@@ -10,25 +10,18 @@
 #define CPoses2DSequence_H
 
 #include <mrpt/poses/CPose2D.h>
-#include <mrpt/utils/CSerializable.h>
 
 namespace mrpt
 {
 namespace poses
 {
-
-	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPoses2DSequence, mrpt::utils::CSerializable )
-
 	/** This class stores a sequence of relative, incremental 2D poses. It is useful as the bases storing unit for more complex probability particles and for computing the absolute pose of any intermediate pose.
 	 *
 	 * \sa CPose2D, CMultiMetricMap
 	 * \ingroup poses_grp
 	 */
-	class BASE_IMPEXP CPoses2DSequence : public mrpt::utils::CSerializable
+	class BASE_IMPEXP CPoses2DSequence
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPoses2DSequence )
 	public:
 		/** Default constructor
 		 */
@@ -81,15 +74,14 @@ namespace poses
 		 */
 		float  computeTraveledDistanceAfterAll();
 
+		void writeToStream(mrpt::utils::CStream &out, int *version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 	private:
 		/** The internal sequence of poses, stored as relative, incremental poses, thus each one is situated just at the end point of last one, where the first one is referenced to (0,0,0deg)
 		 */
 		mrpt::aligned_containers<CPose2D>::vector_t	poses;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPoses2DSequence, mrpt::utils::CSerializable )
-
-
 	} // End of namespace
 } // End of namespace
 

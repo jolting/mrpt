@@ -16,12 +16,6 @@ namespace mrpt
 {
 namespace poses
 {
-	class CPose3DPDF;
-	class CPoint2DPDFGaussian;
-
-	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPosePDFGaussian, CPosePDF )
-
 	/** Declares a class that represents a Probability Density  function (PDF) of a 2D pose \f$ p(\mathbf{x}) = [x ~ y ~ \phi ]^t \f$.
 	 *
 	 *   This class implements that PDF using a mono-modal Gaussian distribution. See mrpt::poses::CPosePDF for more details.
@@ -31,9 +25,6 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPosePDFGaussian : public CPosePDF
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPosePDFGaussian )
-
 	protected:
 		/** Assures the symmetry of the covariance matrix (eventually certain operations in the math-coprocessor lead to non-symmetric matrixes!)
 		  */
@@ -168,7 +159,6 @@ namespace poses
 
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPosePDFGaussian, CPosePDF )
 
 
 	/** Pose compose operator: RES = A (+) B , computing both the mean and the covariance */

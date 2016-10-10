@@ -18,10 +18,6 @@ namespace mrpt
 {
 namespace poses
 {
-	class CPosePDF;
-
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPose3DPDF, mrpt::utils::CSerializable )
-
 	/** Declares a class that represents a Probability Density Function (PDF) of a 3D pose (6D actually).
 	 *   This class is just the base class for unifying many diferent
 	 *    ways this PDF can be implemented.
@@ -37,10 +33,8 @@ namespace poses
 	 * \sa CPose3D, CPosePDF, CPointPDF
 	 * \ingroup poses_pdf_grp
 	 */
-	class BASE_IMPEXP CPose3DPDF : public mrpt::utils::CSerializable, public mrpt::utils::CProbabilityDensityFunction<CPose3D,6>
+	class BASE_IMPEXP CPose3DPDF : public mrpt::utils::CProbabilityDensityFunction<CPose3D,6>
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE( CPose3DPDF )
-
 	 public:
 		/** Copy operator, translating if necesary (for example, between particles and gaussian representations)
 		  * \sa createFrom2D
@@ -114,9 +108,6 @@ namespace poses
 		}
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DPDF, mrpt::utils::CSerializable )
-
-
 	} // End of namespace
 } // End of namespace
 

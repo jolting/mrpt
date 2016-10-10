@@ -30,8 +30,7 @@ namespace mrpt
 		/** Read operator from a CStream. The format is compatible with that of CMatrix & CMatrixD */
 		template <size_t NROWS,size_t NCOLS>
 		mrpt::utils::CStream &operator>>(mrpt::utils::CStream &in, CMatrixFixedNumeric<float,NROWS,NCOLS> & M) {
-			CMatrix  aux;
-			in.ReadObject(&aux);
+			CMatrix &aux = boost::get<CMatrix>(in.ReadObject());
 			ASSERTMSG_(M.cols()==aux.cols() && M.rows()==aux.rows(), format("Size mismatch: deserialized is %ux%u, expected is %ux%u",(unsigned)aux.getRowCount(),(unsigned)aux.getColCount(),(unsigned)NROWS,(unsigned)NCOLS))
 			M = aux;
 			return in;
@@ -39,8 +38,7 @@ namespace mrpt
 		/** Read operator from a CStream. The format is compatible with that of CMatrix & CMatrixD */
 		template <size_t NROWS,size_t NCOLS>
 		mrpt::utils::CStream &operator>>(mrpt::utils::CStream &in, CMatrixFixedNumeric<double,NROWS,NCOLS> & M) {
-			CMatrixD  aux;
-			in.ReadObject(&aux);
+			const CMatrixD &aux = boost::get<CMatrixD>(in.ReadObject());
 			ASSERTMSG_(M.cols()==aux.cols() && M.rows()==aux.rows(), format("Size mismatch: deserialized is %ux%u, expected is %ux%u",(unsigned)aux.getRowCount(),(unsigned)aux.getColCount(),(unsigned)NROWS,(unsigned)NCOLS))
 			M = aux;
 			return in;

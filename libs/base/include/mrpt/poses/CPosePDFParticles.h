@@ -18,9 +18,6 @@ namespace mrpt
 {
 	namespace poses
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPosePDFParticles , CPosePDF )
-
 		/** Declares a class that represents a Probability Density Function (PDF) over a 2D pose (x,y,phi), using a set of weighted samples.
 		 *
 		 *  This class is also the base for the implementation of Monte-Carlo Localization (MCL), in mrpt::slam::CMonteCarloLocalization2D.
@@ -35,9 +32,6 @@ namespace mrpt
 			public mrpt::bayes::CParticleFilterData<CPose2D>,
 			public mrpt::bayes::CParticleFilterDataImpl<CPosePDFParticles,mrpt::bayes::CParticleFilterData<CPose2D>::CParticleList>
 		{
-			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CPosePDFParticles )
-
 		public:
 			/** Free all the memory associated to m_particles, and set the number of parts = 0
 			  */
@@ -89,8 +83,8 @@ namespace mrpt
 			  * The total number of particles will be `list_poses.size() * num_particles_per_pose`.
 			  * \param[in] list_poses The poses (x,y,phi) around which particles will be spread. Must contains at least one pose.
 			  * \param[in] num_particles_per_pose Number of particles to be spread around each of the "spots" in list_poses. Must be >=1.
-			  * 
-			  * Particles will be spread uniformly in a box of width `spread_{x,y,phi_rad}` in each of 
+			  *
+			  * Particles will be spread uniformly in a box of width `spread_{x,y,phi_rad}` in each of
 			  * the three coordinates (meters, radians), so it can be understood as the "initial uncertainty".
 			  *
 			  *  \sa resetDeterministic, resetUniformFreeSpace
@@ -178,8 +172,6 @@ namespace mrpt
 				const double &			stdPhi ) const;
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPosePDFParticles , CPosePDF )
-
 	} // End of namespace
 } // End of namespace
 

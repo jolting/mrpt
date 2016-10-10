@@ -9,29 +9,22 @@
 #ifndef CMATRIXD_H
 #define CMATRIXD_H
 
-#include <mrpt/utils/CSerializable.h>
 #include <mrpt/math/CMatrixTemplateNumeric.h>
-
+#include <memory>
 namespace mrpt
 {
 	namespace math
 	{
-		// This must be added to any CSerializable derived class:
-		// Note: instead of the standard "DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE", classes inheriting
-		// from templates need special nasty handling for MSVC DLL exports...
-		DEFINE_MRPT_OBJECT_PRE_CUSTOM_BASE_LINKAGE2(CMatrixD, mrpt::utils::CSerializable, CMatrixD)
-		BASE_IMPEXP ::mrpt::utils::CStream& operator>>(mrpt::utils::CStream& in, CMatrixDPtr &pObj);
 
 
 		/**  This class is a "CSerializable" wrapper for "CMatrixTemplateNumeric<double>".
 		 * \note For a complete introduction to Matrices and vectors in MRPT, see: http://www.mrpt.org/Matrices_vectors_arrays_and_Linear_Algebra_MRPT_and_Eigen_classes
 		 * \ingroup mrpt_base_grp
 		 */
-		class BASE_IMPEXP_TEMPL CMatrixD : public mrpt::utils::CSerializable, public CMatrixTemplateNumeric<double>
+		class BASE_IMPEXP_TEMPL CMatrixD : public CMatrixTemplateNumeric<double>
 		{
-			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE_CUSTOM_LINKAGE( CMatrixD, void BASE_IMPEXP, static BASE_IMPEXP, virtual BASE_IMPEXP )
 		public:
+			typedef std::shared_ptr<CMatrixD> Ptr;
 			/** Constructor */
 			CMatrixD() : CMatrixTemplateNumeric<double>(1,1)
 			{ }
@@ -68,8 +61,11 @@ namespace mrpt
 			/** Constructor from a TPoint3D, which generates a 3x1 matrix \f$ [x y z]^T \f$ */
 			explicit CMatrixD( const TPoint3D &p);
 
+			void  writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void  readFromStream(mrpt::utils::CStream &in, int version);
 		}; // end of class definition
-		DEFINE_MRPT_OBJECT_POST_CUSTOM_BASE_LINKAGE2(CMatrixD, mrpt::utils::CSerializable, CMatrixD)
+		
+		BASE_IMPEXP ::mrpt::utils::CStream& operator>>(mrpt::utils::CStream& in, CMatrixD::Ptr &pObj);
 
 	} // End of namespace
 } // End of namespace

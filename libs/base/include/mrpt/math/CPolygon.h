@@ -9,24 +9,14 @@
 #ifndef CPOLYGON_H
 #define CPOLYGON_H
 
-#include <mrpt/utils/CSerializable.h>
 #include <mrpt/math/lightweight_geom_data.h>
 
 namespace mrpt
 {
 namespace math
 {
-	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPolygon, mrpt::utils::CSerializable )
-
-	/** A wrapper of a TPolygon2D class, implementing CSerializable.
-	 * \ingroup geometry_grp
-	 */
-	class BASE_IMPEXP CPolygon : public mrpt::utils::CSerializable, public mrpt::math::TPolygon2D
+	class BASE_IMPEXP CPolygon : public mrpt::math::TPolygon2D
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPolygon )
-
 	public:
 		/** Default constructor (empty polygon, 0 vertices) */
 		CPolygon() : TPolygon2D()
@@ -61,8 +51,9 @@ namespace math
 		bool  PointIntoPolygon(double x,double y) const {
 			return TPolygon2D::contains(TPoint2D(x,y));
 		}
+		void writeToStream(mrpt::utils::CStream &out, int *version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPolygon, mrpt::utils::CSerializable )
 
 	} // End of namespace
 } // End of namespace

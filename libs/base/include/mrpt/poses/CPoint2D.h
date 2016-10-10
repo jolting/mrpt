@@ -9,7 +9,6 @@
 #ifndef CPOINT2D_H
 #define CPOINT2D_H
 
-#include <mrpt/utils/CSerializable.h>
 #include <mrpt/poses/CPoint.h>
 #include <mrpt/math/CArray.h>
 
@@ -18,8 +17,6 @@ namespace mrpt
 namespace poses
 {
 	class CPose2D;
-
-	DEFINE_SERIALIZABLE_PRE( CPoint2D )
 
 	/** A class used to store a 2D point.
 	 *
@@ -33,11 +30,8 @@ namespace poses
 	 * \sa CPoseOrPoint,CPose, CPoint
 	 * \ingroup poses_grp
 	 */
-	class BASE_IMPEXP CPoint2D : public CPoint<CPoint2D>, public mrpt::utils::CSerializable
+	class BASE_IMPEXP CPoint2D : public CPoint<CPoint2D>
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPoint2D )
-
 	public:
 		mrpt::math::CArrayDouble<2>   m_coords; //!< [x,y]
 
@@ -88,7 +82,6 @@ namespace poses
 		void setToNaN() MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST( CPoint2D )
 
 
 	} // End of namespace

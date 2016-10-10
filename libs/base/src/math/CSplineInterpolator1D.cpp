@@ -19,9 +19,6 @@ using namespace mrpt::math;
 using namespace mrpt::utils;
 using namespace std;
 
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CSplineInterpolator1D, CSerializable, mrpt::math)
-
 /*---------------------------------------------------------------
 						Constructor
   ---------------------------------------------------------------*/
@@ -133,4 +130,3 @@ void  CSplineInterpolator1D::readFromStream(mrpt::utils::CStream &in, int versio
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
-

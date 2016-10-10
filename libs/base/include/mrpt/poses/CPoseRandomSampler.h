@@ -1,14 +1,14 @@
 /* +---------------------------------------------------------------------------+
-   |                     Mobile Robot Programming Toolkit (MRPT)               |
-   |                          http://www.mrpt.org/                             |
-   |                                                                           |
-   | Copyright (c) 2005-2016, Individual contributors, see AUTHORS file        |
-   | See: http://www.mrpt.org/Authors - All rights reserved.                   |
-   | Released under BSD License. See details in http://www.mrpt.org/License    |
-   +---------------------------------------------------------------------------+ */
+|                     Mobile Robot Programming Toolkit (MRPT)               |
+|                          http://www.mrpt.org/                             |
+|                                                                           |
+| Copyright (c) 2005-2016, Individual contributors, see AUTHORS file        |
+| See: http://www.mrpt.org/Authors - All rights reserved.                   |
+| Released under BSD License. See details in http://www.mrpt.org/License    |
++---------------------------------------------------------------------------+ */
 #ifndef CPoseRandomSampler_H
 #define CPoseRandomSampler_H
-
+	
 #include <mrpt/poses/CPose3D.h>
 #include <mrpt/poses/CPose2D.h>
 #include <mrpt/math/CMatrixTemplateNumeric.h>
@@ -16,87 +16,120 @@
 
 namespace mrpt
 {
-    namespace poses
-    {
-        /** An efficient generator of random samples drawn from a given 2D (CPosePDF) or 3D (CPose3DPDF) pose probability density function (pdf).
-         * This class keeps an internal state which speeds up the sequential generation of samples. It can manage
-         *  any kind of pose PDF.
-		 *
-         * Use with CPoseRandomSampler::setPosePDF, then CPoseRandomSampler::drawSample to draw values.
-		 *
-         * Notice that you can pass a 2D or 3D pose PDF, then ask for a 2D or 3D sample. This class always returns
-         *  the kind of sample you ask it for, but will skip missing terms or fill out with zeroes as required.
-		 * Specifically, when sampling 3D poses from a 2D pose pdf, this class will be smart enought to draw only
-		 *  the 3 required dimensions, avoiding a waste of time with the other 3 missing components.
-         *
-		 * \ingroup poses_pdf_grp
-         * \sa CPosePDF, CPose3DPDF
-         */
-        class BASE_IMPEXP CPoseRandomSampler
-        {
-        protected:
-			// Only ONE of these can be not-NULL at a time.
-            CPosePDF*   m_pdf2D;        //!< A local copy of the PDF
-            CPose3DPDF* m_pdf3D;        //!< A local copy of the PDF
-
-            mrpt::math::CMatrixDouble33 m_fastdraw_gauss_Z3;
-            mrpt::math::CMatrixDouble66 m_fastdraw_gauss_Z6;
-            CPose2D         m_fastdraw_gauss_M_2D;
-            CPose3D         m_fastdraw_gauss_M_3D;
-
-            void clear(); //!< Clear internal pdf
-
+	namespace poses
+	{
+		/** An efficient generator of random samples drawn from a given 2D (CPosePDF) or 3D (CPose3DPDF) pose probability density function (pdf).
+		* This class keeps an internal state which speeds up the sequential generation of samples. It can manage
+		*  any kind of pose PDF.
+		*
+		* Use with CPoseRandomSampler::setPosePDF, then CPoseRandomSampler::drawSample to draw values.
+		*
+		* Notice that you can pass a 2D or 3D pose PDF, then ask for a 2D or 3D sample. This class always returns
+		*  the kind of sample you ask it for, but will skip missing terms or fill out with zeroes as required.
+		* Specifically, when sampling 3D poses from a 2D pose pdf, this class will be smart enought to draw only
+		*  the 3 required dimensions, avoiding a waste of time with the other 3 missing components.
+		*
+		* \ingroup poses_pdf_grp
+		* \sa CPosePDF, CPose3DPDF
+		*/
+		template <class T>
+		class BASE_IMPEXP CPoseRandomSampler
+		{
+		protected:
+						// Only ONE of these can be not-NULL at a time.
+			T::Ptr m_pdf;        //!< A local copy of the PDF
+			
+			mrpt::math::CMatrixDouble33 m_fastdraw_gauss_Z3;
+			mrpt::math::CMatrixDouble66 m_fastdraw_gauss_Z6;
+			CPose2D         m_fastdraw_gauss_M_2D;
+			CPose3D         m_fastdraw_gauss_M_3D;
+			
 			void do_sample_2D( CPose2D &p ) const;	//!< Used internally: sample from m_pdf2D
 			void do_sample_3D( CPose3D &p ) const;	//!< Used internally: sample from m_pdf3D
+			
+		public:
+			/** Default constructor */
+			CPoseRandomSampler();
 
-        public:
-            /** Default constructor */
-            CPoseRandomSampler();
+			/** Destructor */
+			~CPoseRandomSampler();
 
-            /** Destructor */
-            ~CPoseRandomSampler();
+			/** This method must be called to select the PDF from which to draw samples.
+			 * \sa drawSample
+			 */
+			void setPosePDF( const T *pdf )
+			{
+				MRPT_START
+				clear();
+				m_pdf2D = new T(*pdf);
+				if constexpr (std::is_same(T,CPosePDFGaussian))
+				{
+					const CMatrixDouble33 &cov = pdf->cov;
 
-            /** This method must be called to select the PDF from which to draw samples.
-              * \sa drawSample
-              */
-            void setPosePDF( const CPosePDF *pdf );
+					m_fastdraw_gauss_M_2D = gPdf->mean;
 
-            /** This method must be called to select the PDF from which to draw samples.
-              * \sa drawSample
-              */
-            void setPosePDF( const CPosePDFPtr &pdf );
+					/** Computes the eigenvalues/eigenvector decomposition of this matrix,
+					*    so that: M = Z · D · Z<sup>T</sup>, where columns in Z are the
+					*	  eigenvectors and the diagonal matrix D contains the eigenvalues
+					*    as diagonal elements, sorted in <i>ascending</i> order.
+					*/
+					CMatrixDouble33 D;
+					cov.eigenVectors( m_fastdraw_gauss_Z3, D );
 
-            /** This method must be called to select the PDF from which to draw samples.
-              * \sa drawSample
-              */
-            void setPosePDF( const CPosePDF &pdf ) { setPosePDF(&pdf); }
+					// Scale eigenvectors with eigenvalues:
+					D = D.array().sqrt().matrix();
+					m_fastdraw_gauss_Z3.multiply( m_fastdraw_gauss_Z3, D);
 
-            /** This method must be called to select the PDF from which to draw samples.
-              * \sa drawSample
-              */
-            void setPosePDF( const CPose3DPDF *pdf );
+				}
+				if constexpr (std::is_same(T,CPosePDFParticles))
+				{
+					return; // Nothing to prepare.
+				}
+				// According to the PDF type:
+				if constexpr (std::is_same(T,CPose3DPDFGaussian))
+				{
+					const CPose3DPDFGaussian* gPdf = static_cast<const CPose3DPDFGaussian*>(pdf);
+					const CMatrixDouble66 &cov = gPdf->cov;
 
-            /** This method must be called to select the PDF from which to draw samples.
-              * \sa drawSample
-              */
-            void setPosePDF( const CPose3DPDFPtr &pdf );
+					m_fastdraw_gauss_M_3D = gPdf->mean;
 
-            /** This method must be called to select the PDF from which to draw samples.
-              * \sa drawSample
-              */
-            void setPosePDF( const CPose3DPDF &pdf ) { setPosePDF(&pdf); }
+					/** Computes the eigenvalues/eigenvector decomposition of this matrix,
+					*    so that: M = Z · D · Z<sup>T</sup>, where columns in Z are the
+					*	  eigenvectors and the diagonal matrix D contains the eigenvalues
+					*    as diagonal elements, sorted in <i>ascending</i> order.
+					*/
+					CMatrixDouble66 D;
+					cov.eigenVectors( m_fastdraw_gauss_Z6, D );
 
-            /** Generate a new sample from the selected PDF.
-              * \return A reference to the same object passed as argument.
-              * \sa setPosePDF
-              */
-            CPose2D & drawSample( CPose2D &p ) const;
+					// Scale eigenvectors with eigenvalues:
+					D = D.array().sqrt().matrix();
+					m_fastdraw_gauss_Z6.multiply( m_fastdraw_gauss_Z6, D);
+				}
+				else if constexpr (std::is_same(T,CPose3DPDFParticles ))
+				{
+					return; // Nothing to prepare.
+				}
+				else
+				{
+					THROW_EXCEPTION_CUSTOM_MSG1("Unsuported class: %s", m_pdf2D->GetRuntimeClass()->className );
+				}
+				MRPT_END
+			}
+			/** This method must be called to select the PDF from which to draw samples.
+			 * \sa drawSample
+			 */
+			void setPosePDF( const T::Ptr &pdf );
 
-            /** Generate a new sample from the selected PDF.
-              * \return A reference to the same object passed as argument.
-              * \sa setPosePDF
-              */
-            CPose3D & drawSample( CPose3D &p ) const;
+			/** This method must be called to select the PDF from which to draw samples.
+			 * \sa drawSample
+			 */
+			void setPosePDF( const T &pdf ) { setPosePDF(&pdf); }
+
+			/** Generate a new sample from the selected PDF.
+			 * \return A reference to the same object passed as argument.
+			 * \sa setPosePDF
+			 */
+			CPose2D & drawSample( T::type_value &p ) const;
 
 			/** Return true if samples can be generated, which only requires a previous call to setPosePDF */
 			bool isPrepared() const;
@@ -127,7 +160,7 @@ namespace mrpt
 				cov6x6 = mrpt::math::CMatrixDouble(M);
 			}
 
-        }; // End of class def.
+        	}; // End of class def.
 	} // End of namespace
 } // End of namespace
 

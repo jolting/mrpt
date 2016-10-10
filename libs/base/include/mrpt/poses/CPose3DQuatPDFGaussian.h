@@ -20,9 +20,6 @@ namespace poses
 {
 	class CPosePDFGaussian;
 	class CPose3DPDFGaussian;
-
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPose3DQuatPDFGaussian , CPose3DQuatPDF )
-
 	/** Declares a class that represents a Probability Density function (PDF) of a 3D pose using a quaternion \f$ p(\mathbf{x}) = [x ~ y ~ z ~ qr ~ qx ~ qy ~ qz]^\top \f$.
 	 *
 	 *   This class implements that PDF using a mono-modal Gaussian distribution. See mrpt::poses::CPose3DQuatPDF for more details, or
@@ -38,9 +35,6 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPose3DQuatPDFGaussian : public CPose3DQuatPDF
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DQuatPDFGaussian )
-
 	protected:
 		/** Assures the symmetry of the covariance matrix (eventually certain operations in the math-coprocessor lead to non-symmetric matrixes!)
 		  */
@@ -114,8 +108,6 @@ namespace poses
 		double mahalanobisDistanceTo( const CPose3DQuatPDFGaussian& theOther);
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DQuatPDFGaussian , CPose3DQuatPDF )
-
 
 	bool BASE_IMPEXP operator==(const CPose3DQuatPDFGaussian &p1,const CPose3DQuatPDFGaussian &p2);
 	/** Pose composition for two 3D pose Gaussians  \sa CPose3DQuatPDFGaussian::operator += */

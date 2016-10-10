@@ -31,9 +31,6 @@ using namespace mrpt::system;
 
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFGaussian, CPosePDF, mrpt::poses )
-
-
 /*---------------------------------------------------------------
 	Constructor
   ---------------------------------------------------------------*/

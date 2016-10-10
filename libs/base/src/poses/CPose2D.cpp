@@ -22,8 +22,6 @@ using namespace mrpt::math;
 using namespace mrpt::poses;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(CPose2D, CSerializable ,mrpt::poses)
-
 /*---------------------------------------------------------------
 	Constructors
   ---------------------------------------------------------------*/

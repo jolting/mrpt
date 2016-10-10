@@ -18,9 +18,6 @@ namespace mrpt
 {
 	namespace poses
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE(CPose3DPDFParticles,CPose3DPDF)
-
 		/** Declares a class that represents a Probability Density function (PDF) of a 3D pose
 		 *
 		 *  This class is also the base for the implementation of Monte-Carlo Localization (MCL), in mrpt::slam::CMonteCarloLocalization2D.
@@ -35,9 +32,6 @@ namespace mrpt
 			public mrpt::bayes::CParticleFilterData<CPose3D>,
 			public mrpt::bayes::CParticleFilterDataImpl<CPose3DPDFParticles,mrpt::bayes::CParticleFilterData<CPose3D>::CParticleList>
 		{
-			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CPose3DPDFParticles )
-
 		 public:
 			/** Constructor
 			  * \param M The number of m_particles.
@@ -83,7 +77,6 @@ namespace mrpt
 			void  bayesianFusion( const CPose3DPDF &p1, const CPose3DPDF &p2 ) MRPT_OVERRIDE; //!< Bayesian fusion
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE(CPose3DPDFParticles,CPose3DPDF)
 	} // End of namespace
 } // End of namespace
 #endif

@@ -12,8 +12,8 @@
 #include <mrpt/math/math_frwds.h>  // Forward declarations
 #include <mrpt/math/eigen_frwds.h>
 #include <mrpt/utils/types_math.h>
-#include <mrpt/utils/CSerializable.h>
 #include <mrpt/math/point_poses2vectors.h> // MRPT_MATRIX_CONSTRUCTORS_FROM_POSES()
+#include <mrpt/utils/mrpt_macros.h>
 
 namespace mrpt
 {
@@ -103,14 +103,6 @@ namespace mrpt
 
 
 	} // End of namespace
-
-	namespace utils
-	{
-		// Extensions to mrpt::utils::TTypeName for matrices:
-		template<typename T,size_t N,size_t M> struct TTypeName <mrpt::math::CMatrixFixedNumeric<T,N,M> > {
-			static std::string get() { return mrpt::format("CMatrixFixedNumeric<%s,%u,%u>",TTypeName<T>::get().c_str(),(unsigned int)N,(unsigned int)M); }
-		};
-	}
 
 } // End of namespace
 

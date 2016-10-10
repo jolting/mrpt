@@ -16,8 +16,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPointPDFGaussian, CPointPDF )
-
 	/** A gaussian distribution for 3D points. Also a method for bayesian fusion is provided.
 	 *
 	 * \sa CPointPDF
@@ -26,8 +24,6 @@ namespace poses
 	class BASE_IMPEXP CPointPDFGaussian : public CPointPDF
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPointPDFGaussian )
-
 	 public:
 		/** Default constructor
 		  */
@@ -122,9 +118,6 @@ namespace poses
 
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPointPDFGaussian, CPointPDF )
-
-
 	} // End of namespace
 } // End of namespace
 

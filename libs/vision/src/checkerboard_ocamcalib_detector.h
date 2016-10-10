@@ -31,7 +31,7 @@ struct CvContourEx
 
 // Definition Corner Struct
 struct CvCBCorner;
-typedef stlplus::smart_ptr<CvCBCorner> CvCBCornerPtr;
+typedef std::shared_ptr<CvCBCorner> CvCBCornerPtr;
 
 struct CvCBCorner
 {
@@ -50,7 +50,7 @@ struct CvCBCorner
 // Definition Quadrangle Struct
 // This structure stores information about the chessboard quadrange
 struct CvCBQuad;
-typedef stlplus::smart_ptr<CvCBQuad>  CvCBQuadPtr;
+typedef std::shared_ptr<CvCBQuad>  CvCBQuadPtr;
 
 struct CvCBQuad
 {

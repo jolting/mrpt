@@ -14,14 +14,13 @@
 #include <mrpt/utils/CUncopiable.h>
 #include <mrpt/utils/exceptions.h>
 #include <mrpt/utils/bits.h> // reverseBytesInPlace()
+#include <mrpt/utils/CSerializable.h>
 #include <vector>
 
 namespace mrpt
 {
 	namespace utils
 	{
-		class CSerializable;
-		struct CSerializablePtr;
 		class CMessage;
 
 		/** This base class is used to provide a unified interface to
@@ -53,12 +52,6 @@ namespace mrpt
 			/** Introduces a pure virtual method responsible for writing to the stream.
 			 *  Write attempts to write up to Count bytes to Buffer, and returns the number of bytes actually written. */
 			virtual size_t  Write(const void *Buffer, size_t Count) = 0;
-
-			/** A common template code for both versions of CStream::ReadObject()
-			  * - EXISTING_OBJ=true  -> read in the object passed as argument
-			  * - EXISTING_OBJ=false -> build a new object and return it */
-			template <bool EXISTING_OBJ> void internal_ReadObject(CSerializablePtr &newObj, CSerializable *existingObj = NULL);
-
 		public:
 			/* Constructor
 			 */
@@ -119,8 +112,6 @@ namespace mrpt
 			 */
 			void  WriteBuffer (const void *Buffer, size_t Count);
 
-
-
 			/** Writes a sequence of elemental datatypes, taking care of reordering their bytes from the running architecture to MRPT stream standard (little endianness).
 			 *  \param ElementCount The number of elements (not bytes) to write.
 			 *  \param ptr A pointer to the first input element in an array (or std::vector<>, etc...).
@@ -166,28 +157,27 @@ namespace mrpt
 
 			/** Writes an object to the stream.
 			 */
-			void WriteObject( const CSerializable *o );
+			void WriteObject( const CSerializableOption &o );
 
 			/** Reads an object from stream, its class determined at runtime, and returns a smart pointer to the object.
 			 * \exception std::exception On I/O error or undefined class.
 			 * \exception mrpt::utils::CExceptionEOF On an End-Of-File condition found at a correct place: an EOF that abruptly finishes in the middle of one object raises a plain std::exception instead.
 			 */
-			CSerializablePtr ReadObject();
-
-			/** Reads an object from stream, where its class must be the same
-			 *    as the supplied object, where the loaded object will be stored in.
-			 * \exception std::exception On I/O error or different class found.
-			 * \exception mrpt::utils::CExceptionEOF On an End-Of-File condition found at a correct place: an EOF that abruptly finishes in the middle of one object raises a plain std::exception instead.
-			 */
-			void ReadObject(CSerializable *existingObj);
+			CSerializableOption ReadObject();
 
 			/** Write an object to a stream in the binary MRPT format. */
-			CStream& operator << (const CSerializablePtr & pObj);
-			/** Write an object to a stream in the binary MRPT format. */
-			CStream& operator << (const CSerializable &obj);
-
-			CStream& operator >> (CSerializablePtr &pObj);
-			CStream& operator >> (CSerializable &obj);
+			template <class T>
+			CStream& operator << (const T& obj)
+			{
+					WriteObject(obj);
+					return *this;
+			}
+			template <class T>
+			CStream& operator >> (T &obj)
+			{
+				obj = boost::get<T>(ReadObject());
+				return *this;
+			}
 
 			/** Read a value from a stream stored in a type different of the target variable, making the conversion via static_cast. Useful for coding backwards compatible de-serialization blocks */
 			template <typename STORED_TYPE, typename CAST_TO_TYPE>

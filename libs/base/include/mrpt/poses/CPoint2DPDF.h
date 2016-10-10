@@ -9,7 +9,6 @@
 #ifndef CPoint2DPDF_H
 #define CPoint2DPDF_H
 
-#include <mrpt/utils/CSerializable.h>
 #include <mrpt/utils/CProbabilityDensityFunction.h>
 #include <mrpt/poses/CPoint2D.h>
 
@@ -17,8 +16,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPoint2DPDF, mrpt::utils::CSerializable )
-
 	/** Declares a class that represents a Probability Distribution function (PDF) of a 2D point (x,y).
 	 *   This class is just the base class for unifying many diferent
 	 *    ways this PDF can be implemented.
@@ -32,10 +29,8 @@ namespace poses
 	 * \ingroup poses_pdf_grp
 	 * \sa CPoint2D, CPointPDF
 	 */
-	class BASE_IMPEXP CPoint2DPDF : public mrpt::utils::CSerializable, public mrpt::utils::CProbabilityDensityFunction<CPoint2D,2>
+	class BASE_IMPEXP CPoint2DPDF : public mrpt::utils::CProbabilityDensityFunction<CPoint2D,2>
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE( CPoint2DPDF )
-
 	 public:
 		/** Copy operator, translating if necesary (for example, between particles and gaussian representations)
 		  */
@@ -46,16 +41,15 @@ namespace poses
 		  * \param p2 The second distribution to fuse
 		  * \param minMahalanobisDistToDrop If set to different of 0, the result of very separate Gaussian modes (that will result in negligible components) in SOGs will be dropped to reduce the number of modes in the output.
 		  */
-		virtual void  bayesianFusion( const CPoint2DPDF &p1, const CPoint2DPDF &p2, const double &minMahalanobisDistToDrop = 0)  = 0 ;
+		//virtual void  bayesianFusion( const CPoint2DPDF &p1, const CPoint2DPDF &p2, const double &minMahalanobisDistToDrop = 0)  = 0 ;
 
 		enum { is_3D_val = 0 };
 		static inline bool is_3D() { return is_3D_val!=0; }
 		enum { is_PDF_val = 1 };
 		static inline bool is_PDF() { return is_PDF_val!=0; }
-
+		void writeToStream(mrpt::utils::CStream &out, int *version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPoint2DPDF, mrpt::utils::CSerializable )
-
 
 	} // End of namespace
 } // End of namespace

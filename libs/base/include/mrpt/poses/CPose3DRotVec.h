@@ -18,8 +18,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE( CPose3DRotVec )
-
 	/** A 3D pose, with a 3D translation and a rotation in 3D parameterized in rotation-vector form (equivalent to axis-angle).
 	 *   The 6D transformation in SE(3) stored in this class is kept in two
 	 *   separate containers: a 3-array for the rotation vector, and a 3-array for the translation.
@@ -38,11 +36,8 @@ namespace poses
 	 * \ingroup poses_grp
 	 * \sa CPose3DRotVec, CPoseOrPoint,CPoint3D, mrpt::math::CQuaternion
 	 */
-	class BASE_IMPEXP CPose3DRotVec : public CPose<CPose3DRotVec>, public mrpt::utils::CSerializable
+	class BASE_IMPEXP CPose3DRotVec : public CPose<CPose3DRotVec>
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DRotVec )
-
 	public:
 		mrpt::math::CArrayDouble<3>   m_coords; //!< The translation vector [x,y,z]
 		mrpt::math::CArrayDouble<3>   m_rotvec; //!< The rotation vector [vx,vy,vz]
@@ -405,9 +400,6 @@ namespace poses
 		/** @} */
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST( CPose3DRotVec )
-
-
 	std::ostream BASE_IMPEXP  & operator << (std::ostream& o, const CPose3DRotVec& p);
 
 	/** Unary - operator: return the inverse pose "-p" (Note that is NOT the same than a pose with negative x y z yaw pitch roll) */

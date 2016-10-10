@@ -19,15 +19,11 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( TSimple3DPoint, mrpt::utils::CSerializable )
-
 	/** Data within each particle
 	 * \ingroup poses_pdf_grp
 	  */
-	class BASE_IMPEXP TSimple3DPoint : public mrpt::utils::CSerializable
+	class BASE_IMPEXP TSimple3DPoint
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( TSimple3DPoint )
 	public:
 		TSimple3DPoint(const TSimple3DPoint&o) : x(o.x),y(o.y),z(o.z)
 		{
@@ -43,22 +39,16 @@ namespace poses
 
 		float	x,y,z;
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( TSimple3DPoint, mrpt::utils::CSerializable )
-
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPointPDFParticles, CPointPDF )
 
 	/** A probability distribution of a 2D/3D point, represented as a set of random samples (particles).
 	 * \sa CPointPDF
 	 * \ingroup poses_pdf_grp
 	 */
-	class BASE_IMPEXP CPointPDFParticles : 
-		public CPointPDF, 
+	class BASE_IMPEXP CPointPDFParticles :
+		public CPointPDF,
 		public mrpt::bayes::CParticleFilterData<TSimple3DPoint>,
 		public mrpt::bayes::CParticleFilterDataImpl<CPointPDFParticles,mrpt::bayes::CParticleFilterData<TSimple3DPoint>::CParticleList>
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPointPDFParticles )
-
 	 public:
 		/** Default constructor
 		  */
@@ -111,11 +101,7 @@ namespace poses
 		  * \param minMahalanobisDistToDrop If set to different of 0, the result of very separate Gaussian modes (that will result in negligible components) in SOGs will be dropped to reduce the number of modes in the output.
 		  */
 		void  bayesianFusion( const CPointPDF &p1, const CPointPDF &p2, const double &minMahalanobisDistToDrop = 0) MRPT_OVERRIDE;
-
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPointPDFParticles, CPointPDF )
-
-
 	} // End of namespace
 } // End of namespace
 

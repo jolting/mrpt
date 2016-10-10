@@ -10,27 +10,21 @@
 #define CSplineInterpolator1D_H
 
 #include <mrpt/utils/utils_defs.h>
-#include <mrpt/utils/CSerializable.h>
+#include <mrpt/utils/CStream.h>
 #include <map>
 
 namespace mrpt
 {
 	namespace math
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CSplineInterpolator1D, mrpt::utils::CSerializable )
-
 		/** A (persistent) sequence of (x,y) coordinates, allowing queries of intermediate points through spline interpolation, where possible.
 		  *  This class internally relies on mrpt::math::spline. Optionally the y coordinate can be set as wrapped in ]-pi,pi].
 		  *  For querying interpolated points, see
 		  * \ sa mrpt::math::spline, mrpt::poses::CPose3DInterpolator
 		 * \ingroup interpolation_grp
 		 */
-		class BASE_IMPEXP CSplineInterpolator1D : public mrpt::utils::CSerializable
+		class BASE_IMPEXP CSplineInterpolator1D
 		{
-			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CSplineInterpolator1D )
-
 		private:
 			/** The placeholders for the data */
 			std::map<double,double>	m_x2y;
@@ -102,10 +96,9 @@ namespace mrpt
 				}
 				return anyValid;
 			}
-
+			void writeToStream(mrpt::utils::CStream &out, int *version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CSplineInterpolator1D, mrpt::utils::CSerializable )
-
 	} // End of namespace
 } // End of namespace
 #endif

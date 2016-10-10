@@ -418,7 +418,7 @@ namespace obs
 			virtual void internal_writeToStream(mrpt::utils::CStream &out) const = 0;
 			virtual void Print( std::ostream& ) const =0;
 		};
-		typedef stlplus::smart_ptr<TPixelLabelInfoBase>  TPixelLabelInfoPtr;  //!< Used in CObservation3DRangeScan::pixelLabels
+		typedef std::shared_ptr<TPixelLabelInfoBase>  TPixelLabelInfoPtr;  //!< Used in CObservation3DRangeScan::pixelLabels
 
 		template <unsigned int BYTES_REQUIRED_> 
 		struct TPixelLabelInfo : public TPixelLabelInfoBase

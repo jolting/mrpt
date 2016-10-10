@@ -113,7 +113,7 @@ namespace mrpt
 
 			/** The list of available devices */
 			class CDevice;
-			static std::vector<stlplus::smart_ptr<CDevice> > vDevices;
+			static std::vector<std::shared_ptr<CDevice> > vDevices;
 			static int                        numInstances;
 
 			/** A vector with the serial numbers of the available devices */

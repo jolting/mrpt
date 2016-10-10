@@ -29,12 +29,12 @@ using namespace mrpt::random;
         Constructor
   ---------------------------------------------------------------*/
 CPoseRandomSampler::CPoseRandomSampler() :
-    m_pdf2D(NULL),
-    m_pdf3D(NULL),
-    m_fastdraw_gauss_Z3(),
+	m_pdf2D(NULL),
+	m_pdf3D(NULL),
+	m_fastdraw_gauss_Z3(),
 	m_fastdraw_gauss_Z6(),
-    m_fastdraw_gauss_M_2D(),
-    m_fastdraw_gauss_M_3D()
+	m_fastdraw_gauss_M_2D(),
+	m_fastdraw_gauss_M_3D()
 {
 }
 
@@ -43,113 +43,6 @@ CPoseRandomSampler::CPoseRandomSampler() :
   ---------------------------------------------------------------*/
 CPoseRandomSampler::~CPoseRandomSampler()
 {
-    clear();
-}
-
-
-/*---------------------------------------------------------------
-            clear
-  ---------------------------------------------------------------*/
-void CPoseRandomSampler::clear()
-{
-	mrpt::utils::delete_safe( m_pdf2D );
-	mrpt::utils::delete_safe( m_pdf3D );
-}
-
-/*---------------------------------------------------------------
-                        setPosePDF
-  ---------------------------------------------------------------*/
-void CPoseRandomSampler::setPosePDF( const CPosePDF *pdf )
-{
-    MRPT_START
-
-    clear();
-    m_pdf2D = static_cast<CPosePDF*>( pdf->duplicate() );
-
-    // According to the PDF type:
-    if ( IS_CLASS(m_pdf2D,CPosePDFGaussian ) )
-    {
-		const CPosePDFGaussian* gPdf = static_cast<const CPosePDFGaussian*>(pdf);
-		const CMatrixDouble33 &cov = gPdf->cov;
-
-		m_fastdraw_gauss_M_2D = gPdf->mean;
-
-		/** Computes the eigenvalues/eigenvector decomposition of this matrix,
-		*    so that: M = Z · D · Z<sup>T</sup>, where columns in Z are the
-		*	  eigenvectors and the diagonal matrix D contains the eigenvalues
-		*    as diagonal elements, sorted in <i>ascending</i> order.
-		*/
-		CMatrixDouble33 D;
-		cov.eigenVectors( m_fastdraw_gauss_Z3, D );
-
-		// Scale eigenvectors with eigenvalues:
-		D = D.array().sqrt().matrix();
-		m_fastdraw_gauss_Z3.multiply( m_fastdraw_gauss_Z3, D);
-    }
-    else
-    if ( IS_CLASS(m_pdf2D,CPosePDFParticles ) )
-    {
-    	return; // Nothing to prepare.
-    }
-    else
-    {
-        THROW_EXCEPTION_CUSTOM_MSG1("Unsuported class: %s", m_pdf2D->GetRuntimeClass()->className );
-    }
-
-
-    MRPT_END
-}
-
-
-/*---------------------------------------------------------------
-                        setPosePDF
-  ---------------------------------------------------------------*/
-void CPoseRandomSampler::setPosePDF( const CPose3DPDF *pdf )
-{
-    MRPT_START
-
-    clear();
-    m_pdf3D = static_cast<CPose3DPDF*>( pdf->duplicate() );
-
-    // According to the PDF type:
-    if ( IS_CLASS(m_pdf3D,CPose3DPDFGaussian ) )
-    {
-		const CPose3DPDFGaussian* gPdf = static_cast<const CPose3DPDFGaussian*>(pdf);
-		const CMatrixDouble66 &cov = gPdf->cov;
-
-		m_fastdraw_gauss_M_3D = gPdf->mean;
-
-		/** Computes the eigenvalues/eigenvector decomposition of this matrix,
-		*    so that: M = Z · D · Z<sup>T</sup>, where columns in Z are the
-		*	  eigenvectors and the diagonal matrix D contains the eigenvalues
-		*    as diagonal elements, sorted in <i>ascending</i> order.
-		*/
-		CMatrixDouble66 D;
-		cov.eigenVectors( m_fastdraw_gauss_Z6, D );
-
-		// Scale eigenvectors with eigenvalues:
-		D = D.array().sqrt().matrix();
-		m_fastdraw_gauss_Z6.multiply( m_fastdraw_gauss_Z6, D);
-    }
-    else
-    if ( IS_CLASS(m_pdf3D,CPose3DPDFParticles ) )
-    {
-    	return; // Nothing to prepare.
-    }
-    else
-    {
-        THROW_EXCEPTION_CUSTOM_MSG1("Unsoported class: %s", m_pdf3D->GetRuntimeClass()->className );
-    }
-
-    MRPT_END
-}
-
-void CPoseRandomSampler::setPosePDF( const CPose3DPDFPtr &pdf ) { 
-	setPosePDF(pdf.pointer()); 
-}
-
-void CPoseRandomSampler::setPosePDF( const CPosePDFPtr &pdf ) { 
-	setPosePDF(pdf.pointer()); 
 }
 
 /*---------------------------------------------------------------
@@ -157,7 +50,7 @@ void CPoseRandomSampler::setPosePDF( const CPosePDFPtr &pdf ) {
   ---------------------------------------------------------------*/
 CPose2D & CPoseRandomSampler::drawSample( CPose2D &p ) const
 {
-    MRPT_START
+	MRPT_START
 
 	if (m_pdf2D)
 	{

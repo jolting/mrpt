@@ -15,17 +15,12 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPoint2DPDFGaussian, CPoint2DPDF )
-
 	/** A gaussian distribution for 2D points. Also a method for bayesian fusion is provided.
 	 * \ingroup poses_pdf_grp
 	 * \sa CPoint2DPDF
 	 */
 	class BASE_IMPEXP CPoint2DPDFGaussian : public CPoint2DPDF
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPoint2DPDFGaussian )
-
 	 public:
 		CPoint2DPDFGaussian(); //!< Default constructor
 		CPoint2DPDFGaussian( const CPoint2D &init_Mean ); //!< Constructor
@@ -88,13 +83,13 @@ namespace poses
 		  * \param p2 The second distribution to fuse
 		  * \param minMahalanobisDistToDrop If set to different of 0, the result of very separate Gaussian modes (that will result in negligible components) in SOGs will be dropped to reduce the number of modes in the output.
 		  */
-		void bayesianFusion( const CPoint2DPDF &p1, const CPoint2DPDF &p2, const double &minMahalanobisDistToDrop = 0) MRPT_OVERRIDE;
+		void bayesianFusion( const CPoint2DPDFGaussian &p1, const CPoint2DPDFGaussian &p2, const double &minMahalanobisDistToDrop = 0);
 
 		double mahalanobisDistanceTo( const CPoint2DPDFGaussian & other ) const; //!< Returns the Mahalanobis distance from this PDF to another PDF, that is, it's evaluation at (0,0,0)
 		double mahalanobisDistanceToPoint( const double x, const double y ) const; //!< Returns the Mahalanobis distance from this PDF to some point
-
+		void writeToStream(mrpt::utils::CStream &out, int *version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPoint2DPDFGaussian, CPoint2DPDF )
 	} // End of namespace
 } // End of namespace
 #endif

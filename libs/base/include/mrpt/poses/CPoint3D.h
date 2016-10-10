@@ -15,8 +15,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE( CPoint3D )
-
 	/** A class used to store a 3D point.
 	 *
 	 *  For a complete description of Points/Poses, see mrpt::poses::CPoseOrPoint, or refer
@@ -29,11 +27,8 @@ namespace poses
 	 * \ingroup poses_grp
 	 * \sa CPoseOrPoint,CPose, CPoint
 	 */
-	class BASE_IMPEXP  CPoint3D : public CPoint<CPoint3D>, public mrpt::utils::CSerializable
+	class BASE_IMPEXP  CPoint3D : public CPoint<CPoint3D>
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPoint3D )
-
 	public:
 		mrpt::math::CArrayDouble<3>   m_coords; //!< [x,y,z]
 
@@ -94,10 +89,9 @@ namespace poses
 
 		void setToNaN() MRPT_OVERRIDE;
 
+		void writeToStream(mrpt::utils::CStream &out, int *version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST( CPoint3D )
-
-
 	} // End of namespace
 } // End of namespace
 

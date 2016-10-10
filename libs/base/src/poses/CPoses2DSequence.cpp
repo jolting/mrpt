@@ -17,8 +17,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE( CPoses2DSequence, CSerializable ,mrpt::poses)
-
 /*---------------------------------------------------------------
 			Default constructor
   ---------------------------------------------------------------*/

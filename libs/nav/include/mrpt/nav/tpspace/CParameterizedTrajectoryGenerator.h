@@ -18,7 +18,6 @@
 #include <mrpt/nav/link_pragmas.h>
 #include <mrpt/poses/CPose2D.h>
 #include <mrpt/kinematics/CVehicleVelCmd.h>
-#include <mrpt/otherlibs/stlplus/smart_ptr.hpp>  // STL+ library
 
 namespace mrpt { namespace opengl { class CSetOfLines; } }
 

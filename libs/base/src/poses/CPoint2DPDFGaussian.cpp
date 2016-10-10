@@ -25,9 +25,6 @@ using namespace mrpt::math;
 using namespace mrpt::random;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE( CPoint2DPDFGaussian, CPoint2DPDF, mrpt::poses )
-
-
 /*---------------------------------------------------------------
 	Constructor
   ---------------------------------------------------------------*/
@@ -220,14 +217,10 @@ void CPoint2DPDFGaussian::drawSingleSample(CPoint2D &outSample) const
 /*---------------------------------------------------------------
 					bayesianFusion
  ---------------------------------------------------------------*/
-void  CPoint2DPDFGaussian::bayesianFusion( const CPoint2DPDF &p1_, const CPoint2DPDF &p2_,const double &minMahalanobisDistToDrop )
+void  CPoint2DPDFGaussian::bayesianFusion( const CPoint2DPDFGaussian &p1_, const CPoint2DPDFGaussian &p2_,const double &minMahalanobisDistToDrop )
 {
 	MRPT_UNUSED_PARAM(minMahalanobisDistToDrop);
 	MRPT_START
-
-	// p1: CPoint2DPDFGaussian, p2: CPosePDFGaussian:
-	ASSERT_( p1_.GetRuntimeClass() == CLASS_ID(CPoint2DPDFGaussian) );
-	ASSERT_( p2_.GetRuntimeClass() == CLASS_ID(CPoint2DPDFGaussian) );
 
 	THROW_EXCEPTION("TODO!!!");
 
@@ -259,4 +252,3 @@ double CPoint2DPDFGaussian::mahalanobisDistanceToPoint( const double x, const do
 	// The inverse of the combined covs:
 	return std::sqrt( deltaX.multiply_HtCH_scalar( this->cov.inverse() ) );
 }
-

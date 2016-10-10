@@ -9,8 +9,6 @@
 
 #include "base-precomp.h"  // Precompiled headers
 
-
-
 #include <mrpt/math/CPolygon.h>
 #include <mrpt/utils/CStream.h>
 
@@ -18,10 +16,6 @@ using namespace mrpt;
 using namespace mrpt::math;
 using namespace mrpt::utils;
 using namespace std;
-
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CPolygon, CSerializable, mrpt::math)
-
 
 /*---------------------------------------------------------------
 	Implements the writing to a CStream capability of

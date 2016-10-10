@@ -17,9 +17,6 @@ namespace mrpt
 {
 namespace poses
 {
-	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPose3DPDFSOG, CPose3DPDF )
-
 	/** Declares a class that represents a Probability Density function (PDF) of a 3D(6D) pose \f$ p(\mathbf{x}) = [x ~ y ~ z ~ yaw ~ pitch ~ roll]^t \f$.
 	 *   This class implements that PDF as the following multi-modal Gaussian distribution:
 	 *
@@ -33,9 +30,6 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPose3DPDFSOG : public CPose3DPDF
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DPDFSOG )
-
 	public:
 		/** The struct for each mode:
 		 */
@@ -124,7 +118,6 @@ namespace poses
 		void appendFrom( const CPose3DPDFSOG &o ); //!< Append the Gaussian modes from "o" to the current set of modes of "this" density
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DPDFSOG, CPose3DPDF )
 	} // End of namespace
 } // End of namespace
 #endif

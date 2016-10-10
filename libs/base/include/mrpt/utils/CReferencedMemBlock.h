@@ -13,8 +13,7 @@
 #include <vector>
 #include <utility>
 
-// STL+ library:
-#include <mrpt/otherlibs/stlplus/smart_ptr.hpp>
+#include <memory>
 
 namespace mrpt
 {
@@ -24,9 +23,9 @@ namespace mrpt
 		  *  It keeps the reference count and only when it comes to zero, the memory block is really freed.
 		 * \ingroup mrpt_base_grp
 		  */
-		class BASE_IMPEXP CReferencedMemBlock : public stlplus::smart_ptr< std::vector<char> >
+		class BASE_IMPEXP CReferencedMemBlock : public std::shared_ptr<std::vector<char> >
 		{
-		typedef stlplus::smart_ptr< std::vector<char> > base_t;
+		typedef std::shared_ptr<std::vector<char> > base_t;
 		public:
 			/** Constructor with an optional size of the memory block */
 			CReferencedMemBlock(size_t mem_block_size = 0 );

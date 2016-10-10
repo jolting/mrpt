@@ -17,9 +17,6 @@ using namespace mrpt::math;
 using namespace mrpt::utils;
 
 
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CMatrixB, CSerializable, mrpt::math)
-
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
