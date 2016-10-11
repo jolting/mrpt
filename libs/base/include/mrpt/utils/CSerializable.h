@@ -9,32 +9,79 @@
 #ifndef  CSERIALIZABLE_H
 #define  CSERIALIZABLE_H
 
-#include <mrpt/utils/CObject.h>
-#include <mrpt/utils/TTypeName.h>
-#include <mrpt/utils/types_simple.h>
-#include <boost/variant.hpp>
-#include <mrpt/math/CMatrix.h>
-#include <mrpt/poses/CPoint2DPDFGaussian.h>
-#include <mrpt/poses/CPoint2D.h>
-#include <mrpt/poses/CPoses2DSequence.h>
-
 #if MRPT_HAS_MATLAB
 typedef struct mxArray_tag mxArray; //!< Forward declaration for mxArray (avoid #including as much as possible to speed up compiling)
 #endif
+#include <typeinfo>
+#include <memory>
 
 namespace mrpt
 {
 namespace utils
 {
-  typedef boost::variant<
-    mrpt::math::CMatrix,
-    mrpt::poses::CPoint2DPDFGaussian,
-    mrpt::poses::CPoint2D,
-    mrpt::math::TPolygon2D,
-    mrpt::math::TPolygon3D,
-    mrpt::poses::CPoses2DSequence,
-    mrpt::poses::CPose2D
-    > CSerializableOption;
+  class Any
+  {
+    class StorageBase
+    {
+    public:
+      virtual ~StorageBase(){}
+    };
+  
+    template<class T>
+    class Storage : public StorageBase
+    {
+    public:
+      Storage(const T& t) :t(t) {}
+      Storage(T&& t) :t(t) {}
+      ~Storage() override{}
+      T t;
+    };
+
+  public:
+    Any() : valid(false), m_typeInfo(&typeid(nullptr)){}
+    ~Any(){}
+    template<class V>
+    Any(V&& v)
+    {
+      valid = true;
+      m_ptr.reset(new Storage<V>(v));
+      m_typeInfo = &typeid(V);
+    }
+    template<class V>
+    Any(const V& v)
+    {
+      valid = true;
+      m_ptr.reset(new Storage<V>(v));
+      m_typeInfo = &typeid(V);
+    }
+
+    const std::type_info& type() const
+    {
+      return *m_typeInfo;
+    }
+
+    template<class T>
+    T& get_unsafe()
+    {
+      return dynamic_cast<Storage<T>*>(m_ptr.get())->t;
+    }
+    template<class T>
+    const T& get_unsafe() const
+    {
+      return dynamic_cast<Storage<T>*>(m_ptr.get())->t;
+    }
+
+  private:
+    bool valid;
+    std::unique_ptr<StorageBase> m_ptr;
+    const std::type_info *m_typeInfo;
+  };
+  template<class V>V any_cast(const Any& operand)
+  {
+    //if(!valid || operand.type() != typeid(V))
+    // throw
+    return operand.get_unsafe<V>();
+  }
 }
 } // End of namespace
 

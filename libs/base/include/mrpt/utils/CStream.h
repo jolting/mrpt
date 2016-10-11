@@ -157,13 +157,13 @@ namespace mrpt
 
 			/** Writes an object to the stream.
 			 */
-			void WriteObject( const CSerializableOption &o );
+			void WriteObject( const Any &o );
 
 			/** Reads an object from stream, its class determined at runtime, and returns a smart pointer to the object.
 			 * \exception std::exception On I/O error or undefined class.
 			 * \exception mrpt::utils::CExceptionEOF On an End-Of-File condition found at a correct place: an EOF that abruptly finishes in the middle of one object raises a plain std::exception instead.
 			 */
-			CSerializableOption ReadObject();
+			Any ReadObject();
 
 			/** Write an object to a stream in the binary MRPT format. */
 			template <class T>
@@ -175,7 +175,7 @@ namespace mrpt
 			template <class T>
 			CStream& operator >> (T &obj)
 			{
-				obj = boost::get<T>(ReadObject());
+				obj = any_cast<T>(ReadObject());
 				return *this;
 			}
 
