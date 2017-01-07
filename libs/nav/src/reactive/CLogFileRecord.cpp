@@ -25,7 +25,9 @@ IMPLEMENTS_SERIALIZABLE( CLogFileRecord, CSerializable,mrpt::nav )
 					Constructor
   ---------------------------------------------------------------*/
 CLogFileRecord::CLogFileRecord() :
-    nPTGs     ( 0 )
+    nPTGs     ( 0 ),
+    is_regular_stop(false),
+    is_emergency_stop(false)
 {
 	infoPerPTG.clear();
 	WS_Obstacles.clear();
@@ -37,7 +39,7 @@ CLogFileRecord::CLogFileRecord() :
 void  CLogFileRecord::writeToStream(mrpt::utils::CStream &out,int *version) const
 {
 	if (version)
-		*version = 19;
+		*version = 20;
 	else
 	{
 		uint32_t	i,n;
@@ -108,6 +110,10 @@ void  CLogFileRecord::writeToStream(mrpt::utils::CStream &out,int *version) cons
 
 		// v15: cmd_vel converted from std::vector<double> into CSerializable
 		out << additional_debug_msgs; // v18
+
+		// v20: Stop command
+		out << is_regular_stop; // v20
+		out << is_emergency_stop; // v20
 	}
 }
 
@@ -138,6 +144,7 @@ void  CLogFileRecord::readFromStream(mrpt::utils::CStream &in,int version)
 	case 17:
 	case 18:
 	case 19:
+	case 20:
 		{
 			// Version 0 --------------
 			uint32_t  i,n;
@@ -384,9 +391,13 @@ void  CLogFileRecord::readFromStream(mrpt::utils::CStream &in,int version)
 			}
 
 			if (version>=18) 
-			     in >> additional_debug_msgs;
+				in >> additional_debug_msgs;
 			else additional_debug_msgs.clear();
-
+			if(version >=20)
+			{
+				in >> is_regular_stop;
+				in >> is_emergency_stop;
+			}
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)

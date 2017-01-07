@@ -92,6 +92,8 @@ namespace nav
 		mrpt::poses::CPose2D   rel_cur_pose_wrt_last_vel_cmd_NOP, rel_pose_PTG_origin_wrt_sense_NOP;
 		mrpt::math::TTwist2D   ptg_last_curRobotVelLocal;
 
+		bool is_regular_stop;
+		bool is_emergency_stop;
 	};
 	  DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CLogFileRecord, mrpt::utils::CSerializable, NAV_IMPEXP )
 
