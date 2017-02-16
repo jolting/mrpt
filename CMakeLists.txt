@@ -14,8 +14,7 @@
 # ----------------------------------------------------------------------------
 PROJECT(MRPT)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.4)
-
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 # -------------------------
 #        Setup CMake
 # -------------------------
@@ -52,6 +51,8 @@ ENDIF()
 include(cmakemodules/script_version_number.cmake REQUIRED)	#  Loads MRPT version number
 
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmakemodules") # Directory for CMake scripts
+
+include (cotire)
 
 # The root directory for all MRPT libraries/modules:
 SET(MRPT_LIBS_ROOT "${CMAKE_SOURCE_DIR}/libs" CACHE INTERNAL "")  # This emulates global vars

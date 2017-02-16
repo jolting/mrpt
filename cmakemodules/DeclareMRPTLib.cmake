@@ -2,6 +2,7 @@
 #-----------------------------------------------------------------------
 macro(define_mrpt_lib name)
 	internal_define_mrpt_lib(${name} 0 0 ${ARGN}) # headers_only = 0, is_metalib=0
+	cotire(mrpt-${name})
 endmacro(define_mrpt_lib)
 
 # define_mrpt_lib_header_only(): Declares an MRPT headers-only library:
