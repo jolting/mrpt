@@ -23,7 +23,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationRGBD360, CObservation, OBS_IMPEXP )
 
 //	namespace detail {
 //		// Implemented in CObservationRGBD360_project3D_impl.h
@@ -66,7 +65,6 @@ namespace obs
 	class OBS_IMPEXP CObservationRGBD360 : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationRGBD360 )
 
 	protected:
 		bool			m_points3D_external_stored; //!< If set to true, m_points3D_external_file is valid.
@@ -102,7 +100,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationRGBD360, CObservation, OBS_IMPEXP )
 
 
 	} // End of namespace

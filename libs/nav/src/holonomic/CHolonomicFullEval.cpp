@@ -24,8 +24,6 @@ using namespace mrpt::math;
 using namespace mrpt::nav;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CLogFileRecord_FullEval, CHolonomicLogFileRecord,mrpt::nav )
-IMPLEMENTS_SERIALIZABLE( CHolonomicFullEval, CAbstractHolonomicReactiveMethod,mrpt::nav)
 
 CHolonomicFullEval::CHolonomicFullEval(const mrpt::utils::CConfigFileBase *INI_FILE ) :
 	CAbstractHolonomicReactiveMethod("CHolonomicFullEval"),

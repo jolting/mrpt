@@ -174,7 +174,7 @@ void CStream::WriteObject(const  CSerializable *o )
 	const char *className;
 	if(o != NULL)
 	{
-		className = o->GetRuntimeClass()->className;
+		className = typeid(o).name();
 	}
 	else
 	{
@@ -208,7 +208,7 @@ void CStream::WriteObject(const  CSerializable *o )
 }
 
 
-CStream& CStream::operator << (const CSerializablePtr & pObj)
+CStream& CStream::operator << (const CSerializable::Ptr & pObj)
 {
 	WriteObject(pObj.get());
 	return *this;
@@ -221,7 +221,7 @@ CStream& CStream::operator << (const CSerializable &obj)
 	return *this;
 }
 
-CStream& CStream::operator >> (CSerializablePtr &pObj)
+CStream& CStream::operator >> (CSerializable::Ptr &pObj)
 {
 	pObj = ReadObject();
 	return *this;
@@ -354,7 +354,7 @@ CStream& utils::operator>>(mrpt::utils::CStream&in, char *s)
 #define CSTREAM_VERBOSE     0
 
 template <bool EXISTING_OBJ>
-void CStream::internal_ReadObject(CSerializablePtr &newObj,CSerializable *existingObj)
+void CStream::internal_ReadObject(CSerializable::Ptr &newObj,CSerializable *existingObj)
 {
 	// Automatically register all classes when the first one is registered.
 	registerAllPendingClasses();
@@ -423,10 +423,9 @@ void CStream::internal_ReadObject(CSerializablePtr &newObj,CSerializable *existi
 			if(strClassName != "nullptr")
 			{
 				ASSERT_(existingObj)
-				const TRuntimeClassId	*id  = existingObj->GetRuntimeClass();
-				const TRuntimeClassId	*id2 = findRegisteredClass(strClassName);
-				if (!id2) THROW_EXCEPTION_FMT("Stored object has class '%s' which is not registered!",strClassName.c_str());
-				if ( id!=id2 ) THROW_EXCEPTION(format("Stored class does not match with existing object!!:\n Stored: %s\n Expected: %s", id2->className,id->className ));
+				MRPT_TODO("FIX THIS CHECK");
+				//if (!id2) THROW_EXCEPTION_FMT("Stored object has class '%s' which is not registered!",strClassName.c_str());
+				//if ( id!=id2 ) THROW_EXCEPTION(format("Stored class does not match with existing object!!:\n Stored: %s\n Expected: %s", id2->className,id->className ));
 				// It matches, OK
 				obj = existingObj;
 			}
@@ -442,7 +441,7 @@ void CStream::internal_ReadObject(CSerializablePtr &newObj,CSerializable *existi
 				THROW_EXCEPTION(msg)
 			}
 			obj = static_cast<CSerializable*>(classId->createObject());
-			newObj = CSerializablePtr(obj);
+			newObj = CSerializable::Ptr(obj);
 		}
 
 		if(strClassName != "nullptr")
@@ -483,9 +482,9 @@ void CStream::internal_ReadObject(CSerializablePtr &newObj,CSerializable *existi
 	at runtime.
 	  exception std::exception On I/O error or undefined class.
  ---------------------------------------------------------------*/
-CSerializablePtr CStream::ReadObject()
+CSerializable::Ptr CStream::ReadObject()
 {
-	CSerializablePtr ret;
+	CSerializable::Ptr ret;
 	internal_ReadObject<false>(ret, NULL);
 	return ret;
 }
@@ -497,7 +496,7 @@ CSerializablePtr CStream::ReadObject()
  ---------------------------------------------------------------*/
 void CStream::ReadObject(CSerializable *existingObj)
 {
-	CSerializablePtr dummy;
+	CSerializable::Ptr dummy;
 	internal_ReadObject<true>(dummy,existingObj);
 }
 

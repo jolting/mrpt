@@ -20,7 +20,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CSetOfObjects, CRenderizable, OPENGL_IMPEXP )
 
 		/** A set of object, which are referenced to the coordinates framework established in this object.
 		  *  It can be established a hierarchy of "CSetOfObjects", where the coordinates framework of each
@@ -31,7 +30,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CSetOfObjects : public CRenderizable
 		{
-			DEFINE_SERIALIZABLE( CSetOfObjects )
 
 		protected:
 			/** The list of child objects.
@@ -146,7 +144,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CSetOfObjects();
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CSetOfObjects, CRenderizable, OPENGL_IMPEXP )
 		/** Inserts an object into the list. Allows call chaining.
 		  * \sa mrpt::opengl::CSetOfObjects::insert
 		  */

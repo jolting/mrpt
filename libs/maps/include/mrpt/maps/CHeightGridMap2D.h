@@ -26,7 +26,6 @@ namespace mrpt
 {
 	namespace maps
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CHeightGridMap2D, CMetricMap, MAPS_IMPEXP  )
 
 		/** The contents of each cell in a CHeightGridMap2D map */
 		struct MAPS_IMPEXP THeightGridmapCell
@@ -58,7 +57,6 @@ namespace mrpt
 			public CHeightGridMap2D_Base
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CHeightGridMap2D )
 		public:
 
 			/** Calls the base CMetricMap::clear
@@ -138,7 +136,6 @@ namespace mrpt
 				mrpt::maps::CHeightGridMap2D::TInsertionOptions	insertionOpts;
 			MAP_DEFINITION_END(CHeightGridMap2D,MAPS_IMPEXP)
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CHeightGridMap2D, CMetricMap, MAPS_IMPEXP  )
 
 	} // End of namespace
 

@@ -16,7 +16,6 @@ using namespace mrpt::slam;
 using namespace mrpt::hmtslam;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CHMHMapNode, CSerializable, mrpt::hmtslam )
 
 /*---------------------------------------------------------------
 						Default constructor

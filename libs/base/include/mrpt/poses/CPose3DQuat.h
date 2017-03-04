@@ -20,7 +20,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE( CPose3DQuat )
 
 	/** A class used to store a 3D pose as a translation (x,y,z) and a quaternion (qr,qx,qy,qz).
 	 *
@@ -41,7 +40,6 @@ namespace poses
 	class BASE_IMPEXP CPose3DQuat : public CPose<CPose3DQuat>, public mrpt::utils::CSerializable
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DQuat )
 
 	public:
 		mrpt::math::CArrayDouble<3>     m_coords; //!< The translation vector [x,y,z]
@@ -431,9 +429,10 @@ namespace poses
 		//DECLARE_MRPT_CONTAINER_TYPES
 
 		void setToNaN() MRPT_OVERRIDE;
+                void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+                void readFromStream(mrpt::utils::CStream &in, int version);
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST( CPose3DQuat )
 
 	std::ostream BASE_IMPEXP  & operator << (std::ostream& o, const CPose3DQuat& p);
 

@@ -16,16 +16,14 @@ namespace mrpt
 namespace utils
 {
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CTypeSelector, mrpt::utils::CSerializable )
 
 	/** This class represents a std::string derived class which is also CSerializable
 	 * \sa CSerializable
 	 * \ingroup mrpt_base_grp
 	 */
-	class BASE_IMPEXP CTypeSelector : public mrpt::utils::CSerializable
+	class BASE_IMPEXP CTypeSelector : public mrpt::utils::CSerializable, public mrpt::utils::CRtp<CtypeSelector>
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CTypeSelector )
 	protected:
 		/** The possibilities
 		  */
@@ -75,7 +73,6 @@ namespace utils
 		int checkTypeIndex(const std::string &type) const;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CTypeSelector, mrpt::utils::CSerializable )
 
 	} // End of namespace
 } // End of namespace

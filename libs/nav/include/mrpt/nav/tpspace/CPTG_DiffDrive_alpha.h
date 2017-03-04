@@ -14,7 +14,6 @@ namespace mrpt
 {
   namespace nav
   {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CPTG_DiffDrive_alpha, CParameterizedTrajectoryGenerator, NAV_IMPEXP)
 
 	/** The "a(symptotic)-alpha PTG", as named in PTG papers.
 	 * - **Compatible kinematics**: differential-driven / Ackermann steering
@@ -35,7 +34,6 @@ namespace mrpt
 	 */
 	class NAV_IMPEXP  CPTG_DiffDrive_alpha : public CPTG_DiffDrive_CollisionGridBased
 	{
-		DEFINE_SERIALIZABLE(CPTG_DiffDrive_alpha)
 	 public:
 		CPTG_DiffDrive_alpha() : cte_a0v(0),cte_a0w(0) { }
 		CPTG_DiffDrive_alpha(const mrpt::utils::CConfigFileBase &cfg,const std::string &sSection) {
@@ -51,7 +49,6 @@ namespace mrpt
 	 protected:
 		double cte_a0v, cte_a0w;
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CPTG_DiffDrive_alpha, CParameterizedTrajectoryGenerator, NAV_IMPEXP)
 
   }
 }

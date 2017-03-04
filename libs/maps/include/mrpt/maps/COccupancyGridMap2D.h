@@ -34,7 +34,6 @@ namespace mrpt
 {
 namespace maps
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( COccupancyGridMap2D, CMetricMap, MAPS_IMPEXP )
 
 	/** A class for storing an occupancy grid map.
 	 *  COccupancyGridMap2D is a class for storing a metric map
@@ -68,7 +67,6 @@ namespace maps
 #endif
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( COccupancyGridMap2D )
 	public:
 
 	/** The type of the map cells: */
@@ -815,7 +813,6 @@ namespace maps
 		MAP_DEFINITION_END(COccupancyGridMap2D,MAPS_IMPEXP)
 
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( COccupancyGridMap2D, CMetricMap, MAPS_IMPEXP )
 
 
 	bool MAPS_IMPEXP operator <(const COccupancyGridMap2D::TPairLikelihoodIndex &e1, const COccupancyGridMap2D::TPairLikelihoodIndex &e2);

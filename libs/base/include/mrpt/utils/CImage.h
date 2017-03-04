@@ -16,9 +16,6 @@
 #include <mrpt/utils/TCamera.h>
 #include <mrpt/utils/exceptions.h>
 
-// Add for declaration of mexplus::from template specialization
-DECLARE_MEXPLUS_FROM( mrpt::utils::CImage )
-
 namespace mrpt
 {
 	namespace utils
@@ -49,7 +46,6 @@ namespace mrpt
 		};
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CImage, mrpt::utils::CSerializable )
 
 		/** A class for storing images as grayscale or RGB bitmaps.
 		 *  File I/O is supported as:
@@ -100,13 +96,6 @@ namespace mrpt
 		 */
 		class BASE_IMPEXP CImage : public mrpt::utils::CSerializable, public CCanvas
 		{
-			DEFINE_SERIALIZABLE( CImage )
-
-            // This must be added for declaration of MEX-related functions
-            DECLARE_MEX_CONVERSION
-
-
-
 		public:
 
 			// ================================================================
@@ -909,6 +898,8 @@ namespace mrpt
 			/** @} */
 			// ================================================================
 
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
 
 		protected:
 			/** @name Data members
@@ -942,7 +933,6 @@ namespace mrpt
 			void makeSureImageIsLoaded() const throw (std::exception,utils::CExceptionExternalImageNotFound );
 
 		}; // End of class
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CImage, mrpt::utils::CSerializable )
 
 	} // end of namespace utils
 

@@ -13,7 +13,6 @@ using namespace mrpt;
 using namespace mrpt::slam;
 using namespace mrpt::hmtslam;
 
-IMPLEMENTS_SERIALIZABLE( CHMHMapArc, CSerializable, mrpt::hmtslam )
 
 /*---------------------------------------------------------------
 						Constructor

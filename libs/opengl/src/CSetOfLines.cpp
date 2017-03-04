@@ -21,7 +21,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CSetOfLines, CRenderizableDisplayList, mrpt::opengl )
 
 CSetOfLinesPtr CSetOfLines::Create(const std::vector<TSegment3D> &sgms, const bool antiAliasing)
 {

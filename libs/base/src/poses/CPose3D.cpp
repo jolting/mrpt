@@ -36,7 +36,6 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 
 
-IMPLEMENTS_SERIALIZABLE(CPose3D, CSerializable ,mrpt::poses)
 
 /*---------------------------------------------------------------
 	Constructors

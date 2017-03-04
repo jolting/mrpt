@@ -25,7 +25,6 @@ using namespace mrpt::math;
 using namespace mrpt::poses;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFGrid, CPosePDF, mrpt::poses )
 
 /*---------------------------------------------------------------
 	Constructor

@@ -17,7 +17,6 @@ using namespace mrpt::poses;
 using namespace mrpt::hmtslam;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CRobotPosesGraph, CSerializable , mrpt::hmtslam)
 
 
 /*---------------------------------------------------------------

@@ -36,7 +36,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CAssimpModel, CRenderizableDisplayList, mrpt::opengl )
 
 #if MRPT_HAS_OPENGL_GLUT && MRPT_HAS_ASSIMP
 	void recursive_render (const aiScene *sc, const aiNode* nd,const std::vector<unsigned int> &textureIds,const std::map<std::string,CAssimpModel::TInfoPerTexture> &textureIdMap);

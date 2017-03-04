@@ -18,7 +18,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPointPDF, mrpt::utils::CSerializable )
 
 	/** Declares a class that represents a Probability Distribution
 	 *    function (PDF) of a 3D point (x,y,z).
@@ -37,7 +36,6 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPointPDF : public mrpt::utils::CSerializable, public mrpt::utils::CProbabilityDensityFunction<CPoint3D,3>
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE( CPointPDF )
 
 	 public:
 		/** Copy operator, translating if necesary (for example, between particles and gaussian representations)
@@ -77,7 +75,6 @@ namespace poses
 		}
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPointPDF, mrpt::utils::CSerializable )
 
 
 	} // End of namespace

@@ -52,8 +52,8 @@ namespace mrpt
 			{
 				if (j > i)
 				{
-					swap(data[j],data[i]);	// Exchange the two complex numbers.
-					swap(data[j+1],data[i+1]);
+					std::swap(data[j],data[i]);	// Exchange the two complex numbers.
+					std::swap(data[j+1],data[i+1]);
 				}
 				m=nn;
 				while (m >= 2 && j > m)

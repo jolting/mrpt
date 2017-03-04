@@ -23,7 +23,6 @@ using namespace std;
 
 
 
-IMPLEMENTS_SERIALIZABLE( CDisk, CRenderizableDisplayList, mrpt::opengl )
 
 CDiskPtr CDisk::Create(float radiusOut,float radiusIn,uint32_t slices,uint32_t loops)	
 {

@@ -343,8 +343,8 @@ void CScanMatching::OnbtnICPClick(wxCommandEvent&)
 		return;
 	}
 
-	CSerializablePtr obj_ref = rawlog.getAsGeneric( refIndx );
-	CSerializablePtr obj_new = rawlog.getAsGeneric( newIndx );
+	CSerializable::Ptr obj_ref = rawlog.getAsGeneric( refIndx );
+	CSerializable::Ptr obj_new = rawlog.getAsGeneric( newIndx );
 
 	CPosePDFPtr	poseEst;
 	float		runTime;

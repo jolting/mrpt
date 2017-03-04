@@ -21,7 +21,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CVectorField2D, CRenderizableDisplayList, mrpt::opengl )
 
 CVectorField2DPtr CVectorField2D::Create(const CMatrixFloat &Matrix_x, const CMatrixFloat &Matrix_y, float xmin, float xmax, float ymin, float ymax)	
 {

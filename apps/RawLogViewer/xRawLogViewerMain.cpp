@@ -1482,7 +1482,7 @@ void xRawLogViewerFrame::loadRawlogFile(
 			}
 		}
 
-		CSerializablePtr newObj;
+		CSerializable::Ptr newObj;
 		try
 		{
 			fil >> newObj;
@@ -1664,7 +1664,7 @@ void xRawLogViewerFrame::rebuildTreeView()
 
 			case CRawlog::etSensoryFrame:
 			{
-				CSerializablePtr obj = rawlog.getAsObservations(i);
+				CSerializable::Ptr obj = rawlog.getAsObservations(i);
 				if (CLASS_ID(CSensoryFrame)!=obj->GetRuntimeClass())
 					THROW_EXCEPTION("Expected an object of class CSensoryFrame!!");
 
@@ -1797,7 +1797,7 @@ void xRawLogViewerFrame::rebuildTreeView()
 
 	memStats->ShowPosition(0);
 
-	SelectObjectInTreeView( CSerializablePtr() );
+	SelectObjectInTreeView( CSerializable::Ptr() );
 	tree_view->Refresh();
 
 	// Show plot of times:
@@ -1847,7 +1847,7 @@ void xRawLogViewerFrame::OntreeViewSelectionChanged(
 	CRawlogTreeView*		the_tree,
 	TRawlogTreeViewEvent	ev,
 	int					item_index,
-	const mrpt::utils::CSerializablePtr &item_data)
+	const mrpt::utils::CSerializable::Ptr &item_data)
 {
 	xRawLogViewerFrame	*win = (xRawLogViewerFrame*)me;
 	win->SelectObjectInTreeView(item_data);
@@ -2448,7 +2448,7 @@ void xRawLogViewerFrame::OnFileCountEntries(wxCommandEvent& event)
 			wxTheApp->Yield();  // Let the app. process messages
 		}
 
-		CSerializablePtr newObj;
+		CSerializable::Ptr newObj;
 		try
 		{
 			fil >> newObj;
@@ -2540,14 +2540,14 @@ void xRawLogViewerFrame::OnFileSaveImages(wxCommandEvent& event)
 			wxTheApp->Yield();  // Let the app. process messages
 		}
 
-		CSerializablePtr newObj;
+		CSerializable::Ptr newObj;
 		try
 		{
 			fil >> newObj;
 			// Check type:
 			if ( newObj->GetRuntimeClass() == CLASS_ID(CSensoryFrame) )
 			{
-				CSensoryFramePtr SF = CSensoryFramePtr( CSerializablePtr(newObj) );
+				CSensoryFramePtr SF = CSensoryFramePtr( CSerializable::Ptr(newObj) );
 
 				for (unsigned k=0;k<SF->size();k++)
 				{
@@ -2790,7 +2790,7 @@ void xRawLogViewerFrame::OnDecimateRecords(wxCommandEvent& event)
 	// For each entry:
 	for (i=0;i<N;i++)
 	{
-		CSerializablePtr obj = rawlog.getAsGeneric(i);
+		CSerializable::Ptr obj = rawlog.getAsGeneric(i);
 		bool objToBeDeleted = true; // Will be set to false if "obj" cannot be deleted now.
 
 		if (rawlog.getType(i)==CRawlog::etActionCollection)

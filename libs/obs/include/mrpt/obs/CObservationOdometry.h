@@ -20,7 +20,6 @@ namespace mrpt
 {
 	namespace obs
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationOdometry, CObservation,OBS_IMPEXP  )
 
 		/** An observation of the current (cumulative) odometry for a wheeled robot.
 		 *   This kind of observation will only occur in a "observation-only" rawlog file, otherwise
@@ -32,7 +31,6 @@ namespace mrpt
 		class OBS_IMPEXP CObservationOdometry : public CObservation
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CObservationOdometry )
 
 		 public:
 			CObservationOdometry(); //!< Default ctor
@@ -52,7 +50,6 @@ namespace mrpt
 			void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationOdometry, CObservation,OBS_IMPEXP  )
 
 	} // End of namespace
 } // End of namespace

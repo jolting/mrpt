@@ -33,8 +33,6 @@ namespace mrpt
 		class HMTSLAM_IMPEXP CHMTSLAM;
 		class HMTSLAM_IMPEXP CLSLAM_RBPF_2DLASER;
 
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CLSLAMParticleData, mrpt::utils::CSerializable, HMTSLAM_IMPEXP )
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CLocalMetricHypothesis, mrpt::utils::CSerializable, HMTSLAM_IMPEXP )
 
 		/** Auxiliary class used in mrpt::slam::CLocalMetricHypothesis for HMT-SLAM; this class keeps the data relative to each local metric particle ("a robot metric path hypothesis" and its associated metric map).
 		  * \ingroup mrpt_hmtslam_grp
@@ -42,7 +40,6 @@ namespace mrpt
 		class HMTSLAM_IMPEXP CLSLAMParticleData : public mrpt::utils::CSerializable
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CLSLAMParticleData )
 
 		public:
 			CLSLAMParticleData( const mrpt::maps::TSetOfMetricMapInitializers *mapsInitializers = NULL ) :
@@ -54,7 +51,6 @@ namespace mrpt
 			mrpt::maps::CMultiMetricMap            metricMaps;
 			TMapPoseID2Pose3D  robotPoses;
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CLSLAMParticleData, mrpt::utils::CSerializable, HMTSLAM_IMPEXP )
 
 
 		/** This class is used in HMT-SLAM to represent each of the Local Metric Hypotheses (LMHs).
@@ -69,7 +65,6 @@ namespace mrpt
 			friend class HMTSLAM_IMPEXP CLSLAM_RBPF_2DLASER;
 
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CLocalMetricHypothesis )
 
 		public:
 			/** Constructor (Default param only used from STL classes)
@@ -225,7 +220,6 @@ namespace mrpt
 			mutable mrpt::poses::StdVector_CPose2D		m_movementDrawMaximumLikelihood;
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CLocalMetricHypothesis, mrpt::utils::CSerializable, HMTSLAM_IMPEXP )
 
 	} // End of namespace
 } // End of namespace

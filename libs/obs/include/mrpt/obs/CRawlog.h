@@ -20,7 +20,6 @@ namespace mrpt
 {
 	namespace obs
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CRawlog, mrpt::utils::CSerializable, OBS_IMPEXP )
 
 		typedef std::pair<mrpt::system::TTimeStamp, CObservationPtr>		TTimeObservationPair;		//!< For usage with CRawlog classes.
 		typedef std::multimap<mrpt::system::TTimeStamp, CObservationPtr>	TListTimeAndObservations;	//!< For usage with CRawlog classes.
@@ -52,10 +51,9 @@ namespace mrpt
 		class OBS_IMPEXP CRawlog : public mrpt::utils::CSerializable
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CRawlog )
 
 		private:
-			typedef	std::vector<mrpt::utils::CSerializablePtr> TListObjects;
+			typedef	std::vector<mrpt::utils::CSerializable::Ptr> TListObjects;
 			TListObjects	m_seqOfActObs;	//!< The list where the objects really are in.
 
 			CObservationComment		m_commentTexts;	//!< Comments of the rawlog.
@@ -120,7 +118,7 @@ namespace mrpt
 			/** Generic add for a smart pointer to a CSerializable object:
 			  * \sa addObservations, addActionsMemoryReference, addObservationMemoryReference
 			  */
-			void  addGenericObject( const mrpt::utils::CSerializablePtr &obj );
+			void  addGenericObject( const mrpt::utils::CSerializable::Ptr &obj );
 
 			/** Load the contents from a file containing one of these possibilities:
 			  *  - A "CRawlog" object.
@@ -172,7 +170,7 @@ namespace mrpt
 			  * \sa size, isAction, getAsAction, getAsObservations
 			  * \exception std::exception If index is out of bounds
 			  */
-			mrpt::utils::CSerializablePtr    getAsGeneric( size_t index ) const;
+			mrpt::utils::CSerializable::Ptr    getAsGeneric( size_t index ) const;
 
 			/** Returns the i'th element in the sequence, as being an observation, where index=0 is the first object.
 			  *  If it is not an CObservation, it throws an exception. Do neighter modify nor delete the returned pointer.
@@ -199,7 +197,7 @@ namespace mrpt
 				bool operator == (const iterator& o) {  return m_it == o.m_it; }
 				bool operator != (const iterator& o) {  return m_it != o.m_it; }
 
-				mrpt::utils::CSerializablePtr operator *() { return *m_it; }
+				mrpt::utils::CSerializable::Ptr operator *() { return *m_it; }
 
 				inline iterator  operator ++(int) { iterator aux =*this; m_it++; return aux; }  // Post
 				inline iterator& operator ++()    { m_it++; return *this; }  // Pre
@@ -233,7 +231,7 @@ namespace mrpt
 				bool operator == (const const_iterator& o) {  return m_it == o.m_it; }
 				bool operator != (const const_iterator& o) {  return m_it != o.m_it; }
 
-				const mrpt::utils::CSerializablePtr operator *() const { return *m_it; }
+				const mrpt::utils::CSerializable::Ptr operator *() const { return *m_it; }
 
 				inline const_iterator  operator ++(int) { const_iterator aux =*this; m_it++; return aux; }  // Post
 				inline const_iterator& operator ++()    { m_it++; return *this; }  // Pre
@@ -338,7 +336,6 @@ namespace mrpt
 			static std::string detectImagesDirectory(const std::string &rawlogFilename);
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CRawlog, mrpt::utils::CSerializable, OBS_IMPEXP )
 
 	} // End of namespace
 } // End of namespace

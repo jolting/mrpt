@@ -19,7 +19,6 @@ namespace poses
 {
 	class CPose2D;
 
-	DEFINE_SERIALIZABLE_PRE( CPoint2D )
 
 	/** A class used to store a 2D point.
 	 *
@@ -36,7 +35,6 @@ namespace poses
 	class BASE_IMPEXP CPoint2D : public CPoint<CPoint2D>, public mrpt::utils::CSerializable
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPoint2D )
 
 	public:
 		mrpt::math::CArrayDouble<2>   m_coords; //!< [x,y]
@@ -86,9 +84,10 @@ namespace poses
 		/** @} */
 
 		void setToNaN() MRPT_OVERRIDE;
-
+		void writeToStream(mrpt::utils::CStream& out) const;
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST( CPoint2D )
 
 
 	} // End of namespace

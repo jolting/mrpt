@@ -19,7 +19,6 @@ namespace mrpt
 namespace obs
 {
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationSkeleton , CObservation, OBS_IMPEXP)
 
 	/** This class stores a skeleton as tracked by OPENNI2 & NITE2 libraries from PrimeSense sensors
 	 *
@@ -30,7 +29,6 @@ namespace obs
 	class OBS_IMPEXP CObservationSkeleton : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationSkeleton )
 
 	 public:
 		/** Constructor.
@@ -73,7 +71,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationSkeleton , CObservation, OBS_IMPEXP)
 
 	} // End of namespace
 } // End of namespace

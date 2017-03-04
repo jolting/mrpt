@@ -19,7 +19,6 @@ namespace mrpt
 {
 namespace maps
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CGasConcentrationGridMap2D , CRandomFieldGridMap2D, MAPS_IMPEXP )
 
 	/** CGasConcentrationGridMap2D represents a PDF of gas concentrations over a 2D area.
 	  *
@@ -34,7 +33,6 @@ namespace maps
 	class MAPS_IMPEXP CGasConcentrationGridMap2D : public CRandomFieldGridMap2D
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CGasConcentrationGridMap2D )
 	public:
 
 		/** Constructor
@@ -155,7 +153,6 @@ namespace maps
 		MAP_DEFINITION_END(CGasConcentrationGridMap2D,MAPS_IMPEXP)
 
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CGasConcentrationGridMap2D , CRandomFieldGridMap2D, MAPS_IMPEXP )
 
 	} // End of namespace
 

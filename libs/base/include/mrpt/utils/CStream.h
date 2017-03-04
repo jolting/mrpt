@@ -14,14 +14,13 @@
 #include <mrpt/utils/CUncopiable.h>
 #include <mrpt/utils/exceptions.h>
 #include <mrpt/utils/bits.h> // reverseBytesInPlace()
+#include <mrpt/utils/CSerializable.h>
 #include <vector>
 
 namespace mrpt
 {
 	namespace utils
 	{
-		class CSerializable;
-		struct CSerializablePtr;
 		class CMessage;
 
 		/** This base class is used to provide a unified interface to
@@ -57,7 +56,7 @@ namespace mrpt
 			/** A common template code for both versions of CStream::ReadObject()
 			  * - EXISTING_OBJ=true  -> read in the object passed as argument
 			  * - EXISTING_OBJ=false -> build a new object and return it */
-			template <bool EXISTING_OBJ> void internal_ReadObject(CSerializablePtr &newObj, CSerializable *existingObj = NULL);
+			template <bool EXISTING_OBJ> void internal_ReadObject(CSerializable::Ptr &newObj, CSerializable *existingObj = NULL);
 
 		public:
 			/* Constructor
@@ -172,7 +171,7 @@ namespace mrpt
 			 * \exception std::exception On I/O error or undefined class.
 			 * \exception mrpt::utils::CExceptionEOF On an End-Of-File condition found at a correct place: an EOF that abruptly finishes in the middle of one object raises a plain std::exception instead.
 			 */
-			CSerializablePtr ReadObject();
+			CSerializable::Ptr ReadObject();
 
 			/** Reads an object from stream, where its class must be the same
 			 *    as the supplied object, where the loaded object will be stored in.
@@ -182,11 +181,11 @@ namespace mrpt
 			void ReadObject(CSerializable *existingObj);
 
 			/** Write an object to a stream in the binary MRPT format. */
-			CStream& operator << (const CSerializablePtr & pObj);
+			CStream& operator << (const CSerializable::Ptr & pObj);
 			/** Write an object to a stream in the binary MRPT format. */
 			CStream& operator << (const CSerializable &obj);
 
-			CStream& operator >> (CSerializablePtr &pObj);
+			CStream& operator >> (CSerializable::Ptr &pObj);
 			CStream& operator >> (CSerializable &obj);
 
 			/** Read a value from a stream stored in a type different of the target variable, making the conversion via static_cast. Useful for coding backwards compatible de-serialization blocks */

@@ -19,12 +19,12 @@ using namespace boost::python;
 using namespace mrpt::utils;
 
 // CStream
-void CStream_ReadObject(CStream& self, CSerializablePtr& obj)
+void CStream_ReadObject(CStream& self, CSerializable::Ptr& obj)
 {
     self.ReadObject(obj.get());
 }
 
-void CStream_WriteObject(CStream& self, CSerializablePtr& obj)
+void CStream_WriteObject(CStream& self, CSerializable::Ptr& obj)
 {
     self.WriteObject(obj.get());
 }
@@ -125,10 +125,10 @@ void export_utils()
 
     // CSerializable
     {
-        class_<CSerializablePtr, bases<CObject::Ptr> >("CSerializablePtr", "class_name smart pointer type", no_init)
-            .def("ctx", &CSerializablePtr_get_ctx, return_internal_reference<>())
-            .def("ctx", &CSerializablePtr_set_ctx)
-            .def("pointer", &CSerializablePtr_pointer, return_internal_reference<>());
+        class_<CSerializable::Ptr, bases<CObject::Ptr> >("CSerializable::Ptr", "class_name smart pointer type", no_init)
+            .def("ctx", &CSerializable::Ptr_get_ctx, return_internal_reference<>())
+            .def("ctx", &CSerializable::Ptr_set_ctx)
+            .def("pointer", &CSerializable::Ptr_pointer, return_internal_reference<>());
 
         class_<CSerializable, boost::noncopyable, bases<CObject> >("CSerializable", no_init)
         ;

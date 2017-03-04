@@ -27,7 +27,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CRenderizable, mrpt::utils::CSerializable, OPENGL_IMPEXP )
 
 		/** A list of objects pointers, automatically managing memory free at destructor, and managing copies correctly. */
 		typedef std::deque<CRenderizablePtr> CListOpenGLObjects;
@@ -43,8 +42,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CRenderizable : public mrpt::utils::CSerializable
 		{
-			DEFINE_VIRTUAL_SERIALIZABLE( CRenderizable )
-
 			friend class mrpt::opengl::COpenGLViewport;
 			friend class mrpt::opengl::CSetOfObjects;
 
@@ -199,7 +196,6 @@ namespace mrpt
 			static void releaseTextureName(unsigned int i);
 
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CRenderizable, mrpt::utils::CSerializable, OPENGL_IMPEXP )
 
 		/** Applies a mrpt::poses::CPose3D transformation to the object. Note that this method doesn't <i>set</i> the pose to the given value, but <i>combines</i> it with the existing one.
 		  * \sa setPose */

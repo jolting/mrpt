@@ -387,7 +387,7 @@ void navlog_viewer_GUI_designDialog::loadLogfile(const std::string &filName)
 	{
 		try
 		{
-			CSerializablePtr obj = f.ReadObject();
+			CSerializable::Ptr obj = f.ReadObject();
 			if (validClasses.find(string(obj->GetRuntimeClass()->className))==validClasses.end())
 			{
 				wxMessageBox(_U(format("Unexpected class found: %s",obj->GetRuntimeClass()->className).c_str()),_("Error loading log:"));

@@ -16,7 +16,6 @@ namespace mrpt
 	namespace opengl
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CEllipsoidInverseDepth2D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** An especial "ellipsoid" in 3D computed as the uncertainty iso-surfaces of a (inv_range,yaw) variable.
 		  *  The parameter space of this ellipsoid comprises these variables (in this order):
@@ -42,7 +41,6 @@ namespace mrpt
 		class OPENGL_IMPEXP CEllipsoidInverseDepth2D : public CGeneralizedEllipsoidTemplate<2>
 		{
 			typedef CGeneralizedEllipsoidTemplate<2> BASE;
-			DEFINE_SERIALIZABLE( CEllipsoidInverseDepth2D )
 
 		public:
 			/** The maximum range to be used as a correction when a point of the ellipsoid falls in the negative ranges (default: 1e6) */
@@ -68,7 +66,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CEllipsoidInverseDepth2D() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CEllipsoidInverseDepth2D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

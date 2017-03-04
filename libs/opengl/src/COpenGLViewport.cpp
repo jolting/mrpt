@@ -32,7 +32,6 @@ using namespace std;
 #include <mrpt/utils/metaprogramming.h>
 using namespace mrpt::utils::metaprogramming;
 
-IMPLEMENTS_SERIALIZABLE( COpenGLViewport, CSerializable, mrpt::opengl )
 
 //#define OPENGLVIEWPORT_ENABLE_TIMEPROFILING
 

@@ -24,7 +24,6 @@ using namespace mrpt::utils;
 using namespace mrpt::pbmap;
 
 
-IMPLEMENTS_SERIALIZABLE(PbMap, CSerializable, mrpt::pbmap)
 
 /*---------------------------------------------------------------
 	Constructor

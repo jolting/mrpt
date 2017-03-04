@@ -28,7 +28,6 @@ namespace maps
 {
 	namespace internal { typedef std::vector<CLandmark>	TSequenceLandmarks; }
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CLandmarksMap, CMetricMap, VISION_IMPEXP )
 
 	/** A class for storing a map of 3D probabilistic landmarks.
 	 * <br>
@@ -59,7 +58,6 @@ namespace maps
 	class VISION_IMPEXP CLandmarksMap : public mrpt::maps::CMetricMap
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CLandmarksMap )
 
 	private:
 		void internal_clear() MRPT_OVERRIDE;
@@ -540,7 +538,6 @@ namespace maps
 		MAP_DEFINITION_END(CLandmarksMap,VISION_IMPEXP)
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CLandmarksMap, CMetricMap, VISION_IMPEXP )
 
 
 	} // End of namespace

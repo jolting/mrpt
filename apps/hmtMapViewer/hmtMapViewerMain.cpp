@@ -139,10 +139,10 @@ void CMyGLCanvas::OnPostRender()
 class CItemData : public wxTreeItemData
 {
 public:
-	CSerializablePtr m_ptr;
+	CSerializable::Ptr m_ptr;
 	size_t          m_itemIndex;
 
-	CItemData( CSerializablePtr ptr, size_t itemIndex) : m_ptr(ptr), m_itemIndex(itemIndex)
+	CItemData( CSerializable::Ptr ptr, size_t itemIndex) : m_ptr(ptr), m_itemIndex(itemIndex)
 	{
 	}
 };
@@ -600,7 +600,7 @@ void hmtMapViewerFrame::updateLocalMapView()
 	if (!data1) return;
 	if (!data1->m_ptr) return;
 
-	CSerializablePtr obj = data1->m_ptr;
+	CSerializable::Ptr obj = data1->m_ptr;
 	if (obj->GetRuntimeClass()==CLASS_ID(CHMHMapNode))
 	{
 		// The 3D view:

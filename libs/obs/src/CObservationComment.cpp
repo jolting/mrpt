@@ -17,7 +17,6 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationComment, CObservation,mrpt::obs)
 
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects

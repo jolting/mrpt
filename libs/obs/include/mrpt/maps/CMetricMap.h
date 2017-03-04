@@ -26,7 +26,6 @@ namespace mrpt
 {
 	namespace maps
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CMetricMap, mrpt::utils::CSerializable, OBS_IMPEXP )
 
 		/** Declares a virtual base class for all metric maps storage classes.
 		 *  In this class virtual methods are provided to allow the insertion
@@ -54,7 +53,6 @@ namespace mrpt
 			public mrpt::utils::CObservable
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_VIRTUAL_SERIALIZABLE( CMetricMap )
 
 		private:
 			/** Internal method called by clear() */
@@ -241,7 +239,6 @@ namespace mrpt
 			virtual       mrpt::maps::CSimplePointsMap * getAsSimplePointsMap()       { return NULL; }
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CMetricMap, mrpt::utils::CSerializable, OBS_IMPEXP )
 
 		/** A list of metric maps (used in the mrpt::poses::CPosePDFParticles class):
 		  */

@@ -19,7 +19,6 @@ namespace poses
 	class CPose3DPDF;
 
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPosePDFGaussianInf, CPosePDF )
 
 	/** A Probability Density  function (PDF) of a 2D pose \f$ p(\mathbf{x}) = [x ~ y ~ \phi ]^t \f$ as a Gaussian with a mean and the inverse of the covariance.
 	 *
@@ -34,7 +33,6 @@ namespace poses
 	class BASE_IMPEXP CPosePDFGaussianInf : public CPosePDF
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPosePDFGaussianInf )
 
 	protected:
 		/** Assures the symmetry of the covariance matrix (eventually certain operations in the math-coprocessor lead to non-symmetric matrixes!)
@@ -154,8 +152,11 @@ namespace poses
 			this->inverseComposition(*this,ref);
 		}
 
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
+
+
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPosePDFGaussianInf, CPosePDF )
 
 	bool BASE_IMPEXP operator==(const CPosePDFGaussianInf &p1,const CPosePDFGaussianInf &p2);
 	/** Pose compose operator: RES = A (+) B , computing both the mean and the covariance */

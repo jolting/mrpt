@@ -16,7 +16,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationComment , CObservation, OBS_IMPEXP)
 
 
 	/** This "observation" is actually a placeholder for a text block with comments or additional parameters attached to a given rawlog file.
@@ -28,7 +27,6 @@ namespace obs
 	class OBS_IMPEXP CObservationComment : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationComment )
 
 	 public:
 		/** Constructor.
@@ -51,7 +49,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationComment , CObservation, OBS_IMPEXP)
 
 	} // End of namespace
 } // End of namespace

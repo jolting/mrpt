@@ -18,7 +18,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CSimpleLine, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A line segment
 		  *  \sa opengl::COpenGLScene
@@ -26,7 +25,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CSimpleLine : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CSimpleLine )
 
 		protected:
 			float	m_x0,m_y0,m_z0;
@@ -76,7 +74,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CSimpleLine() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CSimpleLine, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

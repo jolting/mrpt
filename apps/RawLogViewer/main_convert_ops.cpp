@@ -205,7 +205,7 @@ void xRawLogViewerFrame::OnMenuLossLessDecimate(wxCommandEvent& event)
 	// For each entry:
 	for (i=0;i<N;i++)
 	{
-		CSerializablePtr obj = rawlog.getAsGeneric(i);
+		CSerializable::Ptr obj = rawlog.getAsGeneric(i);
 
 		if (rawlog.getType(i)==CRawlog::etActionCollection)
 		{
@@ -377,7 +377,7 @@ void xRawLogViewerFrame::OnMenuLossLessDecFILE(wxCommandEvent& event)
 			wxTheApp->Yield();  // Let the app. process messages
 		}
 
-		CSerializablePtr newObj;
+		CSerializable::Ptr newObj;
 		try
 		{
 			fil >> newObj;
@@ -560,7 +560,7 @@ void xRawLogViewerFrame::OnMenuConvertExternallyStored(wxCommandEvent& event)
 
 		try
 		{
-			CSerializablePtr newObj;
+			CSerializable::Ptr newObj;
 			fil >> newObj;
 
 			// Check type:
@@ -698,7 +698,7 @@ void xRawLogViewerFrame::OnMenuConvertObservationOnly(wxCommandEvent& event)
 
 		try
 		{
-			CSerializablePtr newObj;
+			CSerializable::Ptr newObj;
 			fil >> newObj;
 
 			// Check type:

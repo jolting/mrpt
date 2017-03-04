@@ -29,8 +29,6 @@ using namespace mrpt::random;
         Constructor
   ---------------------------------------------------------------*/
 CPoseRandomSampler::CPoseRandomSampler() :
-    m_pdf2D(NULL),
-    m_pdf3D(NULL),
     m_fastdraw_gauss_Z3(),
 	m_fastdraw_gauss_Z6(),
     m_fastdraw_gauss_M_2D(),
@@ -52,8 +50,6 @@ CPoseRandomSampler::~CPoseRandomSampler()
   ---------------------------------------------------------------*/
 void CPoseRandomSampler::clear()
 {
-	mrpt::utils::delete_safe( m_pdf2D );
-	mrpt::utils::delete_safe( m_pdf3D );
 }
 
 /*---------------------------------------------------------------
@@ -61,15 +57,15 @@ void CPoseRandomSampler::clear()
   ---------------------------------------------------------------*/
 void CPoseRandomSampler::setPosePDF( const CPosePDF *pdf )
 {
-    MRPT_START
+	MRPT_START
 
-    clear();
-    m_pdf2D = static_cast<CPosePDF*>( pdf->clone() );
+	clear();
 
-    // According to the PDF type:
-    if ( IS_CLASS(m_pdf2D,CPosePDFGaussian ) )
-    {
-		const CPosePDFGaussian* gPdf = static_cast<const CPosePDFGaussian*>(pdf);
+	// According to the PDF type:
+	if ( IS_CLASS(m_pdf2D,CPosePDFGaussian ) )
+	{
+		const CPosePDFGaussian* gPdf = dynamic_cast<const CPosePDFGaussian*>(pdf);
+		m_pdf2D.reset(new CPosePDFGaussian( *gPdf ));
 		const CMatrixDouble33 &cov = gPdf->cov;
 
 		m_fastdraw_gauss_M_2D = gPdf->mean;
@@ -85,16 +81,18 @@ void CPoseRandomSampler::setPosePDF( const CPosePDF *pdf )
 		// Scale eigenvectors with eigenvalues:
 		D = D.array().sqrt().matrix();
 		m_fastdraw_gauss_Z3.multiply( m_fastdraw_gauss_Z3, D);
-    }
-    else
-    if ( IS_CLASS(m_pdf2D,CPosePDFParticles ) )
-    {
-    	return; // Nothing to prepare.
-    }
-    else
-    {
-        THROW_EXCEPTION_FMT("Unsuported class: %s", m_pdf2D->GetRuntimeClass()->className );
-    }
+	}
+	else if ( IS_CLASS(m_pdf2D,CPosePDFParticles ) )
+	{
+		const CPosePDFParticles* pPdf = dynamic_cast<const CPosePDFParticles*>(pdf);
+		m_pdf2D.reset(new CPosePDFParticles( *pPdf ));
+	
+		return; // Nothing to prepare.
+	}
+	else
+	{
+		THROW_EXCEPTION_FMT("Unsupported class: %s", typeid(m_pdf2D).name() );
+	}
 
 
     MRPT_END
@@ -106,15 +104,15 @@ void CPoseRandomSampler::setPosePDF( const CPosePDF *pdf )
   ---------------------------------------------------------------*/
 void CPoseRandomSampler::setPosePDF( const CPose3DPDF *pdf )
 {
-    MRPT_START
+	MRPT_START
 
-    clear();
-    m_pdf3D = static_cast<CPose3DPDF*>( pdf->clone() );
+	clear();
 
-    // According to the PDF type:
-    if ( IS_CLASS(m_pdf3D,CPose3DPDFGaussian ) )
-    {
-		const CPose3DPDFGaussian* gPdf = static_cast<const CPose3DPDFGaussian*>(pdf);
+	// According to the PDF type:
+	if ( IS_CLASS(m_pdf3D,CPose3DPDFGaussian ) )
+	{
+		const CPose3DPDFGaussian* gPdf = dynamic_cast<const CPose3DPDFGaussian*>(pdf);
+    		m_pdf3D.reset(new CPose3DPDFGaussian(*gPdf));
 		const CMatrixDouble66 &cov = gPdf->cov;
 
 		m_fastdraw_gauss_M_3D = gPdf->mean;
@@ -130,25 +128,27 @@ void CPoseRandomSampler::setPosePDF( const CPose3DPDF *pdf )
 		// Scale eigenvectors with eigenvalues:
 		D = D.array().sqrt().matrix();
 		m_fastdraw_gauss_Z6.multiply( m_fastdraw_gauss_Z6, D);
-    }
-    else
-    if ( IS_CLASS(m_pdf3D,CPose3DPDFParticles ) )
-    {
-    	return; // Nothing to prepare.
-    }
-    else
-    {
-        THROW_EXCEPTION_FMT("Unsoported class: %s", m_pdf3D->GetRuntimeClass()->className );
-    }
+	}
+	else
+	if ( IS_CLASS(m_pdf3D,CPose3DPDFParticles ) )
+	{
+		const CPose3DPDFParticles* pPdf = dynamic_cast<const CPose3DPDFParticles*>(pdf);
+		m_pdf3D.reset(new CPose3DPDFParticles(*pPdf));
+		return; // Nothing to prepare.
+	}
+	else
+	{
+		THROW_EXCEPTION_FMT("Unsupported class: %s", typeid(m_pdf3D).name());
+	}
 
-    MRPT_END
+	MRPT_END
 }
 
-void CPoseRandomSampler::setPosePDF( const CPose3DPDFPtr &pdf ) { 
+void CPoseRandomSampler::setPosePDF( const CPose3DPDF::Ptr &pdf ) { 
 	setPosePDF(pdf.get()); 
 }
 
-void CPoseRandomSampler::setPosePDF( const CPosePDFPtr &pdf ) { 
+void CPoseRandomSampler::setPosePDF( const CPosePDF::Ptr &pdf ) { 
 	setPosePDF(pdf.get()); 
 }
 
@@ -243,11 +243,10 @@ void CPoseRandomSampler::do_sample_2D( CPose2D &p ) const
 		// -------------------------------------
 		//      Particles: just sample as usual
 		// -------------------------------------
-		const CPosePDFParticles* pdf = static_cast<const CPosePDFParticles*>(m_pdf2D);
-		pdf->drawSingleSample(p);
+		dynamic_cast<const CPosePDFParticles&>(*m_pdf2D).drawSingleSample(p);
 	}
 	else
-		THROW_EXCEPTION_FMT("Unsoported class: %s", m_pdf2D->GetRuntimeClass()->className );
+		THROW_EXCEPTION_FMT("Unsupported class: %s", typeid(m_pdf2D).name() );
 
 	MRPT_END
 }
@@ -297,11 +296,10 @@ void CPoseRandomSampler::do_sample_3D( CPose3D &p ) const
 		// -------------------------------------
 		//      Particles: just sample as usual
 		// -------------------------------------
-		const CPose3DPDFParticles* pdf = static_cast<const CPose3DPDFParticles*>(m_pdf3D);
-		pdf->drawSingleSample(p);
+		dynamic_cast<const CPose3DPDFParticles&>(*m_pdf3D).drawSingleSample(p);
 	}
 	else
-		THROW_EXCEPTION_FMT("Unsoported class: %s", m_pdf3D->GetRuntimeClass()->className );
+		THROW_EXCEPTION_FMT("Unsupported class: %s", typeid(m_pdf3D).name() );
 
 	MRPT_END
 }

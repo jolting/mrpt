@@ -41,7 +41,6 @@ namespace mrpt
 		/****************************************************
 						Class CFEATURE
 		*****************************************************/
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CFeature, mrpt::utils::CSerializable, VISION_IMPEXP )
 
 		/** A generic 2D feature from an image, extracted with \a CFeatureExtraction
 		  * Each feature may have one or more descriptors (see \a descriptors), in addition to an image patch.
@@ -55,7 +54,6 @@ namespace mrpt
 			friend class CFeatureList;
 			friend class CMatchedFeatureList;
 
-			DEFINE_SERIALIZABLE( CFeature )
 
 		public:
 			float				x,y;			//!< Coordinates in the image
@@ -200,7 +198,6 @@ namespace mrpt
 				bool dont_shift_angle );
 
 		}; // end of class
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CFeature, mrpt::utils::CSerializable, VISION_IMPEXP )
 
 
 		/****************************************************

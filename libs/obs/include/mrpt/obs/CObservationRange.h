@@ -18,7 +18,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationRange , CObservation,OBS_IMPEXP )
 
 	/** Declares a class derived from "CObservation" that
 	       encapsules a single range measurement, and associated parameters. This can be used
@@ -30,7 +29,6 @@ namespace obs
 	class OBS_IMPEXP CObservationRange : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationRange )
 
 	 public:
 		/** Default constructor.
@@ -79,7 +77,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationRange , CObservation,OBS_IMPEXP )
 	} // End of namespace
 } // End of namespace
 #endif

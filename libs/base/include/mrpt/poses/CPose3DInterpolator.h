@@ -20,7 +20,6 @@ namespace mrpt
 {
 	namespace poses
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPose3DInterpolator, mrpt::utils::CSerializable )
 
 		typedef std::pair<mrpt::system::TTimeStamp, mrpt::poses::CPose3D> TTimePosePair;
 
@@ -56,7 +55,6 @@ namespace mrpt
 		class BASE_IMPEXP CPose3DInterpolator : public mrpt::utils::CSerializable
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CPose3DInterpolator )
 
 		 private:
 			 typedef mrpt::aligned_containers< mrpt::system::TTimeStamp, CPose3D >::map_t TPath;
@@ -193,6 +191,9 @@ namespace mrpt
 			   */
 			 void filter( unsigned int component, unsigned int samples );
 
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
+
 
 		private:
 			 double maxTimeInterpolation; //!< Maximum time considered to interpolate. If the difference between the desired timestamp where to interpolate and the next timestamp stored in the map is bigger than this value, the interpolation will not be done.
@@ -200,7 +201,6 @@ namespace mrpt
 			 TInterpolatorMethod 	m_method;
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DInterpolator, mrpt::utils::CSerializable )
 
 	} // End of namespace
 

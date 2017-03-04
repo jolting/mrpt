@@ -36,7 +36,6 @@ static std::vector<size_t> DEFAULT_VECTOR;
 namespace mrpt {
 namespace pbmap {
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_LINKAGE( Plane, PBMAP_IMPEXP)
 
 	/** A class used to store a planar feature (Plane for short).
 	 *  It is described with geometric features representing the shape and relative
@@ -48,7 +47,6 @@ namespace pbmap {
   class PBMAP_IMPEXP Plane : public mrpt::utils::CSerializable
   {
     // This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE( Plane )
 
    public:
     Plane() :
@@ -202,7 +200,6 @@ namespace pbmap {
 //    vector<vector<float> > HSV;
 
   };
-	DEFINE_SERIALIZABLE_POST_CUSTOM_LINKAGE( Plane, PBMAP_IMPEXP)
 
 } } // End of namespaces
 

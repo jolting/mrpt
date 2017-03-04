@@ -21,8 +21,6 @@ using namespace mrpt::math;
 using namespace mrpt::nav;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CLogFileRecord_ND, CHolonomicLogFileRecord,mrpt::nav )
-IMPLEMENTS_SERIALIZABLE( CHolonomicND, CAbstractHolonomicReactiveMethod,mrpt::nav)
 
 /**  Initialize the parameters of the navigator, from some
 *    configuration file, or default values if filename is set to NULL.

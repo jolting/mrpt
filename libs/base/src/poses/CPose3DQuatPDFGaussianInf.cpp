@@ -26,7 +26,6 @@ using namespace mrpt::random;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPose3DQuatPDFGaussianInf, CPose3DQuatPDF, mrpt::poses )
 
 /** Default constructor - set all values to zero. */
 CPose3DQuatPDFGaussianInf::CPose3DQuatPDFGaussianInf() :
@@ -203,7 +202,7 @@ void  CPose3DQuatPDFGaussianInf::drawManySamples(
  ---------------------------------------------------------------*/
 void	 CPose3DQuatPDFGaussianInf::inverse(CPose3DQuatPDF &o) const
 {
-	ASSERT_(o.GetRuntimeClass() == CLASS_ID(CPose3DQuatPDFGaussianInf));
+	ASSERT_(typeid(o) == typeid(CPose3DQuatPDFGaussianInf));
 	CPose3DQuatPDFGaussianInf	&out = static_cast<CPose3DQuatPDFGaussianInf&>(o);
 
 	// COV:

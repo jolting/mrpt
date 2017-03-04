@@ -21,7 +21,6 @@ namespace mrpt
 {
 	namespace hmtslam
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CHierarchicalMHMap, mrpt::utils::CSerializable,  HMTSLAM_IMPEXP )
 
 		/** The most high level class for storing hybrid, multi-hypothesis maps in a graph-based model.
 		 *   This class is used within the HMT-SLAM implementation in CHMTSLAM.
@@ -34,7 +33,6 @@ namespace mrpt
 			friend class CHMHMapNode;
 
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CHierarchicalMHMap )
 		protected:
 			/** Event handler to be called just after a node has being created: it will be added to the internal list.
 			  */
@@ -76,7 +74,6 @@ namespace mrpt
 			 void  clear();
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CHierarchicalMHMap, mrpt::utils::CSerializable,  HMTSLAM_IMPEXP )
 
 	} // End of namespace
 } // End of namespace

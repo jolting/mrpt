@@ -18,7 +18,6 @@
 
 using namespace mrpt::nav;
 
-IMPLEMENTS_SERIALIZABLE( CLogFileRecord, CSerializable,mrpt::nav )
 
 
 /*---------------------------------------------------------------

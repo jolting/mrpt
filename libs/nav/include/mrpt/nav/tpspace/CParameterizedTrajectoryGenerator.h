@@ -39,7 +39,6 @@ namespace nav
 	/** \defgroup nav_tpspace TP-Space and PTG classes
 	  * \ingroup mrpt_nav_grp
 	  */
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CParameterizedTrajectoryGenerator, mrpt::utils::CSerializable, NAV_IMPEXP)
 
 	/** This is the base class for any user-defined PTG.
 	 *  There is a class factory interface in CParameterizedTrajectoryGenerator::CreatePTG.
@@ -60,7 +59,6 @@ namespace nav
 		public mrpt::utils::CSerializable,
 		public mrpt::utils::CLoadableOptions
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE(CParameterizedTrajectoryGenerator)
 	public:
 		CParameterizedTrajectoryGenerator(); //!< Default ctor. Must call `loadFromConfigFile()` before initialization
 		virtual ~CParameterizedTrajectoryGenerator() //!<  Destructor 
@@ -301,7 +299,6 @@ protected:
 		virtual void evalClearanceSingleObstacle(const double ox, const double oy, const uint16_t k, std::map<double, double> & inout_realdist2clearance) const;
 
 	}; // end of class
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CParameterizedTrajectoryGenerator, mrpt::utils::CSerializable, NAV_IMPEXP )
 
 
 	typedef std::vector<mrpt::nav::CParameterizedTrajectoryGenerator*>  TListPTGs;      //!< A list of PTGs (bare pointers)

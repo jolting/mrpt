@@ -62,7 +62,6 @@ mrpt::maps::CMetricMap* CColouredPointsMap::internal_CreateFromMapDefinition(con
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(CColouredPointsMap, CPointsMap,mrpt::maps)
 
 
 #if MRPT_HAS_PCL

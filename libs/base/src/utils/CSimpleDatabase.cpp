@@ -24,8 +24,6 @@ using namespace std;
 #include <iostream>
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CSimpleDatabase, CSerializable, mrpt::utils)
-IMPLEMENTS_SERIALIZABLE(CSimpleDatabaseTable, CSerializable, mrpt::utils)
 
 /*---------------------------------------------------------------
 						writeToStream

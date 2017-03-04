@@ -18,7 +18,6 @@ namespace mrpt
 {
   namespace nav
   {
-	 DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CLogFileRecord_VFF, CHolonomicLogFileRecord, NAV_IMPEXP )
 	/** \addtogroup nav_holo Holonomic navigation methods
 	  * \ingroup mrpt_nav_grp
 	  * @{ */
@@ -29,14 +28,11 @@ namespace mrpt
 	 */
 	class NAV_IMPEXP CLogFileRecord_VFF : public CHolonomicLogFileRecord
 	{
-		DEFINE_SERIALIZABLE( CLogFileRecord_VFF )
 	 public:
 
 	};
-	 DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CLogFileRecord_VFF, CHolonomicLogFileRecord, NAV_IMPEXP )
 
 
-	 DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CHolonomicVFF, CAbstractHolonomicReactiveMethod, NAV_IMPEXP )
 	/** A holonomic reactive navigation method, based on Virtual Force Fields (VFF).
 	 *
 	 * These are the optional parameters of the method which can be set by means of a configuration file passed to the constructor or to CHolonomicND::initialize (see also the field CHolonomicVFF::options).
@@ -52,7 +48,6 @@ namespace mrpt
 	 */
 	class NAV_IMPEXP CHolonomicVFF : public CAbstractHolonomicReactiveMethod
 	{
-		DEFINE_SERIALIZABLE( CHolonomicVFF )
 	public:
 		/**  Initialize the parameters of the navigator, from some configuration file, or default values if set to NULL. */
 		CHolonomicVFF(const mrpt::utils::CConfigFileBase *INI_FILE=NULL);
@@ -77,7 +72,6 @@ namespace mrpt
 		TOptions options;  //!< Parameters of the algorithm (can be set manually or loaded from CHolonomicVFF::initialize or options.loadFromConfigFile(), etc.)
 
 	};
-	 DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CHolonomicVFF, CAbstractHolonomicReactiveMethod, NAV_IMPEXP )
 	  /** @} */
   }
 }

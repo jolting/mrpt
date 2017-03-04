@@ -27,7 +27,6 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFSOG, CPosePDF, mrpt::poses )
 
 
 /*---------------------------------------------------------------
@@ -199,7 +198,7 @@ void  CPosePDFSOG::copyFrom(const CPosePDF &o)
 
 	if (this == &o) return;		// It may be used sometimes
 
-	if (o.GetRuntimeClass()==CLASS_ID(CPosePDFSOG))
+	if (typeid(o)==typeid(CPosePDFSOG))
 	{
 		m_modes = static_cast<const CPosePDFSOG*>(&o)->m_modes;
 	}
@@ -320,8 +319,8 @@ void  CPosePDFSOG::bayesianFusion(const  CPosePDF &p1_,const  CPosePDF &p2_, con
 
 	// p1: CPosePDFSOG, p2: CPosePDFGaussian:
 
-	ASSERT_( p1_.GetRuntimeClass() == CLASS_ID(CPosePDFSOG) );
-	ASSERT_( p2_.GetRuntimeClass() == CLASS_ID(CPosePDFGaussian) );
+	ASSERT_( typeid(p1_) == typeid(CPosePDFSOG) );
+	ASSERT_( typeid(p2_) == typeid(CPosePDFGaussian) );
 
 	const CPosePDFSOG			*p1 = static_cast<const CPosePDFSOG*>(&p1_);
 	const CPosePDFGaussian		*p2 = static_cast<const CPosePDFGaussian*>(&p2_);
@@ -390,7 +389,7 @@ void  CPosePDFSOG::bayesianFusion(const  CPosePDF &p1_,const  CPosePDF &p2_, con
  ---------------------------------------------------------------*/
 void	 CPosePDFSOG::inverse(CPosePDF &o)  const
 {
-	ASSERT_(o.GetRuntimeClass() == CLASS_ID(CPosePDFSOG));
+	ASSERT_(typeid(o) == typeid(CPosePDFSOG));
 	CPosePDFSOG	*out = static_cast<CPosePDFSOG*>( &o );
 
 	const_iterator	itSrc;

@@ -37,7 +37,6 @@ namespace maps
 {
 	class TSetOfMetricMapInitializers;
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CMultiMetricMap , CMetricMap, SLAM_IMPEXP )
 
 	/** This class stores any customizable set of metric maps.
 	 * The internal metric maps can be accessed directly by the user as smart pointers with CMultiMetricMap::getMapByIndex() or via `iterator`s.
@@ -123,7 +122,6 @@ namespace maps
 	class SLAM_IMPEXP CMultiMetricMap : public mrpt::maps::CMetricMap
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CMultiMetricMap )
 	protected:
 		void deleteAllMaps(); //!< Deletes all maps and clears the internal lists of maps (with clear_unique(), so user copies remain alive)
 		void internal_clear() MRPT_OVERRIDE; //!< Clear all elements of the map.
@@ -328,7 +326,6 @@ namespace maps
 		unsigned int	m_ID;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CMultiMetricMap , mrpt::maps::CMetricMap, SLAM_IMPEXP )
 
 
 	} // End of namespace

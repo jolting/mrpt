@@ -546,7 +546,7 @@ void CFormMotionModel::applyToRawlogFile()
             wxTheApp->Yield();  // Let the app. process messages
         }
 
-        CSerializablePtr newObj;
+        CSerializable::Ptr newObj;
         try
         {
             in_fil >> newObj;
@@ -918,7 +918,7 @@ void CFormMotionModel::OnbtnGetFromFileClick(wxCommandEvent& event)
 
     while (keepLoading)
     {
-        CSerializablePtr newObj;
+        CSerializable::Ptr newObj;
 
         fil >> newObj;
 

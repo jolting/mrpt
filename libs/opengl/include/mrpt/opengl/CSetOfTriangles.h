@@ -19,7 +19,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CSetOfTriangles, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A set of colored triangles.
 		  *  This class can be used to draw any solid, arbitrarily complex object (without textures).
@@ -28,7 +27,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CSetOfTriangles : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CSetOfTriangles )
 		public:
 			/**
 			  * Triangle definition. Each vertex has three spatial coordinates and four color values.
@@ -191,7 +189,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CSetOfTriangles() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CSetOfTriangles, CRenderizableDisplayList, OPENGL_IMPEXP )
 		/** Inserts a set of triangles into the list; note that this method allows to pass another CSetOfTriangles as argument. Allows call chaining.
 		  * \sa mrpt::opengl::CSetOfTriangles::insertTriangle
 		  */

@@ -36,7 +36,6 @@ namespace mrpt
 		hmFULL_EVAL = 2              //!< CHolonomicFullEval
 	};
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CAbstractHolonomicReactiveMethod, mrpt::utils::CSerializable, NAV_IMPEXP)
 
 	/** A base class for holonomic reactive navigation methods.
 	 *  \sa CHolonomicVFF,CHolonomicND,CHolonomicFullEval, CReactiveNavigationSystem
@@ -44,7 +43,6 @@ namespace mrpt
 	class NAV_IMPEXP CAbstractHolonomicReactiveMethod :
 		public mrpt::utils::CSerializable
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE(CAbstractHolonomicReactiveMethod)
 	public:
 		/** Input parameters for CAbstractHolonomicReactiveMethod::navigate() */
 		struct NAV_IMPEXP NavInput
@@ -104,7 +102,6 @@ namespace mrpt
 	private:
 		std::string m_cfgSectionName; //!< used in setConfigFileSectionName(), initialize()
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CAbstractHolonomicReactiveMethod, mrpt::utils::CSerializable, NAV_IMPEXP )
 	  /** @} */
 
   }

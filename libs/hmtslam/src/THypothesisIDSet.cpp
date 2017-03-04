@@ -13,7 +13,6 @@ using namespace mrpt::hmtslam;
 using namespace mrpt::utils;
 
 
-IMPLEMENTS_SERIALIZABLE(THypothesisIDSet, CSerializable, mrpt::hmtslam)
 
 
 /*---------------------------------------------------------------

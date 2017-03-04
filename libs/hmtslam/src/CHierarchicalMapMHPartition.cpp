@@ -899,7 +899,7 @@ void  CHierarchicalMapMHPartition::computeCoordinatesTransformationBetweenNodes(
 
 
 		// Get the pose PDF:
-		CSerializablePtr anotation = (*arcsIt)->m_annotations.get( ARC_ANNOTATION_DELTA, hypothesisID );
+		CSerializable::Ptr anotation = (*arcsIt)->m_annotations.get( ARC_ANNOTATION_DELTA, hypothesisID );
 		ASSERT_( anotation );
 
 		CPose3DPDFGaussian pdf; // Convert to gaussian
@@ -1302,7 +1302,7 @@ void  CHierarchicalMapMHPartition::computeGloballyConsistentNodeCoordinates(
 		const CHMHMapNode::TNodeID id_from = (*it_arc)->getNodeFrom();
 		const CHMHMapNode::TNodeID id_to   = (*it_arc)->getNodeTo();
 
-		CSerializablePtr anotation = (*it_arc)->m_annotations.get( ARC_ANNOTATION_DELTA, hypothesisID );
+		CSerializable::Ptr anotation = (*it_arc)->m_annotations.get( ARC_ANNOTATION_DELTA, hypothesisID );
 		if (!anotation) continue;
 		
 		CPose3DPDFGaussianInf edge_rel_pose_pdf; // Convert to gaussian
@@ -1445,7 +1445,7 @@ void  CHierarchicalMapMHPartition::dumpAsText(utils::CStringList &st) const
 			}
 			else if ( ann->name == ARC_ANNOTATION_DELTA )
 			{
-				CSerializablePtr o = (*it)->m_annotations.get(ARC_ANNOTATION_DELTA, ann->ID );
+				CSerializable::Ptr o = (*it)->m_annotations.get(ARC_ANNOTATION_DELTA, ann->ID );
 				ASSERT_(o);
 
 				CPose3DPDFGaussian relativePoseAcordToArc;

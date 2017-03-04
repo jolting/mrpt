@@ -21,7 +21,6 @@ namespace poses
 	class CPosePDFGaussian;
 	class CPose3DPDFGaussian;
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPose3DQuatPDFGaussian , CPose3DQuatPDF )
 
 	/** Declares a class that represents a Probability Density function (PDF) of a 3D pose using a quaternion \f$ p(\mathbf{x}) = [x ~ y ~ z ~ qr ~ qx ~ qy ~ qz]^\top \f$.
 	 *
@@ -39,7 +38,6 @@ namespace poses
 	class BASE_IMPEXP CPose3DQuatPDFGaussian : public CPose3DQuatPDF
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DQuatPDFGaussian )
 
 	protected:
 		/** Assures the symmetry of the covariance matrix (eventually certain operations in the math-coprocessor lead to non-symmetric matrixes!)
@@ -113,8 +111,10 @@ namespace poses
 		  *   "infinity" is returned if the corresponding elements are not exactly equal. */
 		double mahalanobisDistanceTo( const CPose3DQuatPDFGaussian& theOther);
 
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
+
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DQuatPDFGaussian , CPose3DQuatPDF )
 
 
 	bool BASE_IMPEXP operator==(const CPose3DQuatPDFGaussian &p1,const CPose3DQuatPDFGaussian &p2);

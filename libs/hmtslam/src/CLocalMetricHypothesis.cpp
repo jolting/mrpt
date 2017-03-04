@@ -35,8 +35,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CLocalMetricHypothesis, CSerializable,mrpt::hmtslam)
-IMPLEMENTS_SERIALIZABLE(CLSLAMParticleData, CSerializable,mrpt::hmtslam)
 
 
 /*---------------------------------------------------------------
@@ -782,7 +780,7 @@ void CLocalMetricHypothesis::updateAreaFromLMH(
 	// ---------------------------------------------------------------------
 	CRobotPosesGraphPtr posesGraph;
 	{
-		CSerializablePtr annot = node->m_annotations.get(NODE_ANNOTATION_POSES_GRAPH,m_ID);
+		CSerializable::Ptr annot = node->m_annotations.get(NODE_ANNOTATION_POSES_GRAPH,m_ID);
 		if (!annot)
 		{
 			// Add it now:

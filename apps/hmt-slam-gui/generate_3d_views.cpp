@@ -59,7 +59,7 @@ void hmt_slam_guiFrame::updateLocalMapView()
 	if (!data1) return;
 	if (!data1->m_ptr) return;
 
-	CSerializablePtr obj = data1->m_ptr;
+	CSerializable::Ptr obj = data1->m_ptr;
 	if (obj->GetRuntimeClass()==CLASS_ID(CHMHMapNode))
 	{
 		// The 3D view:

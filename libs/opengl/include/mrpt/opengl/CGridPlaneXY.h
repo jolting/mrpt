@@ -19,7 +19,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CGridPlaneXY , CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A grid of lines over the XY plane.
 		  *  \sa opengl::COpenGLScene
@@ -34,7 +33,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CGridPlaneXY : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CGridPlaneXY )
 
 		protected:
 			float	m_xMin, m_xMax;
@@ -104,7 +102,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CGridPlaneXY() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CGridPlaneXY , CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

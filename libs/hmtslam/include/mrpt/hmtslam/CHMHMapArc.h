@@ -34,7 +34,6 @@ namespace mrpt
 			friend class TArcList;
 
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CHMHMapArc )
 
 		public:
 			/** The hypothesis IDs under which this arc exists.
@@ -113,7 +112,6 @@ namespace mrpt
 			utils::CMHPropertiesValuesList	m_annotations;
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CHMHMapArc,mrpt::utils::CSerializable, HMTSLAM_IMPEXP )
 
 
 	} // End of namespace

@@ -36,7 +36,6 @@ namespace mrpt
 		class CLSLAMAlgorithmBase;
 		class CLSLAM_RBPF_2DLASER;
 
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CHMTSLAM, mrpt::utils::CSerializable, HMTSLAM_IMPEXP )
 
 		/** An implementation of Hybrid Metric Topological SLAM (HMT-SLAM).
 		 *
@@ -64,7 +63,6 @@ namespace mrpt
 			friend class CTopLCDetector_FabMap;
 
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CHMTSLAM )
 
 		protected:
 
@@ -209,10 +207,10 @@ namespace mrpt
 			/** Used from the LSLAM thread to retrieve the next object from the queue.
 			  * \return The object, or NULL if empty.
 			  */
-			mrpt::utils::CSerializablePtr getNextObjectFromInputQueue();
+			mrpt::utils::CSerializable::Ptr getNextObjectFromInputQueue();
 
 			/** The queue of pending actions/observations supplied by the user waiting for being processed. */
-			std::queue<mrpt::utils::CSerializablePtr>		m_inputQueue;
+			std::queue<mrpt::utils::CSerializable::Ptr>		m_inputQueue;
 
 			/** Critical section for accessing  m_inputQueue */
 			synch::CCriticalSection	m_inputQueue_cs;
@@ -453,7 +451,6 @@ namespace mrpt
 			} m_options;
 
 		}; // End of class CHMTSLAM.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CHMTSLAM, mrpt::utils::CSerializable, HMTSLAM_IMPEXP )
 
 
 		/** Virtual base for local SLAM methods, used in mrpt::slam::CHMTSLAM.

@@ -801,7 +801,7 @@ void CFormEdit::executeOperationOnRawlog( TRawlogFilter operation, const char *e
     while ( ( !isInMemory && keepLoading ) ||
             (  isInMemory && countLoop < rawlog.size() ) )
     {
-        CSerializablePtr newObj;
+        CSerializable::Ptr newObj;
         try
         {
             if (isInMemory)

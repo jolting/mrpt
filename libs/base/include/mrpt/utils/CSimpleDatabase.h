@@ -19,9 +19,7 @@ namespace utils
 {
 
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CSimpleDatabase, mrpt::utils::CSerializable )
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CSimpleDatabaseTable, mrpt::utils::CSerializable )
 
 /**  This class implements the tables of databases.
  * \sa CSimpleDatabase \ingroup mrpt_base_grp
@@ -29,7 +27,6 @@ namespace utils
 class BASE_IMPEXP CSimpleDatabaseTable : public mrpt::utils::CSerializable
 {
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE( CSimpleDatabaseTable )
 public:
 	/** Default constructor
 	  */
@@ -122,7 +119,6 @@ private:
 class BASE_IMPEXP CSimpleDatabase  : public mrpt::utils::CSerializable
 {
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE( CSimpleDatabase )
 
 public:
 	/** Default constructor
@@ -197,8 +193,6 @@ private:
 
 }; // end of class definition
 
-DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CSimpleDatabase, mrpt::utils::CSerializable )
-DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CSimpleDatabaseTable, mrpt::utils::CSerializable )
 
 
 } // End of namespace

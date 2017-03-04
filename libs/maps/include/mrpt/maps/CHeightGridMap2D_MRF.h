@@ -18,7 +18,6 @@ namespace mrpt
 {
 namespace maps
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CHeightGridMap2D_MRF , CRandomFieldGridMap2D, MAPS_IMPEXP )
 
 	/** CHeightGridMap2D_MRF represents digital-elevation-model over a 2D area, with uncertainty, based on a Markov-Random-Field (MRF) estimator.
 	  *
@@ -34,7 +33,6 @@ namespace maps
 	class MAPS_IMPEXP CHeightGridMap2D_MRF : public CRandomFieldGridMap2D, public CHeightGridMap2D_Base
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CHeightGridMap2D_MRF )
 	public:
 		/** Constructor */
 		CHeightGridMap2D_MRF(
@@ -87,7 +85,6 @@ namespace maps
 		MAP_DEFINITION_END(CHeightGridMap2D_MRF,MAPS_IMPEXP)
 	};
 
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CHeightGridMap2D_MRF , CRandomFieldGridMap2D, MAPS_IMPEXP )
 
 	} // End of namespace
 } // End of namespace

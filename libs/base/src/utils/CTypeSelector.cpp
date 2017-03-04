@@ -19,7 +19,6 @@ using namespace mrpt::system;
 using namespace std;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CTypeSelector, CSerializable, mrpt::utils)
 
 /*---------------------------------------------------------------
 						writeToStream

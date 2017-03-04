@@ -19,7 +19,6 @@ namespace mrpt
 namespace obs
 {
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationGasSensors , CObservation, OBS_IMPEXP)
 
 	/** Declares a class derived from "CObservation" that represents a set of readings from gas sensors.
 	 *
@@ -29,7 +28,6 @@ namespace obs
 	class OBS_IMPEXP CObservationGasSensors : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationGasSensors )
 
 	 public:
 		/** Constructor.
@@ -149,7 +147,6 @@ namespace obs
 					}; //End of CMOSmodel class def.
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationGasSensors , CObservation, OBS_IMPEXP)
 
 	} // End of namespace
 } // End of namespace

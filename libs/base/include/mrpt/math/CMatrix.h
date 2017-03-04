@@ -17,22 +17,16 @@ namespace mrpt
 {
 	namespace math
 	{
-		// This must be added to any CSerializable derived class:
-		// Note: instead of the standard "DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE", classes inheriting
-		// from templates need special nasty handling for MSVC DLL exports...
-		DEFINE_MRPT_OBJECT_PRE_CUSTOM_BASE_LINKAGE2(CMatrix, mrpt::utils::CSerializable, CMatrix)
-		BASE_IMPEXP ::mrpt::utils::CStream& operator>>(mrpt::utils::CStream& in, CMatrixPtr &pObj);
-
 		/**  This class is a "CSerializable" wrapper for "CMatrixFloat".
 		 * \note For a complete introduction to Matrices and vectors in MRPT, see: http://www.mrpt.org/Matrices_vectors_arrays_and_Linear_Algebra_MRPT_and_Eigen_classes
 		 * \ingroup mrpt_base_grp
 		 */
 		class BASE_IMPEXP_TEMPL CMatrix : public mrpt::utils::CSerializable, public CMatrixFloat
 		{
-			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE_CUSTOM_LINKAGE( CMatrix, void BASE_IMPEXP, static BASE_IMPEXP, virtual BASE_IMPEXP )
-
 		public:
+			using Ptr = std::shared_ptr<CMatrix>;
+			using ConstPtr = std::shared_ptr<const CMatrix>;
+
 			/** Constructor  */
 			CMatrix() : CMatrixFloat(1,1)
 			{ }
@@ -80,9 +74,11 @@ namespace mrpt
 			/*! Constructor from any other Eigen class */
 			template<typename OtherDerived>
 			inline CMatrix(const Eigen::MatrixBase <OtherDerived>& other) : CMatrixTemplateNumeric<float>(other) { }
-
+                        void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
 		}; // end of class definition
-		DEFINE_MRPT_OBJECT_POST_CUSTOM_BASE_LINKAGE2(CMatrix, mrpt::utils::CSerializable, CMatrix)
+
+		BASE_IMPEXP ::mrpt::utils::CStream& operator>>(mrpt::utils::CStream& in, CMatrix::Ptr &pObj);
 
 	} // End of namespace
 } // End of namespace

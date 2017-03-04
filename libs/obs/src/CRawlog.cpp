@@ -23,7 +23,6 @@ using namespace mrpt::poses;
 using namespace mrpt::utils;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE(CRawlog, CSerializable,mrpt::obs)
 
 // ctor
 CRawlog::CRawlog() : m_seqOfActObs(), m_commentTexts()
@@ -44,11 +43,11 @@ void  CRawlog::clear()
 
 void  CRawlog::addObservations(CSensoryFrame		&observations )
 {
-	m_seqOfActObs.push_back( CSerializablePtr( observations.duplicateGetSmartPtr() ) );
+	m_seqOfActObs.push_back( CSerializable::Ptr( observations.duplicateGetSmartPtr() ) );
 }
 
 void  CRawlog::addActions(CActionCollection		&actions ) {
-	m_seqOfActObs.push_back( CSerializablePtr( actions.duplicateGetSmartPtr() ) );
+	m_seqOfActObs.push_back( CSerializable::Ptr( actions.duplicateGetSmartPtr() ) );
 }
 
 void  CRawlog::addActionsMemoryReference( const CActionCollectionPtr &action ) {
@@ -58,7 +57,7 @@ void  CRawlog::addActionsMemoryReference( const CActionCollectionPtr &action ) {
 void  CRawlog::addObservationsMemoryReference( const CSensoryFramePtr &observations ) {
 	m_seqOfActObs.push_back( observations );
 }
-void  CRawlog::addGenericObject( const CSerializablePtr &obj ) {
+void  CRawlog::addGenericObject( const CSerializable::Ptr &obj ) {
 	m_seqOfActObs.push_back( obj );
 }
 
@@ -92,7 +91,7 @@ CActionCollectionPtr  CRawlog::getAsAction( size_t index ) const
 	if (index >=m_seqOfActObs.size())
 		THROW_EXCEPTION("Index out of bounds")
 
-	CSerializablePtr obj = m_seqOfActObs[index];
+	CSerializable::Ptr obj = m_seqOfActObs[index];
 
 	if ( obj->GetRuntimeClass() == CLASS_ID(CActionCollection) )
 			return CActionCollectionPtr( obj );
@@ -107,7 +106,7 @@ CObservationPtr  CRawlog::getAsObservation( size_t index ) const
 	if (index >=m_seqOfActObs.size())
 		THROW_EXCEPTION("Index out of bounds")
 
-	CSerializablePtr obj = m_seqOfActObs[index];
+	CSerializable::Ptr obj = m_seqOfActObs[index];
 
 	if ( obj->GetRuntimeClass()->derivedFrom( CLASS_ID(CObservation) ) )
 			return CObservationPtr( obj );
@@ -115,7 +114,7 @@ CObservationPtr  CRawlog::getAsObservation( size_t index ) const
 	MRPT_END
 }
 
-CSerializablePtr CRawlog::getAsGeneric( size_t index ) const
+CSerializable::Ptr CRawlog::getAsGeneric( size_t index ) const
 {
 	MRPT_START
 	if (index >=m_seqOfActObs.size())
@@ -131,7 +130,7 @@ CRawlog::TEntryType CRawlog::getType( size_t index ) const
 	if (index >=m_seqOfActObs.size())
 		THROW_EXCEPTION("Index out of bounds")
 
-	const CSerializablePtr &obj = m_seqOfActObs[index];
+	const CSerializable::Ptr &obj = m_seqOfActObs[index];
 
 	if( obj->GetRuntimeClass()->derivedFrom( CLASS_ID(CObservation) ) )
 		return etObservation;
@@ -150,7 +149,7 @@ CSensoryFramePtr  CRawlog::getAsObservations( size_t index ) const
 	if (index >=m_seqOfActObs.size())
 		THROW_EXCEPTION("Index out of bounds")
 
-	CSerializablePtr obj = m_seqOfActObs[index];
+	CSerializable::Ptr obj = m_seqOfActObs[index];
 
 	if ( obj->GetRuntimeClass()->derivedFrom( CLASS_ID(CSensoryFrame) ))
 			return CSensoryFramePtr( obj );
@@ -191,7 +190,7 @@ void  CRawlog::readFromStream(mrpt::utils::CStream &in,int version)
 			in >> n;
 			m_seqOfActObs.resize(n);
 			for (i=0;i<n;i++)
-				m_seqOfActObs[i] = CSerializablePtr( in.ReadObject() );
+				m_seqOfActObs[i] = CSerializable::Ptr( in.ReadObject() );
 
 			in >> m_commentTexts;
 
@@ -213,7 +212,7 @@ bool  CRawlog::loadFromRawLogFile( const std::string &fileName, bool non_obs_obj
 	bool keepReading = true;
 	while (keepReading)
 	{
-		CSerializablePtr newObj;
+		CSerializable::Ptr newObj;
 		try
 		{
 			fs >> newObj;
@@ -337,7 +336,7 @@ bool CRawlog::readActionObservationPair(
 		action.reset();
 		while (!action)
 		{
-			CSerializablePtr obj;
+			CSerializable::Ptr obj;
 			inStream >> obj;
 			if (obj->GetRuntimeClass() == CLASS_ID( CActionCollection ) )
 			{
@@ -354,7 +353,7 @@ bool CRawlog::readActionObservationPair(
 		observations.reset();
 		while (!observations)
 		{
-			CSerializablePtr obj;
+			CSerializable::Ptr obj;
 			inStream >> obj;
 			if (obj->GetRuntimeClass() == CLASS_ID( CSensoryFrame ) )
 			{
@@ -402,7 +401,7 @@ bool CRawlog::getActionObservationPairOrObservation(
 		action.reset();
 		while (!action)
 		{
-			CSerializablePtr obj;
+			CSerializable::Ptr obj;
 			inStream >> obj;
 			if (IS_CLASS(obj,CActionCollection ) )
 			{
@@ -423,7 +422,7 @@ bool CRawlog::getActionObservationPairOrObservation(
 		observations.reset();
 		while (!observations)
 		{
-			CSerializablePtr obj;
+			CSerializable::Ptr obj;
 			inStream >> obj;
 			if (obj->GetRuntimeClass() == CLASS_ID( CSensoryFrame ) )
 			{

@@ -18,7 +18,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CAxis, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** Draw a 3D world axis, with coordinate marks at some regular interval
 		  *  \sa opengl::COpenGLScene
@@ -33,7 +32,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CAxis : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CAxis )
 		protected:
 			float	m_xmin,m_ymin,m_zmin;
 			float	m_xmax,m_ymax,m_zmax;
@@ -78,7 +76,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CAxis() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CAxis, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 } // End of namespace

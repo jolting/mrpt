@@ -22,7 +22,6 @@ using namespace mrpt::math;
 using namespace std;
 
 
-IMPLEMENTS_SERIALIZABLE( CSphere, CRenderizableDisplayList, mrpt::opengl )
 
 CSpherePtr CSphere::Create(
 	float radius, int nDivsLongitude, int nDivsLatitude)

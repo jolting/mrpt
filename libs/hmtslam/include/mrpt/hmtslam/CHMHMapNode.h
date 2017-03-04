@@ -25,7 +25,6 @@ namespace mrpt
 		class HMTSLAM_IMPEXP CHierarchicalMHMap;
 		class HMTSLAM_IMPEXP CHMHMapArc;
 
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CHMHMapNode,mrpt::utils::CSerializable, HMTSLAM_IMPEXP )
 
 		/** A class for representing a node in a hierarchical, multi-hypothesis map.
 		 *   The node itself will be considered only if some given hypothesisID matchs its own ID.
@@ -41,7 +40,6 @@ namespace mrpt
 			friend class HMTSLAM_IMPEXP CHMHMapArc;
 
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CHMHMapNode )
 
 		public:
 			/** The type of the IDs of nodes.
@@ -139,7 +137,6 @@ namespace mrpt
 			bool isNeighbor(const TNodeID &otherArea, const THypothesisID &hyp_id ) const;
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CHMHMapNode,mrpt::utils::CSerializable, HMTSLAM_IMPEXP )
 
 
 		/** A map between node IDs and nodes (used in HMT-SLAM).

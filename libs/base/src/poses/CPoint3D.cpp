@@ -21,7 +21,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(CPoint3D, CSerializable, mrpt::poses)
 
 /** Constructor from an CPoint2D object. */  // Here instead of in the .h to avoid headers include loops.
 CPoint3D::CPoint3D( const CPoint2D &p) { m_coords[0]=p.x(); m_coords[1]=p.y(); m_coords[2]=0; }

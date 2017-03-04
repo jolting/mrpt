@@ -25,7 +25,6 @@ using namespace mrpt::math;
 using namespace mrpt::random;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE( CPoint2DPDFGaussian, CPoint2DPDF, mrpt::poses )
 
 
 /*---------------------------------------------------------------
@@ -223,8 +222,8 @@ void  CPoint2DPDFGaussian::bayesianFusion( const CPoint2DPDF &p1_, const CPoint2
 	MRPT_START
 
 	// p1: CPoint2DPDFGaussian, p2: CPosePDFGaussian:
-	ASSERT_( p1_.GetRuntimeClass() == CLASS_ID(CPoint2DPDFGaussian) );
-	ASSERT_( p2_.GetRuntimeClass() == CLASS_ID(CPoint2DPDFGaussian) );
+	ASSERT_( typeid(p1_) == typeid(CPoint2DPDFGaussian) );
+	ASSERT_( typeid(p2_) == typeid(CPoint2DPDFGaussian) );
 
 	THROW_EXCEPTION("TODO!!!");
 

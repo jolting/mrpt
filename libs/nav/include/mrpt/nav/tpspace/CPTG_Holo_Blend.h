@@ -15,7 +15,6 @@ namespace mrpt
 {
   namespace nav
   {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CPTG_Holo_Blend, CParameterizedTrajectoryGenerator, NAV_IMPEXP)
 
 	/** A PTG for circular-shaped robots with holonomic kinematics.
 	 * - **Compatible kinematics**: Holonomic robot capable of velocity commands with a linear interpolation ("ramp "or "blending") time. See mrpt::kinematics::CVehicleSimul_Holo
@@ -27,7 +26,6 @@ namespace mrpt
 	 */
 	class NAV_IMPEXP CPTG_Holo_Blend : public CPTG_RobotShape_Circular
 	{
-		DEFINE_SERIALIZABLE(CPTG_Holo_Blend)
 	public:
 		CPTG_Holo_Blend();
 		CPTG_Holo_Blend(const mrpt::utils::CConfigFileBase &cfg,const std::string &sSection);
@@ -93,7 +91,6 @@ namespace mrpt
 		static double calc_trans_distance_t_below_Tramp_abc(double t, double a, double b, double c);
 
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CPTG_Holo_Blend, CParameterizedTrajectoryGenerator, NAV_IMPEXP)
 
   }
 }

@@ -19,7 +19,6 @@ namespace mrpt
 	namespace poses
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE(CPose3DPDFParticles,CPose3DPDF)
 
 		/** Declares a class that represents a Probability Density function (PDF) of a 3D pose
 		 *
@@ -36,7 +35,6 @@ namespace mrpt
 			public mrpt::bayes::CParticleFilterDataImpl<CPose3DPDFParticles,mrpt::bayes::CParticleFilterData<CPose3D>::CParticleList>
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CPose3DPDFParticles )
 
 		 public:
 			/** Constructor
@@ -72,9 +70,10 @@ namespace mrpt
 			void inverse(CPose3DPDF &o) const MRPT_OVERRIDE; //!< Returns a new PDF such as: NEW_PDF = (0,0,0) - THIS_PDF
 			CPose3D getMostLikelyParticle() const;  //!< Returns the particle with the highest weight.
 			void  bayesianFusion( const CPose3DPDF &p1, const CPose3DPDF &p2 ) MRPT_OVERRIDE; //!< Bayesian fusion
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE(CPose3DPDFParticles,CPose3DPDF)
 	} // End of namespace
 } // End of namespace
 #endif

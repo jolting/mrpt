@@ -30,7 +30,6 @@ namespace mrpt
 /** \ingroup mrpt_maps_grp */
 namespace maps
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CPointsMap , CMetricMap, MAPS_IMPEXP )
 
 	// Forward decls. needed to make its static methods friends of CPointsMap
 	namespace detail {
@@ -62,7 +61,6 @@ namespace maps
 		public mrpt::utils::PLY_Exporter
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_VIRTUAL_SERIALIZABLE( CPointsMap )
 		// This must be added for declaration of MEX-related functions
 		DECLARE_MEX_CONVERSION
 
@@ -834,7 +832,6 @@ namespace maps
 		template <class Derived> friend struct detail::pointmap_traits;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CPointsMap , CMetricMap, MAPS_IMPEXP )
 
 	} // End of namespace
 

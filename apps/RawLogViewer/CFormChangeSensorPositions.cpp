@@ -554,7 +554,7 @@ void CFormChangeSensorPositions::executeOperationOnRawlog( TRawlogFilter operati
     while ((( !isInMemory && keepLoading ) ||
             (  isInMemory && countLoop < rawlog.size() ))&& !sensorPoseReadOK && !camReadIsOk )
     {
-        CSerializablePtr newObj;
+        CSerializable::Ptr newObj;
         try
         {
             if (isInMemory)

@@ -17,7 +17,6 @@ namespace opengl	{
 	class OPENGL_IMPEXP CPolyhedron;
 
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CPolyhedron,CRenderizableDisplayList, OPENGL_IMPEXP)
 	/**
 	  * This class represents arbitrary polyhedra. The class includes a set of static methods to create common polyhedrons. The class includes many methods to create standard polyhedra, not intended to be fast but to be simple. For example, the dodecahedron is not created efficiently: first, an icosahedron is created, and a duality operator is applied to it, which yields the dodecahedron. This way, code is much smaller, although much slower. This is not a big problem, since polyhedron creation does not usually take a significant amount of time (they are created once and rendered many times).
 	  * Polyhedra information and models have been gotten from the Wikipedia, http://wikipedia.org
@@ -32,7 +31,6 @@ namespace opengl	{
 	  * \ingroup mrpt_opengl_grp
 	  */
 	class OPENGL_IMPEXP CPolyhedron:public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CPolyhedron)
 	public:
 		/**
 		  * Struct used to store a polyhedron edge. The struct consists only of two vertex indices, used to access the polyhedron vertex list.
@@ -702,7 +700,6 @@ namespace opengl	{
 		/** Destructor. */
 		virtual ~CPolyhedron()	{}
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CPolyhedron,CRenderizableDisplayList, OPENGL_IMPEXP)
 
 	// Implemented after the definition of SmartPtrs in the _POST() macro above.
 	template<class T>

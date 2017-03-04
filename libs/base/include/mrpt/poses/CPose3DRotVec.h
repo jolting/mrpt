@@ -18,7 +18,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE( CPose3DRotVec )
 
 	/** A 3D pose, with a 3D translation and a rotation in 3D parameterized in rotation-vector form (equivalent to axis-angle).
 	 *   The 6D transformation in SE(3) stored in this class is kept in two
@@ -41,7 +40,6 @@ namespace poses
 	class BASE_IMPEXP CPose3DRotVec : public CPose<CPose3DRotVec>, public mrpt::utils::CSerializable
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DRotVec )
 
 	public:
 		mrpt::math::CArrayDouble<3>   m_coords; //!< The translation vector [x,y,z]
@@ -403,9 +401,10 @@ namespace poses
 		static inline size_type max_size() { return static_size; }
 		static inline void resize(const size_t n) { if (n!=static_size) throw std::logic_error(format("Try to change the size of CPose3DRotVec to %u.",static_cast<unsigned>(n))); }
 		/** @} */
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST( CPose3DRotVec )
 
 
 	std::ostream BASE_IMPEXP  & operator << (std::ostream& o, const CPose3DRotVec& p);

@@ -15,7 +15,6 @@ namespace mrpt
 {
 	namespace utils
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( TStereoCamera, mrpt::utils::CSerializable )
 
 		/** Structure to hold the parameters of a pinhole stereo camera model.
 		  *  The parameters obtained for one camera resolution can be used for any other resolution by means of the method TStereoCamera::scaleToResolution()
@@ -23,8 +22,7 @@ namespace mrpt
 		  * \sa mrpt::vision, the application stereo-calib-gui for calibrating a stereo camera
 		 */
         class BASE_IMPEXP TStereoCamera : public mrpt::utils::CSerializable
-		{
-            DEFINE_SERIALIZABLE( TStereoCamera )
+	{
         public:
 		    TCamera     leftCamera, rightCamera;  //!< Intrinsic and distortion parameters of the left and right cameras
 		    mrpt::poses::CPose3DQuat rightCameraPose;  //!< Pose of the right camera with respect to the coordinate origin of the left camera
@@ -78,7 +76,6 @@ namespace mrpt
 			}
 
 		}; // end class TStereoCamera
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( TStereoCamera, mrpt::utils::CSerializable )
 
 	} // End of namespace
 } // end of namespace

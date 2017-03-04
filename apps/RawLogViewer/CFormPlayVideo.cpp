@@ -340,7 +340,7 @@ void CFormPlayVideo::OnbtnPlayClick(wxCommandEvent& event)
         while (m_nowPlaying)
         {
             wxTheApp->Yield();
-            CSerializablePtr obj;
+            CSerializable::Ptr obj;
 
             if (fil)
             {

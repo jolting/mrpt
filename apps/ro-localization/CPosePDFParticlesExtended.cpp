@@ -36,7 +36,6 @@ using namespace std;
 
 double	likelihood_acumulation=0;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFParticlesExtended, CPosePDF, mrpt::poses )
 
 /*---------------------------------------------------------------
 	Constructor

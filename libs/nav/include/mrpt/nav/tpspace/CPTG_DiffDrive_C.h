@@ -14,7 +14,6 @@ namespace mrpt
 {
   namespace nav
   {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CPTG_DiffDrive_C, CParameterizedTrajectoryGenerator, NAV_IMPEXP)
 
 	/** A PTG for circular paths ("C" type PTG in papers). 
 	 * - **Compatible kinematics**: differential-driven / Ackermann steering
@@ -40,7 +39,6 @@ namespace mrpt
 	 */
 	class NAV_IMPEXP CPTG_DiffDrive_C : public CPTG_DiffDrive_CollisionGridBased
 	{
-		DEFINE_SERIALIZABLE(CPTG_DiffDrive_C)
 	 public:
 		CPTG_DiffDrive_C() : K(0) { }
 		CPTG_DiffDrive_C(const mrpt::utils::CConfigFileBase &cfg,const std::string &sSection) {
@@ -59,7 +57,6 @@ namespace mrpt
 		/** A generation parameter */
 		double K;
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CPTG_DiffDrive_C, CParameterizedTrajectoryGenerator, NAV_IMPEXP)
 
   }
 }

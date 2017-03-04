@@ -16,7 +16,6 @@ namespace mrpt	{
 namespace opengl	{
 
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CBox,CRenderizableDisplayList, OPENGL_IMPEXP)
 	
 	/** A solid or wireframe box in 3D, defined by 6 rectangular faces parallel to the planes X, Y and Z (note that the object can be translated and rotated afterwards as any other CRenderizable object using the "object pose" in the base class).
 	  *  Three drawing modes are possible:
@@ -35,7 +34,6 @@ namespace opengl	{
 	  * \ingroup mrpt_opengl_grp
 	  */
 	class OPENGL_IMPEXP CBox :public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CBox)
 
 	protected:
 		mrpt::math::TPoint3D  	m_corner_min,m_corner_max;		//!< Corners coordinates
@@ -90,7 +88,6 @@ namespace opengl	{
 		virtual ~CBox() { }
 		
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CBox,CRenderizableDisplayList, OPENGL_IMPEXP)
 }
 }
 #endif

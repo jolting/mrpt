@@ -20,7 +20,6 @@ using namespace mrpt::opengl;
 using namespace mrpt::utils;
 using namespace mrpt::math;
 
-IMPLEMENTS_SERIALIZABLE( CSetOfTexturedTriangles, CRenderizableDisplayList, mrpt::opengl )
 
 /*---------------------------------------------------------------
 							~CTexturedPlane
