@@ -30,7 +30,6 @@ namespace mrpt
 		class CRenderizable;
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( COpenGLViewport, mrpt::utils::CSerializable, OPENGL_IMPEXP )
 
 		/** A viewport within a COpenGLScene, containing a set of OpenGL objects to render.
 		  *   This class has protected constuctor, thus it cannot be created by users. Use COpenGLScene::createViewport instead.
@@ -57,7 +56,6 @@ namespace mrpt
 			public mrpt::utils::CSerializable,
 			public mrpt::utils::CObservable
 		{
-			DEFINE_SERIALIZABLE( COpenGLViewport )
 			friend class COpenGLScene;
 		public:
 			// -------------------------------------------------------------------
@@ -345,7 +343,6 @@ namespace mrpt
 
 			std::vector<CLight>  m_lights;
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( COpenGLViewport, mrpt::utils::CSerializable, OPENGL_IMPEXP )
 		/**
 		  * Inserts an openGL object into a viewport. Allows call chaining.
 		  * \sa mrpt::opengl::COpenGLViewport::insert

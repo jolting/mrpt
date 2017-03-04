@@ -22,7 +22,6 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPose3DPDFSOG, CPose3DPDF, mrpt::poses )
 
 /*---------------------------------------------------------------
 	Constructor
@@ -175,7 +174,7 @@ void  CPose3DPDFSOG::copyFrom(const CPose3DPDF &o)
 
 	if (this == &o) return;		// It may be used sometimes
 
-	if (o.GetRuntimeClass()==CLASS_ID(CPose3DPDFSOG))
+	if (typeid(o)==typeid(CPose3DPDFSOG))
 	{
 		*this = *static_cast<const CPose3DPDFSOG*>(&o);
 	}
@@ -227,8 +226,8 @@ void  CPose3DPDFSOG::bayesianFusion(const  CPose3DPDF &p1_,const  CPose3DPDF &p2
 
 	// p1: CPose3DPDFSOG, p2: CPosePDFGaussian:
 
-	ASSERT_( p1_.GetRuntimeClass() == CLASS_ID(CPose3DPDFSOG) );
-	ASSERT_( p2_.GetRuntimeClass() == CLASS_ID(CPose3DPDFSOG) );
+	ASSERT_( typeid(p1_) == typeid(CPose3DPDFSOG) );
+	ASSERT_( typeid(p2_) == typeid(CPose3DPDFSOG) );
 
 	THROW_EXCEPTION("TODO!!!");
 #if 0
@@ -360,7 +359,7 @@ void CPose3DPDFSOG::drawManySamples( size_t N, std::vector<CVectorDouble> & outS
 void  CPose3DPDFSOG::inverse(CPose3DPDF &o) const
 {
 	MRPT_START
-	ASSERT_( o.GetRuntimeClass() == CLASS_ID(CPose3DPDFSOG) );
+	ASSERT_( typeid(o) == typeid(CPose3DPDFSOG) );
 	CPose3DPDFSOG	*out = static_cast<CPose3DPDFSOG*>( &o );
 
 	// Prepare the output SOG:

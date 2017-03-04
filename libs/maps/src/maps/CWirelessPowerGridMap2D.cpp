@@ -75,7 +75,6 @@ mrpt::maps::CMetricMap* CWirelessPowerGridMap2D::internal_CreateFromMapDefinitio
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(CWirelessPowerGridMap2D, CRandomFieldGridMap2D,mrpt::maps)
 
 /*---------------------------------------------------------------
 						Constructor

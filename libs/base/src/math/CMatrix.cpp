@@ -20,7 +20,6 @@ using namespace mrpt::utils;
 
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CMatrix, CSerializable, mrpt::math)
 
 
 /** Constructor from a TPose2D, which generates a 3x1 matrix \f$ [x y \phi]^T \f$ */

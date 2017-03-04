@@ -16,7 +16,6 @@ namespace mrpt
 	namespace utils
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPropertiesValuesList, mrpt::utils::CSerializable )
 
 		/** An arbitrary list of "annotations", or named attributes, each being an instance of any CSerializable object.
 		 *  A multi-hypotheses version exists in CMHPropertiesValuesList.
@@ -25,13 +24,16 @@ namespace mrpt
 		 */
 		class BASE_IMPEXP CPropertiesValuesList : public mrpt::utils::CSerializable
 		{
+		public:
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
+
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CPropertiesValuesList )
 		protected:
 			struct BASE_IMPEXP  TPropertyValuePair
 			{
 				std::string			name;
-				CSerializablePtr	value;
+				CSerializable::Ptr	value;
 			};
 			/** The properties list: a map between strings and objects
 			  */
@@ -60,11 +62,11 @@ namespace mrpt
 
 			/** Returns the value of the property (case insensitive), or nullptr if it does not exist.
 			  */
-			CSerializablePtr get(const std::string &propertyName) const;
+			CSerializable::Ptr get(const std::string &propertyName) const;
 
 			/** Sets/change the value of the property (case insensitive), making a copy of the object (or setting it to nullptr if it is the passed value)
 			  */
-			void  set(const std::string &propertyName,const CSerializablePtr &obj);
+			void  set(const std::string &propertyName,const CSerializable::Ptr &obj);
 
 			/** Returns the number of properties in the list
 			  */
@@ -75,7 +77,6 @@ namespace mrpt
 			std::vector<std::string>  getPropertyNames() const;
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPropertiesValuesList, mrpt::utils::CSerializable )
 
 
 	} // End of namespace

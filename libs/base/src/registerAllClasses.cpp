@@ -28,61 +28,61 @@ MRPT_INITIALIZER(registerAllClasses_mrpt_base)
 #if !defined(DISABLE_MRPT_AUTO_CLASS_REGISTRATION)
 	// Abstract classes are not registered since they can not be
 	//   instanciated, nor loaded from streams.
-	registerClass( CLASS_ID( CMatrix ) );
-	registerClass( CLASS_ID( CMatrixD ) );
-	registerClass( CLASS_ID( CMatrixB ) );
-	registerClass( CLASS_ID( CPolygon ) );
+	RuntimeClassRegistry::registerClass<  CMatrix >() ;
+	RuntimeClassRegistry::registerClass<  CMatrixD >() ;
+	RuntimeClassRegistry::registerClass<  CMatrixB >() ;
+	RuntimeClassRegistry::registerClass<  CPolygon >() ;
 
 //   Hack to enable compatibility with an older name of this class:
-	registerClass( CLASS_ID( CImage ) );
-	registerClassCustomName( "CMRPTImage", CLASS_ID( CImage ) );
+	RuntimeClassRegistry::registerClass<  CImage >() ;
+	RuntimeClassRegistry::registerClassCustomName<CImage>("CMRPTImage") ;
 
-	registerClass( CLASS_ID( CSimpleDatabase ) );
-	registerClass( CLASS_ID( CSimpleDatabaseTable ) );
-	registerClass( CLASS_ID( CPropertiesValuesList ) );
-	registerClass( CLASS_ID( CMHPropertiesValuesList ) );
-	registerClass( CLASS_ID( CTypeSelector ) );
-	registerClass( CLASS_ID( CMemoryChunk ) );
+	RuntimeClassRegistry::registerClass<  CSimpleDatabase >() ;
+	RuntimeClassRegistry::registerClass<  CSimpleDatabaseTable >() ;
+	RuntimeClassRegistry::registerClass<  CPropertiesValuesList >() ;
+	RuntimeClassRegistry::registerClass<  CMHPropertiesValuesList >() ;
+	RuntimeClassRegistry::registerClass<  CTypeSelector >() ;
+	RuntimeClassRegistry::registerClass<  CMemoryChunk >() ;
 
-	registerClass( CLASS_ID( CPoint2D ) );
-	registerClass( CLASS_ID( CPoint3D ) );
-	registerClass( CLASS_ID( CPose2D ) );
-	registerClass( CLASS_ID( CPose3D ) );
-	registerClass( CLASS_ID( CPose3DQuat ) );
-	registerClass( CLASS_ID( CPoses2DSequence ) );
-	registerClass( CLASS_ID( CPoses3DSequence ) );
+	RuntimeClassRegistry::registerClass<  CPoint2D >() ;
+	RuntimeClassRegistry::registerClass<  CPoint3D >() ;
+	RuntimeClassRegistry::registerClass<  CPose2D >() ;
+	RuntimeClassRegistry::registerClass<  CPose3D >() ;
+	RuntimeClassRegistry::registerClass<  CPose3DQuat >() ;
+	RuntimeClassRegistry::registerClass<  CPoses2DSequence >() ;
+	RuntimeClassRegistry::registerClass<  CPoses3DSequence >() ;
 
 
-	registerClass( CLASS_ID( CPosePDF ) );
-	registerClass( CLASS_ID( CPosePDFGaussian ) );
-	registerClass( CLASS_ID( CPosePDFGaussianInf ) );
-	registerClass( CLASS_ID( CPosePDFParticles ) );
-	registerClass( CLASS_ID( CPosePDFGrid ) );
-	registerClass( CLASS_ID( CPosePDFSOG ) );
+	RuntimeClassRegistry::registerClass<  CPosePDF >() ;
+	RuntimeClassRegistry::registerClass<  CPosePDFGaussian >() ;
+	RuntimeClassRegistry::registerClass<  CPosePDFGaussianInf >() ;
+	RuntimeClassRegistry::registerClass<  CPosePDFParticles >() ;
+	RuntimeClassRegistry::registerClass<  CPosePDFGrid >() ;
+	RuntimeClassRegistry::registerClass<  CPosePDFSOG >() ;
 
-	registerClass( CLASS_ID( CPointPDF ) );
-	registerClass( CLASS_ID( CPointPDFGaussian ) );
-	registerClass( CLASS_ID( CPointPDFParticles ) );
-	registerClass( CLASS_ID( CPointPDFSOG ) );
+	RuntimeClassRegistry::registerClass<  CPointPDF >() ;
+	RuntimeClassRegistry::registerClass<  CPointPDFGaussian >() ;
+	RuntimeClassRegistry::registerClass<  CPointPDFParticles >() ;
+	RuntimeClassRegistry::registerClass<  CPointPDFSOG >() ;
 
-	registerClass( CLASS_ID( CPosePDF ) );
-	registerClass( CLASS_ID( CPose3DPDF ) );
-	registerClass( CLASS_ID( CPose3DQuatPDF ) );
-	registerClass( CLASS_ID( CPose3DPDFGaussian ) );
-	registerClass( CLASS_ID( CPose3DPDFGaussianInf ) );
-	registerClass( CLASS_ID( CPose3DPDFParticles ) );
-	registerClass( CLASS_ID( CPose3DPDFSOG ) );
+	RuntimeClassRegistry::registerClass<  CPosePDF >() ;
+	RuntimeClassRegistry::registerClass<  CPose3DPDF >() ;
+	RuntimeClassRegistry::registerClass<  CPose3DQuatPDF >() ;
+	RuntimeClassRegistry::registerClass<  CPose3DPDFGaussian >() ;
+	RuntimeClassRegistry::registerClass<  CPose3DPDFGaussianInf >() ;
+	RuntimeClassRegistry::registerClass<  CPose3DPDFParticles >() ;
+	RuntimeClassRegistry::registerClass<  CPose3DPDFSOG >() ;
 
-	registerClass( CLASS_ID( CPose3DQuatPDF ) );
-	registerClass( CLASS_ID( CPose3DQuatPDFGaussian ) );
-	registerClass( CLASS_ID( CPose3DQuatPDFGaussianInf ) );
+	RuntimeClassRegistry::registerClass<  CPose3DQuatPDF >() ;
+	RuntimeClassRegistry::registerClass<  CPose3DQuatPDFGaussian >() ;
+	RuntimeClassRegistry::registerClass<  CPose3DQuatPDFGaussianInf >() ;
 
-	registerClass( CLASS_ID( CPose3DInterpolator ) );
+	RuntimeClassRegistry::registerClass<  CPose3DInterpolator >() ;
 
-	registerClass( CLASS_ID( TCamera ) );
-	registerClass( CLASS_ID( TStereoCamera ) );
-	registerClass( CLASS_ID( CSplineInterpolator1D  ) );
-	registerClass( CLASS_ID( CStringList ) );
+	RuntimeClassRegistry::registerClass<  TCamera >() ;
+	RuntimeClassRegistry::registerClass<  TStereoCamera >() ;
+	RuntimeClassRegistry::registerClass<  CSplineInterpolator1D  >() ;
+	RuntimeClassRegistry::registerClass<  CStringList >() ;
 #endif
 }
 

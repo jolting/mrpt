@@ -609,7 +609,7 @@ void  CNationalInstrumentsDAQ::doProcess()
 	{
 		m_state = ssWorking;
 					
-		std::vector<mrpt::utils::CSerializablePtr> new_obs;
+		std::vector<mrpt::utils::CSerializable::Ptr> new_obs;
 		new_obs.resize(m_nextObservations.size());
 
 		for (size_t i=0;i<m_nextObservations.size();i++)

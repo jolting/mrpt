@@ -18,7 +18,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationRFID, CObservation, OBS_IMPEXP)
 
 	/** This represents one or more RFID tags observed by a receiver.
 	 *
@@ -28,7 +27,6 @@ namespace obs
 	class OBS_IMPEXP CObservationRFID : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationRFID )
 
 	 public:
 		/** Constructor */
@@ -64,7 +62,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationRFID, CObservation, OBS_IMPEXP)
 
 
 	} // End of namespace

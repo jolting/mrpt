@@ -19,7 +19,6 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_VIRTUAL_MRPT_OBJECT(CBaseGUIWindow, CObject,mrpt::gui)
 
 
 /*---------------------------------------------------------------

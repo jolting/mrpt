@@ -65,8 +65,8 @@ namespace mrpt
 		public:
 			virtual const mrpt::hwdrivers::TSensorClassId* GetRuntimeClass() const = 0;
 
-			typedef std::multimap< mrpt::system::TTimeStamp, mrpt::utils::CSerializablePtr > TListObservations;
-			typedef std::pair< mrpt::system::TTimeStamp, mrpt::utils::CSerializablePtr > TListObsPair;
+			typedef std::multimap< mrpt::system::TTimeStamp, mrpt::utils::CSerializable::Ptr > TListObservations;
+			typedef std::pair< mrpt::system::TTimeStamp, mrpt::utils::CSerializable::Ptr > TListObsPair;
 
 			/** The current state of the sensor
 			  * \sa CGenericSensor::getState
@@ -140,12 +140,12 @@ namespace mrpt
 			  \endcode
 			  * If several observations are passed at once in the vector, they'll be considered as a block regarding the grabbing decimation factor.
 			  */
-			void appendObservations( const std::vector<mrpt::utils::CSerializablePtr> &obj);
+			void appendObservations( const std::vector<mrpt::utils::CSerializable::Ptr> &obj);
 
 			//! Like appendObservations() but for just one observation.
-			void appendObservation( const mrpt::utils::CSerializablePtr &obj)
+			void appendObservation( const mrpt::utils::CSerializable::Ptr &obj)
 			{
-				appendObservations(std::vector<mrpt::utils::CSerializablePtr>(1, obj));
+				appendObservations(std::vector<mrpt::utils::CSerializable::Ptr>(1, obj));
 			}
 
 			/** Auxiliary structure used for CSerializable runtime class ID support.

@@ -44,7 +44,6 @@ using namespace mrpt::system;
 using namespace std;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CImage, CSerializable, mrpt::utils)
 
 
 bool CImage::DISABLE_ZIP_COMPRESSION  = false;

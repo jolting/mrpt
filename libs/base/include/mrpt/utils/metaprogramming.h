@@ -82,36 +82,6 @@ namespace mrpt
 				}
 			};
 
-			//NOTE: replace with mem_fun_ref(&CSerializable::make_unique)
-			/** An object for making smart pointers unique (ie, making copies if necessary), intended for being used in STL algorithms. */
-			struct ObjectMakeUnique {
-				typedef mrpt::utils::CObject::Ptr argument_type;
-				typedef void result_type;
-				inline void operator()(mrpt::utils::CObject::Ptr &ptr) {
-					ptr.reset(ptr->clone());
-				}
-			};
-
-			/** An object for making smart pointers unique (ie, making copies if necessary), intended for being used in STL algorithms. */
-			struct ObjectPairMakeUnique {
-				template <typename T>
-				inline void operator()(T &ptr) {
-					ptr.first.reset(ptr.first->clone());
-					ptr.second.reset(ptr.first->clone());
-				}
-			};
-
-			//NOTE: replace with mem_fun_ref(&CSerializable::reset)
-			/** An object for making smart pointers unique (ie, making copies if necessary), intended for being used in STL algorithms. */
-			template <typename T>
-			struct ObjectClearUnique {
-				typedef T argument_type;
-				typedef void result_type;
-				inline void operator()(T &ptr)
-				{
-					ptr.reset();
-				}
-			};
 
 			/** Behaves like std::copy but allows the source and target iterators to be of different types through static typecasting.
 			  * \note As in std::copy, the target iterator must point to the first "slot" where to put the first transformed element, and sufficient space must be allocated in advance.

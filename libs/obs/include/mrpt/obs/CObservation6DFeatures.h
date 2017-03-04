@@ -18,7 +18,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservation6DFeatures, CObservation, OBS_IMPEXP  )
 
 	/** An observation of one or more "features" or "objects", possibly identified with a unique ID, whose relative SE(3) pose is observed with respect to the sensor.
 	 * The list of features is stored in \a sensedFeatures
@@ -28,7 +27,6 @@ namespace obs
 	class OBS_IMPEXP CObservation6DFeatures : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservation6DFeatures )
 	 public:
 		CObservation6DFeatures( );  //!< Default ctor
 
@@ -54,7 +52,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;// See base class docs
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservation6DFeatures, CObservation, OBS_IMPEXP  )
 
 	} // End of namespace
 } // End of namespace

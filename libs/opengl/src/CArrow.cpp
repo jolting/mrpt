@@ -25,7 +25,6 @@ using namespace mrpt::math;
 using namespace std;
 
 
-IMPLEMENTS_SERIALIZABLE( CArrow, CRenderizableDisplayList, mrpt::opengl )
 
 /** Class factory  */
 CArrowPtr CArrow::Create(

@@ -44,7 +44,6 @@ using namespace mrpt::opengl;
 using namespace std;
 
 
-IMPLEMENTS_SERIALIZABLE(CHMTSLAM, CSerializable,mrpt::hmtslam)
 
 
 // Initialization of static members:
@@ -390,9 +389,9 @@ size_t CHMTSLAM::inputQueueSize()
 /*---------------------------------------------------------------
 					getNextObjectFromInputQueue
   ---------------------------------------------------------------*/
-CSerializablePtr CHMTSLAM::getNextObjectFromInputQueue()
+CSerializable::Ptr CHMTSLAM::getNextObjectFromInputQueue()
 {
-	CSerializablePtr obj;
+	CSerializable::Ptr obj;
 
 	{	// Wait for critical section
 		CCriticalSectionLocker  locker( &m_inputQueue_cs);

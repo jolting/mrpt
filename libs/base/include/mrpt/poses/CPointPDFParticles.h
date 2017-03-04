@@ -19,7 +19,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( TSimple3DPoint, mrpt::utils::CSerializable )
 
 	/** Data within each particle
 	 * \ingroup poses_pdf_grp
@@ -27,7 +26,6 @@ namespace poses
 	class BASE_IMPEXP TSimple3DPoint : public mrpt::utils::CSerializable
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( TSimple3DPoint )
 	public:
 		TSimple3DPoint(const TSimple3DPoint&o) : x(o.x),y(o.y),z(o.z)
 		{
@@ -42,10 +40,11 @@ namespace poses
 		}
 
 		float	x,y,z;
-	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( TSimple3DPoint, mrpt::utils::CSerializable )
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPointPDFParticles, CPointPDF )
+	};
+
 
 	/** A probability distribution of a 2D/3D point, represented as a set of random samples (particles).
 	 * \sa CPointPDF
@@ -56,9 +55,6 @@ namespace poses
 		public mrpt::bayes::CParticleFilterData<TSimple3DPoint>,
 		public mrpt::bayes::CParticleFilterDataImpl<CPointPDFParticles,mrpt::bayes::CParticleFilterData<TSimple3DPoint>::CParticleList>
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPointPDFParticles )
-
 	 public:
 		/** Default constructor */
 		CPointPDFParticles(size_t numParticles = 1);
@@ -103,9 +99,10 @@ namespace poses
 		  * \param minMahalanobisDistToDrop If set to different of 0, the result of very separate Gaussian modes (that will result in negligible components) in SOGs will be dropped to reduce the number of modes in the output.
 		  */
 		void  bayesianFusion( const CPointPDF &p1, const CPointPDF &p2, const double &minMahalanobisDistToDrop = 0) MRPT_OVERRIDE;
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPointPDFParticles, CPointPDF )
 
 
 	} // End of namespace

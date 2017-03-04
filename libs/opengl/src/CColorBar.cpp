@@ -20,7 +20,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CColorBar, CRenderizableDisplayList, mrpt::opengl)
 
 CColorBar::CColorBar(
 	const mrpt::utils::TColormap colormap, //!< The colormap to represent.

@@ -18,7 +18,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationWirelessPower, CObservation, OBS_IMPEXP)
 
 	/** This represents a measurement of the wireless strength perceived by the robot.
 	 *  The signal level is given as a percentage.
@@ -29,7 +28,6 @@ namespace obs
 	class OBS_IMPEXP CObservationWirelessPower : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationWirelessPower )
 
 	 public:
 		/** Constructor */
@@ -48,7 +46,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;// See base class docs
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationWirelessPower, CObservation, OBS_IMPEXP)
 
 
 	} // End of namespace

@@ -18,7 +18,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE( CPose3DRotVec )
 
 	/** A 3D pose, with a 3D translation and a rotation in 3D parameterized in rotation-vector form (equivalent to axis-angle).
 	 *   The 6D transformation in SE(3) stored in this class is kept in two
@@ -41,7 +40,6 @@ namespace poses
 	class BASE_IMPEXP CPose3DRotVec : public CPose<CPose3DRotVec>, public mrpt::utils::CSerializable
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DRotVec )
 
 	public:
 		mrpt::math::CArrayDouble<3>   m_coords; //!< The translation vector [x,y,z]
@@ -245,24 +243,24 @@ namespace poses
 		/** @name Access and modify contents
 			@{ */
 
-        inline double rx() const { return m_rotvec[0]; }
-        inline double ry() const { return m_rotvec[1]; }
-        inline double rz() const { return m_rotvec[2]; }
+		inline double rx() const { return m_rotvec[0]; }
+		inline double ry() const { return m_rotvec[1]; }
+		inline double rz() const { return m_rotvec[2]; }
 
-        inline double &rx() { return m_rotvec[0]; }
-        inline double &ry() { return m_rotvec[1]; }
-        inline double &rz() { return m_rotvec[2]; }
+		inline double &rx() { return m_rotvec[0]; }
+		inline double &ry() { return m_rotvec[1]; }
+		inline double &rz() { return m_rotvec[2]; }
 
 		/** Scalar sum of all 6 components: This is diferent from poses composition, which is implemented as "+" operators. */
 		inline void addComponents(const CPose3DRotVec &p) {
 		    m_coords+=p.m_coords;
 		    m_rotvec+=p.m_rotvec;
-        }
+		}
 
 		/** Scalar multiplication of x,y,z,vx,vy,vz. */
 		inline void operator *=(const double s) {
-            m_coords*=s;
-            m_rotvec*=s;
+			m_coords*=s;
+			m_rotvec*=s;
 		}
 
 		/** Create a vector with 3 components according to the input transformation matrix (only the rotation will be taken into account)
@@ -279,10 +277,10 @@ namespace poses
 			const double		vx,
 			const double		vy,
 			const double		vz )
-        {
-            m_coords[0]=x0; m_coords[1]=y0; m_coords[2]=z0;
-            m_rotvec[0]=vx; m_rotvec[1]=vy; m_rotvec[2]=vz;
-        }
+		{
+			m_coords[0]=x0; m_coords[1]=y0; m_coords[2]=z0;
+			m_rotvec[0]=vx; m_rotvec[1]=vy; m_rotvec[2]=vz;
+		}
 
 		/** Set pose from an array with these 6 elements: [x y z vx vy vz]
 		  *  where v{xyz} is the rotation vector and {xyz} the 3D translation of the pose
@@ -404,8 +402,10 @@ namespace poses
 		static inline void resize(const size_t n) { if (n!=static_size) throw std::logic_error(format("Try to change the size of CPose3DRotVec to %u.",static_cast<unsigned>(n))); }
 		/** @} */
 
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
+
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST( CPose3DRotVec )
 
 
 	std::ostream BASE_IMPEXP  & operator << (std::ostream& o, const CPose3DRotVec& p);

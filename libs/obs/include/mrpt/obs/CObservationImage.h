@@ -21,7 +21,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationImage , CObservation,OBS_IMPEXP )
 
 	/** Declares a class derived from "CObservation" that encapsules an image from a camera, whose relative pose to robot is also stored.
 	     The next figure illustrate the coordinates reference systems involved in this class:<br>
@@ -35,7 +34,6 @@ namespace obs
 	class OBS_IMPEXP CObservationImage : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationImage )
 		// This must be added for declaration of MEX-related functions
 		DECLARE_MEX_CONVERSION
 
@@ -67,7 +65,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationImage , CObservation,OBS_IMPEXP )
 
 
 	} // End of namespace

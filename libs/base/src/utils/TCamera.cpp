@@ -20,7 +20,6 @@ using namespace std;
 
 
 /* Implements serialization for the TCamera struct as it will be included within CObservations objects */
-IMPLEMENTS_SERIALIZABLE( TCamera, CSerializable, mrpt::utils )
 
 /** Dumps all the parameters as a multi-line string, with the same format than \a saveToConfigFile.  \sa saveToConfigFile */
 std::string TCamera::dumpAsText() const

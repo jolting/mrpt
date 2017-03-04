@@ -11,6 +11,7 @@
 
 #include <mrpt/utils/mrpt_stdint.h>    // compiler-independent version of "stdint.h"
 #include <string>
+#include <typeinfo>
 
 namespace mrpt
 {
@@ -47,7 +48,7 @@ namespace mrpt
 		struct TTypeName
 		{
 			static std::string get() {
-				return std::string( T::classinfo->className );
+				return std::string( typeid(T).name() );
 			}
 		};
 

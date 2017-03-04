@@ -18,7 +18,6 @@ namespace mrpt
 	namespace math
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CSplineInterpolator1D, mrpt::utils::CSerializable )
 
 		/** A (persistent) sequence of (x,y) coordinates, allowing queries of intermediate points through spline interpolation, where possible.
 		  *  This class internally relies on mrpt::math::spline. Optionally the y coordinate can be set as wrapped in ]-pi,pi].
@@ -29,8 +28,9 @@ namespace mrpt
 		class BASE_IMPEXP CSplineInterpolator1D : public mrpt::utils::CSerializable
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CSplineInterpolator1D )
-
+		public:
+			using Ptr = std::shared_ptr<CSplineInterpolator1D>;
+			using ConstPtr = std::shared_ptr<const CSplineInterpolator1D>;
 		private:
 			/** The placeholders for the data */
 			std::map<double,double>	m_x2y;
@@ -102,9 +102,9 @@ namespace mrpt
 				}
 				return anyValid;
 			}
-
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CSplineInterpolator1D, mrpt::utils::CSerializable )
 
 	} // End of namespace
 } // End of namespace

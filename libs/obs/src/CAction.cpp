@@ -16,7 +16,6 @@ using namespace mrpt::obs;
 using namespace mrpt::utils;
 
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE(CAction, CSerializable, mrpt::obs)
 
 
 /*---------------------------------------------------------------

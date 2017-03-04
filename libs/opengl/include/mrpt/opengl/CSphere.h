@@ -18,7 +18,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CSphere, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A solid or wire-frame sphere.
 		  *  \sa opengl::COpenGLScene
@@ -33,7 +32,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CSphere : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CSphere )
 
 		protected:
 			float			m_radius;
@@ -85,7 +83,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CSphere() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CSphere, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

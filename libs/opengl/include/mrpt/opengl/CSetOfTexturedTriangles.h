@@ -18,7 +18,6 @@ namespace mrpt
 	namespace opengl
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CSetOfTexturedTriangles, CTexturedObject, OPENGL_IMPEXP )
 
 		/** A set of textured triangles.
 		  *  This class can be used to draw any solid, arbitrarily complex object with textures.
@@ -27,7 +26,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CSetOfTexturedTriangles : public CTexturedObject
 		{
-			DEFINE_SERIALIZABLE( CSetOfTexturedTriangles )
 
 		public:
 			/** Triangle vertex. This structure encapsulates the vertex coordinates and the image pixels.
@@ -81,7 +79,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CSetOfTexturedTriangles();
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CSetOfTexturedTriangles, CTexturedObject, OPENGL_IMPEXP )
 
 	} // end namespace
 

@@ -21,7 +21,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CAssimpModel, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** This class can load & render 3D models in a number of different formats (requires the library assimp).
 		  *  - All supported formats: http://assimp.sourceforge.net/main_features_formats.html
@@ -41,7 +40,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CAssimpModel : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CAssimpModel )
 
 		public:
 			void  render_dl() const MRPT_OVERRIDE; //!< Render child objects
@@ -93,7 +91,6 @@ namespace mrpt
 			mutable std::map<std::string,TInfoPerTexture> m_textureIdMap;
 
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CAssimpModel, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 } // End of namespace

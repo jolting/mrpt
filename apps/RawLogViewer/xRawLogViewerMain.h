@@ -593,9 +593,9 @@ private:
 		CRawlogTreeView*		the_tree,
 		TRawlogTreeViewEvent	ev,
 		int					item_index,
-		const mrpt::utils::CSerializablePtr &item_data);
+		const mrpt::utils::CSerializable::Ptr &item_data);
 
-	void SelectObjectInTreeView( const mrpt::utils::CSerializablePtr & sel_obj );
+	void SelectObjectInTreeView( const mrpt::utils::CSerializable::Ptr & sel_obj );
 
 	void showNextTip(bool forceShow = false);
 
@@ -612,7 +612,7 @@ private:
 
 	// ALWAYS access this inside a "try" block, for the case...
 	mrpt::obs::CObservationPtr			curSelectedObservation;
-	mrpt::utils::CSerializablePtr		curSelectedObject;
+	mrpt::utils::CSerializable::Ptr		curSelectedObject;
 	mrpt::gui::CDisplayWindow3DPtr		winGPSPath;
 	mrpt::gui::CDisplayWindowPlotsPtr  	winGPSPath2D_xy, winGPSPath2D_xz;
 

@@ -22,48 +22,6 @@ namespace mrpt
 		  */
 		class BASE_IMPEXP CListOfClasses
 		{
-		private:
-			typedef std::set<const mrpt::utils::TRuntimeClassId*>  TSet;
-			
-			TSet m_data;
-			
-		public:
-			typedef TSet::iterator iterator;
-			typedef TSet::const_iterator const_iterator;
-			
-			inline iterator begin() {return m_data.begin(); }
-			inline const_iterator begin() const {return m_data.begin(); }
-			
-			inline iterator end() {return m_data.end(); }
-			inline const_iterator end() const {return m_data.end(); }
-		
-			/** Insert a class in the list. Example of usage:
-			  *   \code
-			  *     myList.insert(CLASS_ID(CObservationImage));
-			  *   \endcode
-			  */
-			inline void insert( const mrpt::utils::TRuntimeClassId* id ) { m_data.insert(id); }		
-
-			/** Does the list contains this class? */
-			inline bool contains( const mrpt::utils::TRuntimeClassId* id ) const { return m_data.find(id)!=m_data.end(); }
-
-			/** Does the list contains a class derived from...? */
-			bool containsDerivedFrom( const mrpt::utils::TRuntimeClassId* id ) const;
-			
-			/** Empty the list */
-			inline void clear() { m_data.clear(); }
-			
-			/** Is the list empty? */
-			inline bool empty() const  { return m_data.empty(); }
-			
-			/** Return a string representation of the list, for example: "CPose2D, CObservation, CPose3D".
-			  */
-			std::string toString() const;
-			
-			/** Return a string representation of the list, for example: "CPose2D, CObservation, CPose3D".
-			  * \exception std::exception On unregistered class name found.
-			  */
-			void fromString(const std::string &s);
 			
 		}; // end of class
 

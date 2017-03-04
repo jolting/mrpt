@@ -19,7 +19,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationWindSensor, CObservation, OBS_IMPEXP)
 
 	/** Declares a class derived from "CObservation" that represents the wind measurements taken on the robot by an anemometer.
 	 * The observation is composed by two magnitudes:
@@ -32,7 +31,6 @@ namespace obs
 	class OBS_IMPEXP CObservationWindSensor : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationWindSensor )
 
 	 public:
 		/** Constructor */
@@ -53,7 +51,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationWindSensor, CObservation, OBS_IMPEXP)
 
 
 	} // End of namespace

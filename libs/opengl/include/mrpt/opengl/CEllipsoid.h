@@ -18,7 +18,6 @@ namespace mrpt
 	namespace opengl
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CEllipsoid, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A 2D ellipse or 3D ellipsoid, depending on the size of the m_cov matrix (2x2 or 3x3).
 		  *  The center of the ellipsoid is the "m_x,m_y,m_z" object's coordinates. In the case of
@@ -42,7 +41,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CEllipsoid : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CEllipsoid )
 
 		protected:
 			/** Used to store computed values the first time this is rendered, and to avoid recomputing them again.
@@ -118,7 +116,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CEllipsoid() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CEllipsoid, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

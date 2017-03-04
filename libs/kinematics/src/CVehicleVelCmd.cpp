@@ -14,7 +14,6 @@
 using namespace mrpt::kinematics;
 using namespace mrpt::utils;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE(CVehicleVelCmd, CSerializable, mrpt::kinematics)
 
 CVehicleVelCmd::CVehicleVelCmd()
 {

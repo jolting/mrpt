@@ -28,7 +28,6 @@ namespace maps
 {
 	class COccupancyGridMap2D;
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CRandomFieldGridMap2D , CMetricMap, MAPS_IMPEXP )
 
 	// Pragma defined to ensure no structure packing: since we'll serialize TRandomFieldCell to streams, we want it not to depend on compiler options, etc.
 #if defined(MRPT_IS_X86_AMD64)
@@ -119,7 +118,6 @@ namespace maps
 		typedef utils::CDynamicGrid<TRandomFieldCell> BASE;
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_VIRTUAL_SERIALIZABLE( CRandomFieldGridMap2D )
 	public:
 
 		/** Calls the base CMetricMap::clear
@@ -456,7 +454,6 @@ namespace maps
 			const size_t objective_cxo,
 			const size_t objective_cyo);
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CRandomFieldGridMap2D , CMetricMap, MAPS_IMPEXP )
 
 
 	} // End of namespace

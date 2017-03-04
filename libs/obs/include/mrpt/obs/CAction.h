@@ -21,7 +21,6 @@ namespace mrpt
 namespace obs
 {
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CAction, mrpt::utils::CSerializable, OBS_IMPEXP )
 
 	/** Declares a class for storing a robot action. It is used in mrpt::obs::CRawlog,
 	 *    for logs storage and particle filter based simulations.
@@ -33,7 +32,6 @@ namespace obs
 	class OBS_IMPEXP CAction : public mrpt::utils::CSerializable
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_VIRTUAL_SERIALIZABLE( CAction )
 
 		/** Default constructor
   		  */
@@ -50,7 +48,6 @@ namespace obs
 		mrpt::system::TTimeStamp	timestamp;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CAction, mrpt::utils::CSerializable, OBS_IMPEXP )
 
 
 	} // End of namespace

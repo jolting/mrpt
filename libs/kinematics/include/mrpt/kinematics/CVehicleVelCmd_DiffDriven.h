@@ -14,7 +14,6 @@ namespace mrpt
 {
 namespace kinematics
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CVehicleVelCmd_DiffDriven, CVehicleVelCmd, KINEMATICS_IMPEXP)
 
 	/** Kinematic model for Ackermann-like or differential-driven vehicles.
 	 *
@@ -22,7 +21,6 @@ namespace kinematics
 	 */
 	class KINEMATICS_IMPEXP CVehicleVelCmd_DiffDriven : public CVehicleVelCmd
 	{
-		DEFINE_SERIALIZABLE(CVehicleVelCmd_DiffDriven)
 	public:
 		double lin_vel; //!< Linear velocity (m/s)
 		double ang_vel; //!< Angular velocity (rad/s)
@@ -49,7 +47,6 @@ namespace kinematics
 	private:
 		double filter_max_vw(double &v, double &w, const TVelCmdParams &p);
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CVehicleVelCmd_DiffDriven, CVehicleVelCmd, KINEMATICS_IMPEXP)
 
 	} // End of namespace
 } // End of namespace

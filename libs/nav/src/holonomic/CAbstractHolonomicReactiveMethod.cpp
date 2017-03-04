@@ -16,7 +16,6 @@ using namespace mrpt;
 using namespace mrpt::utils;
 using namespace mrpt::nav;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE(CAbstractHolonomicReactiveMethod, CSerializable, mrpt::nav)
 
 
 CAbstractHolonomicReactiveMethod::CAbstractHolonomicReactiveMethod(const std::string &defaultCfgSectionName) :

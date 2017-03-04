@@ -491,7 +491,7 @@ void CRawlogTreeView::SetSelectedItem( int sel_item, bool force_refresh )
 					this,
 					evSelected,
 					sel_item,
-					sel_item>=0 ? m_tree_nodes[sel_item].data : CSerializablePtr()
+					sel_item>=0 ? m_tree_nodes[sel_item].data : CSerializable::Ptr()
 					);
 			}
 		}

@@ -12,6 +12,7 @@
 #include <mrpt/utils/CSerializable.h>
 #include <mrpt/math/math_frwds.h>
 #include <mrpt/poses/CPose3D.h>
+#include <mrpt/poses/CPose3DPDF.h>
 #include <mrpt/utils/CProbabilityDensityFunction.h>
 
 namespace mrpt
@@ -20,7 +21,6 @@ namespace poses
 {
 	class CPosePDF;
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPose3DPDF, mrpt::utils::CSerializable )
 
 	/** Declares a class that represents a Probability Density Function (PDF) of a 3D pose (6D actually).
 	 *   This class is just the base class for unifying many diferent
@@ -39,9 +39,10 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPose3DPDF : public mrpt::utils::CSerializable, public mrpt::utils::CProbabilityDensityFunction<CPose3D,6>
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE( CPose3DPDF )
 
 	 public:
+		using Ptr = std::shared_ptr<CPose3DPDF>;
+		using ConstPtr = std::shared_ptr<const CPose3DPDF>;
 		/** Copy operator, translating if necesary (for example, between particles and gaussian representations)
 		  * \sa createFrom2D
 		  */
@@ -113,8 +114,10 @@ namespace poses
 			return SETOFOBJECTS::posePDF2opengl(*this);
 		}
 
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
+
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DPDF, mrpt::utils::CSerializable )
 
 
 	} // End of namespace

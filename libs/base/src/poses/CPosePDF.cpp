@@ -17,7 +17,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CPosePDF, CSerializable, mrpt::poses )
 
 
 void CPosePDF::jacobiansPoseComposition(

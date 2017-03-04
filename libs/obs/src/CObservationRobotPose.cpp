@@ -21,7 +21,6 @@ using namespace mrpt::poses;
 
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationRobotPose, CObservation,mrpt::obs)
 
 /** Default constructor */
 CObservationRobotPose::CObservationRobotPose( )

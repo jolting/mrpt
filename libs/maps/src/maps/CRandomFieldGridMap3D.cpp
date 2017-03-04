@@ -33,7 +33,6 @@ using namespace mrpt::maps;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CRandomFieldGridMap3D, CSerializable,mrpt::maps)
 
 /*---------------------------------------------------------------
 						Constructor

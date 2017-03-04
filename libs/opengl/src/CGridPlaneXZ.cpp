@@ -19,7 +19,6 @@ using namespace mrpt::opengl;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CGridPlaneXZ, CRenderizableDisplayList, mrpt::opengl )
 
 CGridPlaneXZPtr CGridPlaneXZ::Create(
 	float xMin,

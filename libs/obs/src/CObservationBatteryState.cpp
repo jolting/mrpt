@@ -20,7 +20,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationBatteryState, CObservation,mrpt::obs)
 
 /** Constructor
  */

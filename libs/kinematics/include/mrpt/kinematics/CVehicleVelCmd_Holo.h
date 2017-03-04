@@ -14,7 +14,6 @@ namespace mrpt
 {
 	namespace kinematics
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CVehicleVelCmd_Holo, CVehicleVelCmd, KINEMATICS_IMPEXP)
 		
 		/** Kinematic model for
 		*
@@ -22,7 +21,6 @@ namespace mrpt
 		*/
 		class KINEMATICS_IMPEXP CVehicleVelCmd_Holo : public CVehicleVelCmd
 		{
-			DEFINE_SERIALIZABLE(CVehicleVelCmd_Holo)
 		public:
 			double vel;       //!< speed(m / s)
 			double dir_local; //!<: direction, **relative** to the current robot heading (radians). 0 means forward.
@@ -43,7 +41,6 @@ namespace mrpt
 			void cmdVel_scale(double vel_scale) MRPT_OVERRIDE;
 			double cmdVel_limits(const mrpt::kinematics::CVehicleVelCmd &prev_vel_cmd, const double beta, const TVelCmdParams &params)  MRPT_OVERRIDE;
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CVehicleVelCmd_Holo, CVehicleVelCmd, KINEMATICS_IMPEXP)
 
 	} // End of namespace
 } // End of namespace

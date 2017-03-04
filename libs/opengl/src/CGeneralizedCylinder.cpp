@@ -24,7 +24,6 @@ using namespace mrpt::poses;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CGeneralizedCylinder,CRenderizableDisplayList,mrpt::opengl)
 
 CGeneralizedCylinderPtr CGeneralizedCylinder::Create(const std::vector<TPoint3D> &axis,const std::vector<TPoint3D> &generatrix)	
 {

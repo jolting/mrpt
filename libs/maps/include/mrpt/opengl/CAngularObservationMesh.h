@@ -21,7 +21,6 @@
 
 namespace mrpt	{
 namespace opengl	{
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CAngularObservationMesh,CRenderizableDisplayList, MAPS_IMPEXP)
 
 	/**
 	  * A mesh built from a set of 2D laser scan observations.
@@ -38,7 +37,6 @@ namespace opengl	{
 	  * \ingroup mrpt_maps_grp
 	  */
 	class MAPS_IMPEXP CAngularObservationMesh:public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CAngularObservationMesh)
 	public:
 		/**
 		  * Range specification type, with several uses.
@@ -399,7 +397,6 @@ namespace opengl	{
 			obs.validRange=valid;
 		}
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CAngularObservationMesh,CRenderizableDisplayList, MAPS_IMPEXP)
 
 	template<class T>
 	void CAngularObservationMesh::trace2DSetOfRays(const T &e,const mrpt::poses::CPose3D &initial,CAngularObservationMeshPtr &caom,const TDoubleRange &pitchs,const TDoubleRange &yaws)	{

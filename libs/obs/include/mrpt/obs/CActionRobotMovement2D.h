@@ -19,7 +19,6 @@ namespace mrpt
 {
 	namespace obs
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CActionRobotMovement2D, CAction, OBS_IMPEXP )
 
 		/** Represents a probabilistic 2D movement of the robot mobile base
 		 *
@@ -32,7 +31,6 @@ namespace mrpt
 		class OBS_IMPEXP  CActionRobotMovement2D : public CAction
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CActionRobotMovement2D )
 
 		public:
 			/** A list of posible ways for estimating the content of a CActionRobotMovement2D object.
@@ -181,7 +179,6 @@ namespace mrpt
 
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CActionRobotMovement2D, CAction, OBS_IMPEXP )
 
 
 	} // End of namespace

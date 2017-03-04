@@ -18,7 +18,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CArrow, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A 3D arrow
 		  *  \sa opengl::COpenGLScene
@@ -33,7 +32,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CArrow : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CArrow )
 		protected:
 			mutable float	m_x0,m_y0,m_z0;
 			mutable float	m_x1,m_y1,m_z1;
@@ -102,7 +100,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CArrow() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CArrow, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 
 	} // end namespace

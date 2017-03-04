@@ -18,7 +18,6 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationOdometry, CObservation, mrpt::obs)
 
 /** Constructor
  */

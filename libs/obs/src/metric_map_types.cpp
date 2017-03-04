@@ -18,7 +18,6 @@ using namespace mrpt::obs;
 using namespace mrpt::maps;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(TMapGenericParams, CSerializable, mrpt::maps )
 
 TMapGenericParams::TMapGenericParams() : 
 	enableSaveAs3DObject(true), 

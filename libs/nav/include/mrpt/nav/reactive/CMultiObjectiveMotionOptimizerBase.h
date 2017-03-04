@@ -26,10 +26,8 @@ namespace mrpt
 		  *  \ingroup nav_reactive
 		  */
 		class NAV_IMPEXP CMultiObjectiveMotionOptimizerBase :
-			public mrpt::utils::CObject
+			public mrpt::utils::CRTP<CMultiObjectiveMotionOptimizerBase>
 		{
-			// This must be added to any CSerializable derived class:
-			DEFINE_VIRTUAL_MRPT_OBJECT(CMultiObjectiveMotionOptimizerBase)
 		public:
 			static CMultiObjectiveMotionOptimizerBase * Create(const std::string &className) MRPT_NO_THROWS; //!< Class factory from C++ class name
 

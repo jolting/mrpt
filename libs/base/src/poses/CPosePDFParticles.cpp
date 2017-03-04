@@ -28,7 +28,6 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFParticles, CPosePDF, mrpt::poses )
 
 /*---------------------------------------------------------------
 	Constructor
@@ -56,7 +55,7 @@ void  CPosePDFParticles::copyFrom(const CPosePDF &o)
 
 	if (this == &o) return;		// It may be used sometimes
 
-	if (o.GetRuntimeClass()==CLASS_ID(CPosePDFParticles))
+	if (typeid(o)==typeid(CPosePDFParticles))
 	{
 		const CPosePDFParticles	*pdf = dynamic_cast<const CPosePDFParticles*>( &o );
 		ASSERT_(pdf);
@@ -64,8 +63,7 @@ void  CPosePDFParticles::copyFrom(const CPosePDF &o)
 		// Both are m_particles:
 		m_particles = pdf->m_particles;
 	}
-	else
-	if (o.GetRuntimeClass()==CLASS_ID(CPosePDFGaussian))
+	else if (typeid(o)==typeid(CPosePDFGaussian))
 	{
 		const CPosePDFGaussian	*pdf = static_cast<const CPosePDFGaussian*>( &o );
 		size_t M = m_particles.size();
@@ -393,7 +391,7 @@ void  CPosePDFParticles::append( CPosePDFParticles &o )
 void	 CPosePDFParticles::inverse(CPosePDF  &o) const
 {
 	MRPT_START
-	ASSERT_( o.GetRuntimeClass() == CLASS_ID(CPosePDFParticles) );
+	ASSERT_( typeid(o) == typeid(CPosePDFParticles) );
 	CPosePDFParticles	*out = static_cast<CPosePDFParticles*>( &o );
 
 

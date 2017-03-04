@@ -88,7 +88,7 @@ void CHMTSLAM::thread_LSLAM()
 					randomGenerator.randomize(obj->m_options.random_seed);
 
 				// Get the next object from the queue:
-				CSerializablePtr nextObject = obj->getNextObjectFromInputQueue();
+				CSerializable::Ptr nextObject = obj->getNextObjectFromInputQueue();
 				ASSERT_(nextObject);
 
 				// Clasify the new object:

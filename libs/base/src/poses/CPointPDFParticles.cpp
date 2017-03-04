@@ -21,8 +21,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE( CPointPDFParticles, CPointPDF, mrpt::poses )
-IMPLEMENTS_SERIALIZABLE( TSimple3DPoint, CSerializable, mrpt::poses )
 
 CPointPDFParticles::CPointPDFParticles(size_t numParticles)
 {

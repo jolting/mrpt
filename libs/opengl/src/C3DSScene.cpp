@@ -41,7 +41,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( C3DSScene, CRenderizableDisplayList, mrpt::opengl )
 
 
 void render_node(Lib3dsNode *node,Lib3dsFile	*file);

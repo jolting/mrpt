@@ -23,7 +23,6 @@ namespace mrpt
 		class OPENGL_IMPEXP CVectorField3D;
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CVectorField3D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A 3D vector field representation, consisting of points and arrows drawn at any spatial position.
 			*  This opengl object has been created to represent scene flow, and hence both the vector field and
@@ -42,7 +41,6 @@ namespace mrpt
 
 		class OPENGL_IMPEXP CVectorField3D : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CVectorField3D )
 		protected:
 			mrpt::math::CMatrix x_vf;				//!< X component of the vector field
 			mrpt::math::CMatrix y_vf;				//!< Y component of the vector field
@@ -282,7 +280,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers. */
 			virtual ~CVectorField3D() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CVectorField3D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 
 	} // end namespace

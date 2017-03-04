@@ -19,7 +19,6 @@ namespace mrpt
 	namespace opengl
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CVectorField2D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A 2D vector field representation, consisting of points and arrows drawn on a plane (invisible grid).
 		  *  \sa opengl::COpenGLScene
@@ -35,7 +34,6 @@ namespace mrpt
 
 		class OPENGL_IMPEXP CVectorField2D : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CVectorField2D )
 		protected:
 			mrpt::math::CMatrix xcomp;				//!< X component of the vector field
 			mrpt::math::CMatrix ycomp;				//!< Y component of the vector field
@@ -211,7 +209,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers. */
 			virtual ~CVectorField2D() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CVectorField2D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 
 	} // end namespace

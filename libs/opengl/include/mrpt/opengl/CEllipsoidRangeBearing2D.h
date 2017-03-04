@@ -16,7 +16,6 @@ namespace mrpt
 	namespace opengl
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CEllipsoidRangeBearing2D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** An especial "ellipsoid" in 2D computed as the uncertainty iso-surfaces of a (range,bearing) variable.
 		  *  The parameter space of this ellipsoid comprises these variables (in this order):
@@ -39,7 +38,6 @@ namespace mrpt
 		class OPENGL_IMPEXP CEllipsoidRangeBearing2D : public CGeneralizedEllipsoidTemplate<2>
 		{
 			typedef CGeneralizedEllipsoidTemplate<2> BASE;
-			DEFINE_SERIALIZABLE( CEllipsoidRangeBearing2D )
 		protected:
 			/** To be implemented by derived classes: maps, using some arbitrary space transformation, a list of points 
 			  *  defining an ellipsoid in parameter space into their corresponding points in 2D/3D space.
@@ -56,7 +54,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CEllipsoidRangeBearing2D() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CEllipsoidRangeBearing2D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

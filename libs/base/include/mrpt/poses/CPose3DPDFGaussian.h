@@ -20,7 +20,6 @@ namespace poses
 	class CPosePDFGaussian;
 	class CPose3DQuatPDFGaussian;
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPose3DPDFGaussian , CPose3DPDF )
 
 	/** Declares a class that represents a Probability Density function (PDF) of a 3D pose \f$ p(\mathbf{x}) = [x ~ y ~ z ~ yaw ~ pitch ~ roll]^t \f$.
 	 *
@@ -36,15 +35,14 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPose3DPDFGaussian : public CPose3DPDF
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DPDFGaussian )
-
 	protected:
 		/** Assures the symmetry of the covariance matrix (eventually certain operations in the math-coprocessor lead to non-symmetric matrixes!)
 		  */
 		void  assureSymmetry();
 
 	 public:
+		using Ptr = std::shared_ptr<CPose3DPDFGaussian>;
+		using ConstPtr = std::shared_ptr<const CPose3DPDFGaussian>;
 		 /** Default constructor
 		  */
 		CPose3DPDFGaussian();
@@ -181,9 +179,9 @@ namespace poses
 		  */
 		void getCovSubmatrix2D( mrpt::math::CMatrixDouble &out_cov ) const;
 
-
+                void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+                void readFromStream(mrpt::utils::CStream &in, int version);
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DPDFGaussian , CPose3DPDF )
 
 
 	/** Pose composition for two 3D pose Gaussians  \sa CPose3DPDFGaussian::operator +=  */

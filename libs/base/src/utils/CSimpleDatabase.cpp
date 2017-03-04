@@ -24,8 +24,6 @@ using namespace std;
 #include <iostream>
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CSimpleDatabase, CSerializable, mrpt::utils)
-IMPLEMENTS_SERIALIZABLE(CSimpleDatabaseTable, CSerializable, mrpt::utils)
 
 /*---------------------------------------------------------------
 						writeToStream
@@ -69,7 +67,7 @@ void  CSimpleDatabase::readFromStream(mrpt::utils::CStream &in, int version)
 		{
 			in >> aux;
 
-			CSimpleDatabaseTablePtr newTb = CSimpleDatabaseTable::Create();
+			CSimpleDatabaseTable::Ptr newTb = std::make_shared<CSimpleDatabaseTable>();
 			in >> (*newTb);
 
 			m_tables[aux] = newTb;
@@ -165,7 +163,7 @@ void  CSimpleDatabase::clear()
 /*---------------------------------------------------------------
 						getTable
  ---------------------------------------------------------------*/
-CSimpleDatabaseTablePtr  CSimpleDatabase::getTable(const std::string &tableName)
+CSimpleDatabaseTable::Ptr  CSimpleDatabase::getTable(const std::string &tableName)
 {
 	MRPT_START
 
@@ -181,7 +179,7 @@ CSimpleDatabaseTablePtr  CSimpleDatabase::getTable(const std::string &tableName)
 /*---------------------------------------------------------------
 						getTable
  ---------------------------------------------------------------*/
-CSimpleDatabaseTablePtr  CSimpleDatabase::getTable(size_t tableIndex)
+CSimpleDatabaseTable::Ptr  CSimpleDatabase::getTable(size_t tableIndex)
 {
 	MRPT_START
 
@@ -220,9 +218,9 @@ string	 CSimpleDatabase::tablesName(size_t tableIndex) const
 /*---------------------------------------------------------------
 						createTable
  ---------------------------------------------------------------*/
-CSimpleDatabaseTablePtr  CSimpleDatabase::createTable(const string &name)
+CSimpleDatabaseTable::Ptr  CSimpleDatabase::createTable(const string &name)
 {
-	CSimpleDatabaseTablePtr table = CSimpleDatabaseTable::Create();
+	CSimpleDatabaseTable::Ptr table = std::make_shared<CSimpleDatabaseTable>();
 	m_tables[name] = table;
 	return table;
 }
@@ -427,7 +425,7 @@ bool CSimpleDatabase::saveAsXML( const string &fileName ) const
 		// For each table:
 		for (const_iterator it=m_tables.begin();it!=m_tables.end();++it)
 		{
-			CSimpleDatabaseTablePtr t = it->second;
+			CSimpleDatabaseTable::Ptr t = it->second;
 			XMLNode tabNod = rootXml.addChild("table");
 			tabNod.addAttribute( "name", it->first.c_str() );
 
@@ -505,7 +503,7 @@ bool CSimpleDatabase::loadFromXML( const string &fileName )
 			ASSERT_(!tabNod.isEmpty())
 
 			// Create table:
-			CSimpleDatabaseTablePtr t = createTable( tabNod.getAttribute("name") );
+			CSimpleDatabaseTable::Ptr t = createTable( tabNod.getAttribute("name") );
 
 			// Create fields:
 			XMLNode fNod = tabNod.getChildNode("fields");
@@ -587,7 +585,7 @@ void CSimpleDatabase::renameTable(
 			THROW_EXCEPTION_FMT("A table with the name '%s' already exists",newTableName.c_str())
 	}
 
-	CSimpleDatabaseTablePtr tb = it->second;
+	CSimpleDatabaseTable::Ptr tb = it->second;
 
 	m_tables.erase(it);
 	m_tables[newTableName] = tb;

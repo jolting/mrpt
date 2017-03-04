@@ -18,7 +18,6 @@ namespace poses
 {
 
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPoses3DSequence, mrpt::utils::CSerializable )
 
 	/** This class stores a sequence of relative, incremental 3D poses. It is useful as the bases storing unit for more complex probability particles and for computing the absolute pose of any intermediate pose.
 	 *
@@ -28,7 +27,6 @@ namespace poses
 	class BASE_IMPEXP CPoses3DSequence : public mrpt::utils::CSerializable
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPoses3DSequence )
 	public:
 		/** Default constructor
 		 */
@@ -82,13 +80,15 @@ namespace poses
 		 */
 		float  computeTraveledDistanceAfterAll();
 
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
+
 	private:
 		/** The internal sequence of poses, stored as relative, incremental poses, thus each one is situated just at the end point of last one, where the first one is referenced to (0,0,0deg)
 		 */
 		std::vector<mrpt::math::TPose3D>	m_poses;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPoses3DSequence, mrpt::utils::CSerializable )
 
 
 	} // End of namespace

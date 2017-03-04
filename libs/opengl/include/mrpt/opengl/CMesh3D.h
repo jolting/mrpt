@@ -22,7 +22,6 @@ namespace mrpt
 	namespace opengl
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CMesh3D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A 3D mesh composed of Triangles and/or Quads.
 		  * A typical usage example would be a 3D model of an object.
@@ -38,7 +37,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CMesh3D : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE(CMesh3D)
 
 			typedef int f_verts[4];
 			typedef float coord3D[3];
@@ -123,7 +121,6 @@ namespace mrpt
 			virtual ~CMesh3D();
 
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CMesh3D, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

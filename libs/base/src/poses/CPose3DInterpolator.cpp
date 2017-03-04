@@ -27,7 +27,6 @@ using namespace mrpt::poses;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CPose3DInterpolator, CSerializable, mrpt::poses)
 
 /*---------------------------------------------------------------
 						Constructor

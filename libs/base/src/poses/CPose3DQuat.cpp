@@ -25,7 +25,6 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 
 
-IMPLEMENTS_SERIALIZABLE(CPose3DQuat, CSerializable, mrpt::poses)
 
 /** Constructor from a CPose3D */
 CPose3DQuat::CPose3DQuat(const CPose3D &p)

@@ -14,7 +14,6 @@ namespace mrpt
 {
   namespace nav
   {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CPTG_DiffDrive_CCS, CParameterizedTrajectoryGenerator, NAV_IMPEXP)
 
 	/** A PTG for optimal paths of type "C|C,S" (as named in PTG papers).
 	 * - **Compatible kinematics**: differential-driven / Ackermann steering
@@ -27,7 +26,6 @@ namespace mrpt
 	 */
 	class NAV_IMPEXP  CPTG_DiffDrive_CCS : public CPTG_DiffDrive_CollisionGridBased
 	{
-		DEFINE_SERIALIZABLE(CPTG_DiffDrive_CCS)
 	 public:
 		CPTG_DiffDrive_CCS() : R(0),K(0) {}
 		CPTG_DiffDrive_CCS(const mrpt::utils::CConfigFileBase &cfg,const std::string &sSection) {
@@ -44,6 +42,5 @@ namespace mrpt
 	 protected:
 		double R,K;
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CPTG_DiffDrive_CCS, CParameterizedTrajectoryGenerator, NAV_IMPEXP)
   }
 }

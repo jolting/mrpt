@@ -21,7 +21,6 @@ namespace poses
 	class CPosePDFGaussian;
 	class CPose3DPDFGaussian;
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPose3DQuatPDFGaussianInf , CPose3DQuatPDF )
 
 	/** Declares a class that represents a Probability Density function (PDF) of a 3D pose using a quaternion \f$ p(\mathbf{x}) = [x ~ y ~ z ~ qr ~ qx ~ qy ~ qz]^\top \f$.
 	 *
@@ -40,9 +39,10 @@ namespace poses
 	class BASE_IMPEXP CPose3DQuatPDFGaussianInf : public CPose3DQuatPDF
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DQuatPDFGaussianInf )
 
 	 public:
+		using Ptr = std::shared_ptr<CPose3DQuatPDFGaussianInf>;
+		using ConstPtr = std::shared_ptr<const CPose3DQuatPDFGaussianInf>;
 		 /** Default constructor - set all values to zero. */
 		CPose3DQuatPDFGaussianInf();
 
@@ -109,8 +109,10 @@ namespace poses
 		double evaluatePDF( const CPose3DQuat &x ) const; //!< Evaluates the PDF at a given point
 		double  evaluateNormalizedPDF( const CPose3DQuat &x ) const; //!< Evaluates the ratio PDF(x) / PDF(MEAN), that is, the normalized PDF in the range [0,1]
 
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
+
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DQuatPDFGaussianInf , CPose3DQuatPDF )
 
 	bool BASE_IMPEXP operator==(const CPose3DQuatPDFGaussianInf &p1,const CPose3DQuatPDFGaussianInf &p2);
 	/** Pose composition for two 3D pose Gaussians  \sa CPose3DQuatPDFGaussianInf::operator += */

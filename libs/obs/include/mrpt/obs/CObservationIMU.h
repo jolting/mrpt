@@ -20,7 +20,6 @@ namespace mrpt
 namespace obs
 {
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationIMU , CObservation,OBS_IMPEXP )
 
 	/** Symbolic names for the indices of IMU data (refer to mrpt::obs::CObservationIMU)
 	 * \ingroup mrpt_obs_grp
@@ -74,7 +73,6 @@ namespace obs
 	class OBS_IMPEXP CObservationIMU : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationIMU )
 
 	 public:
 		/** Constructor.
@@ -111,7 +109,6 @@ namespace obs
 
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationIMU , CObservation,OBS_IMPEXP )
 
 
 	} // End of namespace

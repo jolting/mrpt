@@ -16,7 +16,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationCANBusJ1939 , CObservation, OBS_IMPEXP)
 
 	/** This class stores a message from a CAN BUS with the protocol J1939
 	 *
@@ -26,7 +25,6 @@ namespace obs
 	class OBS_IMPEXP CObservationCANBusJ1939 : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationCANBusJ1939 )
 
 	 public:
 		/** Constructor.
@@ -71,7 +69,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationCANBusJ1939 , CObservation, OBS_IMPEXP)
 
 	} // End of namespace
 } // End of namespace

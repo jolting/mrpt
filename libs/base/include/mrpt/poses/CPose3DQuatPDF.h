@@ -21,7 +21,6 @@ namespace mrpt
 		class CPosePDF;
 		class CPose3DPDF;
 
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPose3DQuatPDF, mrpt::utils::CSerializable )
 
 		/** Declares a class that represents a Probability Density Function (PDF) of a 3D pose (6D actually), by means of a 7-vector with a translation [x y z] and a quaternion [qr qx qy qz].
 		 *   This class is just the base class for unifying many diferent ways this PDF can be implemented.
@@ -42,9 +41,10 @@ namespace mrpt
 			public mrpt::utils::CSerializable,
 			public mrpt::utils::CProbabilityDensityFunction<CPose3DQuat,7>
 		{
-			DEFINE_VIRTUAL_SERIALIZABLE( CPose3DQuatPDF )
 
 		 public:
+			using Ptr = std::shared_ptr<CPose3DQuatPDF>;
+			using ConstPtr = std::shared_ptr<const CPose3DQuatPDF>;
 			/** Copy operator, translating if necesary (for example, between particles and gaussian representations)
 			  * \sa createFrom2D
 			  */
@@ -91,8 +91,10 @@ namespace mrpt
 				return SETOFOBJECTS::posePDF2opengl(*this);
 			}
 
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
+
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DQuatPDF, mrpt::utils::CSerializable )
 
 	} // End of namespace
 } // End of namespace

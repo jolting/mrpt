@@ -22,7 +22,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE( CPose3DPDFParticles, CPose3DPDF, mrpt::poses )
 
 /*---------------------------------------------------------------
 	Constructor
@@ -50,7 +49,7 @@ void  CPose3DPDFParticles::copyFrom(const CPose3DPDF &o)
 
 	if (this == &o) return;		// It may be used sometimes
 
-	if (o.GetRuntimeClass()==CLASS_ID(CPose3DPDFParticles))
+	if (typeid(o)==typeid(CPose3DPDFParticles))
 	{
 		const CPose3DPDFParticles	*pdf = dynamic_cast<const CPose3DPDFParticles*>( &o );
 		ASSERT_(pdf);
@@ -58,7 +57,7 @@ void  CPose3DPDFParticles::copyFrom(const CPose3DPDF &o)
 		m_particles = pdf->m_particles;
 	}
 	else
-	if (o.GetRuntimeClass()==CLASS_ID(CPose3DPDFGaussian))
+	if (typeid(o)==typeid(CPose3DPDFGaussian))
 	{
 		THROW_EXCEPTION("TO DO!!");
 	}
@@ -325,7 +324,7 @@ void  CPose3DPDFParticles::append( CPose3DPDFParticles &o )
 void CPose3DPDFParticles::inverse(CPose3DPDF  &o) const
 {
 	MRPT_START
-	ASSERT_( o.GetRuntimeClass() == CLASS_ID(CPose3DPDFParticles) );
+	ASSERT_( typeid(o) == typeid(CPose3DPDFParticles) );
 	CPose3DPDFParticles * out = static_cast<CPose3DPDFParticles*> (&o);
 
 	// Prepare the output:

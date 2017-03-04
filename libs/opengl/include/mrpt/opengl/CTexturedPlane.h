@@ -18,7 +18,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CTexturedPlane, CTexturedObject, OPENGL_IMPEXP )
 
 		/** A 2D plane in the XY plane with a texture image.
 		  *  \sa opengl::COpenGLScene
@@ -26,7 +25,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CTexturedPlane : public CTexturedObject
 		{
-			DEFINE_SERIALIZABLE( CTexturedPlane )
 		protected:
 			mutable float				m_tex_x_min,m_tex_x_max;
 			mutable float				m_tex_y_min,m_tex_y_max;
@@ -87,7 +85,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CTexturedPlane();
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CTexturedPlane, CTexturedObject, OPENGL_IMPEXP )
 
 	} // end namespace
 

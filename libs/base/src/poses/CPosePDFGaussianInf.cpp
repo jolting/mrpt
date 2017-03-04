@@ -32,7 +32,6 @@ using namespace mrpt::system;
 
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFGaussianInf, CPosePDF, mrpt::poses )
 
 
 /*---------------------------------------------------------------
@@ -283,8 +282,8 @@ void  CPosePDFGaussianInf::bayesianFusion(const  CPosePDF &p1_,const  CPosePDF &
 
 	MRPT_UNUSED_PARAM(minMahalanobisDistToDrop); // Not used in this class!
 
-	ASSERT_( p1_.GetRuntimeClass() == CLASS_ID( CPosePDFGaussianInf )  );
-	ASSERT_( p2_.GetRuntimeClass() == CLASS_ID( CPosePDFGaussianInf )  );
+	ASSERT_( typeid(p1_) == typeid(CPosePDFGaussianInf )  );
+	ASSERT_( typeid(p2_) == typeid(CPosePDFGaussianInf )  );
 
 	const CPosePDFGaussianInf	*p1 = static_cast<const CPosePDFGaussianInf*>( &p1_ );
 	const CPosePDFGaussianInf	*p2 = static_cast<const CPosePDFGaussianInf*>( &p2_ );
@@ -316,7 +315,7 @@ void  CPosePDFGaussianInf::bayesianFusion(const  CPosePDF &p1_,const  CPosePDF &
  ---------------------------------------------------------------*/
 void	 CPosePDFGaussianInf::inverse(CPosePDF &o) const
 {
-	ASSERT_(o.GetRuntimeClass() == CLASS_ID(CPosePDFGaussianInf));
+	ASSERT_(typeid(o) == typeid(CPosePDFGaussianInf));
 	CPosePDFGaussianInf	*out = static_cast<CPosePDFGaussianInf*>( &o );
 
 	// The mean:

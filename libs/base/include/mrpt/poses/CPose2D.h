@@ -16,7 +16,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE( CPose2D )
 
 	/** A class used to store a 2D pose.
 	 *    A class used to store a 2D pose, including the 2D coordinate
@@ -35,10 +34,6 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPose2D : public CPose<CPose2D>, public mrpt::utils::CSerializable
 	{
-	public:
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose2D )
-
 	public:
 		mrpt::math::CArrayDouble<2>   m_coords; //!< [x,y]
 
@@ -254,9 +249,10 @@ namespace poses
 		static inline void resize(const size_t n) { if (n!=static_size) throw std::logic_error(format("Try to change the size of CPose2D to %u.",static_cast<unsigned>(n))); }
 
 		/** @} */
+                void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+                void readFromStream(mrpt::utils::CStream &in, int version);
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST( CPose2D )
 
 
 	std::ostream BASE_IMPEXP & operator << (std::ostream& o, const CPose2D& p);

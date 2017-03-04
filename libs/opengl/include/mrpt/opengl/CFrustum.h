@@ -16,7 +16,6 @@ namespace mrpt	{
 namespace opengl	{
 
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CFrustum,CRenderizableDisplayList, OPENGL_IMPEXP)
 
 	/** A solid or wireframe frustum in 3D (a rectangular truncated pyramid), with arbitrary (possibly assymetric) field-of-view angles.
 	  *
@@ -46,7 +45,6 @@ namespace opengl	{
 	  */
 	class OPENGL_IMPEXP CFrustum :public CRenderizableDisplayList
 	{
-		DEFINE_SERIALIZABLE(CFrustum)
 
 	protected:
 		float  m_min_distance, m_max_distance;    //!< Near and far planes
@@ -107,7 +105,6 @@ namespace opengl	{
 		/** Destructor  */
 		virtual ~CFrustum() { }
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CFrustum,CRenderizableDisplayList, OPENGL_IMPEXP)
 }
 }
 #endif

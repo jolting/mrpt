@@ -24,7 +24,6 @@ namespace mrpt
 		};
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( COctoMapVoxels, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A flexible renderer of voxels, typically from a 3D octo map (see mrpt::maps::COctoMap).
 		  *  This class is sort of equivalent to octovis::OcTreeDrawer from the octomap package, but
@@ -58,7 +57,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP COctoMapVoxels : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( COctoMapVoxels )
 		public:
 
 			/** The different coloring schemes, which modulate the generic mrpt::opengl::CRenderizable object color. Set with setVisualizationMode() */
@@ -211,7 +209,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers. */
 			virtual ~COctoMapVoxels() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( COctoMapVoxels, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 } // End of namespace

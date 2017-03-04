@@ -23,7 +23,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CTexturedPlane, CTexturedObject, mrpt::opengl )
 
 CTexturedPlanePtr CTexturedPlane::Create(
 	float				x_min,

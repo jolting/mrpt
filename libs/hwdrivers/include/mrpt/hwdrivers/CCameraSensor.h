@@ -261,7 +261,7 @@ namespace mrpt
 			  *		- mrpt::obs::CObservation3DRangeScan (For 3D cameras)
 			  */
 			mrpt::obs::CObservationPtr getNextFrame( );
-			void getNextFrame( std::vector<mrpt::utils::CSerializablePtr> & out_obs );
+			void getNextFrame( std::vector<mrpt::utils::CSerializable::Ptr> & out_obs );
 
 			/** Tries to open the camera, after setting all the parameters with a call to loadConfig.
 			  *  \exception This method must throw an exception with a descriptive message if some critical error is found.

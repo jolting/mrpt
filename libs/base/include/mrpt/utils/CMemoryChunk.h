@@ -17,7 +17,6 @@ namespace mrpt
 	namespace utils
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CMemoryChunk, mrpt::utils::CSerializable )
 
 		/** A memory buffer (implements CStream) which can be itself serialized.
 		 *
@@ -26,11 +25,13 @@ namespace mrpt
 		 */
 		class BASE_IMPEXP CMemoryChunk : public CSerializable, public CMemoryStream
 		{
-			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CMemoryChunk )
+		public:
+			using Ptr = std::shared_ptr<CMemoryChunk>;
+			using ConstPtr = std::shared_ptr<const CMemoryChunk>;
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
 
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CMemoryChunk, mrpt::utils::CSerializable )
 
 	} // End of namespace
 } // end of namespace

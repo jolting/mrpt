@@ -16,18 +16,15 @@ namespace mrpt
 {
 namespace math
 {
-	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPolygon, mrpt::utils::CSerializable )
-
 	/** A wrapper of a TPolygon2D class, implementing CSerializable.
 	 * \ingroup geometry_grp
 	 */
 	class BASE_IMPEXP CPolygon : public mrpt::utils::CSerializable, public mrpt::math::TPolygon2D
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPolygon )
-
 	public:
+		using Ptr = std::shared_ptr<CPolygon>;
+		using ConstPtr = std::shared_ptr<const CPolygon>;
+
 		/** Default constructor (empty polygon, 0 vertices) */
 		CPolygon() : TPolygon2D()
 		{ }
@@ -61,9 +58,10 @@ namespace math
 		bool  PointIntoPolygon(double x,double y) const {
 			return TPolygon2D::contains(TPoint2D(x,y));
 		}
-	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPolygon, mrpt::utils::CSerializable )
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 
+	};
 	} // End of namespace
 } // End of namespace
 #endif
