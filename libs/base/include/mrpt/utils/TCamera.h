@@ -20,7 +20,6 @@ namespace mrpt
 {
 	namespace utils
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( TCamera, mrpt::utils::CSerializable )
 
 		/** Structure to hold the parameters of a pinhole camera model.
 		  *  The parameters obtained for one camera resolution can be used for any other resolution by means of the method TCamera::scaleToResolution()
@@ -30,11 +29,6 @@ namespace mrpt
 		 */
 		class BASE_IMPEXP TCamera : public mrpt::utils::CSerializable
 		{
-			DEFINE_SERIALIZABLE( TCamera )
-
-            // This must be added for declaration of MEX-related functions
-            DECLARE_MEX_CONVERSION
-
 		public:
 			TCamera() : ncols(640), nrows(480), focalLengthMeters(0)
 			{
@@ -189,8 +183,10 @@ namespace mrpt
 			inline void p2(double val) { dist[3]=val; }
 			/** Get the value of the k3 distortion parameter.  */
 			inline void k3(double val) { dist[4]=val; }
+
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
 		}; // end class TCamera
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( TCamera, mrpt::utils::CSerializable )
 
 
 		bool BASE_IMPEXP operator ==(const mrpt::utils::TCamera& a, const mrpt::utils::TCamera& b);
@@ -200,5 +196,4 @@ namespace mrpt
 } // end of namespace
 
 // Add for declaration of mexplus::from template specialization
-DECLARE_MEXPLUS_FROM( mrpt::utils::TCamera ) // Not working at the beginning?
 #endif

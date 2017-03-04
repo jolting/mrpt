@@ -19,7 +19,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CSimpleLine, CRenderizableDisplayList, mrpt::opengl )
 
 CSimpleLinePtr CSimpleLine::Create(
 	float x0,float y0, float z0,

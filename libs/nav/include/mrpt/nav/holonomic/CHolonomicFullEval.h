@@ -15,8 +15,6 @@ namespace mrpt
 {
   namespace nav
   {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CLogFileRecord_FullEval, CHolonomicLogFileRecord, NAV_IMPEXP)
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CHolonomicFullEval, CAbstractHolonomicReactiveMethod, NAV_IMPEXP )
 
 	/** \addtogroup nav_holo Holonomic navigation methods
 	  * \ingroup mrpt_nav_grp
@@ -49,7 +47,6 @@ namespace mrpt
 	 */
 	class NAV_IMPEXP CHolonomicFullEval : public CAbstractHolonomicReactiveMethod
 	{
-		DEFINE_SERIALIZABLE( CHolonomicFullEval )
 	public:
 		/**  Initialize the parameters of the navigator, from some configuration file, or default values if set to nullptr */
 		CHolonomicFullEval( const mrpt::utils::CConfigFileBase *INI_FILE = nullptr );
@@ -92,14 +89,12 @@ namespace mrpt
 		virtual void postProcessDirectionEvaluations(std::vector<double> &dir_evals); // If desired, override in a derived class to manipulate the final evaluations of each directions
 
 	}; // end of CHolonomicFullEval
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CHolonomicFullEval, CAbstractHolonomicReactiveMethod, NAV_IMPEXP )
 
 	/** A class for storing extra information about the execution of CHolonomicFullEval navigation.
 	 * \sa CHolonomicFullEval, CHolonomicLogFileRecord
 	 */
 	class CLogFileRecord_FullEval : public CHolonomicLogFileRecord
 	{
-		DEFINE_SERIALIZABLE( CLogFileRecord_FullEval )
 	public:
 		 /** Member data */
 		int32_t              selectedSector;
@@ -108,7 +103,6 @@ namespace mrpt
 
 		const mrpt::math::CMatrixD * getDirectionScores() const MRPT_OVERRIDE { return &dirs_scores; }
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CLogFileRecord_FullEval, CHolonomicLogFileRecord, NAV_IMPEXP)
 
 	  /** @} */
 	} // end namespace

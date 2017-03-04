@@ -19,7 +19,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationBeaconRanges, CObservation, OBS_IMPEXP  )
 
 	/** Declares a class derived from "CObservation" that represents one (or more) range measurements to labeled beacons.
 	 * \sa CObservation
@@ -28,7 +27,6 @@ namespace obs
 	class OBS_IMPEXP CObservationBeaconRanges : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationBeaconRanges )
 
 	 public:
 		/** Default constructor.
@@ -83,7 +81,6 @@ namespace obs
 		float getSensedRangeByBeaconID(int32_t beaconID);
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationBeaconRanges, CObservation, OBS_IMPEXP  )
 
 
 	} // End of namespace

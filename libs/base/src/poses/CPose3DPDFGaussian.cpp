@@ -31,7 +31,6 @@ using namespace std;
 bool mrpt::global_settings::USE_SUT_QUAT2EULER_CONVERSION = false;
 
 
-IMPLEMENTS_SERIALIZABLE( CPose3DPDFGaussian, CPose3DPDF, mrpt::poses )
 
 
 /*---------------------------------------------------------------
@@ -449,7 +448,7 @@ void  CPose3DPDFGaussian::bayesianFusion( const CPose3DPDF &p1_, const CPose3DPD
  ---------------------------------------------------------------*/
 void	 CPose3DPDFGaussian::inverse(CPose3DPDF &o) const
 {
-	ASSERT_(o.GetRuntimeClass() == CLASS_ID(CPose3DPDFGaussian));
+	ASSERT_(typeid(o) == typeid(CPose3DPDFGaussian));
 	CPose3DPDFGaussian	&out = static_cast<CPose3DPDFGaussian&>(o);
 
 	// This is like: b=(0,0,0)

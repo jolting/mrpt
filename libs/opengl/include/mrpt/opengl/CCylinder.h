@@ -15,7 +15,6 @@ namespace mrpt	{
 namespace opengl	{
 	class OPENGL_IMPEXP CCylinder;
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE(CCylinder,CRenderizableDisplayList, OPENGL_IMPEXP)
 	/** A cylinder or cone whose base lies in the XY plane.
 	  * \sa opengl::COpenGLScene,opengl::CDisk
 	  *  
@@ -28,7 +27,6 @@ namespace opengl	{
 	  * \ingroup mrpt_opengl_grp
 	  */
 	class OPENGL_IMPEXP CCylinder:public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CCylinder)
 	protected:
 		/**
 		  * Cylinder's radii. If mBaseRadius==mTopRadius, then the object is an actual cylinder. If both differ, it's a truncated cone. If one of the radii is zero, the object is a cone.
@@ -179,7 +177,6 @@ namespace opengl	{
 			return (mHeight<0)?(Z>=mHeight&&Z<=0):(Z<=mHeight&&Z>=0);
 		}
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(CCylinder,CRenderizableDisplayList, OPENGL_IMPEXP)
 
 }
 }

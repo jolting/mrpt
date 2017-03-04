@@ -143,7 +143,7 @@ void Run_HMT_SLAM()
 
 		// Load next object from the rawlog:
 		// ----------------------------------------
-		CSerializablePtr objFromRawlog;
+		CSerializable::Ptr objFromRawlog;
 		try
 		{
 			rawlogFile >> objFromRawlog;

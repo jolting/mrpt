@@ -21,7 +21,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationStereoImages , CObservation,OBS_IMPEXP )
 
 	/** Observation class for either a pair of left+right or left+disparity images from a stereo camera.
 	  *
@@ -41,7 +40,6 @@ namespace obs
 	class OBS_IMPEXP CObservationStereoImages : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationStereoImages )
 		// This must be added for declaration of MEX-related functions
 		DECLARE_MEX_CONVERSION
 
@@ -115,7 +113,6 @@ namespace obs
 		void swap( CObservationStereoImages &o); //!< Do an efficient swap of all data members of this object with "o".
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationStereoImages , CObservation,OBS_IMPEXP )
 
 	} // End of namespace
 } // End of namespace

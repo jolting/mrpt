@@ -21,7 +21,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( COctoMapVoxels, CRenderizableDisplayList, mrpt::opengl )
 
 /** Ctor */
 COctoMapVoxels::COctoMapVoxels() :

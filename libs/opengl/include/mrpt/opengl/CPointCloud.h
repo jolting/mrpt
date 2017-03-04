@@ -22,7 +22,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CPointCloud, CRenderizable, OPENGL_IMPEXP )
 
 
 		/** A cloud of points, all with the same color or each depending on its value along a particular coordinate axis.
@@ -49,7 +48,6 @@ namespace mrpt
 			public mrpt::utils::PLY_Importer,
 			public mrpt::utils::PLY_Exporter
 		{
-			DEFINE_SERIALIZABLE( CPointCloud )
 		protected:
 			enum Axis { colNone=0, colZ, colY, colX} m_colorFromDepth;
 			std::vector<float>	m_xs,m_ys,m_zs;
@@ -243,7 +241,6 @@ namespace mrpt
 
 			inline void internal_render_one_point(size_t i) const;
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CPointCloud, CRenderizable, OPENGL_IMPEXP )
 
 	} // end namespace
 

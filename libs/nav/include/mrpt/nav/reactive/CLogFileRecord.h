@@ -24,7 +24,6 @@ namespace mrpt
 {
 namespace nav
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CLogFileRecord, mrpt::utils::CSerializable, NAV_IMPEXP )
 
 	/** A class for storing, saving and loading a reactive navigation
 	 *   log record for the CReactiveNavigationSystem class.
@@ -33,7 +32,6 @@ namespace nav
 	 */
 	class NAV_IMPEXP  CLogFileRecord : public mrpt::utils::CSerializable
 	{
-		DEFINE_SERIALIZABLE( CLogFileRecord )
 
 	public:
 		CLogFileRecord();  //!< Constructor, builds an empty record.
@@ -96,7 +94,6 @@ namespace nav
 		mrpt::math::TTwist2D   ptg_last_curRobotVelLocal;
 
 	};
-	  DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CLogFileRecord, mrpt::utils::CSerializable, NAV_IMPEXP )
 
 }
 }

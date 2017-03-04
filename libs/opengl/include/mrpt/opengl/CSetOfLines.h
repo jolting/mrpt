@@ -18,7 +18,6 @@ namespace mrpt
 	namespace opengl
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CSetOfLines, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A set of independent lines (or segments), one line with its own start and end positions (X,Y,Z).
 		  * Optionally, the vertices can be also shown as dots.
@@ -34,7 +33,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CSetOfLines : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CSetOfLines )
 		protected:
 			std::vector<mrpt::math::TSegment3D> mSegments;
 			float   mLineWidth;
@@ -220,7 +218,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers. */
 			virtual ~CSetOfLines() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CSetOfLines, CRenderizableDisplayList, OPENGL_IMPEXP )
 		/** Inserts a set of segments into the list. Allows call chaining.
 		  * \sa mrpt::opengl::CSetOfLines::appendLines
 		  */

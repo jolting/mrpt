@@ -15,7 +15,6 @@
 using namespace mrpt::nav;
 using namespace mrpt::utils;
 
-IMPLEMENTS_VIRTUAL_MRPT_OBJECT(CMultiObjectiveMotionOptimizerBase, CObject, mrpt::nav)
 
 CMultiObjectiveMotionOptimizerBase::CMultiObjectiveMotionOptimizerBase(TParamsBase & params) :
 	m_params_base(params)

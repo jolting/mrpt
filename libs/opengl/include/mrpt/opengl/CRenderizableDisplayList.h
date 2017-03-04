@@ -18,7 +18,6 @@ namespace mrpt
 		#define INVALID_DISPLAY_LIST_ID  static_cast<unsigned int>(-1)
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CRenderizableDisplayList, CRenderizable, OPENGL_IMPEXP )
 
 		/** A renderizable object suitable for rendering with OpenGL's display lists.
 		  *   The idea is to use the derived classes' ::render() method to save all the primitives
@@ -35,7 +34,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CRenderizableDisplayList : public mrpt::opengl::CRenderizable
 		{
-			DEFINE_VIRTUAL_SERIALIZABLE( CRenderizableDisplayList  )
 
 		private:
 			mutable unsigned int	m_dl; //!< Display list ID, for derived classes that want to use it (it's automatically deleted and freed on destruction of this base class).
@@ -81,7 +79,6 @@ namespace mrpt
 			/** @} */
 
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CRenderizableDisplayList, CRenderizable, OPENGL_IMPEXP )
 
 	} // end namespace
 

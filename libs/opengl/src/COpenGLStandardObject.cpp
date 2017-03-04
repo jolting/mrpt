@@ -20,7 +20,6 @@ using namespace mrpt::math;
 using namespace mrpt::poses;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(COpenGLStandardObject,CRenderizableDisplayList,mrpt::opengl)
 
 #define COMPILE_TIME_ASSERT(N,expr)   \
 	char dummy_constraint##N[expr]

@@ -20,7 +20,6 @@ using namespace mrpt::utils;
 using namespace std;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CSplineInterpolator1D, CSerializable, mrpt::math)
 
 /*---------------------------------------------------------------
 						Constructor

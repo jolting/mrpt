@@ -23,7 +23,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CMesh, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A planar (XY) grid where each cell has an associated height and, optionally, a texture map.
 		  *  A typical usage example would be an elevation map or a 3D model of a terrain.
@@ -39,7 +38,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CMesh : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CMesh )
 		public:
 			struct TTriangleVertexIndices { size_t vind[3]; };
 		protected:
@@ -197,7 +195,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CMesh();
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CMesh, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

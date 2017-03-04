@@ -22,7 +22,6 @@ namespace mrpt
 {
 namespace maps
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CBeaconMap, CMetricMap ,MAPS_IMPEXP )
 
 	/** A class for storing a map of 3D probabilistic beacons, using a Montecarlo, Gaussian, or Sum of Gaussians (SOG) representation (for range-only SLAM).
 	 * <br>
@@ -44,7 +43,6 @@ namespace maps
 	class MAPS_IMPEXP CBeaconMap : public mrpt::maps::CMetricMap
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CBeaconMap )
 
 	public:
 		typedef std::deque<CBeacon>					TSequenceBeacons;
@@ -259,7 +257,6 @@ namespace maps
 		MAP_DEFINITION_END(CBeaconMap,MAPS_IMPEXP)
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CBeaconMap, CMetricMap ,MAPS_IMPEXP )
 
 
 	} // End of namespace

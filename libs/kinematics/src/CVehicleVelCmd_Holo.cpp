@@ -14,7 +14,6 @@
 using namespace mrpt::kinematics;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(CVehicleVelCmd_Holo, CVehicleVelCmd, mrpt::kinematics)
 
 CVehicleVelCmd_Holo::CVehicleVelCmd_Holo() :
 	vel(.0),

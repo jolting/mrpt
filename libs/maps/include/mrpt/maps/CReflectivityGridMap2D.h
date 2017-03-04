@@ -24,7 +24,6 @@ namespace mrpt
 {
 	namespace maps
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CReflectivityGridMap2D, CMetricMap, MAPS_IMPEXP  )
 
 		/** A 2D grid map representing the reflectivity of the environment (for example, measured with an IR proximity sensor).
 		  *
@@ -44,7 +43,6 @@ namespace mrpt
 			public CLogOddsGridMap2D<int8_t>
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CReflectivityGridMap2D )
 
 		protected:
 			static CLogOddsGridMapLUT<cell_t>  m_logodd_lut; //!< Lookup tables for log-odds
@@ -101,7 +99,6 @@ namespace mrpt
 				mrpt::maps::CReflectivityGridMap2D::TInsertionOptions	insertionOpts;
 			MAP_DEFINITION_END(CReflectivityGridMap2D,MAPS_IMPEXP)
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CReflectivityGridMap2D, CMetricMap, MAPS_IMPEXP  )
 
 
 	} // End of namespace

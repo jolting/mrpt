@@ -16,4 +16,3 @@ using namespace mrpt;
 using namespace mrpt::utils;
 using namespace mrpt::nav;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CHolonomicLogFileRecord, CSerializable, mrpt::nav )

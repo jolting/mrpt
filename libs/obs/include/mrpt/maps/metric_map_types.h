@@ -61,11 +61,9 @@ namespace mrpt
 			{}
 		};
 
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_LINKAGE ( TMapGenericParams, OBS_IMPEXP )
 		/** Common params to all maps derived from mrpt::maps::CMetricMap  */
 		class OBS_IMPEXP TMapGenericParams : public mrpt::utils::CLoadableOptions, public mrpt::utils::CSerializable
 		{
-			DEFINE_SERIALIZABLE( TMapGenericParams )
 		public:
 			bool  enableSaveAs3DObject;        //!< (Default=true) If false, calling CMetricMap::getAs3DObject() will have no effects
 			bool  enableObservationLikelihood; //!< (Default=true) Enable computing observation likelihoods with this map
@@ -75,7 +73,6 @@ namespace mrpt
 			void loadFromConfigFile(const mrpt::utils::CConfigFileBase &source,const std::string &sectionNamePrefix) MRPT_OVERRIDE; // See base docs
 			void dumpToTextStream(mrpt::utils::CStream &out) const MRPT_OVERRIDE; // See base docs
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_LINKAGE ( TMapGenericParams, OBS_IMPEXP )
 
 
 	} // End of namespace

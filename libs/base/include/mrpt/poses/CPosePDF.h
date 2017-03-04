@@ -22,7 +22,6 @@ namespace poses
 	class CPosePDFGaussian; // frd decl.
 
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPosePDF, mrpt::utils::CSerializable )
 
 	/** Declares a class that represents a probability density function (pdf) of a 2D pose (x,y,phi).
 	 *   This class is just the base class for unifying many diferent ways this pdf can be implemented.
@@ -38,9 +37,11 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPosePDF : public mrpt::utils::CSerializable, public mrpt::utils::CProbabilityDensityFunction<CPose2D,3>
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE( CPosePDF )
 
 	public:
+		using Ptr = std::shared_ptr<CPosePDF>;
+		using ConstPtr = std::shared_ptr<const CPosePDF>;
+
 		/** Copy operator, translating if necesary (for example, between particles and gaussian representations)
 		  */
 		virtual void  copyFrom(const CPosePDF &o) = 0;
@@ -114,7 +115,6 @@ namespace poses
 
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPosePDF, mrpt::utils::CSerializable )
 
 
 	} // End of namespace

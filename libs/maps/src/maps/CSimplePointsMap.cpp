@@ -52,7 +52,6 @@ mrpt::maps::CMetricMap* CSimplePointsMap::internal_CreateFromMapDefinition(const
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(CSimplePointsMap, CPointsMap,mrpt::maps)
 
 /*---------------------------------------------------------------
 						Constructor

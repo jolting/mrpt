@@ -21,7 +21,6 @@ namespace mrpt
 	namespace opengl
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CPointCloudColoured, CRenderizable, OPENGL_IMPEXP )
 		/** A cloud of points, each one with an individual colour (R,G,B). The alpha component is shared by all the points and is stored in the base member m_color_A.
 		  *
 		  *  To load from a points-map, CPointCloudColoured::loadFromPointsMap().
@@ -45,7 +44,6 @@ namespace mrpt
 			public mrpt::utils::PLY_Importer,
 			public mrpt::utils::PLY_Exporter
 		{
-			DEFINE_SERIALIZABLE( CPointCloudColoured )
 
 		public:
 			struct TPointColour
@@ -218,7 +216,6 @@ namespace mrpt
 			void   PLY_export_get_vertex(const size_t idx,mrpt::math::TPoint3Df &pt,bool &pt_has_color,mrpt::utils::TColorf &pt_color) const MRPT_OVERRIDE;
 			/** @} */
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CPointCloudColoured, CRenderizable, OPENGL_IMPEXP )
 
 		OPENGL_IMPEXP mrpt::utils::CStream& operator>>(mrpt::utils::CStream& in,  CPointCloudColoured::TPointColour &o);
 		OPENGL_IMPEXP mrpt::utils::CStream& operator<<(mrpt::utils::CStream& out, const CPointCloudColoured::TPointColour &o);

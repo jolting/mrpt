@@ -16,7 +16,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationRawDAQ , CObservation, OBS_IMPEXP)
 
 	/** Store raw data from a Data Acquisition (DAQ) device, such that input or output analog and digital channels, counters from encoders, etc. at one sampling instant.
 	 *  All analog values are assumed to be volts. 
@@ -30,7 +29,6 @@ namespace obs
 	class OBS_IMPEXP CObservationRawDAQ : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationRawDAQ )
 	 public:
 		/** Constructor */
 		inline CObservationRawDAQ() : AIN_channel_count(0),AIN_interleaved(true),sample_rate(0) { }
@@ -68,7 +66,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationRawDAQ , CObservation, OBS_IMPEXP)
 
 	} // End of namespace
 } // End of namespace

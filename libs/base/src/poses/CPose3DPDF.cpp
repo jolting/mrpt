@@ -26,7 +26,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CPose3DPDF, CSerializable, mrpt::poses )
 
 /*---------------------------------------------------------------
 					copyFrom2D
@@ -35,7 +34,7 @@ CPose3DPDF* CPose3DPDF::createFrom2D(const CPosePDF &o)
 {
 	MRPT_START
 
-	if (o.GetRuntimeClass()==CLASS_ID(CPosePDFGaussian))
+	if (typeid(o)==typeid(CPosePDFGaussian))
 	{
 		CPose3DPDFGaussian	*newObj = new CPose3DPDFGaussian();
 		const CPosePDFGaussian    *obj = static_cast<const CPosePDFGaussian *>( &o );
@@ -53,7 +52,7 @@ CPose3DPDF* CPose3DPDF::createFrom2D(const CPosePDF &o)
 
 		return newObj;
 	}
-	else if (o.GetRuntimeClass()==CLASS_ID(CPosePDFGaussianInf))
+	else if (typeid(o)==typeid(CPosePDFGaussianInf))
 	{
 		CPose3DPDFGaussianInf	*newObj = new CPose3DPDFGaussianInf();
 		const CPosePDFGaussianInf *obj = static_cast<const CPosePDFGaussianInf *>( &o );
@@ -72,56 +71,54 @@ CPose3DPDF* CPose3DPDF::createFrom2D(const CPosePDF &o)
 		return newObj;
 
 	}
-	else
-		if (o.GetRuntimeClass()==CLASS_ID(CPosePDFParticles))
+	else if (typeid(o)==typeid(CPosePDFParticles))
+	{
+		const CPosePDFParticles    *obj = static_cast<const CPosePDFParticles*>( &o );
+		CPose3DPDFParticles	*newObj = new CPose3DPDFParticles(obj->size());
+
+		CPosePDFParticles::CParticleList::const_iterator  it1;
+		CPose3DPDFParticles::CParticleList::iterator      it2;
+		for (it1=obj->m_particles.begin(),it2=newObj->m_particles.begin();it1!=obj->m_particles.end();++it1,++it2)
 		{
-			const CPosePDFParticles    *obj = static_cast<const CPosePDFParticles*>( &o );
-			CPose3DPDFParticles	*newObj = new CPose3DPDFParticles(obj->size());
-
-			CPosePDFParticles::CParticleList::const_iterator  it1;
-			CPose3DPDFParticles::CParticleList::iterator      it2;
-			for (it1=obj->m_particles.begin(),it2=newObj->m_particles.begin();it1!=obj->m_particles.end();++it1,++it2)
-			{
-				it2->log_w = it1->log_w;
-				(*it2->d) = (*it1->d);
-			}
-
-			return newObj;
+			it2->log_w = it1->log_w;
+			(*it2->d) = (*it1->d);
 		}
-		else
-			if (o.GetRuntimeClass()==CLASS_ID(CPosePDFSOG))
-			{
-				const CPosePDFSOG    *obj = static_cast<const CPosePDFSOG*>( &o );
-				CPose3DPDFSOG	*newObj = new CPose3DPDFSOG(obj->size());
 
-				CPosePDFSOG::const_iterator it1;
-				CPose3DPDFSOG::iterator     it2;
+		return newObj;
+	}
+	else if (typeid(o)==typeid(CPosePDFSOG))
+	{
+		const CPosePDFSOG    *obj = static_cast<const CPosePDFSOG*>( &o );
+		CPose3DPDFSOG	*newObj = new CPose3DPDFSOG(obj->size());
 
-				for (it1=obj->begin(),it2=newObj->begin();it1!=obj->end();++it1,++it2)
-				{
-					it2->log_w = it1->log_w;
-					it2->val.mean.setFromValues( it1->mean.x(),it1->mean.y(),0, it1->mean.phi(),0,0 );
+		CPosePDFSOG::const_iterator it1;
+		CPose3DPDFSOG::iterator     it2;
 
-					it2->val.cov.zeros();
+		for (it1=obj->begin(),it2=newObj->begin();it1!=obj->end();++it1,++it2)
+		{
+			it2->log_w = it1->log_w;
+			it2->val.mean.setFromValues( it1->mean.x(),it1->mean.y(),0, it1->mean.phi(),0,0 );
 
-					it2->val.cov.get_unsafe(0,0) = it1->cov.get_unsafe(0,0);
-					it2->val.cov.get_unsafe(1,1) = it1->cov.get_unsafe(1,1);
-					it2->val.cov.get_unsafe(3,3) = it1->cov.get_unsafe(2,2); // yaw <- phi
+			it2->val.cov.zeros();
 
-					it2->val.cov.get_unsafe(0,1) =
-					it2->val.cov.get_unsafe(1,0) = it1->cov.get_unsafe(0,1);
+			it2->val.cov.get_unsafe(0,0) = it1->cov.get_unsafe(0,0);
+			it2->val.cov.get_unsafe(1,1) = it1->cov.get_unsafe(1,1);
+			it2->val.cov.get_unsafe(3,3) = it1->cov.get_unsafe(2,2); // yaw <- phi
 
-					it2->val.cov.get_unsafe(0,3) =
-					it2->val.cov.get_unsafe(3,0) = it1->cov.get_unsafe(0,2);
+			it2->val.cov.get_unsafe(0,1) =
+			it2->val.cov.get_unsafe(1,0) = it1->cov.get_unsafe(0,1);
 
-					it2->val.cov.get_unsafe(1,3) =
-					it2->val.cov.get_unsafe(3,1) = it1->cov.get_unsafe(1,2);
-				}
+			it2->val.cov.get_unsafe(0,3) =
+			it2->val.cov.get_unsafe(3,0) = it1->cov.get_unsafe(0,2);
 
-				return newObj;
-			}
-			else
-				THROW_EXCEPTION("Class of object not supported by this method!");
+			it2->val.cov.get_unsafe(1,3) =
+			it2->val.cov.get_unsafe(3,1) = it1->cov.get_unsafe(1,2);
+		}
+
+		return newObj;
+	}
+	else
+		THROW_EXCEPTION("Class of object not supported by this method!");
 
 	MRPT_END
 }

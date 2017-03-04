@@ -18,7 +18,6 @@ using namespace mrpt::slam;
 using namespace mrpt::utils;
 using namespace mrpt::hmtslam;
 
-IMPLEMENTS_SERIALIZABLE( CHierarchicalMHMap, CSerializable, mrpt::hmtslam )
 
 /*---------------------------------------------------------------
 						Constructor
@@ -486,7 +485,7 @@ void  CHierarchicalMHMap::dumpAsXMLfile(std::string fileName) const
 			}
 			else if ( ann->name == ARC_ANNOTATION_DELTA )
 			{
-				CSerializablePtr o = (*it)->m_annotations.get(ARC_ANNOTATION_DELTA, ann->ID );
+				CSerializable::Ptr o = (*it)->m_annotations.get(ARC_ANNOTATION_DELTA, ann->ID );
 				ASSERT_(o);
 
 				CPose3DPDFGaussian relativePoseAcordToArc;

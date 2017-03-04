@@ -16,7 +16,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPointPDFGaussian, CPointPDF )
 
 	/** A gaussian distribution for 3D points. Also a method for bayesian fusion is provided.
 	 *
@@ -25,9 +24,6 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPointPDFGaussian : public CPointPDF
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPointPDFGaussian )
-
 	 public:
 		/** Default constructor
 		  */
@@ -119,10 +115,10 @@ namespace poses
 
 		/** Returns the Mahalanobis distance from this PDF to another PDF, that is, it's evaluation at (0,0,0) */
 		double mahalanobisDistanceTo( const CPointPDFGaussian & other, bool only_2D = false ) const;
-
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPointPDFGaussian, CPointPDF )
 
 
 	} // End of namespace

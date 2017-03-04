@@ -20,7 +20,6 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CVectorField3D, CRenderizableDisplayList, mrpt::opengl )
 
 /** Constructor */
 CVectorField3D::CVectorField3D()

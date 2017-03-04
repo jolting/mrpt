@@ -40,7 +40,6 @@ using namespace std;
 #endif // MRPT_HAS_OPENGL_GLUT
 
 
-IMPLEMENTS_SERIALIZABLE( COpenGLScene, CRenderizableDisplayList, mrpt::opengl )
 
 
 /*---------------------------------------------------------------
@@ -174,7 +173,7 @@ void  COpenGLScene::readFromStream(mrpt::utils::CStream &in,int version)
 
 			for (i=0;i<n;i++)
 			{
-				CSerializablePtr newObj;
+				CSerializable::Ptr newObj;
 				in >> newObj;
 
 				COpenGLViewportPtr	newView = COpenGLViewportPtr(newObj);

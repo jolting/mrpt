@@ -115,7 +115,7 @@ void hmt_slam_guiFrame::thread_HMTSLAM()
 
 					// Load next object from the rawlog:
 					// ----------------------------------------
-					CSerializablePtr objFromRawlog;
+					CSerializable::Ptr objFromRawlog;
 					try
 					{
 						(*fInRawlog) >> objFromRawlog;

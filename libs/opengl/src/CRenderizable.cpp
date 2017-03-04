@@ -27,7 +27,6 @@ using namespace mrpt::opengl;
 using namespace mrpt::utils;
 using namespace mrpt::synch;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CRenderizable, CSerializable, mrpt::opengl )
 
 #define MAX_GL_TEXTURE_IDS       0x10000
 #define MAX_GL_TEXTURE_IDS_MASK  0x0FFFF

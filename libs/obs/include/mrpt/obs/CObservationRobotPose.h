@@ -17,7 +17,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationRobotPose, CObservation, OBS_IMPEXP  )
 
 	/** An observation providing an alternative robot pose from an external source.
 	 * \sa CObservation
@@ -26,7 +25,6 @@ namespace obs
 	class OBS_IMPEXP CObservationRobotPose : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationRobotPose )
 	 public:
 		CObservationRobotPose( );  //!< Default ctor
 
@@ -39,7 +37,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;// See base class docs
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationRobotPose, CObservation, OBS_IMPEXP  )
 
 	} // End of namespace
 } // End of namespace

@@ -29,7 +29,6 @@ using namespace std;
 bool mrpt::global_settings::USE_SUT_EULER2QUAT_CONVERSION = false;
 
 
-IMPLEMENTS_SERIALIZABLE( CPose3DQuatPDFGaussian, CPose3DQuatPDF, mrpt::poses )
 
 /** Default constructor - set all values to zero. */
 CPose3DQuatPDFGaussian::CPose3DQuatPDFGaussian() :
@@ -315,7 +314,7 @@ void  CPose3DQuatPDFGaussian::drawManySamples(
  ---------------------------------------------------------------*/
 void	 CPose3DQuatPDFGaussian::inverse(CPose3DQuatPDF &o) const
 {
-	ASSERT_(o.GetRuntimeClass() == CLASS_ID(CPose3DQuatPDFGaussian));
+	ASSERT_(typeid(o) == typeid(CPose3DQuatPDFGaussian));
 	CPose3DQuatPDFGaussian	&out = static_cast<CPose3DQuatPDFGaussian&>(o);
 
 	// COV:

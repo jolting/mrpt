@@ -11,6 +11,8 @@
 
 #include <mrpt/poses/CPose3D.h>
 #include <mrpt/poses/CPose2D.h>
+#include <mrpt/poses/CPosePDF.h>
+#include <mrpt/poses/CPose3DPDF.h>
 #include <mrpt/math/CMatrixTemplateNumeric.h>
 #include <mrpt/math/math_frwds.h>
 
@@ -36,8 +38,8 @@ namespace mrpt
         {
         protected:
 			// Only ONE of these can be not-NULL at a time.
-            CPosePDF*   m_pdf2D;        //!< A local copy of the PDF
-            CPose3DPDF* m_pdf3D;        //!< A local copy of the PDF
+            std::unique_ptr<CPosePDF>   m_pdf2D;        //!< A local copy of the PDF
+            std::unique_ptr<CPose3DPDF> m_pdf3D;        //!< A local copy of the PDF
 
             mrpt::math::CMatrixDouble33 m_fastdraw_gauss_Z3;
             mrpt::math::CMatrixDouble66 m_fastdraw_gauss_Z6;
@@ -64,7 +66,7 @@ namespace mrpt
             /** This method must be called to select the PDF from which to draw samples.
               * \sa drawSample
               */
-            void setPosePDF( const CPosePDFPtr &pdf );
+            void setPosePDF( const CPosePDF::Ptr &pdf );
 
             /** This method must be called to select the PDF from which to draw samples.
               * \sa drawSample
@@ -79,7 +81,7 @@ namespace mrpt
             /** This method must be called to select the PDF from which to draw samples.
               * \sa drawSample
               */
-            void setPosePDF( const CPose3DPDFPtr &pdf );
+            void setPosePDF( const CPose3DPDF::Ptr &pdf );
 
             /** This method must be called to select the PDF from which to draw samples.
               * \sa drawSample

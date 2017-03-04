@@ -75,6 +75,10 @@ namespace utils
 			ASSERT_(alloc_block_size>0)
 			m_alloc_block_size = alloc_block_size;
 		}
+
+		void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+		void readFromStream(mrpt::utils::CStream &in, int version);
+
 	}; // End of class def.
 
 	namespace internal {

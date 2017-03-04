@@ -18,7 +18,6 @@ namespace mrpt
 	namespace opengl
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CDisk, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A planar disk in the XY plane.
 		  *  \sa opengl::COpenGLScene
@@ -33,7 +32,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CDisk : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CDisk )
 
 		protected:
 			float		m_radiusIn,m_radiusOut;
@@ -72,7 +70,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CDisk() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CDisk, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

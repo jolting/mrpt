@@ -17,9 +17,6 @@
 using namespace mrpt::utils;
 using namespace mrpt::system;
 
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CMHPropertiesValuesList, CSerializable, mrpt::utils)
-
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
@@ -82,7 +79,7 @@ void  CMHPropertiesValuesList::readFromStream(mrpt::utils::CStream &in, int vers
 				in >> isNull;
 
 				if (isNull)
-					m_properties[i].value.reset();
+					m_properties[i].value.clear();
 				else
 					in >> m_properties[i].value;
 
@@ -155,7 +152,7 @@ CSerializablePtr  CMHPropertiesValuesList::getAnyHypothesis(const char *property
 			return it->value;
 	}
 	// Not found:
-	return CSerializablePtr();
+	return CSerializable::Ptr();
 }
 
 /*---------------------------------------------------------------
@@ -163,7 +160,7 @@ CSerializablePtr  CMHPropertiesValuesList::getAnyHypothesis(const char *property
  ---------------------------------------------------------------*/
 void  CMHPropertiesValuesList::set(
 	const char *propertyName,
-	const CSerializablePtr &obj,
+	const CSerializable::Ptr &obj,
 	const int64_t &hypothesis_ID)
 {
 	MRPT_START
@@ -174,10 +171,12 @@ void  CMHPropertiesValuesList::set(
 		{
 			// Delete current contents:
 			// Copy new value:
-			it->value.reset(obj->clone());
+			it->value = obj;
+			MRPT_TODO("Is this necessary?");
+			//it->value.make_unique();
 
 			//if (!obj)	it->value.clear();
-			//else		it->value = obj; //->clone();
+			//else		it->value = obj; //->duplicate();
 			return;
 		}
 	}
@@ -199,7 +198,7 @@ void  CMHPropertiesValuesList::set(
  ---------------------------------------------------------------*/
 void  CMHPropertiesValuesList::setMemoryReference(
 	const char *propertyName,
-	const CSerializablePtr &obj,
+	const CSerializable::Ptr &obj,
 	const int64_t & hypothesis_ID)
 {
 	MRPT_START
@@ -286,7 +285,7 @@ CMHPropertiesValuesList::CMHPropertiesValuesList( const CMHPropertiesValuesList&
 	m_properties ( o.m_properties )
 {
 	for (std::vector<TPropertyValueIDTriplet>::iterator it=m_properties.begin();it!=m_properties.end();++it)
-		it->value.reset(it->value->clone());
+		it->value.make_unique();
 }
 
 /*---------------------------------------------------------------
@@ -299,7 +298,7 @@ CMHPropertiesValuesList & CMHPropertiesValuesList::operator =( const CMHProperti
 	m_properties = o.m_properties;
 
 	for (std::vector<TPropertyValueIDTriplet>::iterator it=m_properties.begin();it!=m_properties.end();++it)
-		it->value.reset(it->value->clone());
+		it->value.make_unique();
 	return *this;
 }
 

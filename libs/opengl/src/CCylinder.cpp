@@ -20,7 +20,6 @@ using namespace mrpt::math;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CCylinder,CRenderizableDisplayList,mrpt::opengl)
 
 CCylinderPtr CCylinder::Create(const float baseRadius,const float topRadius,const float height,const int slices,const int stacks)	
 {

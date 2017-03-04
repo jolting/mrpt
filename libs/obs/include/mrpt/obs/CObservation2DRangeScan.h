@@ -24,7 +24,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservation2DRangeScan, CObservation, OBS_IMPEXP)
 
 	/** A "CObservation"-derived class that represents a 2D range scan measurement (typically from a laser scanner).
 	  *  The data structures are generic enough to hold a wide variety of 2D scanners and "3D" planar rotating 2D lasers.
@@ -43,7 +42,6 @@ namespace obs
 	class OBS_IMPEXP CObservation2DRangeScan : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservation2DRangeScan )
 		// This must be added for declaration of MEX-related functions
 		DECLARE_MEX_CONVERSION
 	private:
@@ -164,7 +162,6 @@ namespace obs
 		void filterByExclusionAngles( const std::vector<std::pair<double,double> >  &angles );
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservation2DRangeScan, CObservation, OBS_IMPEXP)
 
 	} // End of namespace
 	namespace utils

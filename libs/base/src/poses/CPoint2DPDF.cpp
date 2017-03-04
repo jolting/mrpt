@@ -13,5 +13,4 @@
 #include <mrpt/utils/CStream.h>
 using namespace mrpt::poses;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CPoint2DPDF, CSerializable, mrpt::poses )
 

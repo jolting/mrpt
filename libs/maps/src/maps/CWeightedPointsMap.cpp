@@ -52,7 +52,6 @@ mrpt::maps::CMetricMap* CWeightedPointsMap::internal_CreateFromMapDefinition(con
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(CWeightedPointsMap, CPointsMap,mrpt::maps)
 
 
 /*---------------------------------------------------------------

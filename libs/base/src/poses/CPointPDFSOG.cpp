@@ -29,7 +29,6 @@ using namespace mrpt::random;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPointPDFSOG, CPosePDF, mrpt::poses )
 
 
 /*---------------------------------------------------------------
@@ -204,7 +203,7 @@ void  CPointPDFSOG::copyFrom(const CPointPDF &o)
 
 	if (this == &o) return;		// It may be used sometimes
 
-	if (o.GetRuntimeClass()==CLASS_ID(CPointPDFSOG))
+	if (typeid(o)==typeid(CPointPDFSOG))
 	{
 		m_modes = static_cast<const CPointPDFSOG*>(&o)->m_modes;
 	}
@@ -297,8 +296,8 @@ void  CPointPDFSOG::bayesianFusion(const  CPointPDF &p1_, const CPointPDF &p2_,c
 
 	// p1: CPointPDFSOG, p2: CPosePDFGaussian:
 
-	ASSERT_( p1_.GetRuntimeClass() == CLASS_ID(CPointPDFSOG) );
-	ASSERT_( p2_.GetRuntimeClass() == CLASS_ID(CPointPDFSOG) );
+	ASSERT_( typeid(p1_) == typeid(CPointPDFSOG) );
+	ASSERT_( typeid(p2_) == typeid(CPointPDFSOG) );
 
 	const CPointPDFSOG		*p1 = static_cast<const CPointPDFSOG*>( &p1_ );
 	const CPointPDFSOG		*p2 = static_cast<const CPointPDFSOG*>( &p2_ );

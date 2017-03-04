@@ -14,7 +14,6 @@
 using namespace mrpt::kinematics;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(CVehicleVelCmd_DiffDriven, CVehicleVelCmd, mrpt::kinematics)
 
 CVehicleVelCmd_DiffDriven::CVehicleVelCmd_DiffDriven() :
 	lin_vel(.0),

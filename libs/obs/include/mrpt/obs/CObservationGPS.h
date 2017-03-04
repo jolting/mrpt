@@ -20,7 +20,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationGPS , CObservation, OBS_IMPEXP)
 
 	/** This class <b>stores messages</b> from GNSS or GNSS+IMU devices, from consumer-grade inexpensive GPS receivers to Novatel/Topcon/... advanced RTK solutions.
 	 *
@@ -60,7 +59,6 @@ namespace obs
 	class OBS_IMPEXP CObservationGPS : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationGPS )
 
 	public:
 		typedef std::map<gnss::gnss_message_type_t, gnss::gnss_message_ptr> message_list_t;
@@ -176,7 +174,6 @@ namespace obs
 		static bool GPS_time_to_UTC(uint16_t gps_week,double gps_sec,const int leap_seconds_count, mrpt::system::TTimeParts &utc_out); //!< \overload
 		/** @} */
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationGPS , CObservation, OBS_IMPEXP)
 
 
 	} // End of namespace

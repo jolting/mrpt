@@ -18,8 +18,6 @@ using namespace std;
 
 using namespace mrpt::nav;
 
-IMPLEMENTS_SERIALIZABLE( CLogFileRecord_VFF, CHolonomicLogFileRecord,mrpt::nav )
-IMPLEMENTS_SERIALIZABLE( CHolonomicVFF, CAbstractHolonomicReactiveMethod,mrpt::nav)
 
 /*---------------------------------------------------------------
 						initialize

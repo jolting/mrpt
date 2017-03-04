@@ -26,7 +26,6 @@ namespace mrpt
 		class CPlanarLaserScan;
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CPlanarLaserScan, CRenderizableDisplayList, MAPS_IMPEXP )
 
 		/** This object renders a 2D laser scan by means of three elements: the points, the line along end-points and the 2D scanned surface.
 		  *
@@ -52,7 +51,6 @@ namespace mrpt
 		  */
 		class MAPS_IMPEXP CPlanarLaserScan : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CPlanarLaserScan )
 		protected:
 			mrpt::obs::CObservation2DRangeScan	m_scan;
 			mutable mrpt::maps::CSimplePointsMap		m_cache_points;
@@ -131,7 +129,6 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CPlanarLaserScan() { }
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CPlanarLaserScan, CRenderizableDisplayList, MAPS_IMPEXP )
 
 	} // end namespace
 

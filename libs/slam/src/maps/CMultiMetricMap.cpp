@@ -21,7 +21,6 @@ using namespace mrpt::poses;
 using namespace mrpt::obs;
 using namespace mrpt::utils::metaprogramming;
 
-IMPLEMENTS_SERIALIZABLE( CMultiMetricMap, CMetricMap, mrpt::maps )
 
 // ------------------------------------------------------------------------
 // A few words explaining how all this works:

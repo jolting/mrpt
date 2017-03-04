@@ -583,7 +583,7 @@ CCameraSensor::~CCameraSensor()
 ----------------------------------------------------- */
 CObservationPtr CCameraSensor::getNextFrame( )
 {
-	vector<CSerializablePtr> out_obs;
+	vector<CSerializable::Ptr> out_obs;
 	getNextFrame(out_obs);
 	return static_cast<CObservationPtr>(out_obs[0]);
 }
@@ -591,7 +591,7 @@ CObservationPtr CCameraSensor::getNextFrame( )
 /* -----------------------------------------------------
 				getNextFrame
 ----------------------------------------------------- */
-void CCameraSensor::getNextFrame( vector<CSerializablePtr> & out_obs )
+void CCameraSensor::getNextFrame( vector<CSerializable::Ptr> & out_obs )
 {
 	CObservationImagePtr		obs;
 	CObservationStereoImagesPtr	stObs;
@@ -758,7 +758,7 @@ void CCameraSensor::getNextFrame( vector<CSerializablePtr> & out_obs )
 	{
 		// Read in a loop until we found at least one image:
 		//  Assign to: obs && stObs
-		CSerializablePtr  newObs;
+		CSerializable::Ptr  newObs;
 		while (!obs && !stObs && !obs3D)
 		{
 			*m_cap_rawlog  >> newObs;
@@ -1128,7 +1128,7 @@ void CCameraSensor::getNextFrame( vector<CSerializablePtr> & out_obs )
 ----------------------------------------------------- */
 void  CCameraSensor::doProcess()
 {
-	vector<CSerializablePtr> out_obs;
+	vector<CSerializable::Ptr> out_obs;
 	getNextFrame(out_obs);
 	appendObservations(out_obs);
 }

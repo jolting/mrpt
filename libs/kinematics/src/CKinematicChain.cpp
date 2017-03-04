@@ -23,7 +23,6 @@ using namespace mrpt::poses;
 using namespace mrpt::kinematics;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CKinematicChain, CSerializable, mrpt::kinematics)
 
 
 /** Appends a new link to the robotic arm, with the given Denavit-Hartenberg parameters (see TKinematicLink for further details) */

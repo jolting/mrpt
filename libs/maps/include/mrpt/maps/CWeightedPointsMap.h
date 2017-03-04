@@ -22,7 +22,6 @@ namespace mrpt
 	namespace maps
 	{
 
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CWeightedPointsMap , CPointsMap, MAPS_IMPEXP )
 
 		/** A cloud of points in 2D or 3D, which can be built from a sequence of laser scans.
 		 *    This class stores the coordinates (x,y,z) and a "weight", or counter of how many times that point has been seen, used only if points fusion is enabled in the options structure.
@@ -32,7 +31,6 @@ namespace mrpt
 		class MAPS_IMPEXP CWeightedPointsMap : public CPointsMap
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CWeightedPointsMap )
 
 		 public:
 			 CWeightedPointsMap();          //!< Default constructor
@@ -126,7 +124,6 @@ namespace mrpt
 				mrpt::maps::CPointsMap::TLikelihoodOptions  likelihoodOpts;	//!< Probabilistic observation likelihood options
 			MAP_DEFINITION_END(CWeightedPointsMap,MAPS_IMPEXP)
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CWeightedPointsMap , CPointsMap, MAPS_IMPEXP )
 	} // End of namespace
 
 	namespace utils

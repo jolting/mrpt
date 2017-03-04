@@ -19,18 +19,17 @@ namespace utils
 {
 
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CSimpleDatabase, mrpt::utils::CSerializable )
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CSimpleDatabaseTable, mrpt::utils::CSerializable )
 
 /**  This class implements the tables of databases.
  * \sa CSimpleDatabase \ingroup mrpt_base_grp
  */
 class BASE_IMPEXP CSimpleDatabaseTable : public mrpt::utils::CSerializable
 {
-	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE( CSimpleDatabaseTable )
 public:
+	using Ptr = std::shared_ptr<CSimpleDatabaseTable>;
+	using ConstPtr = std::shared_ptr<const CSimpleDatabaseTable>;
+
 	/** Default constructor
 	  */
 	CSimpleDatabaseTable( );
@@ -104,6 +103,8 @@ public:
 	/** Delete the record at the given index \sa appendRecord */
 	void deleteRecord(size_t recordIndex);
 
+	void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+	void readFromStream(mrpt::utils::CStream &in, int version);
 private:
 	vector_string				field_names;	//!< Field names
 	std::vector<vector_string>	data;	//!< Data for each cell
@@ -122,7 +123,6 @@ private:
 class BASE_IMPEXP CSimpleDatabase  : public mrpt::utils::CSerializable
 {
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE( CSimpleDatabase )
 
 public:
 	/** Default constructor
@@ -139,12 +139,12 @@ public:
 
 	/** Creates a new table in the DB, initially empty.
 	  */
-	CSimpleDatabaseTablePtr  createTable(const std::string &name);
+	CSimpleDatabaseTable::Ptr  createTable(const std::string &name);
 
 	/** Returns the table with the indicated name
 	  * \exception std::exception On table not found.
 	  */
-	CSimpleDatabaseTablePtr getTable(const std::string &tableName);
+	CSimpleDatabaseTable::Ptr getTable(const std::string &tableName);
 
 	/** Deletes the given table.
 	  * \exception std::exception On table not found.
@@ -161,7 +161,7 @@ public:
 	/** Returns the table by index.
 	  * \exception std::exception On index out of bounds
 	  */
-	CSimpleDatabaseTablePtr getTable(size_t tableIndex);
+	CSimpleDatabaseTable::Ptr getTable(size_t tableIndex);
 
 	/** Returns the tables count in the DB.
 	  */
@@ -184,21 +184,19 @@ public:
 	  */
 	bool loadFromXML( const std::string &fileName );
 
+	void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+	void readFromStream(mrpt::utils::CStream &in, int version);
 
 private:
 
 	/** The tables of the DB indexed by their names: */
-	typedef std::map<std::string, CSimpleDatabaseTablePtr>					TTableList;
-	typedef std::map<std::string, CSimpleDatabaseTablePtr>::iterator		iterator;
-	typedef std::map<std::string, CSimpleDatabaseTablePtr>::const_iterator	const_iterator;
+	typedef std::map<std::string, CSimpleDatabaseTable::Ptr>					TTableList;
+	typedef std::map<std::string, CSimpleDatabaseTable::Ptr>::iterator		iterator;
+	typedef std::map<std::string, CSimpleDatabaseTable::Ptr>::const_iterator	const_iterator;
 
 	TTableList	m_tables;
-
-
 }; // end of class definition
 
-DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CSimpleDatabase, mrpt::utils::CSerializable )
-DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CSimpleDatabaseTable, mrpt::utils::CSerializable )
 
 
 } // End of namespace

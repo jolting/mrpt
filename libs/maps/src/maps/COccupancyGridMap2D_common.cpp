@@ -77,7 +77,6 @@ mrpt::maps::CMetricMap* COccupancyGridMap2D::internal_CreateFromMapDefinition(co
 }
 //  =========== End of Map definition Block =========
 
-IMPLEMENTS_SERIALIZABLE(COccupancyGridMap2D, CMetricMap,mrpt::maps)
 
 std::vector<float>		COccupancyGridMap2D::entropyTable;
 

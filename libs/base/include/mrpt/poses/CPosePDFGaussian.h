@@ -20,7 +20,6 @@ namespace poses
 	class CPoint2DPDFGaussian;
 
 	// This must be added to any CSerializable derived class:
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPosePDFGaussian, CPosePDF )
 
 	/** Declares a class that represents a Probability Density  function (PDF) of a 2D pose \f$ p(\mathbf{x}) = [x ~ y ~ \phi ]^t \f$.
 	 *
@@ -32,7 +31,6 @@ namespace poses
 	class BASE_IMPEXP CPosePDFGaussian : public CPosePDF
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPosePDFGaussian )
 
 	protected:
 		/** Assures the symmetry of the covariance matrix (eventually certain operations in the math-coprocessor lead to non-symmetric matrixes!)
@@ -166,9 +164,9 @@ namespace poses
 		/** Returns the PDF of the 2D point \f$ g = q \oplus l\f$ with "q"=this pose and "l" a point without uncertainty */
 		void composePoint(const mrpt::math::TPoint2D &l, CPoint2DPDFGaussian &g ) const;
 
-
+                void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+                void readFromStream(mrpt::utils::CStream &in, int version);
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPosePDFGaussian, CPosePDF )
 
 
 	/** Pose compose operator: RES = A (+) B , computing both the mean and the covariance */

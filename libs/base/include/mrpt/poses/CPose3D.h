@@ -13,9 +13,6 @@
 #include <mrpt/math/CMatrixFixedNumeric.h>
 #include <mrpt/math/CQuaternion.h>
 
-// Add for declaration of mexplus::from template specialization
-DECLARE_MEXPLUS_FROM( mrpt::poses::CPose3D )
-
 namespace mrpt
 {
 namespace poses
@@ -23,7 +20,6 @@ namespace poses
 	class CPose3DQuat;
 	class CPose3DRotVec;
 
-	DEFINE_SERIALIZABLE_PRE( CPose3D )
 
 	/** A class used to store a 3D pose (a 3D translation + a rotation in 3D).
 	 *   The 6D transformation in SE(3) stored in this class is kept in two
@@ -71,12 +67,8 @@ namespace poses
 	 */
 	class BASE_IMPEXP CPose3D : public CPose<CPose3D>, public mrpt::utils::CSerializable
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3D )
-
-        // This must be added for declaration of MEX-related functions
-        DECLARE_MEX_CONVERSION
-
+		using Ptr = std::shared_ptr<CPose3D>;
+		using ConstPtr = std::shared_ptr<const CPose3D>;
 	public:
 		mrpt::math::CArrayDouble<3>   m_coords; //!< The translation vector [x,y,z] access directly or with x(), y(), z() setter/getter methods.
 	protected:
@@ -533,8 +525,10 @@ namespace poses
 		static inline void resize(const size_t n) { if (n!=static_size) throw std::logic_error(format("Try to change the size of CPose3D to %u.",static_cast<unsigned>(n))); }
 		/** @} */
 
+                void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+                void readFromStream(mrpt::utils::CStream &in, int version);
+
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST( CPose3D )
 
 
 	std::ostream BASE_IMPEXP  & operator << (std::ostream& o, const CPose3D& p);

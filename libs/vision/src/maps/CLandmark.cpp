@@ -22,7 +22,6 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 
 
-IMPLEMENTS_SERIALIZABLE(CLandmark, CSerializable,mrpt::maps)
 
 // Initialization:
 CLandmark::TLandmarkID	CLandmark::m_counterIDs= static_cast<CLandmark::TLandmarkID>(0);

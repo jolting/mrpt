@@ -20,7 +20,6 @@ namespace mrpt
 
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CTexturedObject, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 		/** A base class for all OpenGL objects with loadable textures.
 		  *  \sa opengl::COpenGLScene, opengl::CTexturedPlane, opengl::CSetOfTexturedTriangles
@@ -28,8 +27,6 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CTexturedObject : public CRenderizableDisplayList
 		{
-			DEFINE_VIRTUAL_SERIALIZABLE( CTexturedObject )
-
 		protected:
 			mutable unsigned int		m_glTextureName;
 			mutable bool				m_texture_is_loaded;
@@ -77,9 +74,7 @@ namespace mrpt
 			void loadTextureInOpenGL() const;
 
 			virtual void  render_dl() const MRPT_OVERRIDE;
-
 		};
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CTexturedObject, CRenderizableDisplayList, OPENGL_IMPEXP )
 
 	} // end namespace
 

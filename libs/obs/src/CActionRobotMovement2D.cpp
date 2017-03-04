@@ -24,7 +24,6 @@ using namespace mrpt::math;
 using namespace mrpt::random;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CActionRobotMovement2D, CAction, mrpt::obs)
 
 /*---------------------------------------------------------------
 						Constructor

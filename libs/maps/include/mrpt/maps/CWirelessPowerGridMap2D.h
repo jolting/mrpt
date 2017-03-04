@@ -19,7 +19,6 @@ namespace mrpt
 {
 namespace maps
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CWirelessPowerGridMap2D , CRandomFieldGridMap2D, MAPS_IMPEXP )
 
 	/** CWirelessPowerGridMap2D represents a PDF of wifi concentrations over a 2D area.
 	  *
@@ -34,7 +33,6 @@ namespace maps
 	class MAPS_IMPEXP CWirelessPowerGridMap2D : public CRandomFieldGridMap2D
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CWirelessPowerGridMap2D )
 	public:
 		/** Constructor */
 		CWirelessPowerGridMap2D(TMapRepresentation mapType = mrKernelDM, double x_min = -2, double x_max = 2, double y_min = -2, double y_max = 2, double resolution = 0.1);
@@ -75,7 +73,6 @@ namespace maps
 		MAP_DEFINITION_END(CWirelessPowerGridMap2D,MAPS_IMPEXP)
 
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CWirelessPowerGridMap2D , CRandomFieldGridMap2D, MAPS_IMPEXP )
 
 	} // End of namespace
 } // End of namespace

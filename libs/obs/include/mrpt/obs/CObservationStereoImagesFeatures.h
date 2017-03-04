@@ -27,7 +27,6 @@ namespace obs
 		unsigned int ID;
 	};
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationStereoImagesFeatures , CObservation, OBS_IMPEXP )
 	/** Declares a class derived from "CObservation" that encapsules a pair of cameras and a set of matched image features extracted from them.
 	 *
 	 <b>NOTE:</b> The image features stored in this class are NOT supposed to be UNDISTORTED, but the TCamera members must provide their distortion params. 
@@ -38,7 +37,6 @@ namespace obs
 	class OBS_IMPEXP CObservationStereoImagesFeatures : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationStereoImagesFeatures )
 
 	 public:
 		/** Default Constructor.
@@ -107,7 +105,6 @@ namespace obs
 		  */
 		inline void setSensorPose( const mrpt::poses::CPose3DQuat &newSensorPose ) { cameraPoseOnRobot = newSensorPose; }
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationStereoImagesFeatures , CObservation, OBS_IMPEXP )
 
 	} // End of namespace
 } // End of namespace

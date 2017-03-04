@@ -17,7 +17,6 @@ namespace mrpt
 	namespace math
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CMatrixB, mrpt::utils::CSerializable )
 
 		/**  This class is a "CSerializable" wrapper for "CMatrixBool".
 		 * \note For a complete introduction to Matrices and vectors in MRPT, see: http://www.mrpt.org/Matrices_vectors_arrays_and_Linear_Algebra_MRPT_and_Eigen_classes
@@ -26,16 +25,18 @@ namespace mrpt
 		class BASE_IMPEXP CMatrixB : public mrpt::utils::CSerializable, public CMatrixBool
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CMatrixB )
 		public:
+			using Ptr = std::shared_ptr<CMatrixB>;
+			using ConstPtr = std::shared_ptr<const CMatrixB>;
 			/** Constructor */
 			CMatrixB(size_t row = 1, size_t col = 1) : CMatrixBool(row,col) { }
 			/** Copy constructor */
 			CMatrixB( const CMatrixBool &m ) : CMatrixBool(m)  { }
 			/** Assignment operator for float matrixes */
 			CMatrixB & operator = (const CMatrixBool& m) { CMatrixBool::operator =(m); return *this; }
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
 		}; // end of class definition
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CMatrixB, mrpt::utils::CSerializable )
 
 	} // End of namespace
 } // End of namespace

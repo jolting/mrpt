@@ -29,7 +29,6 @@ namespace mrpt
 namespace slam { class CMetricMapBuilderRBPF; }
 namespace maps
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CRBPFParticleData, mrpt::utils::CSerializable, SLAM_IMPEXP )
 
 	/** Auxiliary class used in mrpt::maps::CMultiMetricMapPDF
 	 * \ingroup mrpt_slam_grp
@@ -37,7 +36,6 @@ namespace maps
 	class SLAM_IMPEXP CRBPFParticleData : public mrpt::utils::CSerializable
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CRBPFParticleData )
 	public:
 		CRBPFParticleData( const TSetOfMetricMapInitializers *mapsInitializers = nullptr ) :
 		  mapTillNow( mapsInitializers ),
@@ -48,10 +46,8 @@ namespace maps
 		CMultiMetricMap                 mapTillNow;
 		std::deque<mrpt::math::TPose3D> robotPath;
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CRBPFParticleData, mrpt::utils::CSerializable, SLAM_IMPEXP )
 
 
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CMultiMetricMapPDF, mrpt::utils::CSerializable, SLAM_IMPEXP )
 
 	/** Declares a class that represents a Rao-Blackwellized set of particles for solving the SLAM problem (This class is the base of RBPF-SLAM applications).
 	 *   This class is used internally by the map building algorithm in "mrpt::slam::CMetricMapBuilderRBPF"
@@ -68,7 +64,6 @@ namespace maps
 		friend class mrpt::slam::CMetricMapBuilderRBPF;
 
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CMultiMetricMapPDF )
 
 	protected:
 		// PF algorithm implementations:
@@ -235,7 +230,6 @@ namespace maps
 
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CMultiMetricMapPDF, mrpt::utils::CSerializable, SLAM_IMPEXP )
 
 	} // End of namespace
 } // End of namespace

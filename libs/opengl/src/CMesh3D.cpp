@@ -22,7 +22,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CMesh3D, CRenderizableDisplayList, mrpt::opengl )
 
 CMesh3DPtr CMesh3D::Create(bool enableTransparency, bool enableShowEdges, bool enableShowFaces, bool enableShowVertices)
 {

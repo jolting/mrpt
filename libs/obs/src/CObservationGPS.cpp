@@ -22,7 +22,6 @@ using namespace mrpt::obs;
 using namespace mrpt::math;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationGPS, CObservation,mrpt::obs)
 
 CObservationGPS::CObservationGPS( ) :
 	sensorPose(),

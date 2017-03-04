@@ -21,7 +21,6 @@ namespace mrpt
 {
 	namespace maps
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CLandmark, mrpt::utils::CSerializable, VISION_IMPEXP )
 
 		/** The class for storing "landmarks" (visual or laser-scan-extracted features,...)
 		  *
@@ -34,7 +33,6 @@ namespace mrpt
 		class VISION_IMPEXP CLandmark : public mrpt::utils::CSerializable
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CLandmark )
 
 		public:
 			typedef	int64_t TLandmarkID;					//!< The type for the IDs of landmarks.
@@ -97,7 +95,6 @@ namespace mrpt
 			static TLandmarkID		m_counterIDs;
 
 		}; // End of class definition
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CLandmark, mrpt::utils::CSerializable, VISION_IMPEXP )
 
 	} // End of namespace
 } // End of namespace

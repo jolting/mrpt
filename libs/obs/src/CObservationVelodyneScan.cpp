@@ -19,7 +19,6 @@ using namespace mrpt::obs;
 
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationVelodyneScan, CObservation,mrpt::obs)
 
 CSinCosLookUpTableFor2DScans  velodyne_sincos_tables;
 

@@ -18,7 +18,6 @@ namespace mrpt
 {
 	namespace poses
 	{
-		DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE( CPointPDFSOG, CPointPDF )
 
 		/** Declares a class that represents a Probability Density function (PDF) of a 3D point \f$ p(\mathbf{x}) = [x ~ y ~ z ]^t \f$.
 		 *   This class implements that PDF as the following multi-modal Gaussian distribution:
@@ -35,7 +34,6 @@ namespace mrpt
 		class BASE_IMPEXP  CPointPDFSOG : public CPointPDF
 		{
 			// This must be added to any CSerializable derived class:
-			DEFINE_SERIALIZABLE( CPointPDFSOG )
 
 		public:
 			/** The struct for each mode:
@@ -174,8 +172,10 @@ namespace mrpt
 			/** Evaluates the PDF at a given point */
 			double  evaluatePDF( const	CPoint3D &x, bool	sumOverAllZs ) const;
 
+			void writeToStream(mrpt::utils::CStream &out, int *out_Version) const;
+			void readFromStream(mrpt::utils::CStream &in, int version);
+
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPointPDFSOG, CPointPDF )
 	} // End of namespace
 } // End of namespace
 #endif

@@ -16,7 +16,6 @@ using namespace mrpt::utils;
 
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CMemoryChunk, CSerializable, mrpt::utils)
 
 /*---------------------------------------------------------------
 						writeToStream

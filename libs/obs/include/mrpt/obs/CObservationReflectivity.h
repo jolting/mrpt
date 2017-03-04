@@ -16,7 +16,6 @@ namespace mrpt
 {
 namespace obs
 {
-	DEFINE_SERIALIZABLE_PRE_CUSTOM_BASE_LINKAGE( CObservationReflectivity , CObservation,OBS_IMPEXP )
 
 	/** Declares a class derived from "CObservation" that encapsules a single short-range reflectivity measurement. 
 	 *    This can be used for example to store readings from IR sensors (Lego Mindstorm NXT, etc...).
@@ -27,7 +26,6 @@ namespace obs
 	class OBS_IMPEXP CObservationReflectivity : public CObservation
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CObservationReflectivity )
 
 	 public:
 		CObservationReflectivity( );	//!< Default constructor.
@@ -51,7 +49,6 @@ namespace obs
 		void getDescriptionAsText(std::ostream &o) const MRPT_OVERRIDE;
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CObservationReflectivity , CObservation,OBS_IMPEXP )
 
 	} // End of namespace
 } // End of namespace
