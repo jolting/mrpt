@@ -50,7 +50,7 @@ CGenericSensor::~CGenericSensor()
 /*-------------------------------------------------------------
 						appendObservations
 -------------------------------------------------------------*/
-void CGenericSensor::appendObservations( const std::vector<mrpt::utils::CSerializablePtr> &objs)
+void CGenericSensor::appendObservations( const std::vector<mrpt::utils::CSerializable::Ptr> &objs)
 {
 	if (++m_grab_decimation_counter>=m_grab_decimation)
 	{
@@ -60,7 +60,7 @@ void CGenericSensor::appendObservations( const std::vector<mrpt::utils::CSeriali
 
 		for (size_t i=0;i<objs.size();i++)
 		{
-			const CSerializablePtr &obj = objs[i];
+			const CSerializable::Ptr &obj = objs[i];
 			if (!obj) continue;
 
 			// It must be a CObservation or a CAction!
@@ -68,12 +68,12 @@ void CGenericSensor::appendObservations( const std::vector<mrpt::utils::CSeriali
 
 			if ( obj->GetRuntimeClass()->derivedFrom( CLASS_ID(CAction) ) )
 			{
-				timestamp = CActionPtr(obj)->timestamp;
+				timestamp = CAction::Ptr(obj)->timestamp;
 			}
 			else
 			if ( obj->GetRuntimeClass()->derivedFrom( CLASS_ID(CObservation) ) )
 			{
-				timestamp = CObservationPtr(obj)->timestamp;
+				timestamp = CObservation::Ptr(obj)->timestamp;
 			}
 			else THROW_EXCEPTION("Passed object must be CObservation.");
 

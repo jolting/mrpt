@@ -222,8 +222,8 @@ void CObservation2DRangeScan_from_ROS_LaserScan_msg(CObservation2DRangeScan &sel
 tuple CRawlog_readActionObservationPair(CStream &inStream, size_t rawlogEntry)
 {
   list ret_val;
-  CActionCollectionPtr action;
-  CSensoryFramePtr observations;
+  CActionCollection::Ptr action;
+  CSensoryFrame::Ptr observations;
 
   bool is_next = CRawlog::readActionObservationPair(inStream, action, observations, rawlogEntry);
 

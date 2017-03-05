@@ -94,7 +94,7 @@ namespace poses
 		static inline bool is_PDF() { return is_PDF_val!=0; }
 
 		/** Returns a 3D representation of this PDF (it doesn't clear the current contents of out_obj, but append new OpenGL objects to that list)
-		  * \note Needs the mrpt-opengl library, and using mrpt::opengl::CSetOfObjectsPtr as template argument.
+		  * \note Needs the mrpt-opengl library, and using mrpt::opengl::CSetOfObjects::Ptr as template argument.
 		  * \note By default, ellipsoids for the confidence intervals of  "q=3" are drawn; for more mathematical details, see  CGeneralizedEllipsoidTemplate::setQuantiles()
 		  */
 		template <class OPENGL_SETOFOBJECTSPTR>
@@ -104,7 +104,7 @@ namespace poses
 		}
 
 		/** Returns a 3D representation of this PDF.
-		  * \note Needs the mrpt-opengl library, and using mrpt::opengl::CSetOfObjectsPtr as template argument.
+		  * \note Needs the mrpt-opengl library, and using mrpt::opengl::CSetOfObjects::Ptr as template argument.
 		  */
 		template <class OPENGL_SETOFOBJECTSPTR>
 		inline OPENGL_SETOFOBJECTSPTR getAs3DObject() const {

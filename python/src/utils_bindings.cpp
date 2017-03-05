@@ -19,12 +19,12 @@ using namespace boost::python;
 using namespace mrpt::utils;
 
 // CStream
-void CStream_ReadObject(CStream& self, CSerializablePtr& obj)
+void CStream_ReadObject(CStream& self, CSerializable::Ptr& obj)
 {
     self.ReadObject(obj.get());
 }
 
-void CStream_WriteObject(CStream& self, CSerializablePtr& obj)
+void CStream_WriteObject(CStream& self, CSerializable::Ptr& obj)
 {
     self.WriteObject(obj.get());
 }
@@ -47,9 +47,9 @@ double mrpt_utils_RAD2DEG(double rad) { return mrpt::utils::RAD2DEG(rad); }
 // end of Utils
 
 // smart pointer contents
-CObject& CObjectPtr_get_ctx(CObject::Ptr& self) { return *self; }
-void     CObjectPtr_set_ctx(CObject::Ptr& self, const CObject &ctx) { *self = ctx; }
-CObject* CObjectPtr_pointer(CObject::Ptr& self) { return self.get(); }
+CObject& CObject::Ptr_get_ctx(CObject::Ptr& self) { return *self; }
+void     CObject::Ptr_set_ctx(CObject::Ptr& self, const CObject &ctx) { *self = ctx; }
+CObject* CObject::Ptr_pointer(CObject::Ptr& self) { return self.get(); }
 MAKE_PTR_CTX(CSerializable)
 
 
@@ -72,10 +72,10 @@ void export_utils()
 
     // CObject
     {
-        class_<CObject::Ptr>("CObjectPtr", "class_name smart pointer type", no_init)
-            .def("ctx", &CObjectPtr_get_ctx, return_internal_reference<>())
-            .def("ctx", &CObjectPtr_set_ctx)
-            .def("pointer", &CObjectPtr_pointer, return_internal_reference<>());
+        class_<CObject::Ptr>("CObject::Ptr", "class_name smart pointer type", no_init)
+            .def("ctx", &CObject::Ptr_get_ctx, return_internal_reference<>())
+            .def("ctx", &CObject::Ptr_set_ctx)
+            .def("pointer", &CObject::Ptr_pointer, return_internal_reference<>());
 
         class_<CObject, boost::noncopyable>("CObject", no_init)
             .def("duplicate", &CObject::duplicate, return_value_policy<manage_new_object>(), "Returns a copy of the object, indepently of its class.")
@@ -125,10 +125,10 @@ void export_utils()
 
     // CSerializable
     {
-        class_<CSerializablePtr, bases<CObject::Ptr> >("CSerializablePtr", "class_name smart pointer type", no_init)
-            .def("ctx", &CSerializablePtr_get_ctx, return_internal_reference<>())
-            .def("ctx", &CSerializablePtr_set_ctx)
-            .def("pointer", &CSerializablePtr_pointer, return_internal_reference<>());
+        class_<CSerializable::Ptr, bases<CObject::Ptr> >("CSerializable::Ptr", "class_name smart pointer type", no_init)
+            .def("ctx", &CSerializable::Ptr_get_ctx, return_internal_reference<>())
+            .def("ctx", &CSerializable::Ptr_set_ctx)
+            .def("pointer", &CSerializable::Ptr_pointer, return_internal_reference<>());
 
         class_<CSerializable, boost::noncopyable, bases<CObject> >("CSerializable", no_init)
         ;

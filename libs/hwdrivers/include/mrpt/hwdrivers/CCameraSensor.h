@@ -50,7 +50,7 @@ namespace mrpt
 		  *   CConfigFileMemory	cfg(str);
 		  *   myCam.loadConfig(cfg,"CONFIG");
 		  *   myCam.initialize();
-		  *   CObservationPtr obs = myCam.getNextFrame();
+		  *   CObservation::Ptr obs = myCam.getNextFrame();
 		  *  \endcode
 		  *
 		  *  Images can be retrieved through the normal "doProcess()" interface, or the specific method "getNextFrame()".
@@ -260,8 +260,8 @@ namespace mrpt
 			  *		- mrpt::obs::CObservationStereoImages (For stereo cameras)
 			  *		- mrpt::obs::CObservation3DRangeScan (For 3D cameras)
 			  */
-			mrpt::obs::CObservationPtr getNextFrame( );
-			void getNextFrame( std::vector<mrpt::utils::CSerializablePtr> & out_obs );
+			mrpt::obs::CObservation::Ptr getNextFrame( );
+			void getNextFrame( std::vector<mrpt::utils::CSerializable::Ptr> & out_obs );
 
 			/** Tries to open the camera, after setting all the parameters with a call to loadConfig.
 			  *  \exception This method must throw an exception with a descriptive message if some critical error is found.
@@ -287,7 +287,7 @@ namespace mrpt
 			void enableLaunchOwnThreadForSavingImages(bool enable=true) { m_external_images_own_thread = enable; };
 
 			/** Functor type */
-			typedef void (*TPreSaveUserHook)(const mrpt::obs::CObservationPtr &obs, void* user_ptr);
+			typedef void (*TPreSaveUserHook)(const mrpt::obs::CObservation::Ptr &obs, void* user_ptr);
 
 			/** Provides a "hook" for user-code to be run BEFORE an image is going to be saved to disk if external storage is enabled (e.g. to rectify images, preprocess them, etc.)
 			  * Notice that this code may be called from detached threads, so it must be thread safe.
@@ -393,7 +393,7 @@ namespace mrpt
 			int			m_camera_grab_decimator_counter;
 
 			int							 m_preview_counter;
-			mrpt::gui::CDisplayWindowPtr m_preview_win1,m_preview_win2; //!< Normally we'll use only one window, but for stereo images we'll use two of them.
+			mrpt::gui::CDisplayWindow::Ptr m_preview_win1,m_preview_win2; //!< Normally we'll use only one window, but for stereo images we'll use two of them.
 
 			/** @name Stuff related to working threads to save images to disk
 			    @{ */
@@ -411,11 +411,11 @@ namespace mrpt
 
 		}; // end class
 
-		typedef std::shared_ptr<CCameraSensor>    CCameraSensorPtr; //!< A smart pointer to a CCameraSensor
+		typedef std::shared_ptr<CCameraSensor>    CCameraSensor::Ptr; //!< A smart pointer to a CCameraSensor
 
 		/** Used only from MRPT apps: Use with caution since "panel" MUST be a "mrpt::gui::CPanelCameraSelection *"
 		  */
-		CCameraSensorPtr HWDRIVERS_IMPEXP prepareVideoSourceFromPanel(void *panel);
+		CCameraSensor::Ptr HWDRIVERS_IMPEXP prepareVideoSourceFromPanel(void *panel);
 
 		/** Parse the user options in the wxWidgets "panel" and write the configuration into the given section of the given configuration file.
 		  * Use with caution since "panel" MUST be a "mrpt::gui::CPanelCameraSelection *"
@@ -439,7 +439,7 @@ namespace mrpt
 
 		/** Show to the user a list of possible camera drivers and creates and open the selected camera.
 		  */
-		CCameraSensorPtr HWDRIVERS_IMPEXP prepareVideoSourceFromUserSelection();
+		CCameraSensor::Ptr HWDRIVERS_IMPEXP prepareVideoSourceFromUserSelection();
 
 
 	} // end namespace

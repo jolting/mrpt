@@ -108,7 +108,7 @@ void CGillAnemometer::doProcess()
 		THROW_EXCEPTION("Cannot open the serial port");
 	}
 
-	mrpt::obs::CObservationWindSensorPtr obsPtr = mrpt::obs::CObservationWindSensor::Create();
+	mrpt::obs::CObservationWindSensor::Ptr obs::Ptr = mrpt::obs::CObservationWindSensor::Create();
 	bool have_reading = false;
 	std::string wind_reading;
 	bool time_out = false;
@@ -149,23 +149,23 @@ void CGillAnemometer::doProcess()
 				//Module
 				std::string s_speed = list.at(2);
 				if (s_units == "M")
-					obsPtr->speed = atof(s_speed.c_str());
+					obs::Ptr->speed = atof(s_speed.c_str());
 				else if (s_units == "K")
-					obsPtr->speed = atof(s_speed.c_str())*1000/3600;
+					obs::Ptr->speed = atof(s_speed.c_str())*1000/3600;
 				else
 				{
 					printf("ERROR: WindSonic measurement units not supported: %s\n", s_units.c_str());
-					obsPtr->speed = 0.0;
+					obs::Ptr->speed = 0.0;
 				}
 				//angle
 				std::string s_direction = list.at(1);
-				obsPtr->direction = atof(s_direction.c_str());
+				obs::Ptr->direction = atof(s_direction.c_str());
 
 				//Prepare observation
-				obsPtr->sensorLabel = m_sensorLabel;
-				obsPtr->timestamp = mrpt::system::getCurrentTime();
-				obsPtr->sensorPoseOnRobot = mrpt::poses::CPose3D(pose_x, pose_y, pose_z, pose_yaw, pose_pitch, pose_roll);
-				appendObservation(obsPtr);
+				obs::Ptr->sensorLabel = m_sensorLabel;
+				obs::Ptr->timestamp = mrpt::system::getCurrentTime();
+				obs::Ptr->sensorPoseOnRobot = mrpt::poses::CPose3D(pose_x, pose_y, pose_z, pose_yaw, pose_pitch, pose_roll);
+				appendObservation(obs::Ptr);
 			}
 			else
 				printf("ERROR: WindSonic error code %u\n", status);		
@@ -181,22 +181,22 @@ void CGillAnemometer::doProcess()
 				//module
 				std::string s_speed = list.at(1);
 				if (s_units == "M")
-					obsPtr->speed = atof(s_speed.c_str());
+					obs::Ptr->speed = atof(s_speed.c_str());
 				else if (s_units == "K")
-					obsPtr->speed = atof(s_speed.c_str()) * 1000 / 3600;
+					obs::Ptr->speed = atof(s_speed.c_str()) * 1000 / 3600;
 				else
 				{
 					printf("ERROR: WindSonic measurement units not supported: %s\n", s_units.c_str());
-					obsPtr->speed = 0.0;
+					obs::Ptr->speed = 0.0;
 				}
 				//Angle
-				obsPtr->direction = 0.0;
+				obs::Ptr->direction = 0.0;
 
 				//Prepare observation
-				obsPtr->sensorLabel = m_sensorLabel;
-				obsPtr->timestamp = mrpt::system::getCurrentTime();
-				obsPtr->sensorPoseOnRobot = mrpt::poses::CPose3D(pose_x, pose_y, pose_z, pose_yaw, pose_pitch, pose_roll);
-				appendObservation(obsPtr);
+				obs::Ptr->sensorLabel = m_sensorLabel;
+				obs::Ptr->timestamp = mrpt::system::getCurrentTime();
+				obs::Ptr->sensorPoseOnRobot = mrpt::poses::CPose3D(pose_x, pose_y, pose_z, pose_yaw, pose_pitch, pose_roll);
+				appendObservation(obs::Ptr);
 			}
 			else
 				printf("ERROR: WindSonic error code %u\n", status);

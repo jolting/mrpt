@@ -115,7 +115,7 @@ void hmt_slam_guiFrame::thread_HMTSLAM()
 
 					// Load next object from the rawlog:
 					// ----------------------------------------
-					CSerializablePtr objFromRawlog;
+					CSerializable::Ptr objFromRawlog;
 					try
 					{
 						(*fInRawlog) >> objFromRawlog;
@@ -134,15 +134,15 @@ void hmt_slam_guiFrame::thread_HMTSLAM()
 					// --------------------------------------------
 					if (IS_CLASS(objFromRawlog,CActionCollection))
 					{
-						m_hmtslam->pushAction( CActionCollectionPtr( objFromRawlog) ); // Memory will be freed in mapping class
+						m_hmtslam->pushAction( CActionCollection::Ptr( objFromRawlog) ); // Memory will be freed in mapping class
 					}
 					else if (IS_CLASS(objFromRawlog,CSensoryFrame))
 					{
-						m_hmtslam->pushObservations( CSensoryFramePtr( objFromRawlog) ); // Memory will be freed in mapping class
+						m_hmtslam->pushObservations( CSensoryFrame::Ptr( objFromRawlog) ); // Memory will be freed in mapping class
 					}
 					else if (IS_CLASS(objFromRawlog,CObservation))
 					{
-						m_hmtslam->pushObservation( CObservationPtr( objFromRawlog) ); // Memory will be freed in mapping class
+						m_hmtslam->pushObservation( CObservation::Ptr( objFromRawlog) ); // Memory will be freed in mapping class
 					}
 					else THROW_EXCEPTION("Invalid object class from rawlog!!")
 

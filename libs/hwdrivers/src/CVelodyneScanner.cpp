@@ -190,8 +190,8 @@ void CVelodyneScanner::loadConfig_sensorSpecific(
 }
 
 bool CVelodyneScanner::getNextObservation(
-	mrpt::obs::CObservationVelodyneScanPtr & outScan,
-	mrpt::obs::CObservationGPSPtr          & outGPS
+	mrpt::obs::CObservationVelodyneScan::Ptr & outScan,
+	mrpt::obs::CObservationGPS::Ptr          & outGPS
 	)
 {
 	try
@@ -199,8 +199,8 @@ bool CVelodyneScanner::getNextObservation(
 		ASSERTMSG_(m_initialized, "initialize() has not been called yet!");
 
 		// Init with empty smart pointers:
-		outScan = mrpt::obs::CObservationVelodyneScanPtr();
-		outGPS  = mrpt::obs::CObservationGPSPtr();
+		outScan = mrpt::obs::CObservationVelodyneScan::Ptr();
+		outGPS  = mrpt::obs::CObservationGPS::Ptr();
 
 		// Try to get data & pos packets:
 		mrpt::obs::CObservationVelodyneScan::TVelodyneRawPacket  rx_pkt;
@@ -215,14 +215,14 @@ bool CVelodyneScanner::getNextObservation(
 
 		if (pos_pkt_timestamp!=INVALID_TIMESTAMP)
 		{
-			mrpt::obs::CObservationGPSPtr gps_obs = mrpt::obs::CObservationGPS::Create();
+			mrpt::obs::CObservationGPS::Ptr gps_obs = mrpt::obs::CObservationGPS::Create();
 			gps_obs->sensorLabel = this->m_sensorLabel + std::string("_GPS");
 			gps_obs->sensorPose = m_sensorPose;
 
 			gps_obs->originalReceivedTimestamp = pos_pkt_timestamp;
 
 			bool parsed_ok = CGPSInterface::parse_NMEA( std::string(rx_pos_pkt.NMEA_GPRMC), *gps_obs);
-			const mrpt::obs::gnss::Message_NMEA_RMC *msg_rmc = gps_obs->getMsgByClassPtr<mrpt::obs::gnss::Message_NMEA_RMC>();
+			const mrpt::obs::gnss::Message_NMEA_RMC *msg_rmc = gps_obs->getMsgByClass::Ptr<mrpt::obs::gnss::Message_NMEA_RMC>();
 			if (!parsed_ok || !msg_rmc || msg_rmc->fields.validity_char!='A')
 			{
 				gps_obs->has_satellite_timestamp = false;
@@ -327,8 +327,8 @@ bool CVelodyneScanner::getNextObservation(
 
 void CVelodyneScanner::doProcess()
 {
-	CObservationVelodyneScanPtr obs;
-	CObservationGPSPtr          obs_gps;
+	CObservationVelodyneScan::Ptr obs;
+	CObservationGPS::Ptr          obs_gps;
 
 	if (getNextObservation(obs,obs_gps))
 	{

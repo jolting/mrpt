@@ -252,12 +252,12 @@ namespace mrpt
 			void setRenderTreeVisualization();
 
 			mrpt::utils::CTimeLogger & getProfiler() { return m_timelogger; }
-			const mrpt::nav::TListPTGPtr & getPTGs() const { return m_PTGs;}
+			const mrpt::nav::TListPTGs::Ptr & getPTGs() const { return m_PTGs;}
 
 		protected:
 			mrpt::utils::CTimeLogger m_timelogger;
 			bool  m_initialized; 
-			mrpt::nav::TListPTGPtr m_PTGs;
+			mrpt::nav::TListPTGs::Ptr m_PTGs;
 			mrpt::maps::CSimplePointsMap m_local_obs; // Temporary map. Defined as a member to save realloc time between calls
 
 			static void transformPointcloudWithSquareClipping(

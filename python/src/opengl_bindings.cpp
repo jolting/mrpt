@@ -51,7 +51,7 @@ BOOST_PYTHON_FUNCTION_OVERLOADS(CRenderizable_setColor2_overloads, CRenderizable
 // end of CRenderizable
 
 // COpenGLScene
-void COpenGLScene_insert(COpenGLScene &self, const CRenderizablePtr &newObject, const std::string &viewportName=std::string("main"))
+void COpenGLScene_insert(COpenGLScene &self, const CRenderizable::Ptr &newObject, const std::string &viewportName=std::string("main"))
 {
     self.insert(newObject, viewportName);
 }
@@ -66,14 +66,14 @@ void CSetOfLines_appendLine(CSetOfLines &self, float x0, float y0, float z0, flo
     self.appendLine(x0, y0, z0, x1, y1, z1);
 }
 
-CSetOfLinesPtr CSetOfLines_Create()
+CSetOfLines::Ptr CSetOfLines_Create()
 {
     return CSetOfLines::Create();
 }
 // end of CSetOfLines
 
 // CEllipsoid
-CEllipsoidPtr CEllipsoid_Create()
+CEllipsoid::Ptr CEllipsoid_Create()
 {
     return CEllipsoid::Create();
 }
@@ -90,7 +90,7 @@ void CEllipsoid_setFromPosePDF(CEllipsoid& self, CPose3DPDF& posePDF)
 // end of CEllipsoid
 
 // CGridPlaneXY
-CGridPlaneXYPtr CGridPlaneXY_Create(float xMin=-10.0, float xMax=10.0, float yMin=-10.0, float yMax=10.0, float z=0.0, float frequency=1.0)
+CGridPlaneXY::Ptr CGridPlaneXY_Create(float xMin=-10.0, float xMax=10.0, float yMin=-10.0, float yMax=10.0, float z=0.0, float frequency=1.0)
 {
     return CGridPlaneXY::Create(xMin, xMax, yMin, yMax, z, frequency);
 }

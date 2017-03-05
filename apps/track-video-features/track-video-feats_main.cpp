@@ -34,12 +34,12 @@ using namespace mrpt::system;
 using namespace mrpt::vision;
 using namespace mrpt::poses;
 
-mrpt::gui::CDisplayWindow3DPtr win;  // This is global such as an exception within the main program do not abruptly closes the window
+mrpt::gui::CDisplayWindow3D::Ptr win;  // This is global such as an exception within the main program do not abruptly closes the window
 
 // ------------------------------------------------------
 //		DoTrackingDemo
 // ------------------------------------------------------
-int DoTrackingDemo(CCameraSensorPtr  cam, bool  DO_SAVE_VIDEO)
+int DoTrackingDemo(CCameraSensor::Ptr  cam, bool  DO_SAVE_VIDEO)
 {
 	win = mrpt::gui::CDisplayWindow3D::Create("Tracked features",800,600);
 
@@ -65,10 +65,10 @@ int DoTrackingDemo(CCameraSensorPtr  cam, bool  DO_SAVE_VIDEO)
 
 	const double MAX_FPS = 5000; // 5.0;  // Hz (to slow down visualization).
 
-	CGenericFeatureTrackerAutoPtr  tracker;
+	CGenericFeatureTrackerAuto::Ptr  tracker;
 
 	// "CFeatureTracker_KL" is by far the most robust implementation for now:
-	tracker = CGenericFeatureTrackerAutoPtr( new CFeatureTracker_KL );
+	tracker = CGenericFeatureTrackerAuto::Ptr( new CFeatureTracker_KL );
 
 	tracker->enableTimeLogger(true); // Do time profiling.
 
@@ -110,9 +110,9 @@ int DoTrackingDemo(CCameraSensorPtr  cam, bool  DO_SAVE_VIDEO)
 
 	cout << endl << "TO END THE PROGRAM: Close the window.\n";
 
-	mrpt::opengl::COpenGLViewportPtr gl_view;
+	mrpt::opengl::COpenGLViewport::Ptr gl_view;
 	{
-		mrpt::opengl::COpenGLScenePtr scene = win->get3DSceneAndLock();
+		mrpt::opengl::COpenGLScene::Ptr scene = win->get3DSceneAndLock();
 		gl_view = scene->getViewport("main");
 		win->unlockAccess3DScene();
 	}
@@ -124,7 +124,7 @@ int DoTrackingDemo(CCameraSensorPtr  cam, bool  DO_SAVE_VIDEO)
 	// infinite loop, until we close the win:
 	while( win->isOpen() )
 	{
-		CObservationPtr obs;
+		CObservation::Ptr obs;
 		try
 		{
 			obs= cam->getNextFrame();
@@ -145,17 +145,17 @@ int DoTrackingDemo(CCameraSensorPtr  cam, bool  DO_SAVE_VIDEO)
 
 		if (IS_CLASS(obs,CObservationImage))
 		{
-			CObservationImagePtr o = CObservationImagePtr(obs);
+			CObservationImage::Ptr o = CObservationImage::Ptr(obs);
 			theImg.copyFastFrom(o->image);
 		}
 		else if (IS_CLASS(obs,CObservationStereoImages))
 		{
-			CObservationStereoImagesPtr o = CObservationStereoImagesPtr(obs);
+			CObservationStereoImages::Ptr o = CObservationStereoImages::Ptr(obs);
 			theImg.copyFastFrom(o->imageLeft);
 		}
 		else if (IS_CLASS(obs,CObservation3DRangeScan))
 		{
-			CObservation3DRangeScanPtr o = CObservation3DRangeScanPtr(obs);
+			CObservation3DRangeScan::Ptr o = CObservation3DRangeScan::Ptr(obs);
 			if (o->hasIntensityImage)
 				theImg.copyFastFrom(o->intensityImage);
 		}
@@ -373,7 +373,7 @@ int main(int argc, char **argv)
 		printf("-------------------------------------------------------------------\n");
 
 		// The video source:
-		CCameraSensorPtr  cam;
+		CCameraSensor::Ptr  cam;
 
 		// process cmd line arguments?
 
@@ -409,7 +409,7 @@ int main(int argc, char **argv)
 				// It's a rawlog:
 				cout << "Interpreting '" << fil << "' as a rawlog file...\n";
 
-				cam = CCameraSensorPtr(new CCameraSensor);
+				cam = CCameraSensor::Ptr(new CCameraSensor);
 
 				CConfigFileMemory  cfg;
 				cfg.write("CONFIG","grabber_type","rawlog");
@@ -426,7 +426,7 @@ int main(int argc, char **argv)
 				// Assume it's a video:
 				cout << "Interpreting '" << fil << "' as a video file...\n";
 
-				cam = CCameraSensorPtr(new CCameraSensor);
+				cam = CCameraSensor::Ptr(new CCameraSensor);
 
 				CConfigFileMemory  cfg;
 				cfg.write("CONFIG","grabber_type","ffmpeg");

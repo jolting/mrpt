@@ -32,14 +32,14 @@ bool CMetricMap_insertObservation(CMetricMap& self, const CObservation& obs, con
   return self.insertObservation(&obs, &robotPose);
 }
 
-bool CMetricMap_insertObservationPtr(CMetricMap& self, const CObservationPtr& obs, const CPose3D& robotPose=CPose3D())
+bool CMetricMap_insertObservationPtr(CMetricMap& self, const CObservation::Ptr& obs, const CPose3D& robotPose=CPose3D())
 {
   return self.insertObservationPtr(obs, &robotPose);
 }
 
-CSetOfObjectsPtr CMetricMap_getAs3DObject(CMetricMap &self)
+CSetOfObjects::Ptr CMetricMap_getAs3DObject(CMetricMap &self)
 {
-    CSetOfObjectsPtr outObj = CSetOfObjects::Create();
+    CSetOfObjects::Ptr outObj = CSetOfObjects::Create();
     self.getAs3DObject(outObj);
     return outObj;
 }
@@ -135,9 +135,9 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(COccupancyGridMap2D_loadFromBitmapFile_ov
 // end of COccupancyGridMap2D
 
 // CPointsMap
-mrpt::opengl::CSetOfObjectsPtr CPointsMap_getAs3DObject(CPointsMap &self)
+mrpt::opengl::CSetOfObjects::Ptr CPointsMap_getAs3DObject(CPointsMap &self)
 {
-    mrpt::opengl::CSetOfObjectsPtr outObj = mrpt::opengl::CSetOfObjects::Create();
+    mrpt::opengl::CSetOfObjects::Ptr outObj = mrpt::opengl::CSetOfObjects::Create();
     self.getAs3DObject(outObj);
     return outObj;
 }
@@ -186,10 +186,10 @@ uint32_t CSimplePointsMap_getSize(CSimplePointsMap &self)
 void CSimpleMap_insert(CSimpleMap &self, CPose3DPDF &in_posePDF, CSensoryFrame &in_SF)
 {
     // create smart pointers
-    CPose3DPDFPtr in_posePDFPtr = (CPose3DPDFPtr) in_posePDF.duplicateGetSmartPtr();
-    CSensoryFramePtr in_SFPtr = (CSensoryFramePtr) in_SF.duplicateGetSmartPtr();
+    CPose3DPDF::Ptr in_posePDF::Ptr = (CPose3DPDF::Ptr) in_posePDF.duplicateGetSmart::Ptr();
+    CSensoryFrame::Ptr in_SF::Ptr = (CSensoryFrame::Ptr) in_SF.duplicateGetSmart::Ptr();
     // insert smart pointers
-    self.insert(in_posePDFPtr, in_SFPtr);
+    self.insert(in_posePDF::Ptr, in_SF::Ptr);
 }
 // end of CSimpleMap
 
@@ -218,16 +218,16 @@ CPose3DPDFParticles CMultiMetricMapPDF_getEstimatedPosePDFAtTime(CMultiMetricMap
 // end of CMultiMetricMapPDF
 
 // TSetOfMetricMapInitializers
-void TSetOfMetricMapInitializers_push_back(TSetOfMetricMapInitializers& self, TMetricMapInitializerPtr& o)
+void TSetOfMetricMapInitializers_push_back(TSetOfMetricMapInitializers& self, TMetricMapInitializer::Ptr& o)
 {
     self.push_back(o);
 }
 // end of TSetOfMetricMapInitializers
 
 // CMultiMetricMap
-mrpt::opengl::CSetOfObjectsPtr CMultiMetricMap_getAs3DObject(CMultiMetricMap &self)
+mrpt::opengl::CSetOfObjects::Ptr CMultiMetricMap_getAs3DObject(CMultiMetricMap &self)
 {
-    mrpt::opengl::CSetOfObjectsPtr outObj = mrpt::opengl::CSetOfObjects::Create();
+    mrpt::opengl::CSetOfObjects::Ptr outObj = mrpt::opengl::CSetOfObjects::Create();
     self.getAs3DObject(outObj);
     return outObj;
 }
@@ -237,9 +237,9 @@ void CMultiMetricMap_setListOfMaps(CMultiMetricMap& self, TSetOfMetricMapInitial
     self.setListOfMaps(initializers);
 }
 
-CSimplePointsMapPtr CMultiMetricMap_getAsSimplePointsMap(CMultiMetricMap& self)
+CSimplePointsMap::Ptr CMultiMetricMap_getAsSimplePointsMap(CMultiMetricMap& self)
 {
-    CSimplePointsMapPtr points_map = CSimplePointsMapPtr(new CSimplePointsMap);
+    CSimplePointsMap::Ptr points_map = CSimplePointsMap::Ptr(new CSimplePointsMap);
     CSimplePointsMap* points_map_ptr = self.getAsSimplePointsMap();
     *points_map = *points_map_ptr;
     return points_map;
@@ -409,7 +409,7 @@ void export_maps()
 
     // TMetricMapInitializer
     {
-        class_<TMetricMapInitializerPtr>("TMetricMapInitializerPtr", init<TMetricMapInitializer*>())
+        class_<TMetricMapInitializer::Ptr>("TMetricMapInitializer::Ptr", init<TMetricMapInitializer*>())
         ;
 
         scope s = class_<TMetricMapInitializer, boost::noncopyable, bases<CLoadableOptions> >("TMetricMapInitializer", no_init)
