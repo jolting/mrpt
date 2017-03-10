@@ -86,11 +86,11 @@ void TestCapture_FlyCapture2_stereo()
 
 	int cnt = 0;
 
-	CObservationImage::Ptr obsL= CObservationImage::Create();  // Memory will be freed by SF destructor in each loop.
-	obsL->sensorLabel="LEFT";
+	CObservationImage obsL;  // Memory will be freed by SF destructor in each loop.
+	obsL.sensorLabel="LEFT";
 
-	CObservationImage::Ptr obsR= CObservationImage::Create();  // Memory will be freed by SF destructor in each loop.
-	obsR->sensorLabel="RIGHT";
+	CObservationImage obsR;  // Memory will be freed by SF destructor in each loop.
+	obsR.sensorLabel="RIGHT";
 
 	while (!mrpt::system::os::kbhit())
 	{
@@ -105,8 +105,8 @@ void TestCapture_FlyCapture2_stereo()
 			tictac.Tic();
 		}
 
-		const bool ok1 = capture_left.getObservation( *obsL );
-		const bool ok2 = capture_right.getObservation( *obsR );
+		const bool ok1 = capture_left.getObservation( obsL );
+		const bool ok2 = capture_right.getObservation( obsR );
 		if (!ok1 || !ok2)
 		{
 			cerr << "Error retrieving images!" << endl;
@@ -114,8 +114,8 @@ void TestCapture_FlyCapture2_stereo()
 		}
 
 		cout << "."; cout.flush();
-		if (winL.isOpen()) winL.showImage( obsL->image );
-		if (winR.isOpen()) winR.showImage( obsR->image );
+		if (winL.isOpen()) winL.showImage( obsL.image );
+		if (winR.isOpen()) winR.showImage( obsR.image );
 
 		fil << obsL << obsR;
 	}

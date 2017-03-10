@@ -28,11 +28,11 @@ namespace mrpt
 		#define MRPTSTL_SERIALIZABLE_SEQ_CONTAINER( CONTAINER )  \
 			/** Template method to serialize a sequential STL container  */ \
 			template <class T,class _Ax> \
-			CStream& operator << (mrpt::utils::CStream& out, const CONTAINER<T,_Ax> &obj) \
+			CStream& operator << (mrpt::utils::CStream& out, const CONTAINER<T,_Ax> &objs) \
 			{ \
 				out << std::string(#CONTAINER) << mrpt::utils::TTypeName<T>::get(); \
-				out << static_cast<uint32_t>(obj.size()); \
-				std::for_each( obj.begin(), obj.end(), mrpt::utils::metaprogramming::ObjectWriteToStream(&out) ); \
+				out << static_cast<uint32_t>(objs.size()); \
+				std::for_each( objs.begin(), objs.end(), mrpt::utils::metaprogramming::ObjectWriteToStream(out) ); \
 				return out; \
 			} \
 			/** Template method to deserialize a sequential STL container */ \
@@ -48,7 +48,7 @@ namespace mrpt
 				uint32_t n; \
 				in >> n; \
 				obj.resize(n); \
-				std::for_each( obj.begin(), obj.end(), mrpt::utils::metaprogramming::ObjectReadFromStream(&in) ); \
+				std::for_each( obj.begin(), obj.end(), mrpt::utils::metaprogramming::ObjectReadFromStream(in) ); \
 				return in; \
 			}
 

@@ -12,6 +12,7 @@
 #include <mrpt/opengl/CRenderizable.h>
 #include <mrpt/poses/poses_frwds.h>  // All these are needed for the auxiliary methods posePDF2opengl()
 #include <mrpt/utils/CStringList.h>
+#include <mrpt/opengl/CListOpenGLObjects.h>
 
 namespace mrpt
 {
@@ -56,7 +57,10 @@ namespace mrpt
 			}
 			/** Insert a new object to the list.
 			  */
-			void insert( const CRenderizable::Ptr &newObject );
+			template<typename T>
+			void insert(T&& t){
+				m_objects.push_back(std::forward<T>(t));
+			}
 
 			/** Inserts a set of objects, bounded by iterators, into the list.
 			  */
@@ -84,7 +88,7 @@ namespace mrpt
 
 			/** Returns the first object with a given name, or a nullptr pointer if not found.
 			  */
-			CRenderizable::Ptr getByName( const std::string &str );
+			CListOpenGLObjects::const_iterator getByName( const std::string &str );
 
 			 /** Returns the i'th object of a given class (or of a descendant class), or nullptr (an empty smart pointer) if not found.
 			   *  Example:
@@ -94,7 +98,7 @@ namespace mrpt
 			   * By default (ith=0), the first observation is returned.
 			   */
 			template <typename T>
-			typename T::Ptr getByClass( const size_t &ith = 0 ) const;
+			typename  CListOpenGLObjects::const_iterator getByClass( const size_t &ith = 0 ) const;
 
 			/** Removes the given object from the scene (it also deletes the object to free its memory).
 			  */
@@ -149,8 +153,9 @@ namespace mrpt
 		/** Inserts an object into the list. Allows call chaining.
 		  * \sa mrpt::opengl::CSetOfObjects::insert
 		  */
-		inline CSetOfObjects::Ptr &operator<<(CSetOfObjects::Ptr &s,const CRenderizable::Ptr &r)	{
-			s->insert(r);
+		template <typename T>
+		inline CSetOfObjects &operator<<(CSetOfObjects &s,const T &&r)	{
+			s.insert(std::forward<T>(r));
 			return s;
 		}
 		/** Inserts a set of objects into the list. Allows call chaining.
@@ -163,27 +168,26 @@ namespace mrpt
 
 		// Implementation: (here because it needs the _POST macro defining the Smart::Ptr)
 		template <typename T>
-		typename T::Ptr CSetOfObjects::getByClass( const size_t &ith ) const
+		CListOpenGLObjects::const_iterator CSetOfObjects::getByClass( const size_t &ith ) const
 		{
 			MRPT_START
 			size_t  foundCount = 0;
 			const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo;
 			for (CListOpenGLObjects::const_iterator it = m_objects.begin();it!=m_objects.end();++it)
-				if (  *it && (*it)->GetRuntimeClass()->derivedFrom( class_ID ) )
+				if ( it->GetRuntimeClass()->derivedFrom( class_ID ) )
 					if (foundCount++ == ith)
-						return std::dynamic_pointer_cast<T>(*it);
+						return it;
 
 			// If not found directly, search recursively:
 			for (CListOpenGLObjects::const_iterator it=m_objects.begin();it!=m_objects.end();++it)
 			{
-				if ( *it && (*it)->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,mrpt::opengl))
+				if (it->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,mrpt::opengl))
 				{
-					typename T::Ptr o = std::dynamic_pointer_cast<CSetOfObjects>(*it)->getByClass<T>(ith);
-					if (o) return o;
+					return it.getByClass<T>(ith);
 				}
 			}
 
-			return typename T::Ptr();	// Not found: return empty smart pointer
+			return m_objects.end();
 			MRPT_END
 		}
 

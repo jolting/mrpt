@@ -220,7 +220,11 @@ namespace mrpt
 			/** Insert a new object into the list.
 			  *  The object MUST NOT be deleted, it will be deleted automatically by this object when not required anymore.
 			  */
-			void insert( const CRenderizable::Ptr &newObject );
+			template <typename T>
+			void insert( T &&newObject )
+			{
+				m_objects.push_back(newObject);
+			}
 
 			/** Compute the current 3D camera pose.
 			  * \sa get3DRayForPixelCoord
@@ -229,7 +233,7 @@ namespace mrpt
 
 			/** Returns the first object with a given name, or nullptr if not found.
 			  */
-			CRenderizable::Ptr getByName( const std::string &str );
+			const_iterator getByName( const std::string &str );
 
 			 /** Returns the i'th object of a given class (or of a descendant class), or nullptr (an empty smart pointer) if not found.
 			   *  Example:
@@ -238,29 +242,30 @@ namespace mrpt
 			   * \endcode
 			   * By default (ith=0), the first observation is returned.
 			   */
-			 template <typename T>
-			 typename T::Ptr getByClass( const size_t &ith = 0 ) const
-			 {
+			template <typename T>
+			const_iterator getByClass( const size_t &ith = 0 ) const
+			{
 				MRPT_START
 				size_t  foundCount = 0;
 				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo;
 				for (CListOpenGLObjects::const_iterator it = m_objects.begin();it!=m_objects.end();++it)
-					if ( *it &&  (*it)->GetRuntimeClass()->derivedFrom( class_ID ) )
+					if ( it->GetRuntimeClass()->derivedFrom( class_ID ) )
 						if (foundCount++ == ith)
-							return std::dynamic_pointer_cast<T>(*it);
+							return it;
 
 				// If not found directly, search recursively:
 				for (CListOpenGLObjects::const_iterator it=m_objects.begin();it!=m_objects.end();++it)
 				{
-					if ( *it && (*it)->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,mrpt::opengl))
+					if ( it->GetRuntimeClass() == CLASS_ID(mrpt::opengl::CSetOfObjects))
 					{
-						typename T::Ptr o = std::dynamic_pointer_cast<T>(std::dynamic_pointer_cast<CSetOfObjects>(*it)->getByClass<T>(ith));
-						if (o) return o;
+						mrpt::opengl::CSetOfObjects &set = dynamic_cast<mrpt::opengl::CSetOfObjects &>(*it);
+						auto o = set.getByClass<T>(ith);
+						if(o != set.end()) return it;
 					}
 				}
-				return typename T::Ptr();	// Not found: return empty smart pointer
+				return end();	// Not found: return empty smart pointer
 				MRPT_END
-			 }
+			}
 
 			/** Removes the given object from the scene (it also deletes the object to free its memory).
 			  */
@@ -350,19 +355,25 @@ namespace mrpt
 		  * Inserts an openGL object into a viewport. Allows call chaining.
 		  * \sa mrpt::opengl::COpenGLViewport::insert
 		  */
-		inline COpenGLViewport::Ptr &operator<<(COpenGLViewport::Ptr &s,const CRenderizable::Ptr &r)	{
-			s->insert(r);
+		template <typename T>
+		inline COpenGLViewport &operator<<(COpenGLViewport &s, T&&r)	{
+			s.insert(std::forward<T>(r));
 			return s;
 		}
 		/**
 		  * Inserts any iterable set of openGL objects into a viewport. Allows call chaining.
 		  * \sa mrpt::opengl::COpenGLViewport::insert
 		  */
-		inline COpenGLViewport::Ptr &operator<<(COpenGLViewport::Ptr &s,const std::vector<CRenderizable::Ptr> &v)	{
-			for (std::vector<CRenderizable::Ptr>::const_iterator it=v.begin();it!=v.end();++it) s->insert(*it);
+		/*
+		inline COpenGLViewport &operator<<(COpenGLViewport &s, const std::vector<CRenderizable> &v)	{
+			for(auto &r: v){s.insert(r);}
 			return s;
 		}
-
+		inline COpenGLViewport &operator<<(COpenGLViewport &s, std::vector<CRenderizable> &&v)	{
+			for(auto &r: v){s.insert(std::move(r));}
+			return s;
+		}
+		*/
 
 
 		/** @name Events emitted by COpenGLViewport

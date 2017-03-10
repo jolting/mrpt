@@ -40,9 +40,8 @@ void gl_utils::renderSetOfObjects(const CListOpenGLObjects &objectsToRender)
 	{
 		for (itP=objectsToRender.begin();itP!=objectsToRender.end();++itP)
 		{
-			if (!*itP) continue;
-			const CRenderizable * it = itP->get(); // Use plain pointers, faster than smart pointers:
-			if (!it->isVisible()) continue;
+			const CRenderizable & it = *itP; // Use plain pointers, faster than smart pointers:
+			if (!it.isVisible()) continue;
 
 			// 3D coordinates transformation:
 			glMatrixMode(GL_MODELVIEW);
@@ -60,7 +59,7 @@ void gl_utils::renderSetOfObjects(const CListOpenGLObjects &objectsToRender)
 			//     2  6  10 14
 			//     3  7  11 15
 			//
-			const CPose3D & pos = it->getPoseRef();
+			const CPose3D & pos = it.getPoseRef();
 			const CMatrixDouble33 &R = pos.getRotationMatrix();
 			const GLdouble m[16] = {
 				R.coeff(0,0),R.coeff(1,0),R.coeff(2,0), 0,
@@ -71,16 +70,16 @@ void gl_utils::renderSetOfObjects(const CListOpenGLObjects &objectsToRender)
 			glMultMatrixd( m );  // Multiply so it's composed with the previous, current MODELVIEW matrix
 
 			// Do scaling after the other transformations!
-			if (it->getScaleX()!=1 || it->getScaleY()!=1 || it->getScaleZ()!=1)
-				glScalef(it->getScaleX(),it->getScaleY(),it->getScaleZ());
+			if (it.getScaleX()!=1 || it.getScaleY()!=1 || it.getScaleZ()!=1)
+				glScalef(it.getScaleX(),it.getScaleY(),it.getScaleZ());
 
 			// Set color:
-			glColor4f( it->getColorR(),it->getColorG(),it->getColorB(),it->getColorA());
+			glColor4f( it.getColorR(),it.getColorG(),it.getColorB(),it.getColorA());
 
-			it->render();
+			it.render();
 			gl_utils::checkOpenGLError();
 
-			if (it->isShowNameEnabled())
+			if (it.isShowNameEnabled())
 			{
 				glDisable(GL_DEPTH_TEST);
 				glColor3f(1.f,1.f,1.f);  // Must be called BEFORE glRasterPos3f
@@ -97,7 +96,7 @@ void gl_utils::renderSetOfObjects(const CListOpenGLObjects &objectsToRender)
 					font = GLUT_BITMAP_TIMES_ROMAN_10;
 
 				if (font)
-					CRenderizable::renderTextBitmap( it->getName().c_str(), font);
+					CRenderizable::renderTextBitmap( it.getName().c_str(), font);
 
 				glEnable(GL_DEPTH_TEST);
 			}
@@ -115,7 +114,7 @@ void gl_utils::renderSetOfObjects(const CListOpenGLObjects &objectsToRender)
 	{
 		char str[1000];
 		os::sprintf(str,1000,"Exception while rendering a class '%s'\n%s",
-			(*itP)->GetRuntimeClass()->className,
+			itP->GetRuntimeClass()->className,
 			e.what() );
 		THROW_EXCEPTION(str);
 	}

@@ -8,6 +8,8 @@
    +---------------------------------------------------------------------------+ */
 #pragma once
 
+#include <memory>
+
 namespace mrpt
 {
 	namespace utils
@@ -23,13 +25,13 @@ namespace mrpt
 			struct ObjectReadFromStream
 			{
 			private:
-				CStream		*m_stream;
+				CStream		&m_stream;
 			public:
-				inline ObjectReadFromStream(mrpt::utils::CStream *stream) : m_stream(stream) {  }
+				inline ObjectReadFromStream(mrpt::utils::CStream &stream) : m_stream(stream) {  }
 				// T can be CSerializable::Ptr, CSerializable, or any other class implementing ">>"
 				template <typename T> 
 				inline void operator()(T &obj) {
-					(*m_stream) >> obj;
+					m_stream >> obj;
 				}
 			};
 
@@ -37,29 +39,37 @@ namespace mrpt
 			struct ObjectReadFromStreamToPtrs
 			{
 			private:
-				CStream *m_stream;
+				CStream &m_stream;
 			public:
-				inline ObjectReadFromStreamToPtrs(mrpt::utils::CStream *stream) : m_stream(stream) {  }
+				inline ObjectReadFromStreamToPtrs(mrpt::utils::CStream &stream) : m_stream(stream) {  }
 				template <typename ptr2ptr_t>
 				inline void operator()(ptr2ptr_t &obj) {
 					ptr_t p;
-					(*m_stream) >> p;
+					m_stream >> p;
 					obj = p;
 				}
 			};
+
+
+			template< class T > struct is_shared_ptr     : std::false_type {};
+			template< class T > struct is_shared_ptr<std::shared_ptr<T>> : std::true_type {};
 
 			/** An object for writing objects to a stream, intended for being used in STL algorithms. */
 			struct ObjectWriteToStream
 			{
 			private:
-				CStream		*m_stream;
+				CStream		&m_stream;
 			public:
-				inline ObjectWriteToStream(mrpt::utils::CStream *stream) : m_stream(stream) {  }
+				inline ObjectWriteToStream(mrpt::utils::CStream &stream) : m_stream(stream) {  }
 
 				// T can be CSerializable::Ptr, CSerializable, or any other class implementing "<<"
-				template <typename T>
+				template <typename T, typename std::enable_if<is_shared_ptr<T>::value>::type* = nullptr>
 				inline void operator()(const T &ptr) {
-					(*m_stream) << ptr;
+					m_stream << *ptr;
+				}
+				template <typename T, typename std::enable_if<!is_shared_ptr<T>::value>::type* = nullptr>
+				inline void operator()(const T &ref) {
+					m_stream << ref;
 				}
 			};
 

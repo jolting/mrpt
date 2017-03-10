@@ -211,7 +211,7 @@ void  CMultiMetricMapPDF::prediction_and_update_pfOptimalProposal(
 		// If there is no 2D action, look for a 3D action:
 		if (robotMovement2D)
 		{
-			robotActionSampler.setPosePDF( robotMovement2D->poseChange.get_ptr() );
+			robotActionSampler.setPosePDF( *robotMovement2D->poseChange );
 			motionModelMeanIncr = robotMovement2D->poseChange->getMeanVal();
 		}
 		else

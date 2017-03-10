@@ -308,7 +308,7 @@ void  CMultiMetricMap::readFromStream(mrpt::utils::CStream &in, int version)
 			uint32_t  n;
 			in >> n;
 			this->maps.resize(n);
-			for_each( maps.begin(), maps.end(), ObjectReadFromStreamToPtrs<mrpt::maps::CMetricMap::Ptr>(&in) );
+			for_each( maps.begin(), maps.end(), ObjectReadFromStreamToPtrs<mrpt::maps::CMetricMap::Ptr>(in) );
 
 		} break;
 	default:

@@ -784,7 +784,7 @@ size_t vision::matchFeatures(
             TPoint3D p3D = TPoint3D();
             if( options.estimateDepth && options.parallelOpticalAxis )
             {
-                projectMatchedFeature( list1[vCnt], list2[idxLeftList[vCnt]], p3D, params );
+                projectMatchedFeature( *list1[vCnt], *list2[idxLeftList[vCnt]], p3D, params );
 //                double aux  = options.baseline/disp;
 //                double x3D  = (list1[vCnt]->x-options.cx)*aux;
 //                double y3D  = (list1[vCnt]->y-options.cy)*aux;
@@ -947,8 +947,8 @@ void vision::projectMatchedFeatures(
 					projectMatchedFeatures
 -------------------------------------------------------------*/
 void vision::projectMatchedFeatures(
-                    const CFeatureList		    & leftList,
-                    const CFeatureList			& rightList,
+                    const CFeatureList          & leftList,
+                    const CFeatureList          & rightList,
                     vector<TPoint3D>            & vP3D,
                     const TStereoSystemParams   & params )
 {
@@ -957,7 +957,7 @@ void vision::projectMatchedFeatures(
     for( it1 = leftList.begin(), it2 = rightList.begin(); it1 != leftList.end(); ++it1, ++it2)
     {
         TPoint3D p3D;
-        projectMatchedFeature( *it1, *it2, p3D, params );
+        projectMatchedFeature( **it1, **it2, p3D, params );
         if( p3D.z < params.maxZ && p3D.z > params.minZ && p3D.y < params.maxY )
             vP3D.push_back(p3D);
     }
@@ -967,29 +967,29 @@ void vision::projectMatchedFeatures(
 					projectMatchedFeatures
 -------------------------------------------------------------*/
 void vision::projectMatchedFeature(
-                    const CFeature::Ptr           & leftFeat,
-                    const CFeature::Ptr           & rightFeat,
+                    const CFeature & leftFeat,
+                    const CFeature & rightFeat,
                     TPoint3D                    & p3D,
                     const TStereoSystemParams   & params )
 {
-//    double disp2 = leftFeat->x-rightFeat->x;
+//    double disp2 = leftFeat.x-rightFeat.x;
 //	double aux2  = params.baseline/disp2;
-//	p3D.x = (leftFeat->x-params.K(0,2))*aux2;
-//	p3D.y = (leftFeat->y-params.K(1,2))*aux2;
+//	p3D.x = (leftFeat.x-params.K(0,2))*aux2;
+//	p3D.y = (leftFeat.y-params.K(1,2))*aux2;
 //	p3D.z = params.K(0,0)*aux2;
 //	cout << "Params: BS: " << params.baseline << " CX: " << params.K(0,2) << " CY: " << params.K(1,2) << " FX: " << params.K(0,0) << endl;
-//    cout << "Input: " << leftFeat->x << "," << leftFeat->y << endl;
+//    cout << "Input: " << leftFeat.x << "," << leftFeat.y << endl;
 //	cout << "Disp: " << disp2 << endl;
 //	cout << p3D << endl;
 //	return;
 
     const double f0 = 600;
-    double nfx1 = leftFeat->x, nfy1 = leftFeat->y, nfx2 = rightFeat->x; // nfy2 = rightFeat->y;
+    double nfx1 = leftFeat.x, nfy1 = leftFeat.y, nfx2 = rightFeat.x; // nfy2 = rightFeat.y;
 
-    const double x  = leftFeat->x * f0; // x  = (x  / f0) * f0   x  = x
-	const double y  = leftFeat->y * f0; // y  = (y  / f0) * f0   y  = y
-	const double xd = rightFeat->x * f0; // x' = (x' / f0) * f0   x' = x'
-	const double yd = rightFeat->y * f0; // y' = (y' / f0) * f0   y' = y'
+    const double x  = leftFeat.x * f0; // x  = (x  / f0) * f0   x  = x
+	const double y  = leftFeat.y * f0; // y  = (y  / f0) * f0   y  = y
+	const double xd = rightFeat.x * f0; // x' = (x' / f0) * f0   x' = x'
+	const double yd = rightFeat.y * f0; // y' = (y' / f0) * f0   y' = y'
 
 	const double f2  = f0 * f0;
 	const double p9  = f2 * params.F.get_unsafe(2,2);

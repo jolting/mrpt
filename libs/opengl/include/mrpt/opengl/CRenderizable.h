@@ -16,7 +16,6 @@
 #include <mrpt/opengl/opengl_fonts.h>
 #include <mrpt/opengl/link_pragmas.h>
 #include <mrpt/math/lightweight_geom_data.h>
-#include <deque>
 
 namespace mrpt
 {
@@ -198,14 +197,12 @@ namespace mrpt
 			static void releaseTextureName(unsigned int i);
 
 		};
-		/** A list of objects pointers, automatically managing memory free at destructor, and managing copies correctly. */
-		using CListOpenGLObjects = std::deque<CRenderizable::Ptr>
 
 		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CRenderizable, mrpt::utils::CSerializable, OPENGL_IMPEXP );
 
 		/** Applies a mrpt::poses::CPose3D transformation to the object. Note that this method doesn't <i>set</i> the pose to the given value, but <i>combines</i> it with the existing one.
 		  * \sa setPose */
-		OPENGL_IMPEXP CRenderizable::Ptr & operator<<(CRenderizable::Ptr &r,const mrpt::poses::CPose3D &p);
+		OPENGL_IMPEXP CRenderizable & operator<<(CRenderizable &r,const mrpt::poses::CPose3D &p);
 
 	} // end namespace
 

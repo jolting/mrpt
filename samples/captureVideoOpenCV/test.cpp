@@ -78,7 +78,7 @@ void TestCapture_OpenCV()
 			break;
 		}
 
-		fil << obs;
+		fil << *obs;
 
 		cout << "."; cout.flush();
 		if (win.isOpen())

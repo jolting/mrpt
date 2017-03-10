@@ -94,7 +94,7 @@ namespace mrpt
 
 			CDetectable3D(){};
 
-			CDetectable3D( const CDetectable2D::Ptr &object2d );
+			CDetectable3D( const CDetectable2D &object2d );
 
 			/** Copy pointer content constructor */
 			CDetectable3D( const CDetectable3D *d )

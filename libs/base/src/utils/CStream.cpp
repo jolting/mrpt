@@ -207,13 +207,6 @@ void CStream::WriteObject(const  CSerializable *o )
     MRPT_END
 }
 
-
-CStream& CStream::operator << (const CSerializable::Ptr & pObj)
-{
-	WriteObject(pObj.get());
-	return *this;
-}
-
 /** Write an object to a stream in the binary MRPT format. */
 CStream& CStream::operator << (const CSerializable &obj)
 {

@@ -66,22 +66,12 @@ namespace mrpt
 			/** This method must be called to select the PDF from which to draw samples.
 			  * \sa drawSample
 			  */
-			void setPosePDF( const CPosePDF::Ptr &pdf );
-
-			/** This method must be called to select the PDF from which to draw samples.
-			  * \sa drawSample
-			  */
 			void setPosePDF( const CPosePDF &pdf ) { setPosePDF(&pdf); }
 
 			/** This method must be called to select the PDF from which to draw samples.
 			  * \sa drawSample
 			  */
 			void setPosePDF( const CPose3DPDF *pdf );
-
-			/** This method must be called to select the PDF from which to draw samples.
-			  * \sa drawSample
-			  */
-			void setPosePDF( const CPose3DPDF::Ptr &pdf );
 
 			/** This method must be called to select the PDF from which to draw samples.
 			  * \sa drawSample

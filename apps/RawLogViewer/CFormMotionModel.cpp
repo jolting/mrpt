@@ -581,7 +581,7 @@ void CFormMotionModel::applyToRawlogFile()
 					changes++;
                 }
 
-                out_fil << acts;
+                out_fil << *acts;
                 newObj.reset();
             }
             else

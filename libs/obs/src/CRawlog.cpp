@@ -168,7 +168,7 @@ void  CRawlog::writeToStream(mrpt::utils::CStream &out, int *version) const
 		n = static_cast<uint32_t>( m_seqOfActObs.size() );
 		out << n;
 		for (i=0;i<n;i++)
-			out << m_seqOfActObs[i];
+			out << *m_seqOfActObs[i];
 
 		out << m_commentTexts;
 	}

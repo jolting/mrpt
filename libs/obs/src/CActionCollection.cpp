@@ -74,7 +74,7 @@ void  CActionCollection::readFromStream(mrpt::utils::CStream &in, int version)
 
 			in >> n;
 			m_actions.resize(n);
-			for_each( begin(),end(), ObjectReadFromStreamToPtrs<CAction::Ptr>(&in) );
+			for_each( begin(),end(), ObjectReadFromStreamToPtrs<CAction::Ptr>(in) );
 
 		} break;
 	default:

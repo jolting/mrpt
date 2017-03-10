@@ -109,7 +109,7 @@ void  COpenGLScene::render() const
 	glGetIntegerv( GL_VIEWPORT, win_dims );
 
 	for (TListViewports::const_iterator it=m_viewports.begin();it!=m_viewports.end();++it)
-		(*it)->render( win_dims[2],win_dims[3] );
+		it->render( win_dims[2],win_dims[3] );
 
 	// Assure we restore the original viewport:
 	glViewport( win_dims[0],win_dims[1],win_dims[2],win_dims[3] );
@@ -136,7 +136,7 @@ void  COpenGLScene::writeToStream(mrpt::utils::CStream &out,int *version) const
 		n = (uint32_t)m_viewports.size();
 		out << n;
 		for (TListViewports::const_iterator	it=m_viewports.begin();it!=m_viewports.end();++it)
-			out << **it;
+			out << *it;
 	}
 }
 
@@ -152,15 +152,15 @@ void  COpenGLScene::readFromStream(mrpt::utils::CStream &in,int version)
 		{
 			// Old style: Just one viewport:
 			clear(true);
-			COpenGLViewport::Ptr view = m_viewports[0];
+			COpenGLViewport &view = m_viewports[0];
 
 			// Load objects:
 			uint32_t	n;
 			in >> n;
 
-			view->clear();
-			view->m_objects.resize(n);
-			for_each(view->m_objects.begin(), view->m_objects.end(), metaprogramming::ObjectReadFromStream(&in) );
+			view.clear();
+			view.m_objects.resize(n);
+			for_each(view.m_objects.begin(), view.m_objects.end(), metaprogramming::ObjectReadFromStream(in) );
 		}
 		break;
 	case 1:
@@ -174,11 +174,10 @@ void  COpenGLScene::readFromStream(mrpt::utils::CStream &in,int version)
 
 			for (i=0;i<n;i++)
 			{
-				CSerializable::Ptr newObj;
-				in >> newObj;
+				COpenGLViewport newView;
+				in >> newView;
 
-				COpenGLViewport::Ptr	newView = std::dynamic_pointer_cast<COpenGLViewport>(newObj);
-				newView->m_parent = this;
+				newView.m_parent = this;
 				m_viewports.push_back( newView );
 			}
 
@@ -190,34 +189,14 @@ void  COpenGLScene::readFromStream(mrpt::utils::CStream &in,int version)
 }
 
 /*---------------------------------------------------------------
-							insert
-  ---------------------------------------------------------------*/
-void COpenGLScene::insert( const CRenderizable::Ptr &newObject, const std::string &viewportName )
-{
-	MRPT_START
-	for (TListViewports::iterator it = m_viewports.begin();it!= m_viewports.end();++it)
-	{
-		if ((*it)->m_name == viewportName )
-		{
-			(*it)->insert(newObject);
-			return;
-		}
-	}
-	THROW_EXCEPTION_FMT("Error: viewport '%s' not found.",viewportName.c_str());
-	MRPT_END
-}
-
-/*---------------------------------------------------------------
 							getByName
   ---------------------------------------------------------------*/
-CRenderizable::Ptr	COpenGLScene::getByName( const string &str, const string &viewportName )
+TListViewports::iterator COpenGLScene::getByName( const string &str )
 {
-	MRPT_UNUSED_PARAM(viewportName);
-	CRenderizable::Ptr obj;
 	for (TListViewports::iterator it=m_viewports.begin();it!=m_viewports.end();++it)
-		if ( (obj = (*it)->getByName(str) ) )
-			break;
-	return obj;
+		if ( (it->getByName(str) ) )
+			return it;
+	return m_viewports.end();
 }
 
 /*---------------------------------------------------------------
@@ -226,7 +205,7 @@ CRenderizable::Ptr	COpenGLScene::getByName( const string &str, const string &vie
 void  COpenGLScene::initializeAllTextures()
 {
 	for (TListViewports::iterator it=m_viewports.begin();it!=m_viewports.end();++it)
-		(*it)->initializeAllTextures();
+		it->initializeAllTextures();
 }
 
 /*--------------------------------------------------------------
@@ -238,9 +217,9 @@ void COpenGLScene::dumpListOfObjects( utils::CStringList  &lst )
 
 	for (TListViewports::iterator	it=m_viewports.begin();it!=m_viewports.end();++it)
 	{
-		lst.add( string("VIEWPORT: ")+ (*it)->m_name );
+		lst.add( string("VIEWPORT: ")+ it->m_name );
 		lst.add("============================================");
-		(*it)->dumpListOfObjects(lst);
+		it->dumpListOfObjects(lst);
 	}
 }
 
@@ -249,7 +228,7 @@ void COpenGLScene::dumpListOfObjects( utils::CStringList  &lst )
 /*--------------------------------------------------------------
 					createViewport
   ---------------------------------------------------------------*/
-COpenGLViewport::Ptr COpenGLScene::createViewport( const string &viewportName )
+COpenGLViewport& COpenGLScene::createViewport( const string &viewportName )
 {
 	MRPT_START
 
@@ -267,13 +246,13 @@ COpenGLViewport::Ptr COpenGLScene::createViewport( const string &viewportName )
 /*--------------------------------------------------------------
 					getViewport
   ---------------------------------------------------------------*/
-COpenGLViewport::Ptr COpenGLScene::getViewport( const std::string &viewportName ) const
+TListViewports::const_iterator COpenGLScene::getViewport( const std::string &viewportName ) const
 {
 	MRPT_START
 	for (TListViewports::const_iterator it = m_viewports.begin();it!=m_viewports.end();++it)
-		if ( (*it)->m_name == viewportName)
-			return *it;
-	return COpenGLViewport::Ptr();
+		if (it->m_name == viewportName)
+			return it;
+	return m_viewports.end();
 	MRPT_END
 }
 
@@ -281,7 +260,9 @@ COpenGLViewport::Ptr COpenGLScene::getViewport( const std::string &viewportName 
 /*--------------------------------------------------------------
 					removeObject
   ---------------------------------------------------------------*/
-void COpenGLScene::removeObject( const CRenderizable::Ptr &obj, const std::string &viewportName )
+
+MRPT_TODO("Probably should be iterator")
+void COpenGLScene::removeObject( const CRenderizable &obj, const std::string &viewportName )
 {
 	MRPT_START
 
@@ -297,11 +278,13 @@ bool COpenGLScene::traceRay(const mrpt::poses::CPose3D &o,double &dist) const	{
 	double tmp;
 	for (TListViewports::const_iterator it=m_viewports.begin();it!=m_viewports.end();++it)	{
 		const COpenGLViewport::Ptr &vp=*it;
-		for (CListOpenGLObjects::const_iterator it2=vp->m_objects.begin();it2!=vp->m_objects.end();++it2) if ((*it2)->traceRay(o,tmp))	{
-			if (!found)	{
+		for (CListOpenGLObjects::const_iterator it2=vp->m_objects.begin();it2!=vp->m_objects.end();++it2)
+		if (it2->traceRay(o,tmp)) {
+			if (!found) {
 				found=true;
 				dist=tmp;
-			}	else if (tmp<dist) dist=tmp;
+			}
+			else if (tmp<dist) dist=tmp;
 		}
 	}
 	return found;

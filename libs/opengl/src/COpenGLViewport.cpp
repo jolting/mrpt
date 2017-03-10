@@ -158,15 +158,6 @@ void COpenGLViewport::clear()
 	m_objects.clear();
 }
 
-/*--------------------------------------------------------------
-					insert
-  ---------------------------------------------------------------*/
-void COpenGLViewport::insert( const CRenderizable::Ptr &newObject )
-{
-	m_objects.push_back(newObject);
-}
-
-
 /*---------------------------------------------------------------
 						render
  ---------------------------------------------------------------*/
@@ -339,31 +330,23 @@ void  COpenGLViewport::render( const int render_width, const int render_height  
 
 			// Get camera:
 			// 1st: if there is a CCamera in the scene:
-			CRenderizable::Ptr cam_ptr = viewForGetCamera->getByClass<CCamera>();
+			auto cam_it = viewForGetCamera->getByClass<CCamera>();
 
-			CCamera *myCamera=nullptr;
-			if (cam_ptr)
-			{
-				myCamera = getAs<CCamera>(cam_ptr);
-			}
-
-			// 2nd: the internal camera of all viewports:
-			if (!myCamera)
-				myCamera = &viewForGetCamera->m_camera;
+			CCamera &myCamera = cam_it != viewForGetCamera.end() ? boost:get<CCamera>(*cam_it) : viewForGetCamera->m_camera;
 
 			ASSERT_(m_camera.m_distanceZoom>0);
 
 
-			m_lastProjMat.azimuth = DEG2RAD(myCamera->m_azimuthDeg);
-			m_lastProjMat.elev    = DEG2RAD(myCamera->m_elevationDeg);
+			m_lastProjMat.azimuth = DEG2RAD(myCamera.m_azimuthDeg);
+			m_lastProjMat.elev    = DEG2RAD(myCamera.m_elevationDeg);
 
-			const float dis = max(0.01f,myCamera->m_distanceZoom);
-			m_lastProjMat.eye.x = myCamera->m_pointingX +  dis * cos(m_lastProjMat.azimuth)*cos(m_lastProjMat.elev);
-			m_lastProjMat.eye.y = myCamera->m_pointingY +  dis * sin(m_lastProjMat.azimuth)*cos(m_lastProjMat.elev);
-			m_lastProjMat.eye.z = myCamera->m_pointingZ +  dis * sin(m_lastProjMat.elev);
+			const float dis = max(0.01f,myCamera.m_distanceZoom);
+			m_lastProjMat.eye.x = myCamera.m_pointingX +  dis * cos(m_lastProjMat.azimuth)*cos(m_lastProjMat.elev);
+			m_lastProjMat.eye.y = myCamera.m_pointingY +  dis * sin(m_lastProjMat.azimuth)*cos(m_lastProjMat.elev);
+			m_lastProjMat.eye.z = myCamera.m_pointingZ +  dis * sin(m_lastProjMat.elev);
 
 
-			if (fabs(fabs(myCamera->m_elevationDeg)-90)>1e-6)
+			if (fabs(fabs(myCamera.m_elevationDeg)-90)>1e-6)
 			{
 				m_lastProjMat.up.x=0;
 				m_lastProjMat.up.y=0;
@@ -371,29 +354,29 @@ void  COpenGLViewport::render( const int render_width, const int render_height  
 			}
 			else
 			{
-				float sgn = myCamera->m_elevationDeg>0 ? 1:-1;
-				m_lastProjMat.up.x = -cos(DEG2RAD(myCamera->m_azimuthDeg))*sgn;
-				m_lastProjMat.up.y = -sin(DEG2RAD(myCamera->m_azimuthDeg))*sgn;
+				float sgn = myCamera.m_elevationDeg>0 ? 1:-1;
+				m_lastProjMat.up.x = -cos(DEG2RAD(myCamera.m_azimuthDeg))*sgn;
+				m_lastProjMat.up.y = -sin(DEG2RAD(myCamera.m_azimuthDeg))*sgn;
 				m_lastProjMat.up.z = 0;
 			}
 
-			m_lastProjMat.is_projective = myCamera->m_projectiveModel;
-			m_lastProjMat.FOV           = myCamera->m_projectiveFOVdeg;
-			m_lastProjMat.pointing.x    = myCamera->m_pointingX;
-			m_lastProjMat.pointing.y    = myCamera->m_pointingY;
-			m_lastProjMat.pointing.z    = myCamera->m_pointingZ;
-			m_lastProjMat.zoom    		= myCamera->m_distanceZoom;
+			m_lastProjMat.is_projective = myCamera.m_projectiveModel;
+			m_lastProjMat.FOV           = myCamera.m_projectiveFOVdeg;
+			m_lastProjMat.pointing.x    = myCamera.m_pointingX;
+			m_lastProjMat.pointing.y    = myCamera.m_pointingY;
+			m_lastProjMat.pointing.z    = myCamera.m_pointingZ;
+			m_lastProjMat.zoom    		= myCamera.m_distanceZoom;
 
-			if (myCamera->m_projectiveModel)
+			if (myCamera.m_projectiveModel)
 			{
-				gluPerspective( myCamera->m_projectiveFOVdeg, vw/double(vh),m_clip_min,m_clip_max);
+				gluPerspective( myCamera.m_projectiveFOVdeg, vw/double(vh),m_clip_min,m_clip_max);
 				CRenderizable::checkOpenGLError();
 			}
 			else
 			{
 				const double ratio = vw/double(vh);
-				double Ax = myCamera->m_distanceZoom*0.5;
-				double Ay = myCamera->m_distanceZoom*0.5;
+				double Ax = myCamera.m_distanceZoom*0.5;
+				double Ay = myCamera.m_distanceZoom*0.5;
 
 				if (ratio>1)
 					Ax *= ratio;
@@ -406,13 +389,13 @@ void  COpenGLViewport::render( const int render_width, const int render_height  
 				CRenderizable::checkOpenGLError();
 			}
 
-			if (myCamera->is6DOFMode())
+			if (myCamera.is6DOFMode())
 			{
 				// In 6DOFMode eye is set viewing towards the direction of the positive Z axis
 				// Up is set as Y axis
 				mrpt::poses::CPose3D viewDirection,pose,at;
 				viewDirection.z(+1);
-				pose = myCamera->getPose();
+				pose = myCamera.getPose();
 				at = pose + viewDirection;
 				gluLookAt(
 					pose.x(),
@@ -558,7 +541,7 @@ void  COpenGLViewport::writeToStream(mrpt::utils::CStream &out,int *version) con
 		n = (uint32_t)m_objects.size();
 		out << n;
 		for (CListOpenGLObjects::const_iterator	it=m_objects.begin();it!=m_objects.end();++it)
-			out << **it;
+			out << *it;
 
 		// Added in v2: Global OpenGL settings:
 		out << m_OpenGL_enablePolygonNicest;
@@ -606,7 +589,7 @@ void  COpenGLViewport::readFromStream(mrpt::utils::CStream &in,int version)
 			clear();
 			m_objects.resize(n);
 
-			for_each(m_objects.begin(), m_objects.end(), ObjectReadFromStream(&in) );
+			for_each(m_objects.begin(), m_objects.end(), ObjectReadFromStream(in) );
 
 			// Added in v2: Global OpenGL settings:
 			if (version>=2)
@@ -637,20 +620,20 @@ void  COpenGLViewport::readFromStream(mrpt::utils::CStream &in,int version)
 /*---------------------------------------------------------------
 							getByName
   ---------------------------------------------------------------*/
-CRenderizable::Ptr COpenGLViewport::getByName( const string &str )
+iterator COpenGLViewport::getByName( const string &str )
 {
 	for (CListOpenGLObjects::iterator	it=m_objects.begin();it!=m_objects.end();++it)
 	{
-		if ((*it)->m_name == str)
-			return *it;
-		else if ( (*it)->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,opengl))
+		if (it->m_name == str)
+			return it;
+		else if (it->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,opengl))
 		{
-			CRenderizable::Ptr ret = getAs<CSetOfObjects>(*it)->getByName(str);
-			if (ret)
+			iterator ret = it->getByName(str);
+			if (ret == m_objects.end())
 				return ret;
 		}
 	}
-	return CRenderizable::Ptr();
+	return m_object.end();
 }
 
 /*---------------------------------------------------------------
@@ -677,16 +660,16 @@ void COpenGLViewport::dumpListOfObjects( utils::CStringList  &lst )
 	for (CListOpenGLObjects::iterator	it=m_objects.begin();it!=m_objects.end();++it)
 	{
 		// Single obj:
-		string  s( (*it)->GetRuntimeClass()->className );
-		if ((*it)->m_name.size())
-			s+= string(" (") +(*it)->m_name + string(")");
+		string  s( it->GetRuntimeClass()->className );
+		if (it->m_name.size())
+			s+= string(" (") + it->m_name + string(")");
 		lst.add( s );
 
-		if ((*it)->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,mrpt::opengl))
+		if (it->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,mrpt::opengl))
 		{
 			utils::CStringList  auxLst;
 
-			getAs<CSetOfObjects>(*it)->dumpListOfObjects(auxLst);
+			it->dumpListOfObjects(auxLst);
 
 			for (size_t i=0;i<auxLst.size();i++)
 				lst.add( string(" ")+auxLst(i) );
@@ -694,20 +677,6 @@ void COpenGLViewport::dumpListOfObjects( utils::CStringList  &lst )
 	}
 }
 
-/*--------------------------------------------------------------
-					removeObject
-  ---------------------------------------------------------------*/
-void COpenGLViewport::removeObject( const CRenderizable::Ptr &obj )
-{
-	for (CListOpenGLObjects::iterator	it=m_objects.begin();it!=m_objects.end();++it)
-		if (*it == obj)
-		{
-			m_objects.erase(it);
-			return;
-		}
-		else if ( (*it)->GetRuntimeClass()==CLASS_ID_NAMESPACE(CSetOfObjects,opengl) )
-			getAs<CSetOfObjects>(*it)->removeObject(obj);
-}
 
 /*--------------------------------------------------------------
 					setViewportClipDistances
@@ -903,7 +872,7 @@ void COpenGLViewport::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::T
 	{
 		TPoint3D child_bbmin( std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max() );
 		TPoint3D child_bbmax(-std::numeric_limits<double>::max(),-std::numeric_limits<double>::max(),-std::numeric_limits<double>::max() );
-		(*it)->getBoundingBox(child_bbmin, child_bbmax);
+		it->getBoundingBox(child_bbmin, child_bbmax);
 
 		keep_min(bb_min.x, child_bbmin.x);
 		keep_min(bb_min.y, child_bbmin.y);

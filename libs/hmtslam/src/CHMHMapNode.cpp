@@ -143,7 +143,7 @@ void  CHMHMapNode::onArcDestruction(CHMHMapArc	*arc)
 /*---------------------------------------------------------------
 					onArcAddition
   ---------------------------------------------------------------*/
-void  CHMHMapNode::onArcAddition(const CHMHMapArc::Ptr &arc)
+void  CHMHMapNode::onArcAddition(const CHMHMapArc &arc)
 {
 	MRPT_START
 

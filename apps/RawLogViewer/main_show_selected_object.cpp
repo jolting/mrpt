@@ -41,7 +41,7 @@ using namespace std;
 
 
 // Update selected item display:
-void xRawLogViewerFrame::SelectObjectInTreeView( const CSerializable::Ptr & sel_obj )
+void xRawLogViewerFrame::SelectObjectInTreeView( const CSerializable & sel_obj )
 {
 	WX_START_TRY
 

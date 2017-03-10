@@ -61,8 +61,8 @@ CLSLAM_RBPF_2DLASER::~CLSLAM_RBPF_2DLASER()
 --------------------------------------------------------------- */
 void CLSLAM_RBPF_2DLASER::processOneLMH(
 	CLocalMetricHypothesis	*LMH,
-	const CActionCollection::Ptr &actions,
-	const CSensoryFrame::Ptr     &sf )
+	const CActionCollection &actions,
+	const CSensoryFrame &sf )
 {
 	MRPT_START
 

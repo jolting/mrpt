@@ -226,7 +226,7 @@ namespace mrpt
 
 				return true;
 			}
-            // Save those entries which are not nullptr.
+			// Save those entries which are not nullptr.
 			virtual void OnPostProcess(
 				mrpt::obs::CActionCollection::Ptr &actions,
 				mrpt::obs::CSensoryFrame::Ptr     &SF,
@@ -244,12 +244,12 @@ namespace mrpt
 						else it = SF->erase(it);
 					}
 					// Save:
-					m_out_rawlog << actions << SF;
+					m_out_rawlog << *actions << *SF;
 				}
 				else
 				{
 					if (obs)
-						m_out_rawlog << obs;
+						m_out_rawlog << *obs;
 				}
 			}
 

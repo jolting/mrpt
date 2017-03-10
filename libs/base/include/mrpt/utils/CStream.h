@@ -182,8 +182,6 @@ namespace mrpt
 			void ReadObject(CSerializable *existingObj);
 
 			/** Write an object to a stream in the binary MRPT format. */
-			CStream& operator << (const CSerializable::Ptr & pObj);
-			/** Write an object to a stream in the binary MRPT format. */
 			CStream& operator << (const CSerializable &obj);
 
 			CStream& operator >> (CSerializable::Ptr &pObj);

@@ -108,7 +108,7 @@ namespace mrpt
 			/**
 			  * Inserts an existing CSetOfTriangles into this one.
 			  */
-			void insertTriangles(const CSetOfTriangles::Ptr &p); 
+			void insertTriangles(const CSetOfTriangles &p); 
 			/**
 			  * Reserves memory for certain number of triangles, avoiding multiple memory allocation calls.
 			  */

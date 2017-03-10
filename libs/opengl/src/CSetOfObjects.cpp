@@ -64,7 +64,7 @@ void  CSetOfObjects::writeToStream(mrpt::utils::CStream &out,int *version) const
 		n = (uint32_t)m_objects.size();
 		out << n;
 		for (CListOpenGLObjects::const_iterator	it=m_objects.begin();it!=m_objects.end();++it)
-			out << **it;
+			out << *it;
 	}
 }
 
@@ -86,7 +86,7 @@ void  CSetOfObjects::readFromStream(mrpt::utils::CStream &in,int version)
 			clear();
 			m_objects.resize(n);
 
-			for_each(m_objects.begin(),m_objects.end(), ObjectReadFromStream(&in) );
+			for_each(m_objects.begin(),m_objects.end(), ObjectReadFromStream(in) );
 
 		} break;
 	default:
@@ -105,9 +105,9 @@ void  CSetOfObjects::initializeAllTextures()
 	for (it=m_objects.begin();it!=m_objects.end();++it++)
 	{
 		if ( IS_DERIVED(*it, CTexturedObject ))
-			getAs<CTexturedObject>(*it)->loadTextureInOpenGL();
+			dynamic_cast<CTexturedObject &>(*it).loadTextureInOpenGL();
 		else if ( IS_CLASS( *it, CSetOfObjects) )
-			getAs<CSetOfObjects>(*it)->initializeAllTextures();
+			dynamic_cast<CSetOfObjects &>(*it).initializeAllTextures();
 	}
 #endif
 }
@@ -123,16 +123,6 @@ CSetOfObjects::~CSetOfObjects()
 	clear();
 }
 
-
-void CSetOfObjects::insert( const CRenderizable::Ptr &newObject )
-{
-	ASSERTMSG_(newObject.get() != this, "Error: Trying to insert container into itself!");
-	m_objects.push_back(newObject);
-}
-
-
-
-
 /*--------------------------------------------------------------
 					dumpListOfObjects
   ---------------------------------------------------------------*/
@@ -141,14 +131,14 @@ void CSetOfObjects::dumpListOfObjects( utils::CStringList  &lst )
 	for (CListOpenGLObjects::iterator	it=m_objects.begin();it!=m_objects.end();++it)
 	{
 		// Single obj:
-		string  s( (*it)->GetRuntimeClass()->className );
-		if ((*it)->m_name.size())
-			s+= string(" (") +(*it)->m_name + string(")");
+		string  s(it->GetRuntimeClass()->className );
+		if (it->m_name.size())
+			s+= string(" (") + it->m_name + string(")");
 		lst.add( s );
 
-		if ((*it)->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,mrpt::opengl))
+		if (it->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,mrpt::opengl))
 		{
-			CSetOfObjects *objs = getAs<CSetOfObjects>(*it);
+			CSetOfObjects &objs = dynamic_cast<CSetOfObjects&>(*it);
 
 			utils::CStringList  auxLst;
 			objs->dumpListOfObjects(auxLst);
@@ -158,26 +148,11 @@ void CSetOfObjects::dumpListOfObjects( utils::CStringList  &lst )
 	}
 }
 
-/*--------------------------------------------------------------
-					removeObject
-  ---------------------------------------------------------------*/
-void CSetOfObjects::removeObject( const CRenderizable::Ptr &obj )
-{
-	for (CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it)
-		if (*it == obj)
-		{
-			m_objects.erase(it);
-			return;
-		}
-		else if ( (*it)->GetRuntimeClass()==CLASS_ID_NAMESPACE(CSetOfObjects,opengl) )
-			getAs<CSetOfObjects>(*it)->removeObject(obj);
-}
-
 bool CSetOfObjects::traceRay(const mrpt::poses::CPose3D &o,double &dist) const	{
 	CPose3D nueva=(CPose3D()-this->m_pose)+o;
 	bool found=false;
 	double tmp;
-	for (CListOpenGLObjects::const_iterator it=m_objects.begin();it!=m_objects.end();++it) if ((*it)->traceRay(nueva,tmp))	{
+	for (CListOpenGLObjects::const_iterator it=m_objects.begin();it!=m_objects.end();++it) if (it->traceRay(nueva,tmp))	{
 		if (!found)	{
 			found=true;
 			dist=tmp;
@@ -189,8 +164,8 @@ bool CSetOfObjects::traceRay(const mrpt::poses::CPose3D &o,double &dist) const	{
 class FSetColor	{
 public:
 	uint8_t r,g,b,a;
-	void operator()(CRenderizable::Ptr &p)	{
-		p->setColor_u8(r,g,b,a);
+	void operator()(CRenderizable &p)	{
+		p.setColor_u8(r,g,b,a);
 	}
 	FSetColor(uint8_t R,uint8_t G,uint8_t B,uint8_t A):r(R),g(G),b(B),a(A)	{}
 	~FSetColor()	{}
@@ -202,27 +177,23 @@ CRenderizable& CSetOfObjects::setColor_u8(const mrpt::utils::TColor &c)	{
 }
 
 
-bool CSetOfObjects::contains(const CRenderizable::Ptr &obj) const	{
-	return find(m_objects.begin(),m_objects.end(),obj)!=m_objects.end();
-}
-
 CRenderizable& CSetOfObjects::setColorR_u8(const uint8_t r)	{
-	for(CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it) (*it)->setColorR_u8(m_color.R=r);
+	for(CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it) it->setColorR_u8(m_color.R=r);
 	return *this;
 }
 
 CRenderizable& CSetOfObjects::setColorG_u8(const uint8_t  g)	{
-	for(CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it) (*it)->setColorG_u8(m_color.G=g);
+	for(CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it) it->setColorG_u8(m_color.G=g);
 	return *this;
 }
 
 CRenderizable& CSetOfObjects::setColorB_u8(const uint8_t  b)	{
-	for(CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it) (*it)->setColorB_u8(m_color.B=b);
+	for(CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it) it->setColorB_u8(m_color.B=b);
 	return *this;
 }
 
 CRenderizable& CSetOfObjects::setColorA_u8(const uint8_t  a)	{
-	for(CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it) (*it)->setColorA_u8(m_color.A=a);
+	for(CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it) it->setColorA_u8(m_color.A=a);
 	return *this;
 }
 
@@ -230,20 +201,21 @@ CRenderizable& CSetOfObjects::setColorA_u8(const uint8_t  a)	{
 /*---------------------------------------------------------------
 							getByName
   ---------------------------------------------------------------*/
-CRenderizable::Ptr CSetOfObjects::getByName( const string &str )
+iterator CSetOfObjects::getByName( const string &str )
 {
-	for (CListOpenGLObjects::iterator	it=m_objects.begin();it!=m_objects.end();++it)
+	for (CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it)
 	{
-		if ((*it)->m_name == str)
+		if (it->m_name == str)
 			return *it;
-		else if ( (*it)->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,opengl))
+		else if ( it->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,opengl))
 		{
-			CRenderizable::Ptr ret = getAs<CSetOfObjects>(*it)->getByName(str);
-			if (ret)
+			CSetOfObjects set = dynamic_cast<CSetOfObjects &>(*it);
+			auto ret = set.getByName(str);
+			if (ret != set.end())
 				return ret;
 		}
 	}
-	return CRenderizable::Ptr();
+	return end();
 }
 
 
@@ -257,7 +229,7 @@ void CSetOfObjects::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPo
 	{
 		TPoint3D child_bbmin( std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max() );
 		TPoint3D child_bbmax(-std::numeric_limits<double>::max(),-std::numeric_limits<double>::max(),-std::numeric_limits<double>::max() );
-		(*it)->getBoundingBox(child_bbmin, child_bbmax);
+		it->getBoundingBox(child_bbmin, child_bbmax);
 
 		keep_min(bb_min.x, child_bbmin.x);
 		keep_min(bb_min.y, child_bbmin.y);

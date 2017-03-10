@@ -129,7 +129,7 @@ void  CSensoryFrame::readFromStream(mrpt::utils::CStream &in,int version)
 
 			in >> n;
 			m_observations.resize(n);
-			for_each( m_observations.begin(), m_observations.end(), ObjectReadFromStream(&in) );
+			for_each( m_observations.begin(), m_observations.end(), ObjectReadFromStream(in) );
 
 			if (version==0)
 				for (i=0;i<n;i++)

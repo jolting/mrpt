@@ -1685,7 +1685,7 @@ void slamdemoFrame::executeOneStep()
 		m_lastObservation.timestamp = mrpt::system::now();
 		m_lastObservation.sensorLabel = "SIMUL_2D_RB";
 
-		sf->insert( CObservationBearingRange::Ptr( new CObservationBearingRange(m_lastObservation) ));
+		sf->insert( std::make_shared<CObservationBearingRange>( CObservationBearingRange(m_lastObservation) ));
 
 		tictac.Tic();
 
@@ -1696,7 +1696,7 @@ void slamdemoFrame::executeOneStep()
 		// Save dataset to file?
 		if (m_rawlog_out_file.fileOpenCorrectly())
 		{
-			m_rawlog_out_file << act << sf;
+			m_rawlog_out_file << *act << *sf;
 		}
 	}
 

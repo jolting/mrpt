@@ -280,8 +280,7 @@ void CFaceDetection::detectObjects_Impl(const mrpt::obs::CObservation *obs, vect
 		// Convert 2d detected objects to 3d
 		for ( unsigned int i = 0; i < localDetected.size(); i++ )
 		{
-			CDetectable3D::Ptr object3d =
-				CDetectable3D::Ptr( new CDetectable3D(std::dynamic_pointer_cast<CDetectable2D>(localDetected[i])));
+			CDetectable3D::Ptr object3d = std::dynamic_pointer_cast<CDetectable3D>(localDetected[i]);
 			detected.push_back( object3d );
 		}
 

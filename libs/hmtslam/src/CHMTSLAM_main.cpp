@@ -178,7 +178,7 @@ void  CHMTSLAM::clearInputQueue()
 /*---------------------------------------------------------------
 						pushAction
   ---------------------------------------------------------------*/
-void  CHMTSLAM::pushAction( const CActionCollection::Ptr &acts )
+void  CHMTSLAM::pushAction( const CActionCollection &acts )
 {
 	if (m_terminateThreads)
 	{
@@ -196,7 +196,7 @@ void  CHMTSLAM::pushAction( const CActionCollection::Ptr &acts )
 /*---------------------------------------------------------------
 						pushObservations
   ---------------------------------------------------------------*/
-void  CHMTSLAM::pushObservations( const CSensoryFrame::Ptr &sf )
+void  CHMTSLAM::pushObservations( const CSensoryFrame &sf )
 {
 	if (m_terminateThreads)
 	{
@@ -214,7 +214,7 @@ void  CHMTSLAM::pushObservations( const CSensoryFrame::Ptr &sf )
 /*---------------------------------------------------------------
 						pushObservation
   ---------------------------------------------------------------*/
-void  CHMTSLAM::pushObservation( const CObservation::Ptr &obs )
+void  CHMTSLAM::pushObservation( const CObservation &obs )
 {
 	if (m_terminateThreads)
 	{   // Discard it:

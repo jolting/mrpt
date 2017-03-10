@@ -104,7 +104,7 @@ namespace mrpt
 					m_accumRobotMovement2D.rawOdometryIncrementReading,
 					m_accumRobotMovement2D.motionModelConfiguration );
 
-				m_movementDrawer.setPosePDF( theResultingRobotMov.poseChange.get_ptr() );  // <--- Set mov. drawer
+				m_movementDrawer.setPosePDF( *theResultingRobotMov.poseChange );  // <--- Set mov. drawer
 				m_accumRobotMovement2DIsValid = false; // Reset odometry for next iteration
 			}
 			return true;
@@ -169,7 +169,7 @@ namespace mrpt
 					// If there is no 2D action, look for a 3D action:
 					if (robotMovement2D)
 					{
-						m_movementDrawer.setPosePDF( robotMovement2D->poseChange.get_ptr() );
+						m_movementDrawer.setPosePDF( *robotMovement2D->poseChange );
 						motionModelMeanIncr = robotMovement2D->poseChange->getMeanVal();
 					}
 					else

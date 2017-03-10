@@ -75,7 +75,7 @@ void TestCapture_FlyCapture2()
 		if (win.isOpen())
 			win.showImage( obs->image );
 
-		fil << obs;
+		fil << *obs;
 	}
 
 }

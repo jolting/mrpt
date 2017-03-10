@@ -115,8 +115,8 @@ DECLARE_OP_FUNCTION(op_camera_params)
 		{
 			ASSERT_((actions && SF) || obs)
 			if (actions)
-					outrawlog.out_rawlog << actions << SF;
-			else	outrawlog.out_rawlog << obs;
+					outrawlog.out_rawlog << *actions << *SF;
+			else	outrawlog.out_rawlog << *obs;
 		}
 
 	};

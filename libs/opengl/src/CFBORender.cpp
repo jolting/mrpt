@@ -118,11 +118,11 @@ CFBORender::~CFBORender()
 /*---------------------------------------------------------------
 					Set the scene camera
  ---------------------------------------------------------------*/
-void  CFBORender::setCamera( const COpenGLScene& scene, const CCamera& camera )
+void  CFBORender::setCamera(COpenGLScene& scene, const CCamera& camera )
 {
 	MRPT_START
 
-	scene.getViewport("main")->getCamera() = camera;
+	scene.getViewport("main").getCamera() = camera;
 
 	MRPT_END
 }
@@ -130,11 +130,11 @@ void  CFBORender::setCamera( const COpenGLScene& scene, const CCamera& camera )
 /*---------------------------------------------------------------
 					Get the scene camera
  ---------------------------------------------------------------*/
-CCamera&  CFBORender::getCamera( const COpenGLScene& scene )
+CCamera&  CFBORender::getCamera( COpenGLScene& scene )
 {
 	MRPT_START
 
-	return scene.getViewport("main")->getCamera();
+	return scene.getViewport("main").getCamera();
 
 	MRPT_END
 }

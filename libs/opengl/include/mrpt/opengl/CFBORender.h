@@ -39,11 +39,11 @@ namespace mrpt
 
 			/** Change the scene camera.
 			  */
-			void  setCamera( const COpenGLScene& scene, const CCamera& camera );
+			void  setCamera( COpenGLScene& scene, const CCamera& camera );
 
 			/** Get a reference to the scene camera.
 			  */
-			CCamera  &getCamera( const COpenGLScene& scene );
+			CCamera  &getCamera( COpenGLScene& scene );
 
 			/** Render the scene and get the rendered rgb image. Resizes the image buffer if it
 				is necessary.

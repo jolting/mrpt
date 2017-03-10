@@ -50,6 +50,9 @@ namespace mrpt
 		{
 			DEFINE_SERIALIZABLE( COpenGLScene )
 		public:
+			using TListViewports = std::vector<COpenGLViewport>;
+			using iterator       = TListViewports::iterator;
+			using const_iterator = TListViewports::const_iterator;
 			/** Constructor
 			  */
 			COpenGLScene();
@@ -73,12 +76,28 @@ namespace mrpt
 			template<class T> inline void insertCollection(const T &objs,const std::string &vpn=std::string("main"))	{
 				insert(objs.begin(),objs.end(),vpn);
 			}
+
 			/** Insert a new object into the scene, in the given viewport (by default, into the "main" viewport).
 			  *  The viewport must be created previously, an exception will be raised if the given name does not correspond to
 			  *   an existing viewport.
 			  * \sa createViewport, getViewport
 			  */
-			void insert( const CRenderizable::Ptr &newObject, const std::string &viewportName=std::string("main"));
+			template <typename T>
+			void insert( T &&newObject, const std::string &viewportName = std::string("main"))
+			{
+				MRPT_START
+				for (TListViewports::iterator it = m_viewports.begin();it!= m_viewports.end();++it)
+				{
+					if (it->m_name == viewportName )
+					{
+						it->insert(newObject);
+						return;
+					}
+				}
+				THROW_EXCEPTION_FMT("Error: viewport '%s' not found.",viewportName.c_str());
+				MRPT_END
+			}
+
 
 			/**
 			  * Inserts a set of objects into the scene, in the given viewport ("main" by default).
@@ -92,11 +111,12 @@ namespace mrpt
 			  *  Names (case-sensitive) cannot be duplicated: if the name provided coincides with an already existing viewport, a pointer to the existing object will be returned.
 			  *  The first, default viewport, is named "main".
 			  */
-			COpenGLViewport::Ptr createViewport( const std::string &viewportName );
+			COpenGLViewport &createViewport( const std::string &viewportName );
 
 			/** Returns the viewport with the given name, or nullptr if it does not exist; note that the default viewport is named "main" and initially occupies the entire rendering area.
 			  */
-			COpenGLViewport::Ptr getViewport( const std::string &viewportName = std::string("main") ) const;
+			const COpenGLViewport &getViewport( const std::string &viewportName = std::string("main") ) const;
+			COpenGLViewport &getViewport( const std::string &viewportName = std::string("main") );
 
 			/** Render this scene */
 			void render() const;
@@ -119,7 +139,7 @@ namespace mrpt
 
 			/** Returns the first object with a given name, or nullptr (an empty smart pointer) if not found.
 			  */
-			CRenderizable::Ptr	getByName( const std::string &str, const std::string &viewportName = std::string("main") );
+			iterator getByName( const std::string &str, const std::string &viewportName = std::string("main") );
 
 			 /** Returns the i'th object of a given class (or of a descendant class), or nullptr (an empty smart pointer) if not found.
 			   *  Example:
@@ -129,15 +149,15 @@ namespace mrpt
 			   * By default (ith=0), the first observation is returned.
 			   */
 			 template <typename T>
-			 typename T::Ptr getByClass( const size_t &ith = 0 ) const
+			 iterator getByClass( const size_t &ith = 0 ) const
 			 {
 				MRPT_START
 				for (TListViewports::const_iterator it = m_viewports.begin();it!=m_viewports.end();++it)
 				{
-					typename T::Ptr o = (*it)->getByClass<T>(ith);
-					if (o) return o;
+					auto o = it->getByClass<T>(ith);
+					if(o != it->end()) return it;
 				}
-				return typename T::Ptr();	// Not found: return empty smart pointer
+				return m_viewports.end();	// Not found: return empty smart pointer
 				MRPT_END
 			 }
 
@@ -181,7 +201,7 @@ namespace mrpt
 			{
 				MRPT_START
 				for (TListViewports::const_iterator it = m_viewports.begin();it!=m_viewports.end();++it)
-					for (COpenGLViewport::const_iterator itO = (*it)->begin();itO!=(*it)->end();++itO)
+					for (COpenGLViewport::const_iterator itO = it->begin();itO!=it->end();++itO)
 						internal_visitAllObjects(functor, *itO);
 				MRPT_END
 			}
@@ -198,7 +218,6 @@ namespace mrpt
 		protected:
 			bool		m_followCamera;
 
-			typedef std::vector<COpenGLViewport::Ptr> TListViewports;
 
 			TListViewports		m_viewports;	//!< The list of viewports, indexed by name.
 
@@ -218,14 +237,22 @@ namespace mrpt
 		};
 		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( COpenGLScene, mrpt::utils::CSerializable, OPENGL_IMPEXP )
 		
-			/** Inserts an openGL object into a scene. Allows call chaining. \sa mrpt::opengl::COpenGLScene::insert  */
-		inline COpenGLScene::Ptr &operator<<(COpenGLScene::Ptr &s,const CRenderizable::Ptr &r)	{
-			s->insert(r);
+		/** Inserts an openGL object into a scene. Allows call chaining. \sa mrpt::opengl::COpenGLScene::insert  */
+		template <typename T>
+		inline COpenGLScene &operator<<(COpenGLScene &s, T&&r)	{
+			s.insert(std::forward<T>(r));
 			return s;
 		}
+
 		/**Inserts any iterable collection of openGL objects into a scene, allowing call chaining.  \sa mrpt::opengl::COpenGLScene::insert */
-		template <class T> inline COpenGLScene::Ptr &operator<<(COpenGLScene::Ptr &s,const std::vector<T> &v)	{
-			s->insert(v.begin(),v.end());
+		template <class T> inline COpenGLScene &operator<<(COpenGLScene &s,const std::vector<T> &&v)	{
+			s.insert(std::make_move_iterator(v.begin()),std::make_move_iterator(v.end()));
+			return s;
+		}
+
+		/**Inserts any iterable collection of openGL objects into a scene, allowing call chaining.  \sa mrpt::opengl::COpenGLScene::insert */
+		template <class T> inline COpenGLScene &operator<<(COpenGLScene &s,const std::vector<T> &v)	{
+			s.insert(v.begin(),v.end());
 			return s;
 		}
 	} // end namespace

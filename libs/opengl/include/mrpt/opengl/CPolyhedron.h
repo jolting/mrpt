@@ -564,7 +564,7 @@ namespace opengl	{
 		/** Gets the intersection of two polyhedra, either as a set or as a matrix of intersections. Each intersection is represented by a TObject3D.
 		  * \sa mrpt::math::TObject3D
 		  */
-		template<class T> inline static size_t getIntersection(const CPolyhedron::Ptr &p1,const CPolyhedron::Ptr &p2,T &container);
+		template<class T> inline static size_t getIntersection(const CPolyhedron &p1,const CPolyhedron &p2,T &container);
 		/**
 		  * Returns true if the polygon is a completely closed object.
 		  */
@@ -707,10 +707,10 @@ namespace opengl	{
 
 	// Implemented after the definition of Smart::Ptrs in the _POST() macro above.
 	template<class T>
-	size_t CPolyhedron::getIntersection(const CPolyhedron::Ptr &p1,const CPolyhedron::Ptr &p2,T &container)	{
+	size_t CPolyhedron::getIntersection(const CPolyhedron &p1,const CPolyhedron &p2,T &container)	{
 		std::vector<mrpt::math::TPolygon3D> polys1,polys2;
-		p1->getSetOfPolygonsAbsolute(polys1);
-		p2->getSetOfPolygonsAbsolute(polys2);
+		p1.getSetOfPolygonsAbsolute(polys1);
+		p2.getSetOfPolygonsAbsolute(polys2);
 		return mrpt::math::intersect(polys1,polys2,container);
 	}
 

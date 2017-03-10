@@ -33,18 +33,18 @@ namespace mrpt
 	  *  @{ */
 
 	// A 3D quantization table for storing pairs of TFeatureIDs and scales
-	typedef std::map<int,std::map<int,std::map<int,std::deque<std::pair<TFeatureID, double> > > > > TQuantizationTable;
+	using TQuantizationTable = std::map<int,std::map<int,std::map<int,std::deque<std::pair<TFeatureID, double> > > > >;
 
 	void VISION_IMPEXP saveQTableToFile(
 		const TQuantizationTable            & qTable,
-		const std::string                        & filename );
+		const std::string                   & filename );
 
 	void VISION_IMPEXP insertHashCoeffs(
-		const CFeature::Ptr                   & feat,
+		const CFeature & feat,
 		TQuantizationTable                  & qTable );
 
 	TMultiResMatchingOutput VISION_IMPEXP relocalizeMultiDesc(
-		const mrpt::utils::CImage                        & image,
+		const mrpt::utils::CImage           & image,
 		CFeatureList                        & baseList,
 		CFeatureList                        & currentList,
 		TQuantizationTable                  & qTable,
@@ -54,12 +54,12 @@ namespace mrpt
 	void VISION_IMPEXP updateBaseList(
 		CFeatureList                        & baseList,
 		const CFeatureList                  & currentList,
-		const std::vector<int>                   & idx );
+		const std::vector<int>              & idx );
 
 	void VISION_IMPEXP checkScalesAndFindMore(
 		CMatchedFeatureList                 & baseList,
 		const CFeatureList                  & currentList,
-		const mrpt::utils::CImage                        & currentImage,
+		const mrpt::utils::CImage           & currentImage,
 		const TMultiResMatchingOutput       & output,
 		const TMultiResDescOptions          & computeOpts,
 		const TMultiResDescMatchOptions     & matchOpts );
@@ -73,7 +73,7 @@ namespace mrpt
 		* \return True if the gradient could be computed and False if the pixel is located outside the image or at its border (where the gradient cannot be computed)
 		*/
 	bool VISION_IMPEXP computeGradient(
-		const mrpt::utils::CImage                        & image,
+		const mrpt::utils::CImage           & image,
 		const unsigned int                  x,
 		const unsigned int                  y,
 		double                              & mag,
@@ -88,7 +88,7 @@ namespace mrpt
 		* \param sigma        [IN]    The sigma value of the Gaussian kernel used to smooth the orientation histogram (typically 7.5 px).
 		*/
 	bool VISION_IMPEXP computeMainOrientations(
-		const mrpt::utils::CImage                        & image,
+		const mrpt::utils::CImage           & image,
 		const unsigned int                  x,
 		const unsigned int                  y,
 		const unsigned int                  patchSize,
@@ -106,7 +106,7 @@ namespace mrpt
 		* \param n    [IN]        The number of orienation bins used in the histogram (typically 8).
 		*/
 	void VISION_IMPEXP interpolateHistEntry(
-		std::vector<double>                      & hist,
+		std::vector<double>                 & hist,
 		const double                        & cbin,
 		const double                        & rbin,
 		const double                        & obin,
@@ -126,14 +126,14 @@ namespace mrpt
 		* \sa TMultiResDescOptions
 		*/
 	void VISION_IMPEXP computeHistogramOfOrientations(
-		const mrpt::utils::CImage                    & image,
+		const mrpt::utils::CImage       & image,
 		const unsigned int              x,
 		const unsigned int              y,
 		const unsigned int              patchSize,
 		const double                    & orientation,
-		std::vector<int32_t>                     & descriptor,
+		std::vector<int32_t>            & descriptor,
 		const TMultiResDescOptions      & opts,
-		std::vector<int32_t>                     & hashCoeffs );
+		std::vector<int32_t>            & hashCoeffs );
 
 	/** Matches two CFeatureList containing mulit-resolution descriptors. The first list is taken as a base, i.e. its features must contain multi-resolution descriptors
 		* at a set of different scales. The second list doesn't need to contain such information because it will be computed if necessary according to the
@@ -151,7 +151,7 @@ namespace mrpt
 	TMultiResMatchingOutput VISION_IMPEXP matchMultiResolutionFeatures(
 		const CFeatureList              & list1,
 		CFeatureList                    & list2,
-		const mrpt::utils::CImage                    & rightImage,
+		const mrpt::utils::CImage       & rightImage,
 		const TMultiResDescMatchOptions & matchOpts,
 		const TMultiResDescOptions      & computeOpts );
 
@@ -171,8 +171,8 @@ namespace mrpt
 	int VISION_IMPEXP matchMultiResolutionFeatures(
 		CMatchedFeatureList             & mList1,
 		CMatchedFeatureList             & mList2,
-		const mrpt::utils::CImage                    & leftImage,
-		const mrpt::utils::CImage                    & rightImage,
+		const mrpt::utils::CImage       & leftImage,
+		const mrpt::utils::CImage       & rightImage,
 		const TMultiResDescMatchOptions & matchOpts,
 		const TMultiResDescOptions      & computeOpts );
 
@@ -186,9 +186,9 @@ namespace mrpt
 		* \param opts         [IN]    The options for computing the new descriptors.
 		*/
 	int VISION_IMPEXP computeMoreDescriptors(
-		const mrpt::utils::CImage                    & image,
-		const CFeature::Ptr               & inputFeat,
-		CFeature::Ptr                     & outputFeat,
+		const mrpt::utils::CImage       & image,
+		const CFeature                  & inputFeat,
+		CFeature                        & outputFeat,
 		const bool                      & lowerScales,
 		const TMultiResDescOptions      & opts );
 
@@ -200,8 +200,8 @@ namespace mrpt
 		* \param firstScale   [OUT]   The final scale (within [0 feat1->multiScale.size()-1]) where to look.
 		*/
 	void VISION_IMPEXP setProperScales(
-		const CFeature::Ptr               & feat1,
-		const CFeature::Ptr               & feat2,
+		const CFeature & feat1,
+		const CFeature & feat2,
 		int                             & firstScale,
 		int                             & lastScale );
 
@@ -213,8 +213,8 @@ namespace mrpt
 		* \sa TMultiResDescOptions
 	*/
 	void VISION_IMPEXP computeMultiResolutionDescriptors(
-		const mrpt::utils::CImage                    & imageLeft,
-		const mrpt::utils::CImage                    & imageRight,
+		const mrpt::utils::CImage       & imageLeft,
+		const mrpt::utils::CImage       & imageRight,
 		CMatchedFeatureList             & matchedFeats,
 		const TMultiResDescOptions      & opts );
 
@@ -226,8 +226,8 @@ namespace mrpt
 		* \sa TMultiResDescOptions
 	*/
 	bool VISION_IMPEXP computeMultiResolutionDescriptors(
-		const mrpt::utils::CImage                    & image,
-		CFeature::Ptr                     & feat,
+		const mrpt::utils::CImage       & image,
+		CFeature                        & feat,
 		const TMultiResDescOptions      & opts );
 
 	/** Computes the multi-resolution SIFT-like descriptor of a list of features
@@ -237,7 +237,7 @@ namespace mrpt
 		* \sa TMultiResDescOptions
 		*/
 	std::vector<bool> VISION_IMPEXP computeMultiResolutionDescriptors(
-		const mrpt::utils::CImage                    & image,
+		const mrpt::utils::CImage       & image,
 		CFeatureList                    & list,
 		const TMultiResDescOptions      & opts );
 
@@ -248,7 +248,7 @@ namespace mrpt
 		* \sa TMultiResDescOptions
 		*/
 	void VISION_IMPEXP computeMultiOrientations(
-		const mrpt::utils::CImage                    & image,
+		const mrpt::utils::CImage       & image,
 		CFeatureList                    & list,
 		const TMultiResDescOptions      & opts );
 

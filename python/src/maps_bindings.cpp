@@ -29,12 +29,7 @@ using namespace mrpt::utils;
 // CMetricMap
 bool CMetricMap_insertObservation(CMetricMap& self, const CObservation& obs, const CPose3D& robotPose=CPose3D())
 {
-  return self.insertObservation(&obs, &robotPose);
-}
-
-bool CMetricMap_insertObservationPtr(CMetricMap& self, const CObservation::Ptr& obs, const CPose3D& robotPose=CPose3D())
-{
-  return self.insertObservationPtr(obs, &robotPose);
+  return self.insertObservation(obs, robotPose);
 }
 
 CSetOfObjects::Ptr CMetricMap_getAs3DObject(CMetricMap &self)
@@ -48,9 +43,9 @@ BOOST_PYTHON_FUNCTION_OVERLOADS(CMetricMap_insertObservationPtr_overloads, CMetr
 // end of CMetricMap
 
 // COccupancyGridMap2D
-COccupancyGridMap2D *COccupancyGridMap2D_copy(COccupancyGridMap2D &self)
+COccupancyGridMap2D::Ptr COccupancyGridMap2D_copy(COccupancyGridMap2D &self)
 {
-  return (COccupancyGridMap2D *)self.clone();
+  return COccupancyGridMap2D::Ptr(self.clone());
 }
 
 bool COccupancyGridMap2D_insertObservation(COccupancyGridMap2D &self, CObservation &obs, CPose3D &pose)
@@ -285,7 +280,6 @@ void export_maps()
             .def("loadFromProbabilisticPosesAndObservations", &CMetricMap::loadFromProbabilisticPosesAndObservations, "Load the map contents from a CSimpleMap object, erasing all previous content of the map.")
             .def("loadFromSimpleMap", &CMetricMap::loadFromSimpleMap, "Load the map contents from a CSimpleMap object, erasing all previous content of the map.")
             .def("insertObservation", &CMetricMap_insertObservation, CMetricMap_insertObservation_overloads())
-            .def("insertObservationPtr", &CMetricMap_insertObservationPtr, CMetricMap_insertObservationPtr_overloads())
             .def("saveMetricMapRepresentationToFile", &CMetricMap::saveMetricMapRepresentationToFile, "Save map representation to file.")
             .def("getAs3DObject", &CMetricMap_getAs3DObject, "Returns a 3D object representing the map.")
             .def_readwrite("genericMapParams", &CMetricMap::genericMapParams, "Common params to all maps.")

@@ -12,10 +12,7 @@
 #include <mrpt/utils/utils_defs.h>
 #include <mrpt/opengl/opengl_fonts.h>
 
-#ifndef opengl_CRenderizable_H
-#	include <mrpt/opengl/CRenderizable.h>
-#endif
-
+#include <mrpt/opengl/CListOpenGLObjects.h>
 #include <mrpt/opengl/link_pragmas.h>
 
 namespace mrpt

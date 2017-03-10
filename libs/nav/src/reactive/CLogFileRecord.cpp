@@ -64,7 +64,7 @@ void  CLogFileRecord::writeToStream(mrpt::utils::CStream &out,int *version) cons
 			const bool there_is_ptg_data = infoPerPTG[i].ptg ? true : false;
 			out << there_is_ptg_data;
 			if (there_is_ptg_data)
-				out << infoPerPTG[i].ptg;
+				out << *infoPerPTG[i].ptg;
 
 			out << infoPerPTG[i].clearance.raw_clearances; // v19
 		}
@@ -76,7 +76,7 @@ void  CLogFileRecord::writeToStream(mrpt::utils::CStream &out,int *version) cons
 		out << ptg_last_curRobotVelLocal; // v17
 
 		if (ptg_index_NOP<0)
-			out << cmd_vel /*v10*/ << cmd_vel_original; // v15
+			out << *cmd_vel /*v10*/ << *cmd_vel_original; // v15
 
 		// Previous values: REMOVED IN VERSION #6
 		n = robotShape_x.size();
