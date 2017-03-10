@@ -11,9 +11,8 @@
 
 #include <mrpt/utils/utils_defs.h>
 #include <mrpt/opengl/opengl_fonts.h>
-
-#include <mrpt/opengl/CListOpenGLObjects.h>
 #include <mrpt/opengl/link_pragmas.h>
+#include <mrpt/opengl/CSetOfObjects.h>
 
 namespace mrpt
 {

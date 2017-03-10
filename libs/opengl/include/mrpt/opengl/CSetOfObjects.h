@@ -33,6 +33,8 @@ namespace mrpt
 		class OPENGL_IMPEXP CSetOfObjects : public CRenderizable
 		{
 			DEFINE_SERIALIZABLE( CSetOfObjects )
+		public:
+			using CListOpenGLObjects = std::deque<mapbox::util::variant<CSetOfObjects>>;
 
 		protected:
 			/** The list of child objects.
@@ -41,7 +43,6 @@ namespace mrpt
 			CListOpenGLObjects		m_objects;
 
 		public:
-
 			typedef CListOpenGLObjects::const_iterator 	const_iterator;
 			typedef CListOpenGLObjects::iterator 		iterator;
 
@@ -149,6 +150,10 @@ namespace mrpt
 			/** Private, virtual destructor: only can be deleted from smart pointers */
 			virtual ~CSetOfObjects();
 		};
+
+		using CListOpenGLObjects = CSetOfObjects::CListOpenGLObjects;
+
+
 		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( CSetOfObjects, CRenderizable, OPENGL_IMPEXP )
 		/** Inserts an object into the list. Allows call chaining.
 		  * \sa mrpt::opengl::CSetOfObjects::insert
@@ -172,21 +177,19 @@ namespace mrpt
 		{
 			MRPT_START
 			size_t  foundCount = 0;
-			const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo;
 			for (CListOpenGLObjects::const_iterator it = m_objects.begin();it!=m_objects.end();++it)
-				if ( it->GetRuntimeClass()->derivedFrom( class_ID ) )
+				if ( it->is<T>() )
 					if (foundCount++ == ith)
 						return it;
 
 			// If not found directly, search recursively:
 			for (CListOpenGLObjects::const_iterator it=m_objects.begin();it!=m_objects.end();++it)
 			{
-				if (it->GetRuntimeClass() == CLASS_ID_NAMESPACE(CSetOfObjects,mrpt::opengl))
+				if (it->is<CSetOfObjects>)
 				{
-					return it.getByClass<T>(ith);
+					return it->get<CSetOfObjects>().getByClass<T>(ith);
 				}
 			}
-
 			return m_objects.end();
 			MRPT_END
 		}

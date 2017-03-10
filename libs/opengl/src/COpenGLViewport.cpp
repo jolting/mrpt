@@ -642,12 +642,13 @@ iterator COpenGLViewport::getByName( const string &str )
 void  COpenGLViewport::initializeAllTextures()
 {
 #if MRPT_HAS_OPENGL_GLUT
+
 	for (CListOpenGLObjects::iterator it=m_objects.begin();it!=m_objects.end();++it)
 	{
-		if ( IS_DERIVED(*it, CTexturedObject ))
-			getAs<CTexturedObject>(*it)->loadTextureInOpenGL();
-		else if ( IS_CLASS( *it, CSetOfObjects) )
-			getAs<CSetOfObjects>(*it)->initializeAllTextures();
+		it->match(
+			[] (CTexturedObject &t) { t.loadTextureInOpenGL(); },
+			[] (CSetOfObjects &t) { t.initializeAllTextures(); }
+		);
 	}
 #endif
 }

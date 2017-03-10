@@ -249,16 +249,16 @@ namespace mrpt
 				size_t  foundCount = 0;
 				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo;
 				for (CListOpenGLObjects::const_iterator it = m_objects.begin();it!=m_objects.end();++it)
-					if ( it->GetRuntimeClass()->derivedFrom( class_ID ) )
+					if ( it->is<T>() )
 						if (foundCount++ == ith)
 							return it;
 
 				// If not found directly, search recursively:
 				for (CListOpenGLObjects::const_iterator it=m_objects.begin();it!=m_objects.end();++it)
 				{
-					if ( it->GetRuntimeClass() == CLASS_ID(mrpt::opengl::CSetOfObjects))
+					if ( it->is<mrpt::opengl::CSetOfObjects>())
 					{
-						mrpt::opengl::CSetOfObjects &set = dynamic_cast<mrpt::opengl::CSetOfObjects &>(*it);
+						const mrpt::opengl::CSetOfObjects &set = it->get<mrpt::opengl::CSetOfObjects>();
 						auto o = set.getByClass<T>(ith);
 						if(o != set.end()) return it;
 					}
@@ -350,6 +350,7 @@ namespace mrpt
 
 			std::vector<CLight>  m_lights;
 		};
+
 		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE( COpenGLViewport, mrpt::utils::CSerializable, OPENGL_IMPEXP )
 		/**
 		  * Inserts an openGL object into a viewport. Allows call chaining.

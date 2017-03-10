@@ -236,9 +236,7 @@ COpenGLViewport& COpenGLScene::createViewport( const string &viewportName )
 	if (old)
 		return old;
 
-	COpenGLViewport::Ptr theNew = COpenGLViewport::Ptr( new COpenGLViewport(this, viewportName) );
-	m_viewports.push_back(theNew);
-	return  theNew;
+	return *m_viewports.emplace(this,viewportName);
 
 	MRPT_END
 }
