@@ -6,17 +6,15 @@ dist: trusty
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then  sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y  ; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y;
+    sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y ;
+    sudo add-apt-repository llvm-toolchain-3.8 -y ;
     sudo apt-get update ;
 
-    sudo apt-get install gcc-6 g++-6 ;
-    sudo update-alternatives ;
-    sudo update-alternatives --remove-all gcc ;
-    sudo update-alternatives --remove-all g++ ;
+    sudo apt-get install gcc-6 g++-6 clang-3.8 ;
+    sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100 ;
+    sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100 ;
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 20 ;
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 20 ;
-    sudo update-alternatives --config gcc ;
-    sudo update-alternatives --config g++ ;
     fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then  sudo apt-get update -d  ; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" &&  ]; then  sudo apt-get update -d  ; fi
