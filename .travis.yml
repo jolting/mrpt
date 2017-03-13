@@ -10,8 +10,7 @@ before_install:
     sudo apt-get update ;
 
     sudo apt-get install gcc-6 g++-6 clang-3.8 ;
-    sudo rm /usr/local/bin/clang ;
-    sudo rm /usr/local/bin/clang++ ;
+    sudo rm -rf /usr/local ;
     sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100 ;
     sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100 ;
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 20 ;
