@@ -6,7 +6,7 @@ dist: trusty
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then  sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y  ; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    sudo add-apt-repository ppa:ubuntu-toolchain-r/test ;
+    sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y;
     sudo apt-get update ;
 
     sudo apt-get install gcc-6 g++-6 ;
