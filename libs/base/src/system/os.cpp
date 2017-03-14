@@ -113,7 +113,7 @@ using namespace std;
 		// generic version, slower but probably not used in any modern compiler!
 		time_t mrpt::system::os::timegm(struct tm *tm)
 		{
-			static mrpt::synch::CCriticalSection cs;
+			static std::mutex cs;
 			std::lock_guard<std::mutex> lock(cs);
 
 			time_t ret;

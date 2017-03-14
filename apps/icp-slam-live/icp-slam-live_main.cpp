@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 
 // Sensor thread -------------------------
 mrpt::hwdrivers::CGenericSensor::TListObservations global_list_obs;
-mrpt::synch::CCriticalSection                      cs_global_list_obs;
+std::mutex                      cs_global_list_obs;
 
 bool allThreadsMustExit = false;
 struct TThreadParams
