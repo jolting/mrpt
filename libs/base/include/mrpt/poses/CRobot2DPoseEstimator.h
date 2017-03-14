@@ -82,7 +82,7 @@ namespace mrpt
 			TOptions params; //!< parameters of the filter.
 
 		private:
-			mrpt::synch::CCriticalSection  m_cs;
+			mrpt::synch::std::mutex  m_cs;
 
 			mrpt::system::TTimeStamp    m_last_loc_time;
 			mrpt::math::TPose2D         m_last_loc;   //!< Last pose as estimated by the localization/SLAM subsystem.

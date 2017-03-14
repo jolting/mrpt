@@ -125,7 +125,7 @@ void CLevMarqGSO<GRAPH_t>::setWindowManagerPtr(
 
 template <class GRAPH_t>
 void CLevMarqGSO<GRAPH_t>::setCriticalSectionPtr(
-		mrpt::synch::CCriticalSection* graph_section) {
+		mrpt::synch::std::mutex* graph_section) {
 	MRPT_START;
 
 	m_graph_section = graph_section;
@@ -411,7 +411,7 @@ void CLevMarqGSO<GRAPH_t>::optimizeGraph() {
 				"In optimizeGraph\n\tThreadID: %lu\n\tTrying to grab lock... ",
 				std::this_thread::get_id());
 
-	mrpt::synch::CCriticalSectionLocker m_graph_lock(m_graph_section);
+	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 	this->_optimizeGraph();
 
 	this->logFmt(mrpt::utils::LVL_DEBUG, "2nd thread grabbed the lock..");

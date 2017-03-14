@@ -193,7 +193,7 @@ WxSubsystem::CWXMainFrame::~CWXMainFrame()
 
 int WxSubsystem::CWXMainFrame::notifyWindowCreation()
 {
-	CCriticalSectionLocker	lock(&cs_windowCount);
+	std::lock_guard<std::mutex>	lock(&cs_windowCount);
     return ++m_windowCount;
 }
 
@@ -201,7 +201,7 @@ int WxSubsystem::CWXMainFrame::notifyWindowDestruction()
 {
 	int ret;
 	{
-		CCriticalSectionLocker	lock(&cs_windowCount);
+		std::lock_guard<std::mutex>	lock(&cs_windowCount);
 		ret = --m_windowCount;
 	}
 
@@ -234,7 +234,7 @@ WxSubsystem::TRequestToWxMainThread * WxSubsystem::popPendingWxRequest()
 		listPendingWxRequests = new std::queue<TRequestToWxMainThread*>;
 	}
 
-	synch::CCriticalSectionLocker	locker( cs_listPendingWxRequests );
+	synch::std::lock_guard<std::mutex>	locker( cs_listPendingWxRequests );
 
     // Is empty?
     if (listPendingWxRequests->empty())
@@ -265,7 +265,7 @@ void WxSubsystem::pushPendingWxRequest( WxSubsystem::TRequestToWxMainThread *dat
 		listPendingWxRequests = new std::queue<TRequestToWxMainThread*>;
 	}
 
-	CCriticalSectionLocker locker(cs_listPendingWxRequests);
+	std::lock_guard<std::mutex> locker(cs_listPendingWxRequests);
     listPendingWxRequests->push( data );
 }
 
@@ -806,7 +806,7 @@ int CDisplayWindow_WXAPP::OnExit()
 	cout << "[wxApp::OnExit] wxApplication OnExit called." << endl;
 #endif
 
-	CCriticalSectionLocker	lock(& WxSubsystem::GetWxMainThreadInstance().m_csWxMainThreadId );
+	std::lock_guard<std::mutex>	lock(& WxSubsystem::GetWxMainThreadInstance().m_csWxMainThreadId );
 
 	wxApp::OnExit();
 	CleanUp();
@@ -831,7 +831,7 @@ void WxSubsystem::waitWxShutdownsIfNoWindows()
 	// Any open windows?
 	int nOpenWnds;
 	{
-		CCriticalSectionLocker	locker(&CWXMainFrame::cs_windowCount);
+		std::lock_guard<std::mutex>	locker(&CWXMainFrame::cs_windowCount);
 		nOpenWnds = CWXMainFrame::m_windowCount;
 	}
 
@@ -1007,7 +1007,7 @@ WxSubsystem::TWxMainThreadData::TWxMainThreadData() :
 bool WxSubsystem::createOneInstanceMainThread()
 {
 	WxSubsystem::TWxMainThreadData & wxmtd = WxSubsystem::GetWxMainThreadInstance();
-	CCriticalSectionLocker	lock(&wxmtd.m_csWxMainThreadId);
+	std::lock_guard<std::mutex>	lock(&wxmtd.m_csWxMainThreadId);
 
 	wxAppConsole *app_con = wxApp::GetInstance();
 	if (app_con && wxmtd.m_wxMainThreadId.isClear())

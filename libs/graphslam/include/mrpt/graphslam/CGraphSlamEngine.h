@@ -720,7 +720,7 @@ class CGraphSlamEngine : public mrpt::utils::COutputLogger {
 		/** Mark graph modification/accessing explicitly for multithreaded
 		 * implementation
 		 */
-		mrpt::synch::CCriticalSection m_graph_section;
+		mrpt::synch::std::mutex m_graph_section;
 
 		// keep track of the storage directory for the 3DRangeScan depth/range
 		// images

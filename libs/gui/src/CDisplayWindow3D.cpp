@@ -220,7 +220,7 @@ void CMyGLCanvas_DisplayWindow3D::OnPostRenderSwapBuffers(double At, wxPaintDC &
 		if (m_win3D->isCapturingImgs())
 		{
 			{
-				mrpt::synch::CCriticalSectionLocker	lock(& m_win3D->m_last_captured_img_cs );
+				mrpt::synch::std::lock_guard<std::mutex>	lock(& m_win3D->m_last_captured_img_cs );
 				m_win3D->m_last_captured_img = frame;
 				frame.reset();
 			}
@@ -848,7 +848,7 @@ bool CDisplayWindow3D::getLastWindowImage( mrpt::utils::CImage &out_img ) const
 	bool ret;
 
 	{
-		mrpt::synch::CCriticalSectionLocker	lock(& m_last_captured_img_cs );
+		mrpt::synch::std::lock_guard<std::mutex>	lock(& m_last_captured_img_cs );
 		if (m_last_captured_img)
 		{
 			out_img = *m_last_captured_img;  // Copy the full image
@@ -864,7 +864,7 @@ bool CDisplayWindow3D::getLastWindowImage( mrpt::utils::CImage &out_img ) const
  ---------------------------------------------------------------*/
 CImage::Ptr CDisplayWindow3D::getLastWindowImagePtr() const
 {
-	mrpt::synch::CCriticalSectionLocker	lock(& m_last_captured_img_cs );
+	mrpt::synch::std::lock_guard<std::mutex>	lock(& m_last_captured_img_cs );
 	return m_last_captured_img;
 }
 

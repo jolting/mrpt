@@ -79,7 +79,7 @@ namespace mrpt
 			  */
 			~CLocalMetricHypothesis();
 
-			synch::CCriticalSection				m_lock;					//!< Critical section for threads signaling they are working with the LMH.
+			synch::std::mutex				m_lock;					//!< Critical section for threads signaling they are working with the LMH.
 			THypothesisID						m_ID;					//!< The unique ID of the hypothesis (Used for accessing mrpt::slam::CHierarchicalMHMap).
 			mrpt::utils::safe_ptr<CHMTSLAM>					m_parent;				//!< For quick access to our parent object.
 			TPoseID								m_currentRobotPose;		//!< The current robot pose (its global unique ID) for this hypothesis.
@@ -100,7 +100,7 @@ namespace mrpt
 			/** Used by AA thread */
 			struct TRobotPosesPartitioning
 			{
-				synch::CCriticalSection		lock;  //!< CS to access the entire struct.
+				synch::std::mutex		lock;  //!< CS to access the entire struct.
 				mrpt::slam::CIncrementalMapPartitioner			partitioner;
 				std::map<uint32_t,TPoseID> 		idx2pose;   //!< For the poses in "partitioner".
 

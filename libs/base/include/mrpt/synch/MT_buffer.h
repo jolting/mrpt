@@ -23,7 +23,7 @@ class MT_buffer
 {
 private:
 	vector_byte       m_data;
-	CCriticalSection  m_cs;
+	std::mutex  m_cs;
 
 public:
 	MT_buffer()  //!< Default constructor

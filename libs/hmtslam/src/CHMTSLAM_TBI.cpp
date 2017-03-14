@@ -112,7 +112,7 @@ CHMTSLAM::TMessageLSLAMfromTBI::Ptr CHMTSLAM::TBI_main_method(
 	const THypothesisID		LMH_ID = LMH->m_ID;
 
 	// Lock the map:
-	synch::CCriticalSectionLocker( &obj->m_map_cs );
+	synch::std::lock_guard<std::mutex>( &obj->m_map_cs );
 
 	TMessageLSLAMfromTBI::Ptr msg = TMessageLSLAMfromTBI::Ptr(new TMessageLSLAMfromTBI());
 

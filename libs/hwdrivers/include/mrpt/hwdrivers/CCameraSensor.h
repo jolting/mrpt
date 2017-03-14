@@ -402,7 +402,7 @@ namespace mrpt
 			std::vector<std::thread>  m_threadImagesSaver;
 
 			bool 	m_threadImagesSaverShouldEnd;
-			mrpt::synch::CCriticalSection	m_csToSaveList;		//!< The critical section for m_toSaveList
+			mrpt::synch::std::mutex	m_csToSaveList;		//!< The critical section for m_toSaveList
 			std::vector<TListObservations>	m_toSaveList;		//!< The queues of objects to be returned by getObservations, one for each working thread.
 			void thread_save_images(unsigned int my_working_thread_index); //!< Thread to save images to files.
 			

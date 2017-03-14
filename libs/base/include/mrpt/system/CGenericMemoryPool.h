@@ -39,7 +39,7 @@ namespace mrpt
 		private:
 			typedef std::list<std::pair<DATA_PARAMS,POOLABLE_DATA*> > TList;
 			TList                          m_pool;
-			mrpt::synch::CCriticalSection  m_pool_cs;
+			mrpt::synch::std::mutex  m_pool_cs;
 			size_t                         m_maxPoolEntries;
 			bool                           & m_was_destroyed;  //!< With this trick we get rid of the "global destruction order fiasco" ;-)
 
@@ -72,7 +72,7 @@ namespace mrpt
 				// A quick check first:
 				if (m_pool.empty()) return nullptr;
 
-				mrpt::synch::CCriticalSectionLocker lock( &m_pool_cs );
+				mrpt::synch::std::lock_guard<std::mutex> lock( &m_pool_cs );
 				for (typename TList::iterator it=m_pool.begin();it!=m_pool.end();++it) {
 					if (it->first.isSuitable(params))
 					{
@@ -90,7 +90,7 @@ namespace mrpt
 			  */
 			void dump_to_pool(const DATA_PARAMS &params, POOLABLE_DATA *block)
 			{
-				mrpt::synch::CCriticalSectionLocker lock( &m_pool_cs );
+				mrpt::synch::std::lock_guard<std::mutex> lock( &m_pool_cs );
 
 				while (m_pool.size()>=m_maxPoolEntries) // Free old data if needed
 				{
@@ -105,7 +105,7 @@ namespace mrpt
 			{
 				m_was_destroyed = true;
 				// Free remaining memory blocks:
-				mrpt::synch::CCriticalSectionLocker lock( &m_pool_cs );
+				mrpt::synch::std::lock_guard<std::mutex> lock( &m_pool_cs );
 				for (typename TList::iterator it=m_pool.begin();it!=m_pool.end();++it)
 					delete it->second;
 				m_pool.clear();

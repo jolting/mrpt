@@ -55,7 +55,7 @@ namespace mrpt
 		{
 		protected:
 			std::queue<T*> m_msgs; //!< The queue of messages. Memory is freed at destructor or by clients gathering messages.
-			mrpt::synch::CCriticalSection			m_csQueue; //!< The critical section
+			mrpt::synch::std::mutex			m_csQueue; //!< The critical section
 		public:
 			/** Default ctor. */
 			CThreadSafeQueue() { }
@@ -68,7 +68,7 @@ namespace mrpt
 			/** Clear the queue of messages, freeing memory as required. */
 			void clear()
 			{
-				mrpt::synch::CCriticalSectionLocker locker( &m_csQueue );
+				mrpt::synch::std::lock_guard<std::mutex> locker( &m_csQueue );
 				while (!m_msgs.empty())
 				{
 					delete m_msgs.front();
@@ -80,7 +80,7 @@ namespace mrpt
 			  */
 			inline void push( T *msg )
 			{
-				mrpt::synch::CCriticalSectionLocker locker( &m_csQueue );
+				mrpt::synch::std::lock_guard<std::mutex> locker( &m_csQueue );
 				m_msgs.push( msg );
 			}
 
@@ -89,7 +89,7 @@ namespace mrpt
 			  */
 			inline T *get( )
 			{
-				mrpt::synch::CCriticalSectionLocker locker( &m_csQueue );
+				mrpt::synch::std::lock_guard<std::mutex> locker( &m_csQueue );
 				if (m_msgs.empty())
 					return nullptr;
 				else
@@ -106,7 +106,7 @@ namespace mrpt
 			  */
 			inline T *get_lastest_purge_old( )
 			{
-				mrpt::synch::CCriticalSectionLocker locker( &m_csQueue );
+				mrpt::synch::std::lock_guard<std::mutex> locker( &m_csQueue );
 				if (m_msgs.empty())
 					return nullptr;
 				else
@@ -124,14 +124,14 @@ namespace mrpt
 			/** Return true if there are no messages. */
 			bool empty() const
 			{
-				mrpt::synch::CCriticalSectionLocker locker( &m_csQueue );
+				mrpt::synch::std::lock_guard<std::mutex> locker( &m_csQueue );
 				return m_msgs.empty();
 			}
 
 			/** Return the number of queued messages. */
 			size_t size() const
 			{
-				mrpt::synch::CCriticalSectionLocker locker( &m_csQueue );
+				mrpt::synch::std::lock_guard<std::mutex> locker( &m_csQueue );
 				return m_msgs.size();
 			}
 

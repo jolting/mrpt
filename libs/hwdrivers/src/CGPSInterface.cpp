@@ -198,7 +198,7 @@ void  CGPSInterface::setSerialPortName(const std::string &COM_port)
 
 	if (m_data_stream)
 	{
-		CCriticalSectionLocker lock(m_data_stream_cs);
+		std::lock_guard<std::mutex> lock(m_data_stream_cs);
 		CSerialPort *serial = dynamic_cast<CSerialPort*>(m_data_stream);
 		if (serial && serial->isOpen())
 			THROW_EXCEPTION("Cannot change serial port name when it is already open")
@@ -231,7 +231,7 @@ bool  CGPSInterface::tryToOpenTheCOM()
 	CSerialPort *serial = dynamic_cast<CSerialPort*>(m_data_stream);
 	if (serial)
 	{
-		CCriticalSectionLocker lock(m_data_stream_cs);
+		std::lock_guard<std::mutex> lock(m_data_stream_cs);
 		if (serial->isOpen())
 			return true;  // Already open
 
@@ -293,7 +293,7 @@ void  CGPSInterface::doProcess()
 		size_t nRead=0;
 		if (to_read>0)
 		{
-			CCriticalSectionLocker lock(m_data_stream_cs);
+			std::lock_guard<std::mutex> lock(m_data_stream_cs);
 			if (stream_tcpip) {
 				nRead = stream_tcpip->readAsync( buf, to_read, 100, 10 );
 			}
@@ -328,7 +328,7 @@ void  CGPSInterface::doProcess()
 		// ERROR:
 		MRPT_LOG_ERROR("[CGPSInterface::doProcess] Error reading stream of data: Closing communications\n");
 		if(stream_serial) {
-			CCriticalSectionLocker lock(m_data_stream_cs);
+			std::lock_guard<std::mutex> lock(m_data_stream_cs);
 			stream_serial->close();
 		}
 		m_GPS_comsWork			= false;
@@ -469,7 +469,7 @@ void CGPSInterface::JAVAD_sendMessage(const char *str, bool waitForAnswer )
 	size_t written;
 
 	{
-		CCriticalSectionLocker lock( m_data_stream_cs);
+		std::lock_guard<std::mutex> lock( m_data_stream_cs);
 		written = stream_serial->Write(str,len);
 	}
 
@@ -491,7 +491,7 @@ void CGPSInterface::JAVAD_sendMessage(const char *str, bool waitForAnswer )
 	{
 		size_t nRead;
 		{
-			CCriticalSectionLocker lock( m_data_stream_cs);
+			std::lock_guard<std::mutex> lock( m_data_stream_cs);
 			written = stream_serial->Write(str,len);
 			nRead = stream_serial->Read(buf,sizeof(buf));
 		}
@@ -528,7 +528,7 @@ bool CGPSInterface::OnConnectionShutdown()
 			sTx+=std::string("\r\n");
 		try 
 		{
-			CCriticalSectionLocker lock(m_data_stream_cs);
+			std::lock_guard<std::mutex> lock(m_data_stream_cs);
 			m_data_stream->WriteBuffer(&sTx[0],sTx.size());
 		} catch (...) {
 			return false; // On any I/O error
@@ -556,7 +556,7 @@ bool CGPSInterface::OnConnectionEstablished()
 	CSerialPort *stream_serial = dynamic_cast<CSerialPort*>(m_data_stream);
 	if (stream_serial)
 	{
-		CCriticalSectionLocker lock( m_data_stream_cs );
+		std::lock_guard<std::mutex> lock( m_data_stream_cs );
 		stream_serial->purgeBuffers();
 	}	
 
@@ -573,7 +573,7 @@ bool CGPSInterface::OnConnectionEstablished()
 			sTx+=std::string("\r\n");
 
 		try {
-			CCriticalSectionLocker lock( m_data_stream_cs );
+			std::lock_guard<std::mutex> lock( m_data_stream_cs );
 			m_data_stream->WriteBuffer(&sTx[0],sTx.size());
 		} catch (std::exception &e) {
 			std::cerr << "[CGPSInterface::OnConnectionEstablished] Error sending setup cmds: " << e.what() << std::endl;
@@ -600,7 +600,7 @@ bool CGPSInterface::unsetJAVAD_AIM_mode()
 		CSerialPort *stream_serial = dynamic_cast<CSerialPort*>(m_data_stream);
 		if (stream_serial)
 		{
-			CCriticalSectionLocker lock( m_data_stream_cs );
+			std::lock_guard<std::mutex> lock( m_data_stream_cs );
 			stream_serial->purgeBuffers();
 		}
 
@@ -674,7 +674,7 @@ bool CGPSInterface::legacy_topcon_setup_commands()
 	CSerialPort *stream_serial = dynamic_cast<CSerialPort*>(m_data_stream);
 	if (stream_serial)
 	{
-		CCriticalSectionLocker lock( m_data_stream_cs );
+		std::lock_guard<std::mutex> lock( m_data_stream_cs );
 		stream_serial->purgeBuffers();
 	}
 
@@ -737,7 +737,7 @@ bool CGPSInterface::sendCustomCommand(const void* data, const size_t datalen)
 {
 	try 
 	{
-		CCriticalSectionLocker lock( m_data_stream_cs );
+		std::lock_guard<std::mutex> lock( m_data_stream_cs );
 		m_data_stream->WriteBuffer(data,datalen);
 		return true;
 	} 
