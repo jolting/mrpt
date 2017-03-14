@@ -9,6 +9,7 @@
 #ifndef  mrpt_synch_threadsafevar_H
 #define  mrpt_synch_threadsafevar_H
 
+#include <mutex>
 
 namespace mrpt
 {
@@ -34,7 +35,7 @@ namespace synch
 	class CThreadSafeVariable
 	{
 	private:
-		std::mutex  m_cs;
+		mutable std::mutex  m_cs;
 		T	m_val;
 	public:
 		CThreadSafeVariable() : m_cs(), m_val()  {  }
@@ -47,7 +48,7 @@ namespace synch
 		{
 			T ret;
 			{
-				std::lock_guard<std::mutex> l(&m_cs);
+				std::lock_guard<std::mutex> l(m_cs);
 				ret = m_val;
 			}
 			return ret;
@@ -56,28 +57,28 @@ namespace synch
 		/** Return a copy of the hold variable */
 		void get(T &out_val) const
 		{
-			std::lock_guard<std::mutex> l(&m_cs);
+			std::lock_guard<std::mutex> l(m_cs);
 			out_val = m_val;
 		}
 
 		/** Return a copy of the hold variable */
 		operator T(void) const
 		{
-			std::lock_guard<std::mutex> l(&m_cs);
+			std::lock_guard<std::mutex> l(m_cs);
 			return m_val;
 		}
 
 		/** Return a copy of the hold variable */
 		void set(const T &new_val)
 		{
-			std::lock_guard<std::mutex> l(&m_cs);
+			std::lock_guard<std::mutex> l(m_cs);
 			m_val = new_val;
 		}
 
 		/** Swap the current value of the hold variable and the passed one, as one atomic operation. */
 		void swap(T &in_out_var)
 		{
-			std::lock_guard<std::mutex> l(&m_cs);
+			std::lock_guard<std::mutex> l(m_cs);
 			std::swap(in_out_var,m_val);
 		}
 	};

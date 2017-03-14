@@ -19,7 +19,7 @@ using namespace mrpt::random;
 using namespace std;
 
 
-CCriticalSection  csCounter;
+std::mutex  csCounter;
 int counter = 0;
 
 void thread_example(int id)
@@ -138,7 +138,7 @@ int main()
 {
 	try
 	{
-		cout << " =============== TEST 1: CCriticalSection ================\n";
+		cout << " =============== TEST 1: std::mutex ================\n";
 		ThreadsTest();
 
 		cout << "\n =============== TEST 2: CSemaphore ================\n";

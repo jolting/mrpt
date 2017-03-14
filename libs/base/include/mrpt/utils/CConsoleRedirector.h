@@ -98,7 +98,7 @@ namespace mrpt
 			{
 				sync();
 
-				m_cs.enter();
+				m_cs.lock();
 				if (c != EOF)
 				{
 					if (pbase() == epptr())
@@ -111,13 +111,13 @@ namespace mrpt
 						sputc(c);
 				}
 
-				m_cs.leave();
+				m_cs.unlock();
 				return 0;
 			}
 
 			int	sync() MRPT_OVERRIDE
 			{
-				m_cs.enter();
+				m_cs.lock();
 				if (pbase() != pptr())
 				{
 					int len = int(pptr() - pbase());
@@ -125,7 +125,7 @@ namespace mrpt
 					writeString(temp);
 					setp(pbase(), epptr());
 				}
-				m_cs.leave();
+				m_cs.unlock();
 				return 0;
 			}
 		};

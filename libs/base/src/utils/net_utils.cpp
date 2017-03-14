@@ -14,8 +14,10 @@
 #include <mrpt/utils/CServerTCPSocket.h>
 #include <mrpt/utils/CTicTac.h>
 #include <mrpt/system/string_utils.h>
-#include <mrpt/synch/CSemaphore.h>
 #include <mrpt/synch/CThreadSafeVariable.h>
+
+#include <condition_variable>
+#include <thread>
 #include <cstring>
 #include <stdio.h>
 
@@ -39,6 +41,7 @@
 
 using namespace mrpt;
 using namespace mrpt::system;
+using namespace mrpt::synch;
 using namespace mrpt::utils;
 using namespace mrpt::utils::net;
 using namespace std;
@@ -239,7 +242,7 @@ mrpt::utils::net::http_request(
 					out_errormsg = "Timeout waiting answer from server";
 					return net::erCouldntConnect;
 				}
-				mrpt::system::sleep(10);
+				std::this_thread::sleep_for(10s);
 				continue;
 			}
 			total_read+=len;
@@ -405,15 +408,18 @@ mrpt::utils::net::http_get(
 struct TDNSThreadData
 {
 	TDNSThreadData() :
-		sem_solved(0,1),
-		sem_caller_quitted(0,1),
+		solved(false),
+		quit(false),
 		in_servername(),
 		out_solved_ip()
 	{}
-	synch::CSemaphore   sem_solved;
-	synch::CSemaphore	sem_caller_quitted;   // This is needed in order to the thread to wait for deleting this struct!
+	bool solved;
+	bool quit;
+	std::condition_variable cv_solved;
+	std::condition_variable cv_quit;
+	std::mutex mutex;
 	std::string			in_servername;
-    CThreadSafeVariable<std::string>  out_solved_ip;  // Will be set to nullptr by the caller if the function returns.
+	CThreadSafeVariable<std::string>  out_solved_ip;  // Will be set to nullptr by the caller if the function returns.
 };
 
 void thread_DNS_solver_async(TDNSThreadData &dat); // Frd decl.
@@ -445,11 +451,16 @@ bool net::DNS_resolve_async(
 	TDNSThreadData param;
 	param.in_servername = server_name;
 
-	std::thread th ( thread_DNS_solver_async,param );
+	std::thread th ( &thread_DNS_solver_async, std::ref(param) );
 
-	bool res = (param.sem_solved.waitForSignal(timeout_ms));
+	bool res;
 	// Let the thread now about me quitting:
-	param.sem_caller_quitted.release();
+	{
+		std::unique_lock<std::mutex> lk(param.mutex);
+		res = param.cv_solved.wait_for(lk, std::chrono::milliseconds(timeout_ms),[&](){return param.solved;});
+		param.quit = true;
+		param.cv_quit.notify_one();
+	}
 	th.join();
 
 	if (res)
@@ -503,10 +514,14 @@ void thread_DNS_solver_async(TDNSThreadData &param)
 	param.out_solved_ip.set( dns_result );
 
 	// and signal we're done:
-	param.sem_solved.release();
+	{
+		std::unique_lock<std::mutex> lk(param.mutex);
+		param.solved = true;
+		param.cv_solved.notify_one();
 
-	// Finally, wait for the main thread to end so we can safely free the shared struct:
-	param.sem_caller_quitted.waitForSignal();
+		// Finally, wait for the main thread to end so we can safely free the shared struct:
+		param.cv_quit.wait(lk, [&](){return param.quit;});
+	}
 
 #ifdef MRPT_OS_WINDOWS
 	WSACleanup();
