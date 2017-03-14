@@ -17,6 +17,7 @@ using namespace mrpt;
 using namespace mrpt::poses;
 using namespace mrpt::utils;
 using namespace mrpt::system;
+using namespace mrpt::synch;
 using namespace std;
 
 
@@ -24,7 +25,7 @@ void thread_reader(CPipeReadEndPoint &read_pipe)
 {
 	try
 	{
-		printf("[thread_reader ID:%lu] Started.\n", getCurrentThreadId());
+		std::cout << "[thread_reader ID:" << std::this_thread::get_id() << "] Started." << std::endl;
 
 		// Simple read commands:
 		size_t len=0;
@@ -55,7 +56,7 @@ void thread_writer(CPipeWriteEndPoint &write_pipe)
 {
 	try
 	{
-		printf("[thread_writer ID:%lu] Started.\n", getCurrentThreadId());
+		std::cout << "[thread_writer ID:" << std::this_thread::get_id() << "] Started." << std::endl;
 
 		// Simple write commands:
 		const char *str = "Hello world!";
