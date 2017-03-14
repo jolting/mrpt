@@ -9,7 +9,6 @@
 
 #include <iostream>
 #include "ReactiveNav3D_demo.h"
-#include <mrpt/system/threads.h> // sleep()
 #include <mrpt/utils/CConfigFile.h>
 #include <mrpt/utils/CConfigFileMemory.h>
 

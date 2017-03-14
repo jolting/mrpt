@@ -13,7 +13,7 @@
 #include <mrpt/poses/CPose3D.h>
 #include <mrpt/utils/CImage.h>
 #include <mrpt/utils/CTicTac.h>
-#include <mrpt/system/threads.h> // sleep()
+#include <mrpt/system/threads.h> // std::this_thread::sleep_for(ms)
 
 using mrpt::utils::DEG2RAD;
 

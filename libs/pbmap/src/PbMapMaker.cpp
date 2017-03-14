@@ -1234,7 +1234,7 @@ bool PbMapMaker::stop_pbMapMaker()
     std::this_thread::sleep_for(1ms);
   cout << "Waiting for PbMapMaker thread to die.." << endl;
 
-  mrpt::system::joinThread(pbmaker_hd);
+  pbmaker_hd.join();
 	pbmaker_hd.clear();
 
 	return true;

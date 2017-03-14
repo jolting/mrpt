@@ -673,7 +673,7 @@ mrpt::system::TTimeStamp CVelodyneScanner::internal_receive_UDP_packet(
 	while (true)
 	{
 		// Unfortunately, the Linux kernel recvfrom() implementation
-		// uses a non-interruptible sleep() when waiting for data,
+		// uses a non-interruptible std::this_thread::sleep_for(ms) when waiting for data,
 		// which would cause this method to hang if the device is not
 		// providing data.  We poll() the device first to make sure
 		// the recvfrom() will not block.

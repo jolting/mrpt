@@ -84,7 +84,7 @@ void timerThread( )
     {
         printf("Inside loop counter: %d\n", timerCounter++);
 
-        sleep(1000);
+        std::this_thread::sleep_for(1000ms);
         timer++;
     }
     //printf("timerThread loop exited\n");

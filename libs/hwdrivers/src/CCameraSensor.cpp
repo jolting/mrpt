@@ -380,7 +380,7 @@ void CCameraSensor::close()
 	{
 		m_threadImagesSaverShouldEnd = true;
         for (size_t i=0;i<m_threadImagesSaver.size();i++)
-            mrpt::system::joinThread( m_threadImagesSaver[i] );
+             m_threadImagesSaver[i] .join();
 	}
 }
 

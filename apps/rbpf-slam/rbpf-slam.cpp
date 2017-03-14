@@ -520,7 +520,7 @@ void MapBuilding_RBPF()
                     win3D->forceRepaint();
                     int add_delay = SHOW_PROGRESS_IN_WINDOW_DELAY_MS - t_exec*1000;
                     if (add_delay>0)
-                        sleep(add_delay);
+                        std::this_thread::sleep_for(std::chrono::milliseconds(add_delay));
                 }
                 /*else
                 {

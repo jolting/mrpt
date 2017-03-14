@@ -425,7 +425,7 @@ bool PbMapLocaliser::stop_pbMapLocaliser()
     std::this_thread::sleep_for(1ms);
   cout << "Waiting for PbMapLocaliser thread to die.." << endl;
 
-  mrpt::system::joinThread(pbMapLocaliser_hd);
+  pbMapLocaliser_hd.join();
 	pbMapLocaliser_hd.clear();
 
 	return true;

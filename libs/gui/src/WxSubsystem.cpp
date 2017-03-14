@@ -24,7 +24,7 @@
 
 // ------------------------------------------------------------------------
 // Defined: Try to wait for all windows & the thread to exit cleanly.
-// Undefined: Just to a sleep() and quit crossing our fingers.
+// Undefined: Just to a std::this_thread::sleep_for(ms) and quit crossing our fingers.
 //
 //  Problem with the "clean way" is: As of feb/2011, I get this error
 //   at the end:
@@ -822,7 +822,7 @@ void WxSubsystem::waitWxShutdownsIfNoWindows()
 #ifndef WXSHUTDOWN_DO_IT_CLEAN
 
 	#ifdef WXSUBSYSTEM_VERBOSE
-		cout << "[WxSubsystem::waitWxShutdownsIfNoWindows] Doing a quick sleep() and returning.\n";
+		cout << "[WxSubsystem::waitWxShutdownsIfNoWindows] Doing a quick std::this_thread::sleep_for(ms) and returning.\n";
 	#endif
 	std::this_thread::sleep_for(100ms);
 	return;

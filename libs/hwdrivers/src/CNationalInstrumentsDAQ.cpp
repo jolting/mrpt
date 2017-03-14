@@ -490,7 +490,7 @@ void  CNationalInstrumentsDAQ::initialize()
 			{
 				ipt.must_close=true;
 				cerr << "[CNationalInstrumentsDAQ::initialize] Waiting for the grabbing thread to end due to exception...\n";
-				mrpt::system::joinThread(ipt.hThread);
+				ipt.hThread.join();
 				cerr << "[CNationalInstrumentsDAQ::initialize] Grabbing thread ended.\n";
 			}
 
@@ -522,7 +522,7 @@ void CNationalInstrumentsDAQ::stop()
 	for (list<TInfoPerTask>::iterator it=m_running_tasks.begin();it!=m_running_tasks.end();++it)
 	{
 		// For some reason, join doesn't work...
-		// if (!it->hThread.isClear()) mrpt::system::joinThread(it->hThread);
+		// if (!it->hThread.isClear()) it->hThread.join();
 		// Polling:
 		for (size_t tim=0;tim<250 && !it->is_closed;tim++) { std::this_thread::sleep_for(1ms); }
 		it->hThread.clear();

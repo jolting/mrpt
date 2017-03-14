@@ -109,7 +109,7 @@ void hmt_slam_guiFrame::thread_HMTSLAM()
 					// ---------------------------------------------------
 					if (!m_hmtslam->isInputQueueEmpty())
 					{
-						sleep(2);
+						std::this_thread::sleep_for(2ms);
 						continue;
 					}
 
