@@ -78,7 +78,7 @@ unsigned int CRenderizable::getNewTextureNumber()
 
 	TOpenGLNameBooker &booker = TOpenGLNameBooker::instance();
 
-	CCriticalSectionLocker lock ( &booker.cs );
+	std::lock_guard<std::mutex> lock ( &booker.cs );
 
 	unsigned int ret = booker.next_free_texture;
 	unsigned int tries = 0;
@@ -100,7 +100,7 @@ unsigned int CRenderizable::getNewTextureNumber()
 void CRenderizable::releaseTextureName(unsigned int i)
 {
 	TOpenGLNameBooker &booker = TOpenGLNameBooker::instance();
-	CCriticalSectionLocker lock ( &booker.cs );
+	std::lock_guard<std::mutex> lock ( &booker.cs );
 	booker.freeTextureNames[i] = false;
 	if (i<booker.next_free_texture) booker.next_free_texture = i;  // try to reuse texture numbers.
 	// "glDeleteTextures" seems not to be neeeded, since we do the reservation of texture names by our own.

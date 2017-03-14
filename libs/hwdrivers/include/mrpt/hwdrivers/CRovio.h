@@ -36,7 +36,7 @@ namespace mrpt
 			bool    m_videothread_finished;
 
 			mrpt::obs::CObservationImage::Ptr buffer_img;
-			mrpt::synch::CCriticalSection buffer_img_cs;
+			mrpt::synch::std::mutex buffer_img_cs;
 
 
 			/** This function takes a frame and waits until getLastImage ask for it, and so on.

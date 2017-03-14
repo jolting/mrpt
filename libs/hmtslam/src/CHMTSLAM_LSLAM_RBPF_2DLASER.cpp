@@ -194,7 +194,7 @@ void CLSLAM_RBPF_2DLASER::processOneLMH(
 		// Notice LC detectors:
 		// ------------------------------
 		{
-			synch::CCriticalSectionLocker	lock( &m_parent->m_topLCdets_cs );
+			synch::std::lock_guard<std::mutex>	lock( &m_parent->m_topLCdets_cs );
 
 			for (std::deque<CTopLCDetectorBase*>::iterator it=m_parent->m_topLCdets.begin();it!=m_parent->m_topLCdets.end();++it)
 				(*it)->OnNewPose( newlyAddedPose, sf.get() );

@@ -99,7 +99,7 @@ namespace mrpt
 			static void registerClass(const TSensorClassId* pNewClass);
 
 		private:
-			synch::CCriticalSection			m_csObjList;		//!< The critical section for m_objList
+			synch::std::mutex			m_csObjList;		//!< The critical section for m_objList
 			TListObservations				m_objList;		//!< The queue of objects to be returned by getObservations
 
 			/** Used in registerClass */

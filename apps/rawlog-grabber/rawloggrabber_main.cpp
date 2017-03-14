@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 		{
 			// See if we have observations and process them:
 			{
-				synch::CCriticalSectionLocker	lock (&cs_global_list_obs);
+				synch::std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
 				copy_of_global_list_obs.clear();
 
 				if (!global_list_obs.empty())
@@ -423,7 +423,7 @@ void SensorThread(TThreadParams params)
 			sensor->getObservations( lstObjs );
 
 			{
-				synch::CCriticalSectionLocker	lock (&cs_global_list_obs);
+				synch::std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
 				global_list_obs.insert( lstObjs.begin(), lstObjs.end() );
 			}
 

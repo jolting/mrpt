@@ -28,13 +28,13 @@ int main()
 
 		cout << "Part 1: Normal usage, we'll lock, then unlock the critical section" << endl << endl;
 		{
-			synch::CCriticalSectionLocker  locker(&csTest);
+			synch::std::lock_guard<std::mutex>  locker(&csTest);
 			cout << "I possess the crit. section..." << endl;
 		}
 
 		cout << endl << "Part 2: Bad usage, we'll lock, then lock again the critical section" << endl << endl;
 		{
-			synch::CCriticalSectionLocker  locker(&csTest);
+			synch::std::lock_guard<std::mutex>  locker(&csTest);
 			csTest.enter();
 
 			cout << "This message shouldn't appear, an exception raised before instead!!" << endl;

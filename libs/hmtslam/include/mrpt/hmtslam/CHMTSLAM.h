@@ -213,12 +213,12 @@ namespace mrpt
 			std::queue<mrpt::utils::CSerializable::Ptr>		m_inputQueue;
 
 			/** Critical section for accessing  m_inputQueue */
-			synch::CCriticalSection	m_inputQueue_cs;
+			synch::std::mutex	m_inputQueue_cs;
 
 			/** Critical section for accessing m_map */
-			synch::CCriticalSection	m_map_cs;
+			synch::std::mutex	m_map_cs;
 
-			synch::CCriticalSection	m_LMHs_cs; //!< Critical section for accessing m_LMHs
+			synch::std::mutex	m_LMHs_cs; //!< Critical section for accessing m_LMHs
 
 			/** @} */
 
@@ -286,7 +286,7 @@ namespace mrpt
 			std::deque<CTopLCDetectorBase*>	m_topLCdets;
 
 			/** The critical section for accessing m_topLCdets */
-			synch::CCriticalSection	m_topLCdets_cs;
+			synch::std::mutex	m_topLCdets_cs;
 		public:
 
 			/** Must be invoked before calling  initializeEmptyMap, so LC objects can be created. */

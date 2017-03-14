@@ -250,7 +250,7 @@ void CRovio::thread_video()	//This function takes a frame and waits until getLas
 
 				//Critical section
 				{
-					mrpt::synch::CCriticalSectionLocker cs( &this->buffer_img_cs );
+					mrpt::synch::std::lock_guard<std::mutex> cs( &this->buffer_img_cs );
 					this->buffer_img = obs;
 					//cout<<"[CRovio::threadVideo] Image grabbed\n";
 				}
@@ -334,7 +334,7 @@ bool CRovio::getNextImageSync(CObservationImage::Ptr& lastImage )		//This functi
 		return false;
 
 	{
-		mrpt::synch::CCriticalSectionLocker cs( &buffer_img_cs );
+		mrpt::synch::std::lock_guard<std::mutex> cs( &buffer_img_cs );
 		if(!buffer_img)
 			return false;
 

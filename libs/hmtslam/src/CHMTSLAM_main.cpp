@@ -145,7 +145,7 @@ CHMTSLAM::~CHMTSLAM()
 
 	// Delete TLC-detectors
 	{
-		synch::CCriticalSectionLocker	lock( &m_topLCdets_cs );
+		synch::std::lock_guard<std::mutex>	lock( &m_topLCdets_cs );
 
 		// Clear old list:
 		for (std::deque<CTopLCDetectorBase*>::iterator it=m_topLCdets.begin();it!=m_topLCdets.end();++it)
@@ -162,7 +162,7 @@ void  CHMTSLAM::clearInputQueue()
 {
 	// Wait for critical section
 	{
-		CCriticalSectionLocker  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
 
 		while (!m_inputQueue.empty())
 		{
@@ -186,7 +186,7 @@ void  CHMTSLAM::pushAction( const CActionCollection::Ptr &acts )
 	}
 
 	{	// Wait for critical section
-		CCriticalSectionLocker  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
 		m_inputQueue.push( acts );
 	}
 }
@@ -204,7 +204,7 @@ void  CHMTSLAM::pushObservations( const CSensoryFrame::Ptr &sf )
 	}
 
 	{	// Wait for critical section
-		CCriticalSectionLocker  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
 		m_inputQueue.push( sf );
 	}
 }
@@ -225,7 +225,7 @@ void  CHMTSLAM::pushObservation( const CObservation::Ptr &obs )
 	sf->insert(obs);  // memory will be freed when deleting the SF in other thread
 
 	{	// Wait for critical section
-		CCriticalSectionLocker  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
 		m_inputQueue.push( sf );
 	}
 }
@@ -366,7 +366,7 @@ bool  CHMTSLAM::isInputQueueEmpty()
 	bool	res;
 
 	{	// Wait for critical section
-		CCriticalSectionLocker  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
 		res = m_inputQueue.empty();
 	}
 	return res;
@@ -379,7 +379,7 @@ size_t CHMTSLAM::inputQueueSize()
 {
 	size_t  res;
 	{	// Wait for critical section
-		CCriticalSectionLocker  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
 		res = m_inputQueue.size();
 	}
 	return res;
@@ -393,7 +393,7 @@ CSerializable::Ptr CHMTSLAM::getNextObjectFromInputQueue()
 	CSerializable::Ptr obj;
 
 	{	// Wait for critical section
-		CCriticalSectionLocker  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
 		if (!m_inputQueue.empty())
 		{
 			obj = m_inputQueue.front();
@@ -419,7 +419,7 @@ void  CHMTSLAM::initializeEmptyMap()
 	// ------------------------------------
 	CHMHMapNode::TNodeID	firstAreaID;
 	{
-		synch::CCriticalSectionLocker	locker( &m_map_cs );
+		synch::std::lock_guard<std::mutex>	locker( &m_map_cs );
 
 		// Initialize hierarchical structures:
 		// -----------------------------------------------------
@@ -442,7 +442,7 @@ void  CHMTSLAM::initializeEmptyMap()
 	// CLEAR LIST OF HYPOTHESES
 	// ------------------------------------
 	{
-		synch::CCriticalSectionLocker	lock( &m_LMHs_cs );
+		synch::std::lock_guard<std::mutex>	lock( &m_LMHs_cs );
 
 		// Add to the list:
 		m_LMHs.clear();
@@ -479,7 +479,7 @@ void  CHMTSLAM::initializeEmptyMap()
 	//  Topological LC detectors:
 	// ------------------------------------
 	{
-		synch::CCriticalSectionLocker	lock( &m_topLCdets_cs );
+		synch::std::lock_guard<std::mutex>	lock( &m_topLCdets_cs );
 
 		// Clear old list:
 		for (std::deque<CTopLCDetectorBase*>::iterator it=m_topLCdets.begin();it!=m_topLCdets.end();++it)
@@ -630,10 +630,10 @@ void  CHMTSLAM::readFromStream(mrpt::utils::CStream &in,int version)
 			// -------------------------------------------
 			//std::map< THypothesisID, CLocalMetricHypothesis >::const_iterator it;
 
-			//CCriticalSectionLocker LMHs( & m_LMHs_cs );
+			//std::lock_guard<std::mutex> LMHs( & m_LMHs_cs );
 			//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.enter();
 
-			CCriticalSectionLocker lock_map( &m_map_cs );
+			std::lock_guard<std::mutex> lock_map( &m_map_cs );
 
 			// Data:
 			in  >> m_nextAreaLabel
@@ -672,10 +672,10 @@ void  CHMTSLAM::writeToStream(mrpt::utils::CStream &out, int *version) const
 		// -------------------------------------------
 		//std::map< THypothesisID, CLocalMetricHypothesis >::const_iterator it;
 
-		//CCriticalSectionLocker LMHs( & m_LMHs_cs );
+		//std::lock_guard<std::mutex> LMHs( & m_LMHs_cs );
 		//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.enter();
 
-		CCriticalSectionLocker lock_map( &m_map_cs );
+		std::lock_guard<std::mutex> lock_map( &m_map_cs );
 
 		// Data:
 		out << m_nextAreaLabel

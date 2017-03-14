@@ -138,7 +138,7 @@ void SensorThread(TThreadParams params)
 			CGenericSensor::TListObservations	lstObjs;
 			sensor->getObservations( lstObjs );
 			{
-				synch::CCriticalSectionLocker	lock (&cs_global_list_obs);
+				synch::std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
 				global_list_obs.insert( lstObjs.begin(), lstObjs.end() );
 			}
 			lstObjs.clear();
@@ -308,7 +308,7 @@ void MapBuilding_ICP_Live(const string &INI_FILENAME)
 		{
 			mrpt::hwdrivers::CGenericSensor::TListObservations obs_copy;
 			{
-				mrpt::synch::CCriticalSectionLocker csl(&cs_global_list_obs);
+				mrpt::synch::std::lock_guard<std::mutex> csl(&cs_global_list_obs);
 				obs_copy = global_list_obs;
 				global_list_obs.clear();
 			}

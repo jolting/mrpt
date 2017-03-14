@@ -114,7 +114,7 @@ using namespace std;
 		time_t mrpt::system::os::timegm(struct tm *tm)
 		{
 			static mrpt::synch::CCriticalSection cs;
-			mrpt::synch::CCriticalSectionLocker locker(&cs);
+			mrpt::synch::std::lock_guard<std::mutex> locker(&cs);
 
 			time_t ret;
 			char tz[256];

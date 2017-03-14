@@ -137,10 +137,10 @@ namespace mrpt
 		{
 		protected:
 			wxBitmap *m_img;
-			mrpt::synch::CCriticalSection	m_img_cs;
+			mrpt::synch::std::mutex	m_img_cs;
 
 			wxPoint m_last_mouse_point, m_last_mouse_click;
-			mrpt::synch::CCriticalSection	m_mouse_cs;
+			mrpt::synch::std::mutex	m_mouse_cs;
 
 		public:
 			wxMRPTImageControl(	wxWindow *parent,wxWindowID winID,int x, int y, int width, int height);
