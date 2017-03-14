@@ -518,7 +518,7 @@ void PbMapMaker::detectPlanesCloud( pcl::PointCloud<PointT>::Ptr &pointCloudPtr_
   pcl::PointCloud<pcl::PointXYZRGBA>::Ptr alignedCloudPtr(new pcl::PointCloud<pcl::PointXYZRGBA>);
   pcl::transformPointCloud(*pointCloudPtr_arg,*alignedCloudPtr,poseKF);
 
-  { mrpt::synch::std::lock_guard<std::mutex> csl(&CS_visualize);
+  { std::lock_guard<std::mutex> csl(&CS_visualize);
     *mPbMap.globalMapPtr += *alignedCloudPtr;
     // Downsample voxel map's point cloud
     static pcl::VoxelGrid<pcl::PointXYZRGBA> grid;
@@ -639,7 +639,7 @@ void PbMapMaker::detectPlanesCloud( pcl::PointCloud<PointT>::Ptr &pointCloudPtr_
   size_t numPrevPlanes = mPbMap.vPlanes.size();
 //  set<unsigned> observedPlanes;
   observedPlanes.clear();
- { mrpt::synch::std::lock_guard<std::mutex> csl(&CS_visualize);
+ { std::lock_guard<std::mutex> csl(&CS_visualize);
   for (size_t i = 0; i < detectedPlanes.size (); i++)
   {
     // Check similarity with previous planes detected
@@ -987,7 +987,7 @@ void PbMapMaker::viz_cb (pcl::visualization::PCLVisualizer& viz)
     return;
   }
 
-  { mrpt::synch::std::lock_guard<std::mutex> csl(&CS_visualize);
+  { std::lock_guard<std::mutex> csl(&CS_visualize);
 
     // Render the data
     {

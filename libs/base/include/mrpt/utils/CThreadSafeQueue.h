@@ -10,6 +10,8 @@
 #define  CThreadSafeQueue_H
 
 #include <mrpt/utils/CMessage.h>
+
+#include <mutex>
 #include <queue>
 
 namespace mrpt
@@ -68,7 +70,7 @@ namespace mrpt
 			/** Clear the queue of messages, freeing memory as required. */
 			void clear()
 			{
-				mrpt::synch::std::lock_guard<std::mutex> lock(m_csQueue );
+				std::lock_guard<std::mutex> lock(m_csQueue );
 				while (!m_msgs.empty())
 				{
 					delete m_msgs.front();
@@ -80,7 +82,7 @@ namespace mrpt
 			  */
 			inline void push( T *msg )
 			{
-				mrpt::synch::std::lock_guard<std::mutex> lock(m_csQueue );
+				std::lock_guard<std::mutex> lock(m_csQueue );
 				m_msgs.push( msg );
 			}
 
@@ -89,7 +91,7 @@ namespace mrpt
 			  */
 			inline T *get( )
 			{
-				mrpt::synch::std::lock_guard<std::mutex> lock(m_csQueue );
+				std::lock_guard<std::mutex> lock(m_csQueue );
 				if (m_msgs.empty())
 					return nullptr;
 				else
@@ -106,7 +108,7 @@ namespace mrpt
 			  */
 			inline T *get_lastest_purge_old( )
 			{
-				mrpt::synch::std::lock_guard<std::mutex> lock(m_csQueue );
+				std::lock_guard<std::mutex> lock(m_csQueue );
 				if (m_msgs.empty())
 					return nullptr;
 				else
@@ -124,14 +126,14 @@ namespace mrpt
 			/** Return true if there are no messages. */
 			bool empty() const
 			{
-				mrpt::synch::std::lock_guard<std::mutex> lock(m_csQueue );
+				std::lock_guard<std::mutex> lock(m_csQueue );
 				return m_msgs.empty();
 			}
 
 			/** Return the number of queued messages. */
 			size_t size() const
 			{
-				mrpt::synch::std::lock_guard<std::mutex> lock(m_csQueue );
+				std::lock_guard<std::mutex> lock(m_csQueue );
 				return m_msgs.size();
 			}
 
