@@ -13,7 +13,6 @@
 #include <mrpt/utils/utils_defs.h>
 #include <mrpt/synch/CSemaphore.h>
 #include <mrpt/synch/MT_buffer.h>
-#include <mrpt/system/threads.h>
 
 #include <mrpt/hwdrivers/link_pragmas.h>
 
@@ -99,7 +98,7 @@ namespace mrpt
 		protected:
 			void private_ntrip_thread(); //!< The working thread
 
-			mrpt::system::TThreadHandle  m_thread;
+			std::thread  m_thread;
 			mrpt::synch::CSemaphore  m_sem_sock_closed;
 			mrpt::synch::CSemaphore  m_sem_first_connect_done;
 

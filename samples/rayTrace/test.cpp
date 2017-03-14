@@ -17,7 +17,6 @@
 
 #include <mrpt/gui.h>
 #include <mrpt/random.h>
-#include <mrpt/system/threads.h> // sleep()
 #include <mrpt/poses/CPose3D.h>
 #include <mrpt/utils/CTicTac.h>
 #include <mrpt/opengl/CAngularObservationMesh.h>

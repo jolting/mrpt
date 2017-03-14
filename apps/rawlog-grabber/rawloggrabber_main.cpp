@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 		vector_string	sections;
 		iniFile.getAllSections( sections );
 
-		vector<TThreadHandle>		lstThreads;
+		vector<std::thread>		lstThreads;
 
 		for (vector_string::iterator it=sections.begin();it!=sections.end();++it)
 		{
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 			threParms.cfgFile		= &iniFile;
 			threParms.sensor_label	= *it;
 
-			TThreadHandle	thre = createThread(SensorThread, threParms);
+			std::thread	thre = createThread(SensorThread, threParms);
 
 			lstThreads.push_back(thre);
 			sleep(time_between_launches);
@@ -361,8 +361,8 @@ int main(int argc, char **argv)
 		allThreadsMustExit = true;
 		mrpt::system::sleep(300);
 		cout << endl << "Waiting for all threads to close..." << endl;
-		for (vector<TThreadHandle>::iterator th=lstThreads.begin();th!=lstThreads.end();++th)
-			joinThread( *th );
+		for (vector<std::thread>::iterator th=lstThreads.begin();th!=lstThreads.end();++th)
+			th->join();
 
 		return 0;
 	} catch (std::exception &e)

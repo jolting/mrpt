@@ -17,7 +17,6 @@
 #include <mrpt/gui.h>
 #include <mrpt/opengl.h>
 #include <mrpt/maps/CColouredPointsMap.h>
-#include <mrpt/system/threads.h>
 
 using namespace mrpt;
 using namespace mrpt::maps;

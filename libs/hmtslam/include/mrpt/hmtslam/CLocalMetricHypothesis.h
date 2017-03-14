@@ -9,7 +9,6 @@
 #ifndef CLocalMetricHypothesis_H
 #define CLocalMetricHypothesis_H
 
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/bayes/CParticleFilterCapable.h>
 
 #include <mrpt/hmtslam/HMT_SLAM_common.h>

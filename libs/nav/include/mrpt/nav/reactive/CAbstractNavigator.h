@@ -14,7 +14,6 @@
 #include <mrpt/utils/TEnumType.h>
 #include <mrpt/utils/CLoadableOptions.h>
 #include <mrpt/poses/CPose3DInterpolator.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/obs/obs_frwds.h>
 
 #include <mrpt/nav/link_pragmas.h>

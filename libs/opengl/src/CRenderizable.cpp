@@ -11,7 +11,6 @@
 
 #include <mrpt/opengl/CRenderizable.h>		// Include these before windows.h!!
 #include <mrpt/opengl/gl_utils.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/utils/CStringList.h>
 #include <mrpt/math/utils.h>
 #include <mrpt/poses/CPoint3D.h>
@@ -25,7 +24,6 @@ using namespace std;
 using namespace mrpt;
 using namespace mrpt::opengl;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 
 IMPLEMENTS_VIRTUAL_SERIALIZABLE( CRenderizable, CSerializable, mrpt::opengl )
 

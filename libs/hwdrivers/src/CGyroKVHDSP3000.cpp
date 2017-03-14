@@ -9,12 +9,8 @@
 
 #include "hwdrivers-precomp.h"   // Precompiled headers
 
-#include <mrpt/system/threads.h>
 #include <mrpt/hwdrivers/CGyroKVHDSP3000.h>
 #include <mrpt/obs/CObservationIMU.h>
-
-
-
 
 IMPLEMENTS_GENERIC_SENSOR(CGyroKVHDSP3000,mrpt::hwdrivers)
 

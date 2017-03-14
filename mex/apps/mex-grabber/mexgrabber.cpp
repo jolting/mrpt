@@ -62,7 +62,7 @@ synch::CCriticalSection					cs_global_list_obs;
 bool									allThreadsMustExit = false;
 
 // Thread handlers vector stored as global (persistent MEX variables)
-vector<TThreadHandle> lstThreads;
+vector<std::thread> lstThreads;
 
 // State variables
 bool mex_is_running = false;
@@ -131,7 +131,7 @@ MEX_DEFINE(new) (int nlhs, mxArray* plhs[],
         threParms.cfgFile		= &iniFile;
         threParms.sensor_label	= *it;
 
-        TThreadHandle	thre = createThread(SensorThread, threParms);
+        std::thread	thre = createThread(SensorThread, threParms);
 
         lstThreads.push_back(thre);
         sleep(time_between_launches);
@@ -205,8 +205,8 @@ MEX_DEFINE(delete) (int nlhs, mxArray* plhs[],
     allThreadsMustExit = true;
     mrpt::system::sleep(300);
     printf("\nWaiting for all threads to close...\n");
-    for (vector<TThreadHandle>::iterator th=lstThreads.begin();th!=lstThreads.end();++th)
-        joinThread( *th );
+    for (vector<std::thread>::iterator th=lstThreads.begin();th!=lstThreads.end();++th)
+        th->join();
 
     cout << endl << "[mex-grabber::delete] mex-grabber application finished" << endl;
 	mrpt::system::sleep(1000); // Time for the wxSubsystem to close all remaining windows and avoid crash... (any better way?)

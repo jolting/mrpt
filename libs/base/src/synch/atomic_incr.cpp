@@ -11,7 +11,6 @@
 
 #include <mrpt/synch/atomic_incr.h>
 
-using namespace mrpt::synch;
 
 #ifdef MRPT_OS_WINDOWS
 	#include <windows.h>

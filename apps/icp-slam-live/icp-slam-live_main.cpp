@@ -177,13 +177,13 @@ void MapBuilding_ICP_Live(const string &INI_FILENAME)
 	mrpt::utils::CConfigFile iniFile(INI_FILENAME);
 
 	// Load sensor params from section: "LIDAR_SENSOR"
-	mrpt::system::TThreadHandle hSensorThread;
+	std::thread hSensorThread;
 	{
 		TThreadParams	threParms;
 		threParms.cfgFile		= &iniFile;
 		threParms.section_name	= "LIDAR_SENSOR";
 		std::cout << "\n\n==== Launching LIDAR grabbing thread ==== \n";
-		hSensorThread = mrpt::system::createThread(SensorThread, threParms);
+		hSensorThread = std::thread(SensorThread, threParms);
 	}
 	// Wait and check if the sensor is ready:
 	mrpt::system::sleep(2000);

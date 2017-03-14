@@ -10,7 +10,6 @@
 #include <mrpt/gui/CDisplayWindow3D.h>
 #include <mrpt/utils/CTicTac.h>
 #include <mrpt/math/geometry.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/system/os.h>
 #include <mrpt/opengl/CText.h>
 #include <mrpt/opengl/CGridPlaneXY.h>

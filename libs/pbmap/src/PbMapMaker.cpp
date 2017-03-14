@@ -18,7 +18,6 @@
 
 
 #include <mrpt/utils/types_math.h> // Eigen
-#include <mrpt/system/threads.h>
 
 //#include <pcl/io/io.h>
 //#include <pcl/io/pcd_io.h>
@@ -31,7 +30,6 @@
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/common/transforms.h>
 #include <pcl/common/time.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/utils/CConfigFile.h>
 #include <mrpt/pbmap/PbMapMaker.h>
 

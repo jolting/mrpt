@@ -10,7 +10,6 @@
 #include <mrpt/hwdrivers/CJoystick.h>
 #include <mrpt/utils/CTicTac.h>
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h>
 #include <cstdio>
 #include <iostream>
 

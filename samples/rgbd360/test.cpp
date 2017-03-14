@@ -59,7 +59,7 @@ int main ( int argc, char** argv )
     cout << "OK " << rgbd360.numDevices << " available devices."  << endl;
 
     const unsigned num_sensors = NUM_SENSORS;
-    vector<mrpt::system::TThreadHandle> v_stitch_hd(num_sensors);
+    vector<std::thread> v_stitch_hd(num_sensors);
     vector<bool> v_stitch_im(num_sensors);
 
 //    cout << "Create windows\n";

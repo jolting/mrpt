@@ -29,7 +29,6 @@
 #include <mrpt/utils/CConfigFile.h>
 #include <mrpt/utils/stl_serialization.h>
 #include <mrpt/system/filesystem.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/utils/CMemoryStream.h>
 
 #include <mrpt/system/os.h>
@@ -37,7 +36,6 @@
 using namespace mrpt::slam;
 using namespace mrpt::hmtslam;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 using namespace mrpt::obs;
 using namespace mrpt::maps;
 using namespace mrpt::opengl;

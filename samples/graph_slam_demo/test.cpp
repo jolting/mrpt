@@ -9,7 +9,6 @@
 
 #include <mrpt/random.h>
 #include <mrpt/graphslam/levmarq.h>
-#include <mrpt/system/threads.h> // sleep()
 #include <mrpt/gui.h>
 #include <mrpt/opengl/CSetOfObjects.h>
 #include <mrpt/opengl/COpenGLScene.h>

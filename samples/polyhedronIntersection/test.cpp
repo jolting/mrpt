@@ -8,7 +8,6 @@
    +---------------------------------------------------------------------------+ */
 
 #include <mrpt/gui/CDisplayWindow3D.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/opengl/CPolyhedron.h>
 #include <mrpt/opengl/CGridPlaneXY.h>
 #include <mrpt/opengl/CAxis.h>
@@ -58,7 +57,7 @@ void piThreadFunction(PIThreadParam &p)	{
 	TObject3D::getSegments(ints,p.intersection);
 }
 
-inline TThreadHandle piCreateThread(PIThreadParam &p)	{
+inline std::thread piCreateThread(PIThreadParam &p)	{
 	return createThread<PIThreadParam &>(&piThreadFunction,p);
 }
 
@@ -76,7 +75,7 @@ CSetOfLines::Ptr getIntersections(const vector<pair<CPolyhedron::Ptr,CPolyhedron
 	vector<TSegment3D> sgms;
 	#ifdef USE_THREADS
 		vector<PIThreadParam> pars(v.size());
-		vector<TThreadHandle> threads(v.size());
+		vector<std::thread> threads(v.size());
 		transform(v.begin(),v.end(),pars.begin(),&PIThreadParam::createObject);
 		transform(pars.begin(),pars.end(),threads.begin(),&piCreateThread);
 		for_each(threads.begin(),threads.end(),&joinThread);

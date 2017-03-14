@@ -25,7 +25,6 @@
 using namespace mrpt::slam;
 using namespace mrpt::hmtslam;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 using namespace mrpt::obs;
 using namespace mrpt::maps;
 using namespace mrpt::opengl;
@@ -56,7 +55,7 @@ void CHMTSLAM::thread_LSLAM()
 	{
 		// Start thread:
 		// -------------------------
-		obj->logFmt(mrpt::utils::LVL_DEBUG,"[thread_LSLAM] Thread started (ID=0x%08lX)\n", mrpt::system::getCurrentThreadId() );
+		obj->logFmt(mrpt::utils::LVL_DEBUG,"[thread_LSLAM] Thread started (ID=0x%08lX)\n", std::this_thread::get_id() );
 
 		// --------------------------------------------
 		//    The main loop

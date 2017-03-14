@@ -12,7 +12,6 @@
 #include <mrpt/hwdrivers/CSerialPort.h>
 #include <mrpt/system/os.h>
 #include <mrpt/utils/utils_defs.h>
-#include <mrpt/system/threads.h>
 
 #if defined(MRPT_OS_LINUX) || defined(MRPT_OS_APPLE)
 // Linux implementation: refer to

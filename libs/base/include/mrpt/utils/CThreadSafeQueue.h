@@ -10,7 +10,6 @@
 #define  CThreadSafeQueue_H
 
 #include <mrpt/utils/CMessage.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <queue>
 
 namespace mrpt

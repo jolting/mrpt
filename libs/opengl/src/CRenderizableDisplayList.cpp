@@ -11,7 +11,6 @@
 
 #include <mrpt/opengl/CRenderizableDisplayList.h>
 #include <mrpt/utils/CStream.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <cstdlib> // atexit()
 
 #include "opengl_internals.h"

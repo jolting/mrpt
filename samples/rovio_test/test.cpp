@@ -1007,7 +1007,7 @@ int main()
 	bool output=false;
 	data.showvideo=false;
 	string response, errormsg;
-	mrpt::system::TThreadHandle screen_hd, featuring_hd, matching_hd, fm_hd;
+	std::thread screen_hd, featuring_hd, matching_hd, fm_hd;
 	int *a_enc;
 	int act=0; //Action
 	int dir=0; //Direction

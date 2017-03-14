@@ -15,7 +15,6 @@
 #include <mrpt/hwdrivers/CGenericSensor.h>
 #include <mrpt/synch/CPipe.h>
 #include <mrpt/synch/atomic_incr.h>
-#include <mrpt/system/threads.h>
 #include <list>
 #include <memory>
 
@@ -335,7 +334,7 @@ namespace mrpt
 				TInfoPerTask(const TInfoPerTask &o); //!< Copy ctor (needed for the auto_ptr semantics)
 
 				void * taskHandle;
-				mrpt::system::TThreadHandle hThread;
+				std::thread hThread;
 #if MRPT_HAS_CXX11
 				std::unique_ptr<mrpt::synch::CPipeReadEndPoint> read_pipe;
 				std::unique_ptr<mrpt::synch::CPipeWriteEndPoint> write_pipe;

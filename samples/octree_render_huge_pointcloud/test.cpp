@@ -9,7 +9,6 @@
 
 #include <mrpt/gui/CDisplayWindow3D.h>
 #include <mrpt/opengl/CPointCloud.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/random.h>
 #include <mrpt/math/geometry.h>
 

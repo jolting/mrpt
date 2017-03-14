@@ -78,7 +78,7 @@ namespace mrpt
 			double                  m_beamApperture;
 			bool					m_run;
 			void					dataCollection();
-			mrpt::system::TThreadHandle	dataCollectionThread;
+			std::thread	dataCollectionThread;
 			double					convertLayerToRad(int scanlayer);
 			double					convertTicksToHRad(int hticks, int hticksPerRotation);
 			mrpt::poses::CPoint3D	convertToCartesian(float vrad, float hrad, float distance);

@@ -12,7 +12,6 @@
 #include <mrpt/gui/CBaseGUIWindow.h>
 #include <mrpt/opengl/COpenGLScene.h>
 #include <mrpt/opengl/opengl_fonts.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/utils/CImage.h>
 
 namespace mrpt

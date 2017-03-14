@@ -11,7 +11,6 @@
 #include <mrpt/opengl/CGridPlaneXY.h>
 #include <mrpt/opengl/COctoMapVoxels.h>
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h>  // for sleep()
 #include <mrpt/gui/CDisplayWindow3D.h>
 
 using namespace mrpt;

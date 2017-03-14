@@ -170,7 +170,7 @@ int VelodyneView(int argc, char **argv)
 	// Launch grabbing thread:
 	// --------------------------------------------------------
 	TThreadParam thrPar;
-	mrpt::system::TThreadHandle thHandle= mrpt::system::createThreadRef(thread_grabbing ,thrPar);
+	std::thread thHandle(thread_grabbing ,thrPar);
 
 	// Wait until data stream starts so we can say for sure the sensor has been initialized OK:
 	cout << "Waiting for sensor initialization...\n";

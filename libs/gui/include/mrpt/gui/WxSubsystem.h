@@ -11,10 +11,8 @@
 
 #include <mrpt/opengl/opengl_fonts.h>
 #include <mrpt/utils/utils_defs.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/config.h>
 #include <mrpt/synch/CSemaphore.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/math/lightweight_geom_data.h>
 #include <mrpt/utils/types_math.h>
 #include <mrpt/gui/gui_frwds.h>
@@ -164,7 +162,7 @@ namespace mrpt
 			struct TWxMainThreadData
 			{
 				TWxMainThreadData();
-				mrpt::system::TThreadHandle  m_wxMainThreadId; //!< The thread ID of wxMainThread, or 0 if it is not running.
+				std::thread  m_wxMainThreadId; //!< The thread ID of wxMainThread, or 0 if it is not running.
 				mrpt::synch::CSemaphore m_semWxMainThreadReady; //!< This is signaled when wxMainThread is ready.
 				mrpt::synch::CCriticalSection m_csWxMainThreadId; //!< The critical section for accessing "m_wxMainThreadId"
 			};

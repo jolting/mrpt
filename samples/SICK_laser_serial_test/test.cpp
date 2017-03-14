@@ -11,7 +11,6 @@
 #include <mrpt/gui/CDisplayWindowPlots.h>
 #include <mrpt/maps/CSimplePointsMap.h>
 #include <mrpt/obs/CObservation2DRangeScan.h>
-#include <mrpt/system/threads.h> // sleep()
 #include <mrpt/system/os.h>
 
 using namespace mrpt;

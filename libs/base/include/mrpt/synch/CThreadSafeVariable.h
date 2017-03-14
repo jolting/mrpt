@@ -9,7 +9,6 @@
 #ifndef  mrpt_synch_threadsafevar_H
 #define  mrpt_synch_threadsafevar_H
 
-#include <mrpt/synch/CCriticalSection.h>
 
 namespace mrpt
 {

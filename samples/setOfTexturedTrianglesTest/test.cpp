@@ -13,7 +13,6 @@
 #include <mrpt/opengl/CSetOfTexturedTriangles.h>
 #include <mrpt/opengl/CSphere.h>
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/gui/CDisplayWindow3D.h>
 
 using namespace std;

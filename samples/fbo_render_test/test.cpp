@@ -13,7 +13,6 @@
 #include <mrpt/opengl/CSphere.h>
 #include <mrpt/opengl/CFBORender.h>
 #include <mrpt/gui/CDisplayWindow.h>
-#include <mrpt/system/threads.h>
 
 using namespace mrpt;
 using namespace mrpt::gui;

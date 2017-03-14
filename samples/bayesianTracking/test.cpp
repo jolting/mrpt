@@ -17,7 +17,6 @@
 #include <mrpt/gui/CDisplayWindowPlots.h>
 #include <mrpt/random.h>
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/math/wrap2pi.h>
 #include <mrpt/math/distributions.h>
 #include <mrpt/obs/CSensoryFrame.h>

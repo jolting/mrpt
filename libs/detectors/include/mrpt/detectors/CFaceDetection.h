@@ -13,7 +13,6 @@
 #include <mrpt/detectors/CObjectDetection.h>
 #include <mrpt/detectors/CCascadeClassifierDetection.h>
 #include <mrpt/utils/CTimeLogger.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/synch/CSemaphore.h>
 #include <mrpt/obs/CObservation3DRangeScan.h>
 #include <mrpt/obs/obs_frwds.h>
@@ -73,9 +72,9 @@ namespace mrpt
 			
 		private:
 
-			mrpt::system::TThreadHandle		m_thread_checkIfFaceRegions;	//!< Thread that execute checkIfFaceRegions filter
-			mrpt::system::TThreadHandle		m_thread_checkIfFacePlaneCov;	//!< Thread that execute checkIfFacePlaneCov filter
-			mrpt::system::TThreadHandle		m_thread_checkIfDiagonalSurface;	//!< Thread that execute checkIfDiagonalSurface filter
+			std::thread		m_thread_checkIfFaceRegions;	//!< Thread that execute checkIfFaceRegions filter
+			std::thread		m_thread_checkIfFacePlaneCov;	//!< Thread that execute checkIfFacePlaneCov filter
+			std::thread		m_thread_checkIfDiagonalSurface;	//!< Thread that execute checkIfDiagonalSurface filter
 
 			bool	m_checkIfFaceRegions_res;	//!< Save result of checkIfFaceRegions filter
 			bool	m_checkIfFacePlaneCov_res;	//!< Save result of checkIfFacePlaneCov filter

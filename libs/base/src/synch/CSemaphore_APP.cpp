@@ -15,7 +15,6 @@
 
 #include <mrpt/synch/CSemaphore.h>
 #include <mrpt/utils/CStdOutStream.h>
-#include <mrpt/system/threads.h>
 
 #include <mach/mach_init.h>
 #include <mach/task.h>
@@ -30,7 +29,6 @@
 
 using namespace mrpt;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 
 typedef struct
 {

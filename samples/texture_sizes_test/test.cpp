@@ -9,7 +9,6 @@
 
 #include <mrpt/utils/CImage.h>
 #include <mrpt/gui/CDisplayWindow3D.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/opengl/CTexturedPlane.h>
 #include <mrpt/opengl/CText.h>
 

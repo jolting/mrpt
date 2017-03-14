@@ -35,7 +35,7 @@ int timer   = 0;
 bool allThreadsMustExit = false;
 
 // Thread handler stored as global
-TThreadHandle thre;
+std::thread thre;
 
 void timerThread( );
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])

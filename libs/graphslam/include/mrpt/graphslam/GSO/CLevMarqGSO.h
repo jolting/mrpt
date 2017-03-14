@@ -20,7 +20,6 @@
 #include <mrpt/utils/CTicTac.h>
 #include <mrpt/utils/types_simple.h>
 #include <mrpt/utils/TColor.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/opengl/graph_tools.h>
 #include <mrpt/opengl/CDisk.h>
 #include <mrpt/opengl/CRenderizable.h>
@@ -304,7 +303,7 @@ class CLevMarqGSO:
 		size_t m_last_total_num_of_nodes;
 
 		// Use second thread for graph optimization
-		mrpt::system::TThreadHandle m_thread_optimize;
+		std::thread m_thread_optimize;
 		mrpt::utils::CTimeLogger m_time_logger; /**<Time logger instance */
 };
 
