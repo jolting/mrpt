@@ -721,7 +721,7 @@ void _DSceneViewerFrame::loadFromFile( const std::string &fil, bool isInASequenc
 
         static utils::CTicTac		tictac;
         {
-            synch::std::lock_guard<std::mutex>   lock(&critSec_UpdateScene);
+            synch::std::lock_guard<std::mutex>   lock(critSec_UpdateScene);
 
             tictac.Tic();
 
@@ -1265,7 +1265,7 @@ void func_clear_octrees(const mrpt::opengl::CRenderizable::Ptr &o)
 void _DSceneViewerFrame::clear_all_octrees_in_scene()
 {
 	{
-		mrpt::synch::std::lock_guard<std::mutex> lock(&critSec_UpdateScene);
+		mrpt::synch::std::lock_guard<std::mutex> lock(critSec_UpdateScene);
 		m_canvas->m_openGLScene->visitAllObjects( &func_clear_octrees );
 	}
 }
@@ -1317,7 +1317,7 @@ void _DSceneViewerFrame::OnmnuSceneStatsSelected(wxCommandEvent& event)
 		sceneStats.clear();
 
 		{
-			mrpt::synch::std::lock_guard<std::mutex> lock(&critSec_UpdateScene);
+			mrpt::synch::std::lock_guard<std::mutex> lock(critSec_UpdateScene);
 			m_canvas->m_openGLScene->visitAllObjects( &func_gather_stats );
 		}
 
@@ -1369,7 +1369,7 @@ void _DSceneViewerFrame::OnmnuItemShowCloudOctreesSelected(wxCommandEvent& event
 		wxBusyCursor wait;
 
 		{
-			mrpt::synch::std::lock_guard<std::mutex> lock(&critSec_UpdateScene);
+			mrpt::synch::std::lock_guard<std::mutex> lock(critSec_UpdateScene);
 			m_canvas->m_openGLScene->visitAllObjects( &func_gather_stats );
 
 			CSetOfObjects::Ptr gl_octrees_bb;

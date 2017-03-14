@@ -93,7 +93,7 @@ void CLocalMetricHypothesis::getAs3DScene( opengl::CSetOfObjects::Ptr &objs ) co
 	// Draw a 3D coordinates corner for each cluster
 	// -----------------------------------------------
 	{
-		std::lock_guard<std::mutex>	locker( &m_parent->m_map_cs );
+		std::lock_guard<std::mutex>	lock(m_parent->m_map_cs );
 
 		for ( TNodeIDSet::const_iterator n=m_neighbors.begin();n!=m_neighbors.end();++n)
 		{
@@ -283,7 +283,7 @@ void CLocalMetricHypothesis::getAs3DScene( opengl::CSetOfObjects::Ptr &objs ) co
 	// Draw each of the areas in the neighborhood:
 	// ---------------------------------------------------------
 	{
-		std::lock_guard<std::mutex>	locker( &m_parent->m_map_cs ); //To access nodes' labels.
+		std::lock_guard<std::mutex>	lock(m_parent->m_map_cs ); //To access nodes' labels.
 
 		for ( itMeans = areas_mean.begin(); itMeans!=areas_mean.end(); itMeans++ )
 		{
@@ -325,7 +325,7 @@ void CLocalMetricHypothesis::getAs3DScene( opengl::CSetOfObjects::Ptr &objs ) co
 	// Draw links between areas:
 	// ---------------------------------------------------------
 	{
-		std::lock_guard<std::mutex>	locker( &m_parent->m_map_cs );
+		std::lock_guard<std::mutex>	lock(m_parent->m_map_cs );
 
 		for ( itMeans = areas_mean.begin(); itMeans!=areas_mean.end(); itMeans++ )
 		{

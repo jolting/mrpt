@@ -178,7 +178,7 @@ void CAbstractPTGBasedReactive::enableLogFile(bool enable)
 
 void CAbstractPTGBasedReactive::getLastLogRecord( CLogFileRecord &o )
 {
-	mrpt::synch::std::lock_guard<std::mutex> lock(&m_critZoneLastLog);
+	mrpt::synch::std::lock_guard<std::mutex> lock(m_critZoneLastLog);
 	o = lastLogRecord;
 }
 

@@ -49,7 +49,7 @@ void CHMTSLAM::generateLogFiles(unsigned int nIteration)
 	THypothesisID	bestHypoID;
 	CLocalMetricHypothesis  *bestLMH = nullptr;
 	{
-		std::lock_guard<std::mutex>  locker( &m_LMHs_cs );
+		std::lock_guard<std::mutex>  lock(m_LMHs_cs );
 
 		MRPT_LOG_INFO_STREAM << "[LOG] Number of LMHs: " <<  m_LMHs.size();
 
@@ -101,7 +101,7 @@ void CHMTSLAM::generateLogFiles(unsigned int nIteration)
 				// Save the SSO matrix:
 #if 0
 				{
-					std::lock_guard<std::mutex>  locker( &bestLMH->m_robotPosesGraph.lock );
+					std::lock_guard<std::mutex>  lock(bestLMH->m_robotPosesGraph.lock );
 					string filSSO = format("%s/ASSO/mostLikelyLMH_ASSO_%05u.3Dscene", m_options.LOG_OUTPUT_DIR.c_str(), nIteration );
 					COpenGLScene	sceneSSO;
 					opengl::CSetOfObjects::Ptr sso3D = opengl::CSetOfObjects::Create();
@@ -157,7 +157,7 @@ void CHMTSLAM::generateLogFiles(unsigned int nIteration)
 			// Save global map for most likely hypothesis:
 			COpenGLScene	sceneGlobalHMTMAP;
 			{
-				std::lock_guard<std::mutex>  locker( &m_map_cs );
+				std::lock_guard<std::mutex>  lock(m_map_cs );
 				MRPT_LOG_INFO_STREAM << "[LOG] HMT-map: "<< m_map.nodeCount() << " nodes/ "<< m_map.arcCount() << " arcs";
 
 				m_map.getAs3DScene(

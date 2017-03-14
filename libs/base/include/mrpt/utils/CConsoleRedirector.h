@@ -30,7 +30,7 @@ namespace mrpt
 			std::streambuf 	*sbOld;		//!< The "old" std::cout
 			std::streambuf 	*sbOld_cerr;		//!< The "old" std::cout
 			bool 			m_also_to_console;
-			mrpt::synch::std::mutex	m_cs;
+			std::mutex	m_cs;
 
 		public:
 			/** Constructor

@@ -190,7 +190,7 @@ namespace mrpt
 		CLogFileRecord lastLogRecord;  //!< The last log
 		mrpt::kinematics::CVehicleVelCmd::Ptr m_last_vel_cmd ; //!< Last velocity commands
 
-		mrpt::synch::std::mutexRecursive  m_critZoneLastLog; //!< Critical zones
+		std::mutexRecursive  m_critZoneLastLog; //!< Critical zones
 
 		bool    m_enableConsoleOutput;  //!< Enables / disables the console debug output.
 		bool    m_init_done;            //!< Whether \a loadConfigFile() has been called or not.

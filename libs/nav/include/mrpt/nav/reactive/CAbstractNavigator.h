@@ -150,7 +150,7 @@ namespace mrpt
 
 		CRobot2NavInterface   &m_robot; //!< The navigator-robot interface.
 
-		mrpt::synch::std::mutexRecursive m_nav_cs; //!< mutex for all navigation methods
+		std::mutexRecursive m_nav_cs; //!< mutex for all navigation methods
 
 		struct NAV_IMPEXP TRobotPoseVel
 		{

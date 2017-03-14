@@ -27,7 +27,7 @@ void thread_example(int id)
 	try
 	{
 		{
-			std::lock_guard<std::mutex> lock(&csCounter);
+			std::lock_guard<std::mutex> lock(csCounter);
 			counter++;
 		}
 
@@ -39,7 +39,7 @@ void thread_example(int id)
 
 		int remaining;
 		{
-			std::lock_guard<std::mutex> lock(&csCounter);
+			std::lock_guard<std::mutex> lock(csCounter);
 			remaining = --counter;
 		}
 
