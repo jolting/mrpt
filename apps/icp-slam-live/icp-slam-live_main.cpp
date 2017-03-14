@@ -308,7 +308,7 @@ void MapBuilding_ICP_Live(const string &INI_FILENAME)
 		{
 			mrpt::hwdrivers::CGenericSensor::TListObservations obs_copy;
 			{
-				mrpt::synch::std::lock_guard<std::mutex> csl(&cs_global_list_obs);
+				std::lock_guard<std::mutex> csl(&cs_global_list_obs);
 				obs_copy = global_list_obs;
 				global_list_obs.clear();
 			}
