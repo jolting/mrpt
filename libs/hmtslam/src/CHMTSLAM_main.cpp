@@ -162,7 +162,7 @@ void  CHMTSLAM::clearInputQueue()
 {
 	// Wait for critical section
 	{
-		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  lock(m_inputQueue_cs);
 
 		while (!m_inputQueue.empty())
 		{
@@ -186,7 +186,7 @@ void  CHMTSLAM::pushAction( const CActionCollection::Ptr &acts )
 	}
 
 	{	// Wait for critical section
-		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  lock(m_inputQueue_cs);
 		m_inputQueue.push( acts );
 	}
 }
@@ -204,7 +204,7 @@ void  CHMTSLAM::pushObservations( const CSensoryFrame::Ptr &sf )
 	}
 
 	{	// Wait for critical section
-		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  lock(m_inputQueue_cs);
 		m_inputQueue.push( sf );
 	}
 }
@@ -225,7 +225,7 @@ void  CHMTSLAM::pushObservation( const CObservation::Ptr &obs )
 	sf->insert(obs);  // memory will be freed when deleting the SF in other thread
 
 	{	// Wait for critical section
-		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  lock(m_inputQueue_cs);
 		m_inputQueue.push( sf );
 	}
 }
@@ -366,7 +366,7 @@ bool  CHMTSLAM::isInputQueueEmpty()
 	bool	res;
 
 	{	// Wait for critical section
-		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  lock(m_inputQueue_cs);
 		res = m_inputQueue.empty();
 	}
 	return res;
@@ -379,7 +379,7 @@ size_t CHMTSLAM::inputQueueSize()
 {
 	size_t  res;
 	{	// Wait for critical section
-		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  lock(m_inputQueue_cs);
 		res = m_inputQueue.size();
 	}
 	return res;
@@ -393,7 +393,7 @@ CSerializable::Ptr CHMTSLAM::getNextObjectFromInputQueue()
 	CSerializable::Ptr obj;
 
 	{	// Wait for critical section
-		std::lock_guard<std::mutex>  locker( &m_inputQueue_cs);
+		std::lock_guard<std::mutex>  lock(m_inputQueue_cs);
 		if (!m_inputQueue.empty())
 		{
 			obj = m_inputQueue.front();
@@ -419,7 +419,7 @@ void  CHMTSLAM::initializeEmptyMap()
 	// ------------------------------------
 	CHMHMapNode::TNodeID	firstAreaID;
 	{
-		synch::std::lock_guard<std::mutex>	locker( &m_map_cs );
+		synch::std::lock_guard<std::mutex>	lock(m_map_cs );
 
 		// Initialize hierarchical structures:
 		// -----------------------------------------------------

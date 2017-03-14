@@ -164,7 +164,7 @@ namespace mrpt
 				TWxMainThreadData();
 				std::thread  m_wxMainThreadId; //!< The thread ID of wxMainThread, or 0 if it is not running.
 				mrpt::synch::CSemaphore m_semWxMainThreadReady; //!< This is signaled when wxMainThread is ready.
-				mrpt::synch::std::mutex m_csWxMainThreadId; //!< The critical section for accessing "m_wxMainThreadId"
+				std::mutex m_csWxMainThreadId; //!< The critical section for accessing "m_wxMainThreadId"
 			};
 
 			static TWxMainThreadData& GetWxMainThreadInstance();
@@ -294,7 +294,7 @@ namespace mrpt
 			{
 			protected:
 				wxBitmap *m_img;
-				mrpt::synch::std::mutex	m_img_cs;
+				std::mutex	m_img_cs;
 				CDisplayWindow *m_win2D;
 
 			public:
@@ -302,7 +302,7 @@ namespace mrpt
 				virtual ~wxMRPTImageControl();
 
 				wxPoint m_last_mouse_point, m_last_mouse_click;
-				//mrpt::synch::std::mutex	m_mouse_cs;
+				//std::mutex	m_mouse_cs;
 
 				void AssignImage(wxBitmap *img); //!< Assigns this image. This object has the ownship of the image and will delete it when appropriate.
 				void GetBitmap(wxBitmap &bmp);

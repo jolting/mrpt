@@ -39,7 +39,7 @@ namespace mrpt
 		private:
 			typedef std::list<std::pair<DATA_PARAMS,POOLABLE_DATA*> > TList;
 			TList                          m_pool;
-			mrpt::synch::std::mutex  m_pool_cs;
+			std::mutex  m_pool_cs;
 			size_t                         m_maxPoolEntries;
 			bool                           & m_was_destroyed;  //!< With this trick we get rid of the "global destruction order fiasco" ;-)
 

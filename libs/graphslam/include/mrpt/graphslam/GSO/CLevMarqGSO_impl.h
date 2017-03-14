@@ -125,7 +125,7 @@ void CLevMarqGSO<GRAPH_t>::setWindowManagerPtr(
 
 template <class GRAPH_t>
 void CLevMarqGSO<GRAPH_t>::setCriticalSectionPtr(
-		mrpt::synch::std::mutex* graph_section) {
+		std::mutex* graph_section) {
 	MRPT_START;
 
 	m_graph_section = graph_section;

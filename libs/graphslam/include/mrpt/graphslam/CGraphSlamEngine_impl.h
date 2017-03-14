@@ -96,7 +96,7 @@ typename GRAPH_t::constraint_t::type_value
 CGraphSlamEngine<GRAPH_t>::getCurrentRobotPosEstimation() const {
 	MRPT_START;
 
-	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 	return m_node_registrar->getCurrentRobotPosEstimation();
 
 	MRPT_END;
@@ -107,7 +107,7 @@ void CGraphSlamEngine<GRAPH_t>::getRobotEstimatedTrajectory(
 		mrpt::graphs::CNetworkOfPoses2DInf::global_poses_t* graph_poses) const {
 	MRPT_START;
 
-	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 	*graph_poses = m_graph.nodes;
 
 	MRPT_END;
@@ -338,7 +338,7 @@ void CGraphSlamEngine<GRAPH_t>::initCGraphSlamEngine() {
 
 	// query node/edge deciders for visual objects initialization
 	if (m_enable_visuals) {
-		mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+		mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 		m_time_logger.enter("Visuals");
 		m_node_registrar->initializeVisuals();
 		m_edge_registrar->initializeVisuals();
@@ -443,7 +443,7 @@ bool CGraphSlamEngine<GRAPH_t>::execGraphSlamStep(
 	// node registration procedure
 	bool registered_new_node;
 	{
-		mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+		mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 		m_time_logger.enter("node_registrar");
 		registered_new_node = m_node_registrar->updateState(
 				action, observations, observation);
@@ -457,7 +457,7 @@ bool CGraphSlamEngine<GRAPH_t>::execGraphSlamStep(
 	// run this so that the decider can be updated with the latest
 	// observations even when no new nodes have been added to the graph
 	{
-		mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+		mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 
 		m_time_logger.enter("edge_registrar");
 		m_edge_registrar->updateState(
@@ -538,7 +538,7 @@ bool CGraphSlamEngine<GRAPH_t>::execGraphSlamStep(
 
 		// update the global position of the nodes
 		{
-			mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+			mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 			m_time_logger.enter("dijkstra_nodes_estimation");
 			m_graph.dijkstra_nodes_estimate();
 			m_time_logger.leave("dijkstra_nodes_estimation");
@@ -548,14 +548,14 @@ bool CGraphSlamEngine<GRAPH_t>::execGraphSlamStep(
 		m_nodes_to_laser_scans2D[m_nodeID_max] = m_last_laser_scan2D;
 
 		if (m_enable_visuals && m_visualize_map) {
-			mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+			mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 			bool full_update = m_edge_registrar->justInsertedLoopClosure();
 			this->updateMapVisualization(m_graph, m_nodes_to_laser_scans2D, full_update);
 		}
 
 		// query node/edge deciders for visual objects update
 		if (m_enable_visuals) {
-			mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+			mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 			m_time_logger.enter("Visuals");
 			m_node_registrar->updateVisuals();
 			m_edge_registrar->updateVisuals();
@@ -726,7 +726,7 @@ void CGraphSlamEngine<GRAPH_t>::computeOccupancyGridMap2D() const {
 	using namespace mrpt::poses;
 
 	MRPT_LOG_DEBUG_STREAM << "Computing the occupancy gridmap...";
-	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 
 	// set the map parameters
 	mrpt::maps::COccupancyGridMap2D gridmap(
@@ -1539,7 +1539,7 @@ void CGraphSlamEngine<GRAPH_t>::toggleMapVisualization() {
 	// get total number of nodes
 	int num_of_nodes;
 	{
-		mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+		mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 		num_of_nodes = m_graph.nodeCount();
 	}
 
@@ -1963,7 +1963,7 @@ updateEstimatedTrajectoryVisualization(bool full_update) {
 	ASSERT_(m_enable_visuals);
 	using namespace mrpt::opengl;
 
-	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 	ASSERT_(m_graph.nodeCount() != 0);
 
 	COpenGLScene::Ptr scene = m_win->get3DSceneAndLock();
@@ -2344,7 +2344,7 @@ void CGraphSlamEngine<GRAPH_t>::generateReportFiles(
 	this->initOutputDir(output_dir_fname);
 
 	MRPT_LOG_INFO_STREAM << "Generating detailed class report...";
-	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(&m_graph_section);
+	mrpt::synch::std::lock_guard<std::mutex> m_graph_lock(m_graph_section);
 
 	std::string report_str;
 	std::string fname;

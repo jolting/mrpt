@@ -142,7 +142,7 @@ class CLevMarqGSO:
 
 		void setGraphPtr(GRAPH_t* graph);
 		void setWindowManagerPtr(mrpt::graphslam::CWindowManager* win_manager);
-		void setCriticalSectionPtr(mrpt::synch::std::mutex* graph_section);
+		void setCriticalSectionPtr(std::mutex* graph_section);
 		void initializeVisuals();
 		void updateVisuals();
 		/**\brief Get a list of the window events that happened since the last
@@ -290,7 +290,7 @@ class CLevMarqGSO:
 		mrpt::gui::CDisplayWindow3D* m_win;
 		mrpt::graphslam::CWindowManager* m_win_manager;
 		mrpt::graphslam::CWindowObserver* m_win_observer;
-		mrpt::synch::std::mutex* m_graph_section;
+		std::mutex* m_graph_section;
 
 		bool m_first_time_call;
 		bool m_initialized_visuals;

@@ -69,7 +69,7 @@ class CRegistrationDeciderOrOptimizer : public mrpt::utils::COutputLogger {
 
 			m_win_manager = win_manager;
 		}
-		/**\brief Fetch a mrpt::synch::std::mutex for locking the GRAPH_t resource.
+		/**\brief Fetch a std::mutex for locking the GRAPH_t resource.
 		 *
 		 * Handy for realising multithreading in the derived classes.
 		 *
@@ -80,7 +80,7 @@ class CRegistrationDeciderOrOptimizer : public mrpt::utils::COutputLogger {
 		 * thread runs.
 		 */
 		virtual void setCriticalSectionPtr(
-				mrpt::synch::std::mutex* graph_section) { }
+				std::mutex* graph_section) { }
 		/**\brief Initialize visual objects in CDisplayWindow (e.g. \em add an
 		 * object to scene).
 		 *

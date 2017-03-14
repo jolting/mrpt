@@ -73,14 +73,14 @@ public:
 #ifdef _WIN32
             SetEvent(_event);
 #else
-            pthread_mutex_lock(&_cond_locker);
+            pthread_mutex_lock(_cond_locker);
                
             if ( _is_signalled == false )
             {
                 _is_signalled = true;
                 pthread_cond_signal(&_cond_var);
             }
-            pthread_mutex_unlock(&_cond_locker);
+            pthread_mutex_unlock(_cond_locker);
 #endif
         }
         else
@@ -88,9 +88,9 @@ public:
 #ifdef _WIN32
             ResetEvent(_event);
 #else
-            pthread_mutex_lock(&_cond_locker);
+            pthread_mutex_lock(_cond_locker);
             _is_signalled = false;
-            pthread_mutex_unlock(&_cond_locker);
+            pthread_mutex_unlock(_cond_locker);
 #endif
         }
     }
