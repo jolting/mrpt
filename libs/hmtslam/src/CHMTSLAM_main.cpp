@@ -145,7 +145,7 @@ CHMTSLAM::~CHMTSLAM()
 
 	// Delete TLC-detectors
 	{
-		synch::std::lock_guard<std::mutex>	lock( &m_topLCdets_cs );
+		synch::std::lock_guard<std::mutex>	lock(m_topLCdets_cs );
 
 		// Clear old list:
 		for (std::deque<CTopLCDetectorBase*>::iterator it=m_topLCdets.begin();it!=m_topLCdets.end();++it)
@@ -442,7 +442,7 @@ void  CHMTSLAM::initializeEmptyMap()
 	// CLEAR LIST OF HYPOTHESES
 	// ------------------------------------
 	{
-		synch::std::lock_guard<std::mutex>	lock( &m_LMHs_cs );
+		synch::std::lock_guard<std::mutex>	lock(m_LMHs_cs );
 
 		// Add to the list:
 		m_LMHs.clear();
@@ -479,7 +479,7 @@ void  CHMTSLAM::initializeEmptyMap()
 	//  Topological LC detectors:
 	// ------------------------------------
 	{
-		synch::std::lock_guard<std::mutex>	lock( &m_topLCdets_cs );
+		synch::std::lock_guard<std::mutex>	lock(m_topLCdets_cs );
 
 		// Clear old list:
 		for (std::deque<CTopLCDetectorBase*>::iterator it=m_topLCdets.begin();it!=m_topLCdets.end();++it)

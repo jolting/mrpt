@@ -59,7 +59,7 @@ CHMTSLAM::TMessageLSLAMfromAA::Ptr CHMTSLAM::areaAbstraction(
 		CPose3DPDFParticles::Ptr		posePDF = CPose3DPDFParticles::Create();
 
 		{
-			// std::lock_guard<std::mutex>	lock( & LMH->m_lock ); // We are already within the LMH's lock!
+			// std::lock_guard<std::mutex>	lock( LMH->m_lock ); // We are already within the LMH's lock!
 
 			// SF:
 			std::map<TPoseID,CSensoryFrame>::const_iterator itSFs = LMH->m_SFs.find( *newID );
