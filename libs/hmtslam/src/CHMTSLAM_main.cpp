@@ -69,9 +69,9 @@ CHMTSLAM::CHMTSLAM( )
 
 	// Create threads:
 	// -----------------------
-	m_hThread_LSLAM 	= mrpt::system::createThreadFromObjectMethod( this, &CHMTSLAM::thread_LSLAM );
-	m_hThread_TBI 		= mrpt::system::createThreadFromObjectMethod( this, &CHMTSLAM::thread_TBI );
-	m_hThread_3D_viewer	= mrpt::system::createThreadFromObjectMethod( this, &CHMTSLAM::thread_3D_viewer );
+	m_hThread_LSLAM 	= std::thread( &CHMTSLAM::thread_LSLAM , this);
+	m_hThread_TBI 		= std::thread( &CHMTSLAM::thread_TBI , this);
+	m_hThread_3D_viewer	= std::thread( &CHMTSLAM::thread_3D_viewer , this);
 
 
 	// Other variables:

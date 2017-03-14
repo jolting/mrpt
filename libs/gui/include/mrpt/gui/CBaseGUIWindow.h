@@ -9,7 +9,6 @@
 #ifndef  CBaseGUIWindow_H
 #define  CBaseGUIWindow_H
 
-#include <mrpt/synch/CSemaphore.h>
 #include <mrpt/utils/CSerializable.h>
 #include <mrpt/utils/mrptEvent.h>
 #include <mrpt/utils/CObservable.h>
@@ -20,6 +19,8 @@
 #include <mrpt/gui/gui_frwds.h>
 
 #include <mrpt/gui/link_pragmas.h>
+
+#include <condition_variable>
 
 namespace mrpt
 {
@@ -58,8 +59,10 @@ namespace mrpt
 			void*		m_winobj_voidptr;
 
 		protected:
-			synch::CSemaphore 	m_semThreadReady;	//!< This semaphore will be signaled when the wx window is built and ready.
-			synch::CSemaphore 	m_semWindowDestroyed; //!< This semaphore will be signaled when the wx window is destroyed.
+			std::condition_variable 	m_cvThreadReady;	//!< This semaphore will be signaled when the wx window is built and ready.
+			bool				m_threadReady = false;
+			std::condition_variable 	m_cvWindowDestroyed; //!< This semaphore will be signaled when the wx window is destroyed.
+			bool				m_windowDestroyed = false;
 			std::string			m_caption;	//!< The caption of the window
 			mrpt::utils::void_ptr_noncopy	m_hwnd;	//!< The window handle
 

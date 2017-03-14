@@ -284,7 +284,7 @@ void CDlgPoseEst::OnbtnStartClick(wxCommandEvent& event)
 
 	m_calibFrames.clear();
 
-	m_threadCorners = mrpt::system::createThreadFromObjectMethod( this, &CDlgPoseEst::threadProcessCorners );
+	m_threadCorners = std::thread( &CDlgPoseEst::threadProcessCorners , this);
 
 	//lbProgress->SetLabel(_("0"));
 

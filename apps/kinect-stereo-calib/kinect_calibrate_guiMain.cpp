@@ -895,8 +895,8 @@ void kinect_calibrate_guiDialog::OnbtnConnectClick(wxCommandEvent& event)
 	m_findcorners_thread_data.quit = false;
 
 	// Launch thread:
-	m_cap_thread         = mrpt::system::createThreadFromObjectMethod(this, &kinect_calibrate_guiDialog::thread_grabbing);
-	m_findcorners_thread = mrpt::system::createThreadFromObjectMethod(this, &kinect_calibrate_guiDialog::thread_find_corners);
+	m_cap_thread         = std::thread( &kinect_calibrate_guiDialog::thread_grabbing,this);
+	m_findcorners_thread = std::thread( &kinect_calibrate_guiDialog::thread_find_corners,this);
 	btnConnect->Enable(false);
 	btnDisconnect->Enable(true);
 
@@ -1908,7 +1908,7 @@ void kinect_calibrate_guiDialog::OnbtnConnectLive3DClick(wxCommandEvent& event)
 	m_cap_thread_data.select_IR_channel = false;
 
 	// Launch thread:
-	m_cap_thread         = mrpt::system::createThreadFromObjectMethod(this, &kinect_calibrate_guiDialog::thread_grabbing);
+	m_cap_thread         = std::thread( &kinect_calibrate_guiDialog::thread_grabbing,this);
 
 	btnDisconnectLive->Enable(true);
 }

@@ -82,7 +82,7 @@ void CBaseGUIWindow::createWxWindow(unsigned int initialWidth, unsigned int init
 	if (envVal) maxTimeout = atoi(envVal);
 
 
-	if(!m_semThreadReady.waitForSignal(maxTimeout))  // 2 secs should be enough...
+	if(!m_cvThreadReady.waitForSignal(maxTimeout))  // 2 secs should be enough...
 	{
 		cerr << "[CBaseGUIWindow::ctor] Timeout waiting window creation." << endl;
 	}

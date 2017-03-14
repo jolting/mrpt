@@ -91,7 +91,7 @@ namespace mrpt
 			  */
 			void dump_to_pool(const DATA_PARAMS &params, POOLABLE_DATA *block)
 			{
-				std::lock_guard<std::mutex> lock( &m_pool_cs );
+				std::lock_guard<std::mutex> lock( m_pool_cs );
 
 				while (m_pool.size()>=m_maxPoolEntries) // Free old data if needed
 				{
@@ -106,7 +106,7 @@ namespace mrpt
 			{
 				m_was_destroyed = true;
 				// Free remaining memory blocks:
-				std::lock_guard<std::mutex> lock( &m_pool_cs );
+				std::lock_guard<std::mutex> lock( m_pool_cs );
 				for (typename TList::iterator it=m_pool.begin();it!=m_pool.end();++it)
 					delete it->second;
 				m_pool.clear();

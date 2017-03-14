@@ -217,7 +217,11 @@ void CWindowDialog::OnClose(wxCloseEvent& event)
     WxSubsystem::CWXMainFrame::notifyWindowDestruction();
 
 	// Signal we are destroyed:
-    m_win2D->m_semWindowDestroyed.release();
+    {
+      std::unique_lock<std::mutex> lock(m_win2D->m_mutex);
+      m_win2D->m_windowDestroyed = true;
+      m_win2D->m_cvWindowDestroyed.notify_one();
+    }
 
     event.Skip(); // keep processing by parent classes.
 }

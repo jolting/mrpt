@@ -348,7 +348,7 @@ void CCameraSensor::initialize()
 		m_toSaveList.resize(m_external_image_saver_count);
 
 		for (unsigned int i=0;i<m_external_image_saver_count;++i)
-			m_threadImagesSaver[i] = mrpt::system::createThreadFromObjectMethod(this,&CCameraSensor::thread_save_images, i);
+			m_threadImagesSaver[i] = std::thread( i,this,&CCameraSensor::thread_save_images);
 
 	}
 

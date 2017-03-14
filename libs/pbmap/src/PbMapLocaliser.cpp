@@ -40,7 +40,7 @@ std::cout << "PbMapLocaliser::PbMapLocaliser min_planes_recognition " << matcher
 
   LoadPreviousPbMaps("/home/edu/newPbMaps/PbMaps.txt");
 
-  pbMapLocaliser_hd = mrpt::system::createThreadFromObjectMethod(this, &PbMapLocaliser::run);
+  pbMapLocaliser_hd = std::thread(&PbMapLocaliser::run, this);
 }
 
 
@@ -426,9 +426,8 @@ bool PbMapLocaliser::stop_pbMapLocaliser()
   cout << "Waiting for PbMapLocaliser thread to die.." << endl;
 
   pbMapLocaliser_hd.join();
-	pbMapLocaliser_hd.clear();
 
-	return true;
+  return true;
 }
 
 PbMapLocaliser::~PbMapLocaliser()
