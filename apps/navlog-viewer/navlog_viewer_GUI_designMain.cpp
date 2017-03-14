@@ -339,7 +339,7 @@ navlog_viewer_GUI_designDialog::~navlog_viewer_GUI_designDialog()
 	// Clean all windows:
 	m_mywins.clear();
 	m_mywins3D.clear();
-	mrpt::system::sleep(100);
+	std::this_thread::sleep_for(100ms);
 }
 
 // ---------------------------------------------------------

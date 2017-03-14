@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 				CGenericSensor::TListObservations dummy;
 				robot.getObservations(dummy);  // Empty the list
 
-				mrpt::system::sleep(20);
+				std::this_thread::sleep_for(20ms);
 				continue;
 			}
 			char c = mrpt::system::os::getch();

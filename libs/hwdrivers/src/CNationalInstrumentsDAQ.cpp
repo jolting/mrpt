@@ -524,7 +524,7 @@ void CNationalInstrumentsDAQ::stop()
 		// For some reason, join doesn't work...
 		// if (!it->hThread.isClear()) mrpt::system::joinThread(it->hThread);
 		// Polling:
-		for (size_t tim=0;tim<250 && !it->is_closed;tim++) { mrpt::system::sleep(1); }
+		for (size_t tim=0;tim<250 && !it->is_closed;tim++) { std::this_thread::sleep_for(1ms); }
 		it->hThread.clear();
 	}
 	if (m_verbose) cout << "[CNationalInstrumentsDAQ::stop] All threads ended.\n";
@@ -739,10 +739,10 @@ void CNationalInstrumentsDAQ::grabbing_thread(TInfoPerTask &ipt)
 			{
 				++(ipt.new_obs_available);
 				ipt.write_pipe->WriteObject(&obs);
-				//mrpt::system::sleep(1); // This seems to be needed to allow all objs to be sent to the recv thread
+				//std::this_thread::sleep_for(1ms); // This seems to be needed to allow all objs to be sent to the recv thread
 			}
 			else {
-				mrpt::system::sleep(1);
+				std::this_thread::sleep_for(1ms);
 			}
 
 		} // end of main thread loop

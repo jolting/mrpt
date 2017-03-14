@@ -167,7 +167,7 @@ void goThere(data_st &Pdata, string& response, string& errormsg)
 		data->Robot.getLastImage2(lastimg);
 		if(lastimg)	//Avoid nullptr image
 			win.showImage(lastimg->image);
-		mrpt::system::sleep(50);
+		std::this_thread::sleep_for(50ms);
 	}
 }
 
@@ -245,7 +245,7 @@ void JoystickControl(data_st *data)
 		}
 
 		fflush(stdout);
-		mrpt::system::sleep(20);
+		std::this_thread::sleep_for(20ms);
 	}
 	cout<<"No Joystick connected...\n\n\n"<<endl;
 }
@@ -1262,7 +1262,7 @@ int main()
 				if(data.fm_calculated)	//End getFM thread
 					joinThread(fm_hd);
 
-				mrpt::system::sleep(10);
+				std::this_thread::sleep_for(10ms);
 			}while(decision!='.');
 		}//end if
 		else

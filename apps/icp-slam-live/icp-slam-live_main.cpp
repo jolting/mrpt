@@ -147,7 +147,7 @@ void SensorThread(TThreadParams params)
 			double	At = timeDifference(t0,t1);
 			int At_rem_ms = process_period_ms - At*1000;
 			if (At_rem_ms>0)
-				mrpt::system::sleep(At_rem_ms);
+				std::this_thread::sleep_for(std::chrono::milliseconds(At_rem_ms));
 		}
 		sensor.reset();
 		cout << format("[thread_%s] Closing...",params.section_name.c_str()) << endl;
@@ -186,7 +186,7 @@ void MapBuilding_ICP_Live(const string &INI_FILENAME)
 		hSensorThread = std::thread(SensorThread, threParms);
 	}
 	// Wait and check if the sensor is ready:
-	mrpt::system::sleep(2000);
+	std::this_thread::sleep_for(2000ms);
 	if (allThreadsMustExit)
 		throw std::runtime_error("\n\n==== ABORTING: It seems that we could not connect to the LIDAR. See reported errors. ==== \n");
 
@@ -332,7 +332,7 @@ void MapBuilding_ICP_Live(const string &INI_FILENAME)
 				timeout_read_scans.Tic();
 				cout << "[Warning] *** Waiting for laser scans from the Device ***\n";
 			}
-			mrpt::system::sleep(1);
+			std::this_thread::sleep_for(1ms);
 			continue;
 		}
 		else {
@@ -478,7 +478,7 @@ void MapBuilding_ICP_Live(const string &INI_FILENAME)
 				// Update:
 				win3D->forceRepaint();
 
-				mrpt::system::sleep( SHOW_PROGRESS_3D_REAL_TIME_DELAY_MS );
+				std::this_thread::sleep_for(std::chrono::milliseconds(SHOW_PROGRESS_3D_REAL_TIME_DELAY_MS ));
 			}
 		}
 

@@ -104,7 +104,7 @@ void CCascadeClassifierDetection::detectObjects_Impl(const CObservation *obs, ve
 	}
 	if (!img)
 	{
-	    mrpt::system::sleep(2);
+	    std::this_thread::sleep_for(2ms);
 	    return;
 	}
 

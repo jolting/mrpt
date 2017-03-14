@@ -45,7 +45,7 @@ CGraphSlamHandler::~CGraphSlamHandler() {
 		bool break_exec = false;
 		while (win->isOpen() && break_exec == false) {
 			break_exec = !this->queryObserverForEvents();
-			mrpt::system::sleep(100);
+			std::this_thread::sleep_for(100ms);
 			win->forceRepaint();
 		}
 	}

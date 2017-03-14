@@ -983,7 +983,7 @@ void PbMapMaker::viz_cb (pcl::visualization::PCLVisualizer& viz)
 {
   if (mPbMap.globalMapPtr->empty())
   {
-    mrpt::system::sleep(10);
+    std::this_thread::sleep_for(10ms);
     return;
   }
 
@@ -1189,7 +1189,7 @@ void PbMapMaker::run()
   {
     if( numPrevKFs == frameQueue.size() )
     {
-      mrpt::system::sleep(10);
+      std::this_thread::sleep_for(10ms);
     }
     else
     {
@@ -1231,7 +1231,7 @@ bool PbMapMaker::stop_pbMapMaker()
 {
   m_pbmaker_must_stop = true;
   while(!m_pbmaker_finished)
-    mrpt::system::sleep(1);
+    std::this_thread::sleep_for(1ms);
   cout << "Waiting for PbMapMaker thread to die.." << endl;
 
   mrpt::system::joinThread(pbmaker_hd);

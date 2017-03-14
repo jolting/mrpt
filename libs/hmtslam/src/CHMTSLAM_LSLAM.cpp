@@ -203,7 +203,7 @@ void CHMTSLAM::thread_LSLAM()
 			else
 			{
 				// Wait for new data:
-				mrpt::system::sleep(5);
+				std::this_thread::sleep_for(5ms);
 			}
 		};	// end while execute thread
 

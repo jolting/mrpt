@@ -150,7 +150,7 @@ void CNTRIPClient::private_ntrip_thread()
 				m_sem_sock_closed.release();
 
 			last_thread_do_process = m_thread_do_process;
-			mrpt::system::sleep(100);
+			std::this_thread::sleep_for(100ms);
 			continue;
 		}
 
@@ -260,7 +260,7 @@ void CNTRIPClient::private_ntrip_thread()
 		// Retry if it was a failed connection.
 		if ( !my_sock.isConnected() )
 		{
-			mrpt::system::sleep(500);
+			std::this_thread::sleep_for(500ms);
 			continue;
 		}
 
@@ -295,7 +295,7 @@ void CNTRIPClient::private_ntrip_thread()
 				cerr << "*ERROR*: Couldn't write back " << N << " bytes to NTRIP server!.\n";
 		}
 
-		mrpt::system::sleep(10);
+		std::this_thread::sleep_for(10ms);
 	} // end while
 
 

@@ -1458,7 +1458,7 @@ void CGraphSlamEngine<GRAPH_t>::queryObserverForEvents() {
 		}
 
 		while (m_program_paused) {
-			mrpt::system::sleep(1000);
+			std::this_thread::sleep_for(1000ms);
 			this->queryObserverForEvents();
 		}
 	}
@@ -1600,7 +1600,7 @@ void CGraphSlamEngine<GRAPH_t>::dumpVisibilityErrorMsg(
 			<< "Make sure that the corresponding visualization flag ("
 			<< viz_flag
 			<< ") is set to true in the .ini file.";
-	mrpt::system::sleep(sleep_time);
+	std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
 
 	MRPT_END;
 }

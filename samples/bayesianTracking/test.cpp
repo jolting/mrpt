@@ -355,7 +355,7 @@ void TestBayesianTracking()
 
 
 		// Delay:
-		mrpt::system::sleep((int)(DELTA_TIME*1000));
+		std::this_thread::sleep_for(std::chrono::milliseconds((int)(DELTA_TIME*1000)));
 		t+=DELTA_TIME;
 	}
 }

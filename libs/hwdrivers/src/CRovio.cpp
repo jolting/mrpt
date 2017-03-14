@@ -260,7 +260,7 @@ void CRovio::thread_video()	//This function takes a frame and waits until getLas
 				//obs.clear();	//If no image was copied, destroy the thisect.
 				cout<<"[CRovio::thread_video] Warning: the program doesn't receive any image\n";
 			}
-			mrpt::system::sleep(10);
+			std::this_thread::sleep_for(10ms);
 		}//end while
 
 		in_video.close();
@@ -294,7 +294,7 @@ bool CRovio::retrieve_video()
 		m_videoThread = mrpt::system::createThreadFromObjectMethod(this,&mrpt::hwdrivers::CRovio::thread_video);
 
 		while (!m_videothread_initialized_done) {
-			mrpt::system::sleep(10);
+			std::this_thread::sleep_for(10ms);
 		}
 
 		// Ok or error?

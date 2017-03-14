@@ -831,7 +831,7 @@ void TestParticlesLocalization()
 
 					window.unlockAccess3DScene();
 					window.forceRepaint();
-					mrpt::system::sleep(2);	// Time to refresh
+					std::this_thread::sleep_for(2ms);	// Time to refresh
 	#endif
 				}
 #endif

@@ -63,7 +63,7 @@ int main()
 			if (! eNoses.getObservation( obs ) )
 			{
 				cout << "- Could not retrieve an observation from the eNoses..." << endl;
-				mrpt::system::sleep(25);
+				std::this_thread::sleep_for(25ms);
 			}
 			else
 			{
@@ -106,7 +106,7 @@ int main()
 				}
 				if (f_log) fprintf(f_log,"\n");
 
-				mrpt::system::sleep(5);
+				std::this_thread::sleep_for(5ms);
 			}
 
 		}

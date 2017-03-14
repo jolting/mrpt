@@ -1031,7 +1031,7 @@ void kinect_calibrate_guiDialog::StopLiveGrabThreads()
 	{
 		m_cap_thread_data.quit = true;
 		cout << "Waiting for the grabbing thread to end...\n";
-		for (int i=0;i<1000 && !m_cap_thread_data.terminated;i++) mrpt::system::sleep(1);
+		for (int i=0;i<1000 && !m_cap_thread_data.terminated;i++) std::this_thread::sleep_for(1ms);
 		mrpt::system::terminateThread( m_cap_thread );
 		m_cap_thread.clear();
 		cout << "Grabbing thread closed.\n";
@@ -1040,7 +1040,7 @@ void kinect_calibrate_guiDialog::StopLiveGrabThreads()
 	{
 		m_findcorners_thread_data.quit = true;
 		cout << "Waiting for the corner find thread to end...\n";
-		for (int i=0;i<1000 && !m_findcorners_thread_data.terminated;i++) mrpt::system::sleep(1);
+		for (int i=0;i<1000 && !m_findcorners_thread_data.terminated;i++) std::this_thread::sleep_for(1ms);
 		mrpt::system::terminateThread( m_findcorners_thread );
 		m_findcorners_thread.clear();
 		cout << "Corner finding thread closed.\n";
@@ -1291,7 +1291,7 @@ void kinect_calibrate_guiDialog::thread_find_corners()
 			}
 			else
 			{
-				mrpt::system::sleep(2);
+				std::this_thread::sleep_for(2ms);
 			}
 		}
 		catch(std::exception &e)

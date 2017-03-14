@@ -408,7 +408,7 @@ bool DemoFeatures()
 			win1.showImage(img1_show);
 			win2.showImage(img2_show);
 
-			mrpt::system::sleep(10);
+			std::this_thread::sleep_for(10ms);
 		}
 
 		// Wait for the next iteration:

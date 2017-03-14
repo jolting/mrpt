@@ -74,9 +74,9 @@ bool  CRaePID::tryToOpenTheCOM()
         COM.setConfig( com_bauds, 0, 8, 1 );
         //COM.setTimeouts( 1, 0, 1, 1, 1 );
 		COM.setTimeouts(50,1,100, 1,20);
-		//mrpt::system::sleep(10);
+		//std::this_thread::sleep_for(10ms);
 		COM.purgeBuffers();
-		//mrpt::system::sleep(10);
+		//std::this_thread::sleep_for(10ms);
 
 		return true; // All OK!
 	}
@@ -121,7 +121,7 @@ void CRaePID::doProcess()
 		if (time_out)
 		{
 			//cout << "[CRaePID] " << com_port << " @ " <<com_bauds << " - measurement Timed-Out" << endl;
-			mrpt::system::sleep(10);
+			std::this_thread::sleep_for(10ms);
 		}
 		else
 			have_reading = true;

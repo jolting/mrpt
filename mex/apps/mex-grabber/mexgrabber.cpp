@@ -203,13 +203,13 @@ MEX_DEFINE(delete) (int nlhs, mxArray* plhs[],
     // Wait all threads:
     // ----------------------------
     allThreadsMustExit = true;
-    mrpt::system::sleep(300);
+    std::this_thread::sleep_for(300ms);
     printf("\nWaiting for all threads to close...\n");
     for (vector<std::thread>::iterator th=lstThreads.begin();th!=lstThreads.end();++th)
         th->join();
 
     cout << endl << "[mex-grabber::delete] mex-grabber application finished" << endl;
-	mrpt::system::sleep(1000); // Time for the wxSubsystem to close all remaining windows and avoid crash... (any better way?)
+	std::this_thread::sleep_for(1000ms); // Time for the wxSubsystem to close all remaining windows and avoid crash... (any better way?)
     mex_is_running = false;
 } // End of "delete" method
 
@@ -309,7 +309,7 @@ int main(int argc, const char* argv[] )
         mxArray* mxOut[1];
         mexFunction( 1, mxOut, 2, mxIn );
 
-		mrpt::system::sleep(5000); // Time for the sensor to read before collecting
+		std::this_thread::sleep_for(5000ms); // Time for the sensor to read before collecting
 
         // Read frames with "read"
 		mxIn[0] = mexplus::from( "read" );

@@ -97,7 +97,7 @@ void TestDisplay3D()
 		// show the redered image
 		win.showImage(frame);
 
-		mrpt::system::sleep(50);
+		std::this_thread::sleep_for(50ms);
 	}
 }
 

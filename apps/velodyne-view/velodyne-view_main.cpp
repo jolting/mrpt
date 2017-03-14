@@ -178,7 +178,7 @@ int VelodyneView(int argc, char **argv)
 		CObservation::Ptr possiblyNewObs = thrPar.new_obs.get();
 		if (possiblyNewObs && possiblyNewObs->timestamp!=INVALID_TIMESTAMP)
 				break;
-		else 	mrpt::system::sleep(10);
+		else 	std::this_thread::sleep_for(10ms);
 	} while (!thrPar.quit);
 
 	// Check error condition:
@@ -326,7 +326,7 @@ int VelodyneView(int argc, char **argv)
 		win3D.addTextMessage(5,25,mrpt::format("'1'/'2': Toggle view dual last (%s)/strongest(%s) returns.",pc_params.dualKeepLast ? "ON":"OFF",pc_params.dualKeepStrongest ? "ON":"OFF"), TColorf(1,1,1),"mono",10.0, mrpt::opengl::NICE, 111 );
 		win3D.unlockAccess3DScene();
 
-		mrpt::system::sleep(50);
+		std::this_thread::sleep_for(50ms);
 	}
 
 	cout << "Waiting for grabbing thread to exit...\n";
@@ -341,7 +341,7 @@ int main(int argc, char **argv)
 	try
 	{
 		int ret = VelodyneView(argc,argv);
-		mrpt::system::sleep(50);  // to allow GUI threads to end gracefully.
+		std::this_thread::sleep_for(50ms);  // to allow GUI threads to end gracefully.
 		return ret;
 
 	} catch (std::exception &e)

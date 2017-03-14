@@ -46,7 +46,7 @@ void thread_server()
 			client->sendMessage( msg );
 			printf("[Server] Message sent!!\n");
 
-			mrpt::system::sleep(50);
+			std::this_thread::sleep_for(50ms);
 
 			delete client;
 		}
@@ -78,7 +78,7 @@ void thread_client()
 		printf("[Client] Connected. Waiting for a message...\n");
 
 //		cout << "pending: " << sock.getReadPendingBytes() << endl;
-//		mrpt::system::sleep(4000);
+//		std::this_thread::sleep_for(4000ms);
 //		cout << "pending: " << sock.getReadPendingBytes() << endl;
 
 		CMessage	msg;
@@ -128,7 +128,7 @@ void SocketsTest()
 	std::thread(thread_server).detach();
 	std::thread(thread_client).detach();
 
-	mrpt::system::sleep(2000);
+	std::this_thread::sleep_for(2000ms);
 	mrpt::system::pause();
 }
 

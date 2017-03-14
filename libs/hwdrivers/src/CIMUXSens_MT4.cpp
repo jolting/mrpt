@@ -366,7 +366,7 @@ void CIMUXSens_MT4::doProcess()
 #if MRPT_HAS_xSENS_MT4
 	if(m_state == ssError)
 	{
-		mrpt::system::sleep(200);
+		std::this_thread::sleep_for(200ms);
 		initialize();
 	}
 
