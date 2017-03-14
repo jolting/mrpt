@@ -151,7 +151,7 @@ void CGPSInterface::setParser(CGPSInterface::PARSERS parser) {
 CGPSInterface::PARSERS CGPSInterface::getParser() const {
 	return m_parser;
 }
-void CGPSInterface::bindStream(mrpt::utils::CStream * external_stream, mrpt::synch::CCriticalSection *csOptionalExternalStream)
+void CGPSInterface::bindStream(mrpt::utils::CStream * external_stream, std::mutex *csOptionalExternalStream)
 {
 	if (!m_data_stream_is_external) {
 		delete m_data_stream;

@@ -57,7 +57,7 @@ struct ThreadData
 };
 
 ThreadData                    td;
-mrpt::synch::CCriticalSection td_cs;
+std::mutex td_cs;
 
 
 void viewerUpdate(pcl::visualization::PCLVisualizer& viewer)

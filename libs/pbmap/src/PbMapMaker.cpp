@@ -44,7 +44,7 @@ using namespace std;
 using namespace Eigen;
 using namespace mrpt::pbmap;
 
-mrpt::synch::CCriticalSection CS_visualize;
+std::mutex CS_visualize;
 
 // Bhattacharyya histogram distance function
 double BhattacharyyaDist(std::vector<float> &hist1, std::vector<float> &hist2)
