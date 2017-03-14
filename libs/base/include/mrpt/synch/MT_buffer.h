@@ -33,40 +33,40 @@ public:
 
 	void clear()  //!< Empty the buffer
 	{
-		m_cs.enter();
+		m_cs.lock();
 		m_data.clear();
-		m_cs.leave();
+		m_cs.unlock();
 	}
 
 	size_t size()  //!< Return the number of available bytes at this moment.
 	{
 		size_t s;
-		m_cs.enter();
+		m_cs.lock();
 		s = m_data.size();
-		m_cs.leave();
+		m_cs.unlock();
 		return s;
 	}
 
 	void appendData(const vector_byte &d)  //!< Append new data to the stream
 	{
-		m_cs.enter();
+		m_cs.lock();
 		m_data.insert( m_data.begin(), d.begin(),d.end() );
-		m_cs.leave();
+		m_cs.unlock();
 	}
 
 	void readAndClear(vector_byte &d)  //!< Read the whole buffer and empty it.
 	{
-		m_cs.enter();
+		m_cs.lock();
 		d.clear();
 		m_data.swap(d);
-		m_cs.leave();
+		m_cs.unlock();
 	}
 
 	void read(vector_byte &d)  //!< Read the whole buffer.
 	{
-		m_cs.enter();
+		m_cs.lock();
 		d = m_data;
-		m_cs.leave();
+		m_cs.unlock();
 	}
 
 }; // end of MT_buffer

@@ -125,8 +125,8 @@ void SocketsTest()
 	// mrpt::utils::CImage::DISABLE_JPEG_COMPRESSION = true;
 	//mrpt::utils::CImage::SERIALIZATION_JPEG_QUALITY = 90;
 
-	mrpt::system::createThread(thread_server);
-	mrpt::system::createThread(thread_client);
+	std::thread(thread_server).detach();
+	std::thread(thread_client).detach();
 
 	mrpt::system::sleep(2000);
 	mrpt::system::pause();

@@ -13,7 +13,7 @@ using namespace mrpt;
 using namespace mrpt::utils;
 using namespace std;
 
-CCriticalSection  csTest("csTest");
+std::mutex  csTest("csTest");
 
 CStdOutStream	myOutStream;
 
