@@ -429,7 +429,7 @@ void MapBuilding_ICP(const string &INI_FILENAME, const string &override_rawlog_f
 					// Update:
 					win3D->forceRepaint();
 
-					mrpt::system::sleep( SHOW_PROGRESS_3D_REAL_TIME_DELAY_MS );
+					std::this_thread::sleep_for(std::chrono::milliseconds(SHOW_PROGRESS_3D_REAL_TIME_DELAY_MS));
 				}
 			}
 

@@ -51,7 +51,7 @@ void CHMTSLAM::thread_TBI()
 		// --------------------------------------------
 		while ( !obj->m_terminateThreads )
 		{
-			mrpt::system::sleep(100);
+			std::this_thread::sleep_for(100ms);
 		};	// end while execute thread
 
 		// Finish thread:

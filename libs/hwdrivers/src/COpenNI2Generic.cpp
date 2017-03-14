@@ -246,7 +246,7 @@ void COpenNI2Generic::open(unsigned sensor_id)
 	}else{
 	  showLog(" open failed.\n");
 	}
-	mrpt::system::sleep(1000); // Sleep
+	std::this_thread::sleep_for(1000ms); // Sleep
 #else
 	MRPT_UNUSED_PARAM(sensor_id);
 	THROW_EXCEPTION("MRPT was built without OpenNI2 support")

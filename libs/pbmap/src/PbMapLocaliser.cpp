@@ -329,7 +329,7 @@ void PbMapLocaliser::run()
   {
 //    cout << "while...\n";
     if(vQueueObservedPlanes.empty()) //if(sQueueObservedPlanes.empty())
-      mrpt::system::sleep(50);
+      std::this_thread::sleep_for(50ms);
 
     else
     {
@@ -422,7 +422,7 @@ bool PbMapLocaliser::stop_pbMapLocaliser()
 {
   m_pbMapLocaliser_must_stop = true;
   while(!m_pbMapLocaliser_finished)
-    mrpt::system::sleep(1);
+    std::this_thread::sleep_for(1ms);
   cout << "Waiting for PbMapLocaliser thread to die.." << endl;
 
   mrpt::system::joinThread(pbMapLocaliser_hd);

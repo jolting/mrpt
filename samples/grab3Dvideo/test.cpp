@@ -142,7 +142,7 @@ void TestDisplay3D()
 
 		// Update window:
 		win.forceRepaint();
-		mrpt::system::sleep(10);
+		std::this_thread::sleep_for(10ms);
 
 		// Grab frame:
 		mrpt::utils::CImage::Ptr img = win.getLastWindowImagePtr();

@@ -179,13 +179,13 @@ int main(int argc, char**argv)
 							td.new_cloud = cloud;
 						}
 
-						mrpt::system::sleep(30);  // Delay to allow the point cloud to show up.
+						std::this_thread::sleep_for(30ms);  // Delay to allow the point cloud to show up.
 					}
 
 				}
 			}
 
-			mrpt::system::sleep(1);
+			std::this_thread::sleep_for(1ms);
 		}
 		return 0;
 	}

@@ -164,7 +164,7 @@ void Test_HOKUYO()
             tictac.Tic();
 		}
 
-		mrpt::system::sleep(15);
+		std::this_thread::sleep_for(15ms);
 	};
 
 	laser.turnOff();

@@ -155,7 +155,7 @@ void TestOctoMap()
 			win.repaint();
 		}
 
-		mrpt::system::sleep(10);
+		std::this_thread::sleep_for(10ms);
 	};
 
 

@@ -256,7 +256,7 @@ bool CVelodyneScanner::getNextObservation(
 					if (m_pcap) {
 						// Keep the reader from blowing through the file.
 						if (!m_pcap_read_fast)
-							mrpt::system::sleep(m_pcap_read_full_scan_delay_ms);
+							std::this_thread::sleep_for(std::chrono::milliseconds(m_pcap_read_full_scan_delay_ms));
 					}
 				}
 			}
@@ -808,14 +808,14 @@ bool CVelodyneScanner::internal_read_PCAP_packet(
 		if (m_pcap_read_once)
 		{
 			if (m_pcap_verbose) printf("[CVelodyneScanner] INFO: end of file reached -- done reading.\n");
-			mrpt::system::sleep(250);
+			std::this_thread::sleep_for(250ms);
 			return false;
 		}
 
 		if (m_pcap_repeat_delay > 0.0)
 		{
 			if (m_pcap_verbose) printf("[CVelodyneScanner] INFO: end of file reached -- delaying %.3f seconds.\n", m_pcap_repeat_delay);
-			mrpt::system::sleep( m_pcap_repeat_delay * 1000.0);
+			std::this_thread::sleep_for(std::chrono::milliseconds(m_pcap_repeat_delay * 1000.0));
 		}
 
 		if (m_pcap_verbose) printf("[CVelodyneScanner] INFO: replaying Velodyne dump file.\n");

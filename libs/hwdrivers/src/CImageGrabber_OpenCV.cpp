@@ -216,7 +216,7 @@ bool  CImageGrabber_OpenCV::getObservation( mrpt::obs::CObservationImage &out_ob
         capImg = cvRetrieveFrame(M_CAPTURE);
         if (capImg) break;
         cerr << "[CImageGrabber_OpenCV] WARNING: Ignoring error #" <<nTries+1 << " retrieving frame..." << endl;
-        mrpt::system::sleep(1);
+        std::this_thread::sleep_for(1ms);
 	}
 
 	if(!capImg) return false;

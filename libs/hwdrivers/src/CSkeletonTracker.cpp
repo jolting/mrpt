@@ -379,7 +379,7 @@ void CSkeletonTracker::doProcess()
 #if MRPT_HAS_OPENNI2 && MRPT_HAS_NITE2
 	if(m_state == ssError)
 	{
-		mrpt::system::sleep(200);
+		std::this_thread::sleep_for(200ms);
 		initialize();
 	}
 

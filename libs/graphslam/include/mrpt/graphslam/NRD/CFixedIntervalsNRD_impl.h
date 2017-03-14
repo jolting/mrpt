@@ -218,7 +218,7 @@ void CFixedIntervalsNRD<GRAPH_t>::checkIfInvalidDataset(
 	if (m_consecutive_invalid_format_instances > m_consecutive_invalid_format_instances_thres) {
 		this->logFmt(LVL_ERROR,
 				"Can't find usuable data in the given dataset.\nMake sure dataset contains valid odometry data.");
-		mrpt::system::sleep(5000);
+		std::this_thread::sleep_for(5000ms);
 		m_checked_for_usuable_dataset = true;
 	}
 

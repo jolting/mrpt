@@ -820,7 +820,7 @@ void TestOpenGLObjects()
 	while (win.isOpen())
 	{
 		win.addTextMessage(5,5, format("%.02fFPS", win.getRenderingFPS()));
-		mrpt::system::sleep(2);
+		std::this_thread::sleep_for(2ms);
 		win.repaint();
 	}
 }

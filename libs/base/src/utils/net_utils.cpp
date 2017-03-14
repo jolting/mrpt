@@ -242,7 +242,7 @@ mrpt::utils::net::http_request(
 					out_errormsg = "Timeout waiting answer from server";
 					return net::erCouldntConnect;
 				}
-				std::this_thread::sleep_for(10s);
+				std::this_thread::sleep_for(10ms);
 				continue;
 			}
 			total_read+=len;

@@ -68,7 +68,7 @@ void CBaseGUIWindow::createWxWindow(unsigned int initialWidth, unsigned int init
     // Wait for the window to realize and signal it's alive:
     if (!WxSubsystem::isConsoleApp)
     {
-    	mrpt::system::sleep(20);	// Force at least 1-2 timer ticks for processing the event:
+    	std::this_thread::sleep_for(20ms);	// Force at least 1-2 timer ticks for processing the event:
     	wxApp::GetInstance()->Yield(true);
     }
 	int maxTimeout =
@@ -120,7 +120,7 @@ void CBaseGUIWindow::destroyWxWindow()
 		// Wait until the thread ends:
 		if (!WxSubsystem::isConsoleApp)
 		{
-			mrpt::system::sleep(20);	// Force at least 1-2 timer ticks for processing the event:
+			std::this_thread::sleep_for(20ms);	// Force at least 1-2 timer ticks for processing the event:
 			wxApp::GetInstance()->Yield(true);
 		}
 		const int maxTimeout =
@@ -175,7 +175,7 @@ int  CBaseGUIWindow::waitForKey(bool ignoreControlKeys,mrptKeyModifier *out_push
 			}
 			// Ignore and keep waiting
 		}
-		mrpt::system::sleep(10);
+		std::this_thread::sleep_for(10ms);
 		// Are we still alive?
 		if (!isOpen())
 			return 0;
@@ -199,7 +199,7 @@ int  CBaseGUIWindow::getPushedKey(mrptKeyModifier *out_pushModifier)
 			if (out_pushModifier) *out_pushModifier = m_keyPushedModifier;
 			return k;
 		}
-		mrpt::system::sleep(10);
+		std::this_thread::sleep_for(10ms);
 		// Are we still alive?
 		if (!isOpen())
 			return 0;

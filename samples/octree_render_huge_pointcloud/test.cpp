@@ -161,7 +161,7 @@ void TestOctreeRenderHugePointCloud()
 	bool end=false;
 	while (win.isOpen() && !end)
 	{
-		mrpt::system::sleep(5);
+		std::this_thread::sleep_for(5ms);
 
 		if (win.keyHit())
 		{
@@ -204,7 +204,7 @@ int main()
 	{
 		TestOctreeRenderHugePointCloud();
 
-		mrpt::system::sleep(500);
+		std::this_thread::sleep_for(500ms);
 
 		return 0;
 	} catch (std::exception &e)

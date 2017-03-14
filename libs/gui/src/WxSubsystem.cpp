@@ -70,7 +70,7 @@ WxSubsystem::CAuxWxSubsystemShutdowner::~CAuxWxSubsystemShutdowner()
 			REQ->OPCODE   = 999;
 			WxSubsystem::pushPendingWxRequest( REQ );
 
-			//mrpt::system::sleep(100); // JL: I found no better way of doing this, sorry :-(  See WxSubsystem::waitWxShutdownsIfNoWindows()
+			//std::this_thread::sleep_for(100ms); // JL: I found no better way of doing this, sorry :-(  See WxSubsystem::waitWxShutdownsIfNoWindows()
 			WxSubsystem::waitWxShutdownsIfNoWindows();
 		} catch (...) { } // Just in case we got an out-of-mem error.
 	} // is console app.
@@ -824,7 +824,7 @@ void WxSubsystem::waitWxShutdownsIfNoWindows()
 	#ifdef WXSUBSYSTEM_VERBOSE
 		cout << "[WxSubsystem::waitWxShutdownsIfNoWindows] Doing a quick sleep() and returning.\n";
 	#endif
-	mrpt::system::sleep(100);
+	std::this_thread::sleep_for(100ms);
 	return;
 #else
 	// Just let know a global object that, at its destruction, it must  ....

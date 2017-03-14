@@ -158,7 +158,7 @@ void TestLaser2Imgs()
 
 		wind.showImage(image);
 
-		mrpt::system::sleep(50);
+		std::this_thread::sleep_for(50ms);
 	}; // end for
 
 	mrpt::system::pause();

@@ -56,7 +56,7 @@ void CGyroKVHDSP3000::doProcess()
 
 	if(m_state == ssError)
 	{
-		mrpt::system::sleep(200);
+		std::this_thread::sleep_for(200ms);
 		initialize();
 	}
 

@@ -124,7 +124,7 @@ void CGillAnemometer::doProcess()
 			if (time_out)
 			{
 				cout << "[CGillAnemometer] " << com_port << " @ " <<com_bauds << " - measurement Timed-Out" << endl;
-				mrpt::system::sleep(10);
+				std::this_thread::sleep_for(10ms);
 			}
 			else
 				have_reading = true;

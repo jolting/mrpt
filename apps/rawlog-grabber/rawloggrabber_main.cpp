@@ -359,7 +359,7 @@ int main(int argc, char **argv)
 		// Wait all threads:
 		// ----------------------------
 		allThreadsMustExit = true;
-		mrpt::system::sleep(300);
+		std::this_thread::sleep_for(300ms);
 		cout << endl << "Waiting for all threads to close..." << endl;
 		for (vector<std::thread>::iterator th=lstThreads.begin();th!=lstThreads.end();++th)
 			th->join();

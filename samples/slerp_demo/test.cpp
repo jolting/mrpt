@@ -109,7 +109,7 @@ void TestSLERP()
 
 		// Update window:
 		win.forceRepaint();
-		mrpt::system::sleep(5);
+		std::this_thread::sleep_for(5ms);
 
 	};
 }

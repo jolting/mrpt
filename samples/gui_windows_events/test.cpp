@@ -97,7 +97,7 @@ void TestGuiWindowsEvents()
 
 	while (win2D.isOpen() && win3D.isOpen() && winPlot.isOpen())
 	{
-		mrpt::system::sleep(100);
+		std::this_thread::sleep_for(100ms);
 	}
 
 }

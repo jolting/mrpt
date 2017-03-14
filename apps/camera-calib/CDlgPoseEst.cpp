@@ -473,7 +473,7 @@ void CDlgPoseEst::threadProcessCorners()
 				else
 				{
 					// Nothing to do:
-					mrpt::system::sleep(5);
+					std::this_thread::sleep_for(5ms);
 				}
 			}
 

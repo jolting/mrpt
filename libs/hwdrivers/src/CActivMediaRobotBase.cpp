@@ -192,7 +192,7 @@ void CActivMediaRobotBase::connectAndEnableMotors()
 		THE_ROBOT->runAsync(true);
 		THE_ROBOT->unlock();
 
-		mrpt::system::sleep(500);
+		std::this_thread::sleep_for(500ms);
 
 		CTicTac	tictac;
 		tictac.Tic();
@@ -202,7 +202,7 @@ void CActivMediaRobotBase::connectAndEnableMotors()
 			THE_ROBOT->lock();
 			THE_ROBOT->enableMotors();
 			THE_ROBOT->unlock();
-			mrpt::system::sleep(500);
+			std::this_thread::sleep_for(500ms);
 
 			bool	success = false;
 
@@ -220,7 +220,7 @@ void CActivMediaRobotBase::connectAndEnableMotors()
 					break;
 				}
 				THE_ROBOT->unlock();
-				mrpt::system::sleep(100);
+				std::this_thread::sleep_for(100ms);
 			}
 
 			if (!success)
@@ -308,7 +308,7 @@ void CActivMediaRobotBase::disconnectAndDisableMotors()
 	THE_ROBOT->stopEncoderPackets();
 	THE_ROBOT->unlock();
 
-	mrpt::system::sleep(1);
+	std::this_thread::sleep_for(1ms);
 
 	THE_ROBOT->lock();
 	if (THE_ROBOT->areMotorsEnabled())

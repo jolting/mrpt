@@ -56,7 +56,7 @@ bool CServoeNeck::queryFirmwareVersion( std::string &out_firmwareVersion )
 		if (receiveMessage( msgRx ) )
 		{
 			msgRx.getContentAsString( out_firmwareVersion );
-			mrpt::system::sleep(200);
+			std::this_thread::sleep_for(200ms);
 			return true;
 		}
 		else
@@ -125,7 +125,7 @@ bool CServoeNeck::setRegisterValue( const uint16_t value, const uint8_t servo, b
 		if (!receiveMessage(msgRx) )
 			return false;	// Error
 
-		mrpt::system::sleep(200);
+		std::this_thread::sleep_for(200ms);
 		return true;
 	}
 	catch(...)
@@ -163,7 +163,7 @@ bool CServoeNeck::setRegisterValueAndSpeed( const uint16_t value, const uint8_t 
 		if (!receiveMessage(msgRx) )
 			return false;	// Error
 
-		mrpt::system::sleep(200);
+		std::this_thread::sleep_for(200ms);
 		return true;
 	}
 	catch(...)
@@ -379,9 +379,9 @@ bool CServoeNeck::checkConnectionAndConnect()
 	try
 	{
 		OpenBySerialNumber( m_usbSerialNumber );
-		mrpt::system::sleep(10);
+		std::this_thread::sleep_for(10ms);
 		Purge();
-		mrpt::system::sleep(10);
+		std::this_thread::sleep_for(10ms);
 		SetLatencyTimer(1);
         SetTimeouts(300,100);
 		return true;

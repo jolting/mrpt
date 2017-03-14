@@ -650,7 +650,7 @@ void CCameraSensor::getNextFrame( vector<CSerializable::Ptr> & out_obs )
 		do
 		{
 			m_cap_kinect->getNextObservation(*obs3D, there_is_obs, hardware_error);
-			if (!there_is_obs) mrpt::system::sleep(1);
+			if (!there_is_obs) std::this_thread::sleep_for(1ms);
 		} while (!there_is_obs && mrpt::system::timeDifference(t0,mrpt::system::now())<max_timeout);
 
 		if (!there_is_obs || hardware_error)
@@ -670,7 +670,7 @@ void CCameraSensor::getNextFrame( vector<CSerializable::Ptr> & out_obs )
 		do
 		{
 			m_cap_openni2->getNextObservation(*obs3D, there_is_obs, hardware_error);
-			if (!there_is_obs) mrpt::system::sleep(1);
+			if (!there_is_obs) std::this_thread::sleep_for(1ms);
 		} while (!there_is_obs && mrpt::system::timeDifference(t0,mrpt::system::now())<max_timeout);
 
 		if (!there_is_obs || hardware_error)
@@ -1191,7 +1191,7 @@ CCameraSensor::Ptr mrpt::hwdrivers::prepareVideoSourceFromUserSelection()
     // Wait for the window to realize and signal it's alive:
     if (!WxSubsystem::isConsoleApp)
     {
-    	mrpt::system::sleep(20);	// Force at least 1-2 timer ticks for processing the event:
+    	std::this_thread::sleep_for(20ms);	// Force at least 1-2 timer ticks for processing the event:
     	wxApp::GetInstance()->Yield(true);
     }
 
@@ -1372,6 +1372,6 @@ void CCameraSensor::thread_save_images(unsigned int my_working_thread_index)
 			appendObservation(i->second);
 		}
 
-		mrpt::system::sleep(2);
+		std::this_thread::sleep_for(2ms);
 	}
 }

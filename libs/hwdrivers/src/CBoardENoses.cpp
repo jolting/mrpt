@@ -140,9 +140,9 @@ CStream *CBoardENoses::checkConnectionAndConnect()
 		try
 		{
 			m_stream_FTDI->OpenBySerialNumber( m_usbSerialNumber );
-			mrpt::system::sleep(10);
+			std::this_thread::sleep_for(10ms);
 			m_stream_FTDI->Purge();
-			mrpt::system::sleep(10);
+			std::this_thread::sleep_for(10ms);
 			m_stream_FTDI->SetLatencyTimer(1);
 			m_stream_FTDI->SetTimeouts(10,100);
 			return m_stream_FTDI;
@@ -162,9 +162,9 @@ CStream *CBoardENoses::checkConnectionAndConnect()
 		{
 			m_stream_SERIAL->open(m_COM_port);
 			m_stream_SERIAL->setConfig(m_COM_baud);
-			mrpt::system::sleep(10);
+			std::this_thread::sleep_for(10ms);
 			m_stream_SERIAL->purgeBuffers();
-			mrpt::system::sleep(10);
+			std::this_thread::sleep_for(10ms);
 			//m_stream_SERIAL->setTimeouts(25,1,100, 1,20);
 			m_stream_SERIAL->setTimeouts(50,1,100, 1,20);
 			return m_stream_SERIAL;

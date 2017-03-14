@@ -1686,7 +1686,7 @@ void CLoopCloserERD<GRAPH_t>::checkIfInvalidDataset(
 			m_consecutive_invalid_format_instances_thres) {
 		this->logFmt(mrpt::utils::LVL_ERROR,
 				"Can't find usuable data in the given dataset.\nMake sure dataset contains valid CObservation2DRangeScan/CObservation3DRangeScan data.");
-		mrpt::system::sleep(5000);
+		std::this_thread::sleep_for(5000ms);
 		m_checked_for_usuable_dataset = true;
 	}
 
@@ -1703,7 +1703,7 @@ void CLoopCloserERD<GRAPH_t>::dumpVisibilityErrorMsg(
 			"Make sure that the corresponding visualization flag ( %s "
 			") is set to true in the .ini file.\n",
 			viz_flag.c_str());
-	mrpt::system::sleep(sleep_time);
+	std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
 
 	MRPT_END;
 }

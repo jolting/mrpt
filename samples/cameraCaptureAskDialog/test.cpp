@@ -98,7 +98,7 @@ void TestCameraCaptureAsk()
 		}
 
 
-		mrpt::system::sleep(2);
+		std::this_thread::sleep_for(2ms);
 	}
 
 	cout << "Closing..." << endl;

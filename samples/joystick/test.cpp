@@ -54,7 +54,7 @@ void TestJoystick()
 			printf("Error reading from joystick, please connect one to the system...\r");
 		}
 
-		mrpt::system::sleep(20);
+		std::this_thread::sleep_for(20ms);
 	}
 }
 

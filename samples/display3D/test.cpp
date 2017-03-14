@@ -219,7 +219,7 @@ void TestDisplay3D()
 
 		// Update window:
 		win.forceRepaint();
-		mrpt::system::sleep(20);
+		std::this_thread::sleep_for(20ms);
 
 		if (mrpt::system::os::kbhit()) end = true;
 		if (win.keyHit())

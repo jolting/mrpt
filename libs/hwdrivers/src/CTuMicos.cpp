@@ -314,7 +314,7 @@ bool CTuMicos::reset(void) {
 
 	sprintf(command2,"%u %s ",axis_index,"ncal");
 
-	mrpt::system::sleep(1000);
+	std::this_thread::sleep_for(1000ms);
 
 	if (!transmit(command2)) return false;
 

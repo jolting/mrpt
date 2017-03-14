@@ -478,11 +478,11 @@ void CGPSInterface::JAVAD_sendMessage(const char *str, bool waitForAnswer )
 
 	if (written != len )
 		throw std::runtime_error(format("Error sending command: '%s'",str).c_str());
-	mrpt::system::sleep(5);
+	std::this_thread::sleep_for(5ms);
 
 	if (!waitForAnswer) return;
 
-	mrpt::system::sleep(200);
+	std::this_thread::sleep_for(200ms);
 	char buf[200];
 	buf[0]='\0';
 
@@ -534,7 +534,7 @@ bool CGPSInterface::OnConnectionShutdown()
 			return false; // On any I/O error
 		}
 
-		mrpt::system::sleep(m_custom_cmds_delay*1000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(m_custom_cmds_delay*1000));
 	}
 	return true;
 }
@@ -579,9 +579,9 @@ bool CGPSInterface::OnConnectionEstablished()
 			std::cerr << "[CGPSInterface::OnConnectionEstablished] Error sending setup cmds: " << e.what() << std::endl;
 			return false;
 		}
-		mrpt::system::sleep(m_custom_cmds_delay*1000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(m_custom_cmds_delay*1000));
 	}
-	mrpt::system::sleep(m_custom_cmds_delay*1000);
+	std::this_thread::sleep_for(std::chrono::milliseconds(m_custom_cmds_delay*1000));
 	return true;
 }
 
@@ -592,9 +592,9 @@ bool CGPSInterface::unsetJAVAD_AIM_mode()
 	{
 		// Stop messaging:
 		JAVAD_sendMessage("%%dm\r\n", false);
-		mrpt::system::sleep(500);
+		std::this_thread::sleep_for(500ms);
 		JAVAD_sendMessage("%%dm\r\n",false);
-		mrpt::system::sleep(1000);
+		std::this_thread::sleep_for(1000ms);
 
 		// Purge input:
 		CSerialPort *stream_serial = dynamic_cast<CSerialPort*>(m_data_stream);
@@ -666,9 +666,9 @@ bool CGPSInterface::legacy_topcon_setup_commands()
 {
 	// Stop messaging:
 	JAVAD_sendMessage("%%dm\r\n", false);
-	mrpt::system::sleep(500);
+	std::this_thread::sleep_for(500ms);
 	JAVAD_sendMessage("%%dm\r\n",false);
-	mrpt::system::sleep(1000);
+	std::this_thread::sleep_for(1000ms);
 
 	// Purge input:
 	CSerialPort *stream_serial = dynamic_cast<CSerialPort*>(m_data_stream);

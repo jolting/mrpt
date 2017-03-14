@@ -44,7 +44,7 @@ void Test_EnumerateDevices()
 
 		printf("\nPRESS ANY KEY TO END THE PROGRAM...\n\n");
 		cout.flush();
-		mrpt::system::sleep(500);
+		std::this_thread::sleep_for(500ms);
 	};
 }
 

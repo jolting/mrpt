@@ -138,7 +138,7 @@ void Test_Kinect()
 		CObservation3DRangeScan::Ptr possiblyNewObs = thrPar.new_obs.get();
 		if (possiblyNewObs && possiblyNewObs->timestamp!=INVALID_TIMESTAMP)
 				break;
-		else 	mrpt::system::sleep(10);
+		else 	std::this_thread::sleep_for(10ms);
 	} while (!thrPar.quit);
 
 	// Check error condition:
@@ -351,7 +351,7 @@ void Test_Kinect()
 		}
 
 
-		mrpt::system::sleep(1);
+		std::this_thread::sleep_for(1ms);
 	}
 
 
@@ -368,7 +368,7 @@ int main(int argc, char **argv)
 	{
 		Test_Kinect();
 
-		mrpt::system::sleep(50);
+		std::this_thread::sleep_for(50ms);
 		return 0;
 
 	} catch (std::exception &e)
