@@ -291,7 +291,7 @@ bool CRovio::retrieve_video()
 		m_videothread_must_exit         = false;
 		m_videothread_finished          = false;
 
-		m_videoThread = mrpt::system::createThreadFromObjectMethod(this,&mrpt::hwdrivers::CRovio::thread_video);
+		m_videoThread = std::thread(&mrpt::hwdrivers::CRovio::thread_video,this);
 
 		while (!m_videothread_initialized_done) {
 			std::this_thread::sleep_for(10ms);

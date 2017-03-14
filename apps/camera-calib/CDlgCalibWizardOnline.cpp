@@ -224,7 +224,7 @@ void CDlgCalibWizardOnline::OnbtnStartClick(wxCommandEvent& event)
 
 	m_calibFrames.clear();
 
-	m_threadCorners = mrpt::system::createThreadFromObjectMethod( this, &CDlgCalibWizardOnline::threadProcessCorners );
+	m_threadCorners = std::thread( &CDlgCalibWizardOnline::threadProcessCorners , this);
 
 	lbProgress->SetLabel(_("0"));
 

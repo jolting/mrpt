@@ -39,7 +39,7 @@ CNTRIPClient::CNTRIPClient() :
 	m_answer_connection(connError),
 	m_args ( )
 {
-	m_thread = mrpt::system::createThreadFromObjectMethod( this, &CNTRIPClient::private_ntrip_thread );
+	m_thread = std::thread( &CNTRIPClient::private_ntrip_thread , this);
 }
 
 /* --------------------------------------------------------

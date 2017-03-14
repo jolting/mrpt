@@ -461,7 +461,7 @@ hmt_slam_guiFrame::hmt_slam_guiFrame(wxWindow* parent,wxWindowID id)  :
 
 
 	// Launch Thread:
-	m_hThreadHMTSLAM = mrpt::system::createThreadFromObjectMethod(this, &hmt_slam_guiFrame::thread_HMTSLAM );
+	m_hThreadHMTSLAM = std::thread( &hmt_slam_guiFrame::thread_HMTSLAM ,this);
 
 	// Set default size of the window:
     this->SetSize(600,500);

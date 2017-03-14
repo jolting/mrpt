@@ -12,7 +12,6 @@
 #include <mrpt/opengl/opengl_fonts.h>
 #include <mrpt/utils/utils_defs.h>
 #include <mrpt/config.h>
-#include <mrpt/synch/CSemaphore.h>
 #include <mrpt/math/lightweight_geom_data.h>
 #include <mrpt/utils/types_math.h>
 #include <mrpt/gui/gui_frwds.h>
@@ -21,6 +20,7 @@
 
 #include <queue>
 #include <map>
+#include <thread>
 
 #if MRPT_HAS_WXWIDGETS
 
@@ -148,7 +148,7 @@ namespace mrpt
 
 				private:
 
-					static synch::std::mutex     cs_windowCount;
+					static std::mutex     cs_windowCount;
 					static int                         m_windowCount;
 
 					wxTimer                         *m_theTimer;
@@ -163,7 +163,8 @@ namespace mrpt
 			{
 				TWxMainThreadData();
 				std::thread  m_wxMainThreadId; //!< The thread ID of wxMainThread, or 0 if it is not running.
-				mrpt::synch::CSemaphore m_semWxMainThreadReady; //!< This is signaled when wxMainThread is ready.
+				std::condition_variable m_cvWxMainThreadReady; //!< This is signaled when wxMainThread is ready.
+				bool			m_WxMainThreadReady = false;
 				std::mutex m_csWxMainThreadId; //!< The critical section for accessing "m_wxMainThreadId"
 			};
 
@@ -276,7 +277,7 @@ namespace mrpt
 			/** Do not access directly to this, use the thread-safe functions
 			  */
 			static std::queue<TRequestToWxMainThread*>  *listPendingWxRequests;
-			static synch::std::mutex              *cs_listPendingWxRequests;
+			static std::mutex              *cs_listPendingWxRequests;
 	#endif
 		}; // End of class def.
 

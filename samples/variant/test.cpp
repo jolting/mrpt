@@ -94,8 +94,8 @@ void ThreadsTest()
 	CPipe::createPipe(read_pipe,write_pipe);
 
 	// And send the two end-points to two threads:
-	std::thread hT1( thread_reader, *read_pipe );
-	std::thread hT2( thread_writer, *write_pipe );
+	std::thread hT1( thread_reader, std::ref(*read_pipe) );
+	std::thread hT2( thread_writer, std::ref(*write_pipe) );
 
 	usleep(1000);
 	// Wait for the threads to end.

@@ -14,6 +14,8 @@
 #include <mrpt/opengl/opengl_fonts.h>
 #include <mrpt/utils/CImage.h>
 
+#include <mutex>
+
 namespace mrpt
 {
 	namespace gui
@@ -105,7 +107,7 @@ namespace mrpt
 			friend class CMyGLCanvas_DisplayWindow3D;
 
 			mrpt::opengl::COpenGLScene::Ptr          m_3Dscene; //!< Internal OpenGL object (see general discussion in about usage of this object)
-			std::mutexRecursive m_csAccess3DScene; //!< Critical section for accesing m_3Dscene
+			std::recursive_mutex m_csAccess3DScene; //!< Critical section for accesing m_3Dscene
 
 			void  createOpenGLContext(); //!< Throws an exception on initialization error
 
@@ -117,7 +119,7 @@ namespace mrpt
 
 			bool				m_is_capturing_imgs;
 			mrpt::utils::CImage::Ptr		m_last_captured_img;
-			synch::std::mutex		m_last_captured_img_cs;
+			std::mutex		m_last_captured_img_cs;
 
 			void  doRender();
 
