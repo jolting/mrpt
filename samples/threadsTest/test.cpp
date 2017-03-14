@@ -35,7 +35,7 @@ void thread_example(int id)
 
 		printf("[thread_example %i, ID:%lu] Started, will run for %f seconds\n", id, getCurrentThreadId(), delay);
 
-		mrpt::system::sleep( delay*1000 );
+		std::this_thread::sleep_for( delay*1000 );
 
 		int remaining;
 		{
