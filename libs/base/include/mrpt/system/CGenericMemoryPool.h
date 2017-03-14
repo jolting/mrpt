@@ -10,6 +10,7 @@
 #define  MRPT_MEMORY_POOL_H
 
 #include <list>
+#include <mutex>
 
 namespace mrpt
 {
@@ -72,7 +73,7 @@ namespace mrpt
 				// A quick check first:
 				if (m_pool.empty()) return nullptr;
 
-				std::lock_guard<std::mutex> lock( &m_pool_cs );
+				std::lock_guard<std::mutex> lock( m_pool_cs );
 				for (typename TList::iterator it=m_pool.begin();it!=m_pool.end();++it) {
 					if (it->first.isSuitable(params))
 					{

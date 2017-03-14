@@ -25,6 +25,7 @@
 #include <mrpt/pbmap/SubgraphMatcher.h>
 #include <mrpt/pbmap/ConsistencyTest.h>
 #include <mrpt/pbmap/link_pragmas.h>
+#include <thread>
 
 namespace mrpt {
 namespace pbmap {

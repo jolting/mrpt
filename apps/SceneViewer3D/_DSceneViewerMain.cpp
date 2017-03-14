@@ -171,7 +171,7 @@ void CMyGLCanvas::OnPreRender()
 {
 	// This was used to receive scenes from a TCP stream, but it's not used anymore now:
 	// Do we have to update the scene??
-//	synch::std::lock_guard<std::mutex>   lock( &critSec_UpdateScene );
+//	synch::std::lock_guard<std::mutex>   lock(critSec_UpdateScene );
 //	if (newOpenGLScene) { m_openGLScene.reset(); m_openGLScene = newOpenGLScene; newOpenGLScene.reset(); }
 }
 
