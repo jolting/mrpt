@@ -87,7 +87,7 @@ void msleep(uint32_t ms)
 	{
 		diff = (1000 * diff) / CLOCKS_PER_SEC;
 		if (diff > 1000)
-			sleep(diff / 1000);
+			std::this_thread::sleep_for(std::chrono::milliseconds(diff / 1000));
 		else
 			usleep(diff * 1000);
 	}

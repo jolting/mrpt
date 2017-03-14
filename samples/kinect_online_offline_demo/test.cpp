@@ -421,7 +421,7 @@ void Test_KinectOnlineOffline(bool is_online, const string &rawlog_file = string
 
 	cout << "Waiting for grabbing thread to exit...\n";
 	thrPar.quit = true;
-	mrpt::system::joinThread(thHandle);
+	thHandle.join();
 	cout << "Bye!\n";
 }
 

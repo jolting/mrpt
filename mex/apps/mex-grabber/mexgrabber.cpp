@@ -134,7 +134,7 @@ MEX_DEFINE(new) (int nlhs, mxArray* plhs[],
         std::thread	thre = createThread(SensorThread, threParms);
 
         lstThreads.push_back(thre);
-        sleep(time_between_launches);
+        std::this_thread::sleep_for(std::chrono::milliseconds(time_between_launches));
     }
 
     printf("[mex-grabber::new] All threads launched\n");
@@ -269,7 +269,7 @@ void SensorThread(TThreadParams params)
             double	At = timeDifference(t0,t1);
             int At_rem_ms = process_period_ms - At*1000;
             if (At_rem_ms>0)
-                sleep(At_rem_ms);
+                std::this_thread::sleep_for(std::chrono::milliseconds(At_rem_ms));
         }
 
         sensor.clear();

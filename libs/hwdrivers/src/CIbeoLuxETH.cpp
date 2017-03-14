@@ -47,11 +47,11 @@ CIbeoLuxETH::CIbeoLuxETH(string _ip, unsigned int _port):
 CIbeoLuxETH::~CIbeoLuxETH()
 {
 	m_run = false;
-	mrpt::system::joinThread(dataCollectionThread);
+	dataCollectionThread.join();
 	// Wait a little for the thread to come down
 	// Don't ask why, it just works
 	//TODO: Try without the delay
-	sleep(10);
+	std::this_thread::sleep_for(10ms);
 }
 
 void CIbeoLuxETH::dataCollection()

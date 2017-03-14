@@ -510,7 +510,7 @@ void MapBuilding_ICP_Live(const string &INI_FILENAME)
 
 	cout << "Waiting for sensor thread to exit...\n";
 	allThreadsMustExit = true;
-	mrpt::system::joinThread( hSensorThread );
+	 hSensorThread .join();
 	cout << "Sensor thread is closed. Bye bye!\n";
 
 	if (win3D && win3D->isOpen())

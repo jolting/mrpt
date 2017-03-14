@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 			std::thread	thre = createThread(SensorThread, threParms);
 
 			lstThreads.push_back(thre);
-			sleep(time_between_launches);
+			std::this_thread::sleep_for(std::chrono::milliseconds(time_between_launches));
 		}
 
 		// ----------------------------------------------
@@ -346,7 +346,7 @@ int main(int argc, char **argv)
 					cout << "[" << dateTimeToString(now()) << "] Saved " << copy_of_global_list_obs.size() << " objects." << endl;
 				}
 			}
-			sleep(GRABBER_PERIOD_MS);
+			std::this_thread::sleep_for(std::chrono::milliseconds(GRABBER_PERIOD_MS));
 		}
 
 		if (allThreadsMustExit) {
@@ -434,7 +434,7 @@ void SensorThread(TThreadParams params)
 			double	At = timeDifference(t0,t1);
 			int At_rem_ms = process_period_ms - At*1000;
 			if (At_rem_ms>0)
-				sleep(At_rem_ms);
+				std::this_thread::sleep_for(std::chrono::milliseconds(At_rem_ms));
 		}
 
 		sensor.reset();

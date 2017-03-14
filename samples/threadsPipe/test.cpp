@@ -97,8 +97,8 @@ void ThreadsTest()
 	std::thread hT2 = createThreadRef( thread_writer, write_pipe );
 
 	// Wait for the threads to end.
-	mrpt::system::joinThread(hT1);
-	mrpt::system::joinThread(hT2);
+	hT1.join();
+	hT2.join();
 }
 
 // ------------------------------------------------------

@@ -306,7 +306,7 @@ void CDlgPoseEst::OnbtnStopClick(wxCommandEvent& event)
 	this->m_panelCamera->Enable();
 
 	m_threadMustClose = true;
-	mrpt::system::joinThread( m_threadCorners );
+	 m_threadCorners .join();
 }
 
 void CDlgPoseEst::OntimCaptureTrigger(wxTimerEvent& event)

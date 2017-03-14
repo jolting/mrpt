@@ -100,9 +100,9 @@ CHMTSLAM::~CHMTSLAM()
 	// ----------------------------------
 	MRPT_LOG_DEBUG("[CHMTSLAM::destructor] Waiting for threads end...\n");
 
-	mrpt::system::joinThread( m_hThread_3D_viewer );
-	mrpt::system::joinThread( m_hThread_LSLAM );
-	mrpt::system::joinThread( m_hThread_TBI );
+	 m_hThread_3D_viewer .join();
+	 m_hThread_LSLAM .join();
+	 m_hThread_TBI .join();
 
 	MRPT_LOG_DEBUG("[CHMTSLAM::destructor] All threads finished.\n");
 

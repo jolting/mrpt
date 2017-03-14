@@ -331,7 +331,7 @@ int VelodyneView(int argc, char **argv)
 
 	cout << "Waiting for grabbing thread to exit...\n";
 	thrPar.quit = true;
-	mrpt::system::joinThread(thHandle);
+	thHandle.join();
 	cout << "Bye!\n";
 	return 0;
 }
