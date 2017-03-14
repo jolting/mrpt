@@ -22,7 +22,6 @@
 #endif
 
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 
 // ------------------  CPipe ------------------
 

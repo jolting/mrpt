@@ -14,8 +14,6 @@
 
 #include <mrpt/synch/CSemaphore.h>
 #include <mrpt/utils/CStdOutStream.h>
-#include <mrpt/system/threads.h>
-
 
 #include <cstdlib>
 #include <cstring>
@@ -28,7 +26,6 @@
 
 using namespace mrpt;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 using namespace std;
 
 

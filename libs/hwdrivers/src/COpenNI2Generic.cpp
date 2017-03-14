@@ -12,7 +12,6 @@
 #include <mrpt/hwdrivers/COpenNI2Generic.h>
 #include <mrpt/utils/CTimeLogger.h>
 #include <mrpt/obs/CObservation3DRangeScan.h>
-#include <mrpt/system/threads.h>
 
 // Universal include for all versions of OpenCV
 #include <mrpt/otherlibs/do_opencv_includes.h>
@@ -31,7 +30,6 @@
 using namespace mrpt::hwdrivers;
 using namespace mrpt::system;
 using namespace mrpt::obs;
-using namespace mrpt::synch;
 using namespace std;
 
 

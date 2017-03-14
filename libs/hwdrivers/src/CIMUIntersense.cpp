@@ -9,7 +9,6 @@
 
 #include "hwdrivers-precomp.h"   // Precompiled headers
 
-#include <mrpt/system/threads.h>
 #include <mrpt/hwdrivers/CIMUIntersense.h>
 #include <mrpt/obs/CObservationIMU.h>
 

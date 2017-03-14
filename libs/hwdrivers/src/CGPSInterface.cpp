@@ -10,7 +10,6 @@
 #include "hwdrivers-precomp.h"   // Precompiled headers
 
 #include <mrpt/system/os.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/system/filesystem.h>
 #include <mrpt/hwdrivers/CGPSInterface.h>
 #include <mrpt/utils/CClientTCPSocket.h>
@@ -19,7 +18,6 @@
 using namespace mrpt::hwdrivers;
 using namespace mrpt::obs;
 using namespace mrpt::system;
-using namespace mrpt::synch;
 using namespace mrpt::utils;
 using namespace std;
 

@@ -12,7 +12,6 @@
 #include <mrpt/opengl/CBox.h>
 #include <mrpt/opengl/CSphere.h>
 #include <mrpt/gui/CDisplayWindow3D.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/system/os.h>
 
 using namespace std;

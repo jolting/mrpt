@@ -409,7 +409,7 @@ void CLevMarqGSO<GRAPH_t>::optimizeGraph() {
 
 	this->logFmt(mrpt::utils::LVL_DEBUG,
 				"In optimizeGraph\n\tThreadID: %lu\n\tTrying to grab lock... ",
-				mrpt::system::getCurrentThreadId());
+				std::this_thread::get_id());
 
 	mrpt::synch::CCriticalSectionLocker m_graph_lock(m_graph_section);
 	this->_optimizeGraph();

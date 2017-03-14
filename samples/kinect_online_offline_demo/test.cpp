@@ -216,7 +216,7 @@ void Test_KinectOnlineOffline(bool is_online, const string &rawlog_file = string
 		false // generate_3D_pointcloud_in_this_thread -> Don't, we'll do it in this main thread.
 		);
 
-	mrpt::system::TThreadHandle thHandle= mrpt::system::createThreadRef(thread_grabbing ,thrPar);
+	std::thread thHandle(thread_grabbing ,thrPar);
 
 	// Wait until data stream starts so we can say for sure the sensor has been initialized OK:
 	cout << "Waiting for sensor initialization...\n";

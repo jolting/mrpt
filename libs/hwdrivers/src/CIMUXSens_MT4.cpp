@@ -10,7 +10,6 @@
 #include "hwdrivers-precomp.h"   // Precompiled headers
 
 
-#include <mrpt/system/threads.h>
 #include <mrpt/hwdrivers/CIMUXSens_MT4.h>
 #include <mrpt/obs/CObservationIMU.h>
 #include <mrpt/obs/CObservationGPS.h>

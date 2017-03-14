@@ -8,7 +8,6 @@
    +---------------------------------------------------------------------------+ */
 
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/hwdrivers/CServoeNeck.h>
 
 using namespace mrpt;

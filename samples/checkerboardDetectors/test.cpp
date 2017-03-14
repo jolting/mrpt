@@ -10,7 +10,6 @@
 #include <mrpt/utils/CImage.h>
 #include <mrpt/utils/CTimeLogger.h>
 #include <mrpt/vision/chessboard_find_corners.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/gui.h>
 
 using namespace std;

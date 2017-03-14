@@ -44,9 +44,7 @@
 #include <mrpt/system/filesystem.h>
 #include <mrpt/system/datetime.h>
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/system/string_utils.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/utils/CLoadableOptions.h>
 #include <mrpt/utils/CFileOutputStream.h>
 #include <mrpt/utils/CFileInputStream.h>

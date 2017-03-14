@@ -11,7 +11,6 @@
 
 #include <mrpt/utils/net_utils.h>
 #include <mrpt/hwdrivers/CServoeNeck.h>
-#include <mrpt/system/threads.h>
 
 //const double MAX_VALUE = 10000;					// ICR value in the ATMEGA16
 

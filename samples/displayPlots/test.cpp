@@ -10,7 +10,6 @@
 #include <mrpt/gui/CDisplayWindowPlots.h>
 #include <mrpt/math/distributions.h>
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h>
 
 using namespace mrpt;
 using namespace mrpt::gui;

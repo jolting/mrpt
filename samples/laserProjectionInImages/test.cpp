@@ -16,7 +16,6 @@
 #include <mrpt/utils/CFileGZInputStream.h>
 #include <mrpt/system/filesystem.h>
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/obs/CRawlog.h>
 #include <mrpt/maps/CSimplePointsMap.h>
 #include <mrpt/obs/CActionCollection.h>

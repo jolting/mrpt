@@ -10,7 +10,6 @@
 #include <mrpt/gui.h>
 #include <mrpt/utils/CObserver.h>
 #include <mrpt/opengl/CGridPlaneXY.h>
-#include <mrpt/system/threads.h>
 
 using namespace mrpt;
 using namespace mrpt::gui;

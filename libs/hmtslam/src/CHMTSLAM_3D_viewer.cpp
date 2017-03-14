@@ -34,7 +34,7 @@ void CHMTSLAM::thread_3D_viewer(  )
 	{
 		// Start thread:
 		// -------------------------
-		obj->logFmt(mrpt::utils::LVL_DEBUG,"[thread_3D_viewer] Thread started (ID=0x%08lX)\n", mrpt::system::getCurrentThreadId() );
+		obj->logFmt(mrpt::utils::LVL_DEBUG,"[thread_3D_viewer] Thread started (ID=0x%08lX)\n", std::this_thread::get_id() );
 
 		// --------------------------------------------
 		//    The main loop

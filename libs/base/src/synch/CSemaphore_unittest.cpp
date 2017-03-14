@@ -9,12 +9,10 @@
 
 #include <mrpt/synch/CSemaphore.h>
 #include <mrpt/random.h>
-#include <mrpt/system/threads.h>
 #include <gtest/gtest.h>
 
 using namespace mrpt;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 using namespace mrpt::random;
 using namespace mrpt::system;
 using namespace std;
@@ -67,12 +65,12 @@ void sem_thread_example(int id)
 template <int num_threads,int initial_sem_count>
 void my_CSemaphore()
 {
-	std::vector<TThreadHandle>  threads;
+	std::vector<std::thread>  threads;
 
 	// Create a named semaphore:
 	CSemaphore  sem(initial_sem_count /*init val*/,5*num_threads /*max val*/);
 
-    mrpt::system::sleep(1000);
+	mrpt::system::sleep(1000);
 
 	for (int i=1;i<=num_threads;i++)
 		threads.push_back( createThread( sem_thread_example, i ) );

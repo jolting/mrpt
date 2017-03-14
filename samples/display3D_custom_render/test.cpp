@@ -8,7 +8,6 @@
    +---------------------------------------------------------------------------+ */
 
 #include <mrpt/gui/CDisplayWindow3D.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/system/os.h>
 #include <mrpt/utils/CTicTac.h>
 #include <mrpt/utils/CObserver.h>

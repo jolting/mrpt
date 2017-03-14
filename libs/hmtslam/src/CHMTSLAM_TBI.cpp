@@ -43,7 +43,7 @@ void CHMTSLAM::thread_TBI()
 	{
 		// Start thread:
 		// -------------------------
-		obj->logFmt(mrpt::utils::LVL_DEBUG, "[thread_TBI] Thread started (ID=0x%08lX)\n", mrpt::system::getCurrentThreadId() );
+		obj->logFmt(mrpt::utils::LVL_DEBUG, "[thread_TBI] Thread started (ID=0x%08lX)\n", std::this_thread::get_id() );
 
 		// --------------------------------------------
 		//    The main loop

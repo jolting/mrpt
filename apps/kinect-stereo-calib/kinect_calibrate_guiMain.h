@@ -105,10 +105,10 @@ class kinect_calibrate_guiDialog: public wxDialog
 
 		CMyRedirector  *m_my_redirector;
 
-		mrpt::system::TThreadHandle  m_cap_thread;
+		std::thread  m_cap_thread;
 		TThreadParam                 m_cap_thread_data;
 
-		mrpt::system::TThreadHandle  m_findcorners_thread;
+		std::thread  m_findcorners_thread;
 		TThreadDetectCornerParam     m_findcorners_thread_data;
 
 		mrpt::obs::CObservation3DRangeScan::Ptr  m_last_obs;

@@ -14,7 +14,6 @@
 #include <mrpt/utils/CServerTCPSocket.h>
 #include <mrpt/utils/CTicTac.h>
 #include <mrpt/system/string_utils.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/synch/CSemaphore.h>
 #include <mrpt/synch/CThreadSafeVariable.h>
 #include <cstring>
@@ -39,7 +38,6 @@
 
 
 using namespace mrpt;
-using namespace mrpt::synch;
 using namespace mrpt::system;
 using namespace mrpt::utils;
 using namespace mrpt::utils::net;
@@ -447,13 +445,12 @@ bool net::DNS_resolve_async(
 	TDNSThreadData param;
 	param.in_servername = server_name;
 
-	TThreadHandle th =
-	mrpt::system::createThreadRef( thread_DNS_solver_async,param );
+	std::thread th ( thread_DNS_solver_async,param );
 
-	bool res =(param.sem_solved.waitForSignal(timeout_ms));
+	bool res = (param.sem_solved.waitForSignal(timeout_ms));
 	// Let the thread now about me quitting:
 	param.sem_caller_quitted.release();
-	mrpt::system::joinThread(th);
+	th.join();
 
 	if (res)
 	{

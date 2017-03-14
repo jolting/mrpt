@@ -152,7 +152,7 @@ void Test_Kinect()
 	// Launch grabbing thread:
 	// --------------------------------------------------------
 	TThreadParam thrPar;
-	mrpt::system::TThreadHandle thHandle= mrpt::system::createThreadRef(thread_grabbing ,thrPar);
+	std::thread thHandle= std::thread(thread_grabbing ,thrPar);
 
 	// Wait until data stream starts so we can say for sure the sensor has been initialized OK:
 	cout << "Waiting for sensor initialization...\n";

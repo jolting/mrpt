@@ -16,7 +16,6 @@
 using namespace mrpt;
 using namespace mrpt::poses;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 using namespace mrpt::system;
 using namespace std;
 
@@ -94,16 +93,16 @@ void ThreadsTest()
 	CPipe::createPipe(read_pipe,write_pipe);
 
 	// And send the two end-points to two threads:
-	mrpt::system::TThreadHandle hT1 = createThreadRef( thread_reader, *read_pipe );
-	mrpt::system::TThreadHandle hT2 = createThreadRef( thread_writer, *write_pipe );
+	std::thread hT1( thread_reader, *read_pipe );
+	std::thread hT2( thread_writer, *write_pipe );
 
 	usleep(1000);
 	// Wait for the threads to end.
-	mrpt::system::joinThread(hT2);
+	hT1.join();
 	// We need to close this to ensure the pipe gets flushed
 	// Remember Unix uses buffered io
 	write_pipe.reset();
-	mrpt::system::joinThread(hT1);
+	hT1.join();
 }
 
 // ------------------------------------------------------

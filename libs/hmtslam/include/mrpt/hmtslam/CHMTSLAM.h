@@ -9,10 +9,8 @@
 #ifndef CHMTSLAM_H
 #define CHMTSLAM_H
 
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/utils/COutputLogger.h>
 #include <mrpt/utils/CMessageQueue.h>
-#include <mrpt/system/threads.h>
 
 #include <mrpt/hmtslam/HMT_SLAM_common.h>
 #include <mrpt/hmtslam/CLocalMetricHypothesis.h>
@@ -237,7 +235,7 @@ namespace mrpt
 			/** The function for the "3D viewer" thread. */
 			void thread_3D_viewer( );
 			/** Threads handles */
-			mrpt::system::TThreadHandle m_hThread_LSLAM, m_hThread_TBI, m_hThread_3D_viewer;
+			std::thread m_hThread_LSLAM, m_hThread_TBI, m_hThread_3D_viewer;
 			/** @} */
 
 

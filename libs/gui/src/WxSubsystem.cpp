@@ -38,7 +38,6 @@
 using namespace mrpt;
 using namespace mrpt::gui;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 using namespace std;
 
 synch::CCriticalSection  	WxSubsystem::CWXMainFrame::cs_windowCount;

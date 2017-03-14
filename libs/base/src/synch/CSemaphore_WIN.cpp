@@ -21,7 +21,6 @@
 #include <mrpt/utils/CStream.h>
 
 using namespace mrpt;
-using namespace mrpt::synch;
 
 /*---------------------------------------------------------------
 						CSemaphore

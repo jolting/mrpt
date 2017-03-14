@@ -14,7 +14,6 @@
 #include <mrpt/system/filesystem.h>
 
 #ifndef HAVE_TIMEGM
-#   include <mrpt/synch/CCriticalSection.h>
 #endif // HAVE_TIMEGM
 
 #include <cstring>

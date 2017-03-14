@@ -21,7 +21,6 @@ using namespace mrpt::hmtslam;
 using namespace mrpt::poses;
 using namespace mrpt::obs;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 using namespace std;
 
 /*---------------------------------------------------------------

@@ -12,7 +12,6 @@
 
 #include <mrpt/utils/TCamera.h>
 #include <mrpt/hwdrivers/link_pragmas.h>
-#include <mrpt/synch/CCriticalSection.h>
 #include <mrpt/synch/CThreadSafeVariable.h>
 #include <mrpt/obs/CObservationImage.h>
 
@@ -30,7 +29,7 @@ namespace mrpt
 		class HWDRIVERS_IMPEXP CRovio
 		{
 		private:
-			mrpt::system::TThreadHandle		m_videoThread;
+			std::thread		m_videoThread;
 			bool	m_videothread_must_exit; 
 			bool	m_videothread_initialized_done;
 			bool	m_videothread_initialized_error;

@@ -14,7 +14,6 @@
 
 using namespace mrpt;
 using namespace mrpt::utils;
-using namespace mrpt::synch;
 using namespace mrpt::system;
 using namespace mrpt::random;
 using namespace std;
@@ -119,7 +118,7 @@ void thread_example2(int id)
 // ------------------------------------------------------
 void ThreadsTest2()
 {
-	std::vector<TThreadHandle>  threads;
+	std::vector<std::thread>  threads;
 
 	// Create a named semaphore:
 	CSemaphore  sem(3 /*init val*/,50 /*max val*/);

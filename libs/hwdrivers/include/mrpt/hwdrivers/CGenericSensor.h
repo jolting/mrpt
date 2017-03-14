@@ -13,8 +13,6 @@
 #include <mrpt/utils/CConfigFileBase.h>
 #include <mrpt/utils/CUncopiable.h>
 #include <mrpt/obs/CObservation.h>
-#include <mrpt/synch/CCriticalSection.h>
-#include <mrpt/system/threads.h>
 #include <map>
 
 #include <mrpt/hwdrivers/link_pragmas.h>
