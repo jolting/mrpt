@@ -76,7 +76,7 @@ void CHMTSLAM::generateLogFiles(unsigned int nIteration)
 			bestHypoID = bestLMH->m_ID;
 
 			{
-				std::lock_guard<std::mutex>  lockerLMH( &bestLMH->m_lock );
+				std::lock_guard<std::mutex>  lockerLMH( bestLMH->threadLocks.m_lock );
 
 				{
 					// Generate the metric maps 3D view...
@@ -149,7 +149,7 @@ void CHMTSLAM::generateLogFiles(unsigned int nIteration)
 		static int CNT = 0;
 		if ((CNT++ % 5) == 0)
 		{
-			std::lock_guard<std::mutex>  lockerLMH( &bestLMH->m_lock );
+			std::lock_guard<std::mutex>  lockerLMH( bestLMH->threadLocks.m_lock );
 
 			for (TNodeIDSet::const_iterator n = bestLMH->m_neighbors.begin();n!=bestLMH->m_neighbors.end();++n)
 				bestLMH->updateAreaFromLMH( *n );

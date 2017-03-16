@@ -100,6 +100,7 @@ int main(int argc, char **argv)
 }
 
 // Sensor thread -------------------------
+MRPT_TODO("Should these be global?")
 mrpt::hwdrivers::CGenericSensor::TListObservations global_list_obs;
 std::mutex                      cs_global_list_obs;
 
@@ -137,7 +138,7 @@ void SensorThread(TThreadParams params)
 			CGenericSensor::TListObservations	lstObjs;
 			sensor->getObservations( lstObjs );
 			{
-				std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
+				std::lock_guard<std::mutex>	lock (cs_global_list_obs);
 				global_list_obs.insert( lstObjs.begin(), lstObjs.end() );
 			}
 			lstObjs.clear();

@@ -42,7 +42,6 @@ IMPLEMENTS_SERIALIZABLE(CLSLAMParticleData, CSerializable,mrpt::hmtslam)
 				Normal constructor
   ---------------------------------------------------------------*/
 CLocalMetricHypothesis::CLocalMetricHypothesis( CHMTSLAM  * parent ) :
-	m_lock(),
 	m_parent(parent),
 	m_log_w_metric_history()
 	//m_log_w_topol_history()
@@ -572,7 +571,7 @@ void CLocalMetricHypothesis::changeCoordinateOrigin( const TPoseID &newOrigin )
 
 	// Change coords in incr. partitioning as well:
 	{
-		std::lock_guard<std::mutex> locker ( &m_robotPosesGraph.lock );
+		std::lock_guard<std::mutex> locker ( m_robotPosesGraph.lock );
 
 		CSimpleMap *SFseq = m_robotPosesGraph.partitioner.getSequenceOfFrames();
 		for (std::map<uint32_t,TPoseID>::const_iterator it=m_robotPosesGraph.idx2pose.begin();it!=m_robotPosesGraph.idx2pose.end();++it)
@@ -685,7 +684,7 @@ void CLocalMetricHypothesis::removeAreaFromLMH( const CHMHMapNode::TNodeID areaI
 	// 	- the graph partitioner.
 	// ----------------------------------------------------------------------
 	{
-		std::lock_guard<std::mutex> locker ( &m_robotPosesGraph.lock );
+		std::lock_guard<std::mutex> locker ( m_robotPosesGraph.lock );
 
 		vector_uint	indexesToRemove;
 		indexesToRemove.reserve( lstPoseIDs.size() );
@@ -766,7 +765,7 @@ void CLocalMetricHypothesis::updateAreaFromLMH(
 
 	CHMHMapNode::Ptr node;
 	{
-		std::lock_guard<std::mutex>  ( &m_parent->m_map_cs );
+		std::lock_guard<std::mutex>  ( m_parent->m_map_cs );
 		node = m_parent->m_map.getNodeByID( areaID );
 		ASSERT_(node);
 		ASSERT_(node->m_hypotheses.has( m_ID ));

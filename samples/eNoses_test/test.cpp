@@ -13,6 +13,8 @@
 #include <mrpt/system/os.h>
 #include <mrpt/system/filesystem.h>
 
+#include <thread>
+
 using namespace mrpt;
 using namespace mrpt::hwdrivers;
 using namespace mrpt::system;

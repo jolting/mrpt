@@ -30,6 +30,8 @@
 #include <mrpt/system/os.h>
 #include <mrpt/system/filesystem.h>
 
+#include <thread>
+
 #ifdef RAWLOGGRABBER_PLUGIN
 #	include "rawloggrabber_plugin.h"
 #endif
@@ -155,9 +157,8 @@ int main(int argc, char **argv)
 			threParms.cfgFile		= &iniFile;
 			threParms.sensor_label	= *it;
 
-			std::thread	thre = std::thread(SensorThread, threParms);
 
-			lstThreads.push_back(thre);
+			lstThreads.emplace_back(&SensorThread, threParms);
 			std::this_thread::sleep_for(std::chrono::milliseconds(time_between_launches));
 		}
 
@@ -176,7 +177,7 @@ int main(int argc, char **argv)
 		{
 			// See if we have observations and process them:
 			{
-				std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
+				std::lock_guard<std::mutex>	lock (cs_global_list_obs);
 				copy_of_global_list_obs.clear();
 
 				if (!global_list_obs.empty())
@@ -423,7 +424,7 @@ void SensorThread(TThreadParams params)
 			sensor->getObservations( lstObjs );
 
 			{
-				std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
+				std::lock_guard<std::mutex>	lock (cs_global_list_obs);
 				global_list_obs.insert( lstObjs.begin(), lstObjs.end() );
 			}
 

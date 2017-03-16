@@ -10,6 +10,8 @@
 #include <mrpt/system/os.h>
 #include <mrpt/hwdrivers/CServoeNeck.h>
 
+#include <thread>
+
 using namespace mrpt;
 using namespace mrpt::system;
 using namespace mrpt::hwdrivers;

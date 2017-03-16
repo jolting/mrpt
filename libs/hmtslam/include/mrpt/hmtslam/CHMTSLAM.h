@@ -23,6 +23,8 @@
 #include <mrpt/slam/TKLDParams.h>
 #include <mrpt/obs/CActionCollection.h>
 #include <mrpt/opengl/COpenGLScene.h>
+
+#include<thread>
 #include <queue>
 
 namespace mrpt
@@ -213,12 +215,12 @@ namespace mrpt
 			std::queue<mrpt::utils::CSerializable::Ptr>		m_inputQueue;
 
 			/** Critical section for accessing  m_inputQueue */
-			synch::std::mutex	m_inputQueue_cs;
+			mutable std::mutex	m_inputQueue_cs;
 
 			/** Critical section for accessing m_map */
-			synch::std::mutex	m_map_cs;
+			mutable std::mutex	m_map_cs;
 
-			synch::std::mutex	m_LMHs_cs; //!< Critical section for accessing m_LMHs
+			mutable std::mutex	m_LMHs_cs; //!< Critical section for accessing m_LMHs
 
 			/** @} */
 
@@ -286,7 +288,7 @@ namespace mrpt
 			std::deque<CTopLCDetectorBase*>	m_topLCdets;
 
 			/** The critical section for accessing m_topLCdets */
-			synch::std::mutex	m_topLCdets_cs;
+			std::mutex	m_topLCdets_cs;
 		public:
 
 			/** Must be invoked before calling  initializeEmptyMap, so LC objects can be created. */

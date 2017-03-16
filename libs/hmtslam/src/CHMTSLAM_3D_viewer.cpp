@@ -14,9 +14,12 @@
 #include <mrpt/utils/CFileStream.h>
 #include <mrpt/system/os.h>
 
+#include <thread>
+
 using namespace mrpt::slam;
 using namespace mrpt::hmtslam;
 using namespace mrpt::utils;
+using namespace std::literals;
 
 /*---------------------------------------------------------------
 
@@ -48,8 +51,9 @@ void CHMTSLAM::thread_3D_viewer(  )
 		// Finish thread:
 		// -------------------------
 		time_t timCreat,timExit; double timCPU=0;
-		try { mrpt::system::getCurrentThreadTimes( timCreat,timExit,timCPU); } catch(...) {};
-		obj->logFmt(mrpt::utils::LVL_DEBUG,"[thread_3D_viewer] Thread finished. CPU time used:%.06f secs \n",timCPU);
+		MRPT_TODO("Fix thread times")
+		//try { mrpt::system::getCurrentThreadTimes( timCreat,timExit,timCPU); } catch(...) {};
+		//obj->logFmt(mrpt::utils::LVL_DEBUG,"[thread_3D_viewer] Thread finished. CPU time used:%.06f secs \n",timCPU);
 		obj->m_terminationFlag_3D_viewer = true;
 
 	}

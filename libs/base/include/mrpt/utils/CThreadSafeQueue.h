@@ -57,7 +57,7 @@ namespace mrpt
 		{
 		protected:
 			std::queue<T*> m_msgs; //!< The queue of messages. Memory is freed at destructor or by clients gathering messages.
-			std::mutex			m_csQueue; //!< The critical section
+			mutable std::mutex			m_csQueue; //!< The critical section
 		public:
 			/** Default ctor. */
 			CThreadSafeQueue() { }

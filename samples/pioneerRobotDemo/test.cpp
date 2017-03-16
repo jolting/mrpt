@@ -12,6 +12,8 @@
 #include <mrpt/math/ops_vectors.h>  // << for vectors
 #include <mrpt/utils/utils_defs.h>
 
+#include <thread>
+
 using namespace mrpt;
 using namespace mrpt::hwdrivers;
 using namespace mrpt::utils;

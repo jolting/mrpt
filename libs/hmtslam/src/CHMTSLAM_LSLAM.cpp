@@ -115,7 +115,7 @@ void CHMTSLAM::thread_LSLAM()
 
 					for (it=obj->m_LMHs.begin();it!=obj->m_LMHs.end();it++)
 					{
-						std::lock_guard<std::mutex>  LMH_individual_lock( it->second.m_lock );
+						std::lock_guard<std::mutex>  LMH_individual_lock( it->second.threadLocks.m_lock );
 
 						// ----------------------------------------------
 						// 1) Process acts & obs by Local SLAM method:
@@ -210,7 +210,8 @@ void CHMTSLAM::thread_LSLAM()
 		// Finish thread:
 		// -------------------------
 		time_t timCreat,timExit; double timCPU=0;
-		try { mrpt::system::getCurrentThreadTimes( timCreat,timExit,timCPU); } catch(...) {};
+		MRPT_TODO("Fix thread times");
+		//try { mrpt::system::getCurrentThreadTimes( timCreat,timExit,timCPU); } catch(...) {};
 		obj->logFmt(mrpt::utils::LVL_DEBUG,"[thread_LSLAM] Thread finished. CPU time used:%.06f secs \n",timCPU);
 		obj->m_terminationFlag_LSLAM = true;
 
@@ -1228,7 +1229,7 @@ void CHMTSLAM::LSLAM_process_message_from_AA( const TMessageLSLAMfromAA &myMsg )
 					// Remove from list first:
 					CHMHMapNode::TNodeID id = *pNei1;
 
-					pNei1 = erase_return_next(LMH->m_neighbors,pNei1);
+					pNei1 = mrpt::utils::erase_return_next(LMH->m_neighbors,pNei1);
 
 					// Now: this calls internally to "updateAreaFromLMH"
 					double ESS_bef = LMH->ESS();

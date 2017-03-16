@@ -204,7 +204,7 @@ int main ( int argc, char** argv )
 
 		scene = window.get3DSceneAndLock();
 		kinectp->loadFromPointsMap<mrpt::maps::CColouredPointsMap> (&points);
-		system::sleep(5);
+		std::this_thread::sleep_for(5ms);
 		window.unlockAccess3DScene();
 		window.repaint();
 	}

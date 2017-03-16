@@ -326,7 +326,7 @@ int DoTrackingDemo(CCameraSensor::Ptr  cam, bool  DO_SAVE_VIDEO)
 		}
 
 		if (extra_tim_to_wait>0)
-			std::this_thread::sleep_for(std::chrono::milliseconds(1000*extra_tim_to_wait));
+			std::this_thread::sleep_for(std::chrono::duration<double,std::milli>(1000.0*extra_tim_to_wait));
 
 		step_num++;
 	} // end infinite loop

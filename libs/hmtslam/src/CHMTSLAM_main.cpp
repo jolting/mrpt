@@ -54,11 +54,6 @@ THypothesisID	CHMTSLAM::m_nextHypID     = COMMON_TOPOLOG_HYP + 1;
 						Constructor
   ---------------------------------------------------------------*/
 CHMTSLAM::CHMTSLAM( )
- :  m_inputQueue_cs("inputQueue_cs"),
-    m_map_cs("map_cs"),
-    m_LMHs_cs("LMHs_cs")
-//	m_semaphoreInputQueueHasData (0 /*Init state*/ ,1 /*Max*/ ),
-//	m_eventNewObservationInserted(0 /*Init state*/ ,10000 /*Max*/ )
 {
 	// Initialize data structures:
 	// ----------------------------
@@ -633,7 +628,7 @@ void  CHMTSLAM::readFromStream(mrpt::utils::CStream &in,int version)
 			//std::lock_guard<std::mutex> LMHs( & m_LMHs_cs );
 			//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.lock();
 
-			std::lock_guard<std::mutex> lock_map( &m_map_cs );
+			std::lock_guard<std::mutex> lock_map( m_map_cs );
 
 			// Data:
 			in  >> m_nextAreaLabel
@@ -675,7 +670,7 @@ void  CHMTSLAM::writeToStream(mrpt::utils::CStream &out, int *version) const
 		//std::lock_guard<std::mutex> LMHs( & m_LMHs_cs );
 		//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.lock();
 
-		std::lock_guard<std::mutex> lock_map( &m_map_cs );
+		std::lock_guard<std::mutex> lock_map( m_map_cs );
 
 		// Data:
 		out << m_nextAreaLabel
