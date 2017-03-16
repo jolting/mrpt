@@ -76,12 +76,10 @@ bool CLevMarqGSO<GRAPH_t>::updateState(
 
 		if (opt_params.optimization_on_second_thread) {
 			//join the previous optimization thread
-			mrpt::system::joinThread(m_thread_optimize);
+			m_thread_optimize.join();
 
 			// optimize the graph - run on a seperate thread
-			m_thread_optimize = mrpt::system::createThreadFromObjectMethod(
-					/*obj = */ this,
-					/* func = */ &CLevMarqGSO::optimizeGraph);
+			m_thread_optimize = std::thread(&CLevMarqGSO::optimizeGraph, this);
 
 		}
 		else { // single threaded implementation

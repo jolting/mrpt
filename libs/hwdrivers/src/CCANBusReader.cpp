@@ -15,8 +15,9 @@
 #include <mrpt/utils/CTicTac.h>
 #include <mrpt/system/os.h>
 #include <cstdio> // printf
-
 #include <mrpt/hwdrivers/CCANBusReader.h>
+
+#include <thread>
 
 IMPLEMENTS_GENERIC_SENSOR(CCANBusReader,mrpt::hwdrivers)
 

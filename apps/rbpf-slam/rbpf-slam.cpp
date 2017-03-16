@@ -26,7 +26,6 @@
 #include <mrpt/utils/CConfigFile.h>
 #include <mrpt/gui/CDisplayWindow3D.h>
 #include <mrpt/random.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/system/filesystem.h>
 #include <mrpt/system/os.h>
 #include <mrpt/poses/CPosePDFGaussian.h>

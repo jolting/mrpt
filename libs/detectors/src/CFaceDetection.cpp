@@ -44,7 +44,7 @@ using namespace mrpt::obs;
 //							CFaceDetection
 //------------------------------------------------------------------------
 CFaceDetection::CFaceDetection() :
-	m_end_threads(false),
+	m_end_threads(false)
 {
 	m_measure.numPossibleFacesDetected = 0;
 	m_measure.numRealFacesDetected = 0;
@@ -189,9 +189,9 @@ void CFaceDetection::detectObjects_Impl(const mrpt::obs::CObservation *obs, vect
 
 					// Semaphores wait
 					if ( m_options.useCovFilter )
-						m_leave_checkIfFacePlaneCov.wait();
+						m_leave_checkIfFacePlaneCov.get_future().wait();
 					if ( m_options.useRegionsFilter )
-						m_leave_checkIfFaceRegions.wait();
+						m_leave_checkIfFaceRegions.get_future().wait();
 					if ( m_options.useSizeDistanceRelationFilter || m_options.useDiagonalDistanceFilter )
 						m_leave_checkIfDiagonalSurface.waitForSignal();
 
@@ -340,7 +340,7 @@ void CFaceDetection::thread_checkIfFacePlaneCov( )
 {
 	for(;;)
 	{
-		m_enter_checkIfFacePlaneCov.wait();
+		m_enter_checkIfFacePlaneCov.get_future().wait();
 
 		if ( m_end_threads )
 			break;
@@ -468,7 +468,7 @@ void CFaceDetection::thread_checkIfFaceRegions( )
 {
 	for(;;)
 	{
-		m_enter_checkIfFaceRegions.wait();
+		m_enter_checkIfFaceRegions.get_future().wait();
 
 		if ( m_end_threads )
 			break;
@@ -792,7 +792,7 @@ void CFaceDetection::thread_checkIfDiagonalSurface( )
 {
 	for(;;)
 	{
-		m_enter_checkIfDiagonalSurface.wait();
+		m_enter_checkIfDiagonalSurface.get_future().wait();
 
 		if ( m_end_threads )
 			break;

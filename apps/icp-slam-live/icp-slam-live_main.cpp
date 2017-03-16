@@ -24,7 +24,6 @@
 #include <mrpt/utils/CFileGZInputStream.h>
 #include <mrpt/utils/CFileGZOutputStream.h>
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/system/filesystem.h>
 #include <mrpt/opengl/COpenGLScene.h>
 #include <mrpt/opengl/CGridPlaneXY.h>

@@ -14,6 +14,8 @@
 
 #include <mrpt/hwdrivers/CBoardSonars.h>
 
+#include <thread>
+
 using namespace mrpt::utils;
 using namespace mrpt::hwdrivers;
 using namespace std;

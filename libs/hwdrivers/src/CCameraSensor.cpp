@@ -30,6 +30,7 @@ using namespace mrpt::utils;
 using namespace mrpt::obs;
 using namespace mrpt::system;
 using namespace std;
+using namespace std::literals;
 
 IMPLEMENTS_GENERIC_SENSOR(CCameraSensor,mrpt::hwdrivers)
 
@@ -97,7 +98,7 @@ CCameraSensor::CCameraSensor() :
 	m_camera_grab_decimator (0),
 	m_camera_grab_decimator_counter(0),
 	m_preview_counter	(0),
-	m_external_image_saver_count( mrpt::system::getNumberOfProcessors() ),
+	m_external_image_saver_count( std::thread::hardware_concurrency() ),
 	m_threadImagesSaverShouldEnd(false),
 	m_hook_pre_save      (nullptr),
 	m_hook_pre_save_param(nullptr)
@@ -1206,7 +1207,7 @@ CCameraSensor::Ptr mrpt::hwdrivers::prepareVideoSourceFromUserSelection()
 	const char *envVal = getenv("MRPT_WXSUBSYS_TIMEOUT_MS");
 	if (envVal) maxTimeout = atoi(envVal);
 
-	if(!semDlg.get_future().wait_for(std::chrono::milliseconds(maxTimeout)))
+	if(semDlg.get_future().wait_for(std::chrono::milliseconds(maxTimeout))== std::future_status::timeout)
 	{
 		cerr << "[prepareVideoSourceFromUserSelection] Timeout waiting window creation." << endl;
 		return CCameraSensor::Ptr();
@@ -1220,7 +1221,7 @@ CCameraSensor::Ptr mrpt::hwdrivers::prepareVideoSourceFromUserSelection()
 		return CCameraSensor::Ptr();
 
 	CCameraSensor::Ptr cam = CCameraSensor::Ptr(new CCameraSensor);
-	cam->loadConfig(dlgSelection.selectedConfig,"CONFIG");
+	cam->loadConfig(dlgSelection.get().selectedConfig,"CONFIG");
 	cam->initialize();	// This will raise an exception if neccesary
 
 	return cam;

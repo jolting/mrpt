@@ -45,7 +45,6 @@
 #include <mrpt/utils.h>
 #include <mrpt/obs/CObservation3DRangeScan.h>
 #include <mrpt/opengl.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/vision/chessboard_stereo_camera_calib.h>
 #include <mrpt/synch/CThreadSafeVariable.h>
 

@@ -14,6 +14,8 @@
 #include <mrpt/obs/CObservationIMU.h>
 #include <mrpt/obs/CObservationGPS.h>
 
+#include <thread>
+
 IMPLEMENTS_GENERIC_SENSOR(CIMUXSens_MT4,mrpt::hwdrivers)
 
 using namespace mrpt::utils;

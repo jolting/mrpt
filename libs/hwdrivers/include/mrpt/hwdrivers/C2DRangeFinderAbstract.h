@@ -43,7 +43,7 @@ namespace mrpt
 
 			/** For being thread-safe.
 			  */
-			synch::std::mutex	m_csChangeStream,m_csLastObservation;
+			std::mutex	m_csChangeStream,m_csLastObservation;
 
 			mrpt::obs::CObservation2DRangeScan::Ptr		m_nextObservation;		//!< A dynamic object used as buffer in doProcess
 

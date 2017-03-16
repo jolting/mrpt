@@ -13,6 +13,7 @@
 #include <mrpt/utils/CConfigFileMemory.h>
 
 using namespace mrpt::math;
+using namespace std::literals;
 
 const char *default_cfg_txt =
 	"; ---------------------------------------------------------------\n"

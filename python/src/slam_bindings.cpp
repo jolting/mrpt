@@ -425,7 +425,7 @@ void export_slam()
 
     // CMetricMapBuilderRBPF
     {
-        scope s = class_<CMetricMapBuilderRBPF, bases<CMetricMapBuilder> >("CMetricMapBuilderRBPF", init<CMetricMapBuilderRBPF::TConstructionOptions>())
+        scope s = class_<CMetricMapBuilderRBPF, bases<CMetricMapBuilder>, boost::noncopyable >("CMetricMapBuilderRBPF", init<CMetricMapBuilderRBPF::TConstructionOptions>())
             .def("getCurrentPoseEstimation", &CMetricMapBuilderRBPF_getCurrentPoseEstimation, "Returns a copy of the current best pose estimation as a pose PDF.")
             .def("drawCurrentEstimationToImage", &CMetricMapBuilderRBPF::drawCurrentEstimationToImage)
             .def("initialize", &CMetricMapBuilderRBPF_initialize, "Initialize the method, starting with a known location PDF \"x0\"(if supplied, set to nullptr to left unmodified) and a given fixed, past map.")

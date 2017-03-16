@@ -13,6 +13,7 @@
 #include <mrpt/hwdrivers/CIbeoLuxETH.h> // Precompiled headers
 
 #include <bitset>
+#include <thread>
 
 #define APPERTURE           4.712385    // in radian <=> 270°
 

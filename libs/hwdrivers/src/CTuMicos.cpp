@@ -10,7 +10,6 @@
 #include "hwdrivers-precomp.h"   // Precompiled headers
 
 #include <mrpt/hwdrivers/CTuMicos.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/system/string_utils.h>
 #include <mrpt/utils/utils_defs.h>
 #include <cstring>

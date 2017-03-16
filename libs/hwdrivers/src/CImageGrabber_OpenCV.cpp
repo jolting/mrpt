@@ -13,6 +13,8 @@
 
 #include <mrpt/otherlibs/do_opencv_includes.h>
 
+#include <thread>
+
 #define M_CAPTURE  (static_cast<CvCapture*>(m_capture.get()))
 
 using namespace std;

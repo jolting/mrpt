@@ -15,7 +15,7 @@
 
 #include <mrpt/hwdrivers/link_pragmas.h>
 
-#include <promise>
+#include <future>
 #include <list>
 
 namespace mrpt

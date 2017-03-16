@@ -29,7 +29,6 @@
 #include <mrpt/system/filesystem.h>
 #include <mrpt/system/os.h>
 #include <mrpt/math/data_utils.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/obs/CObservationBeaconRanges.h>
 #include <mrpt/obs/CObservationGPS.h>
 #include <mrpt/obs/CRawlog.h>

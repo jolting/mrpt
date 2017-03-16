@@ -13,6 +13,8 @@
 #include <mrpt/hwdrivers/CEnoseModular.h>
 #include <mrpt/utils/CMessage.h>
 
+#include <thread>
+
 using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace mrpt::obs;
