@@ -349,7 +349,7 @@ void CCameraSensor::initialize()
 		m_toSaveList.resize(m_external_image_saver_count);
 
 		for (unsigned int i=0;i<m_external_image_saver_count;++i)
-			m_threadImagesSaver[i] = std::thread( i,this,&CCameraSensor::thread_save_images);
+			m_threadImagesSaver[i] = std::thread(&CCameraSensor::thread_save_images,this,i);
 
 	}
 
@@ -1214,14 +1214,15 @@ CCameraSensor::Ptr mrpt::hwdrivers::prepareVideoSourceFromUserSelection()
 	}
 
 	// wait for user selection:
-	dlgSelection.get_future().wait()
+	auto future = dlgSelection.get_future();
+	future.wait();
 
 	// If the user didn't accept the dialog, return now:
-	if (!dlgSelection.get().accepted_by_user)
+	if (!future.get().accepted_by_user)
 		return CCameraSensor::Ptr();
 
 	CCameraSensor::Ptr cam = CCameraSensor::Ptr(new CCameraSensor);
-	cam->loadConfig(dlgSelection.get().selectedConfig,"CONFIG");
+	cam->loadConfig(future.get().selectedConfig,"CONFIG");
 	cam->initialize();	// This will raise an exception if neccesary
 
 	return cam;

@@ -559,7 +559,7 @@ bool CGPSInterface::OnConnectionEstablished()
 	CSerialPort *stream_serial = dynamic_cast<CSerialPort*>(m_data_stream);
 	if (stream_serial)
 	{
-		std::lock_guard<std::mutex> lock( m_data_stream_cs );
+		std::lock_guard<std::mutex> lock( *m_data_stream_cs );
 		stream_serial->purgeBuffers();
 	}	
 

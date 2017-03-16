@@ -17,6 +17,7 @@
 
 #include <mrpt/hwdrivers/CGenericSensor.h>
 
+#include <thread>
 
 namespace mrpt
 {

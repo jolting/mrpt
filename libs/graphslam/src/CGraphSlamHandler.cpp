@@ -12,6 +12,8 @@
 #include "graphslam-precomp.h"
 #include <mrpt/graphslam/apps_related/CGraphSlamHandler.h>
 
+using namespace std::literals;
+
 CGraphSlamHandler::CGraphSlamHandler() {
 	using namespace mrpt::system;
 

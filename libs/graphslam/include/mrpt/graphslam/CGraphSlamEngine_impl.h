@@ -38,7 +38,6 @@ CGraphSlamEngine<GRAPH_t>::CGraphSlamEngine(
 	m_estimated_traj_color(255, 165, 0),
 	m_optimized_map_color(255, 0, 0),
 	m_robot_model_size(1),
-	m_graph_section("graph_sec"), // give the std::mutex a name for easier debugging
 	m_class_name("CGraphSlamEngine")
 {
 

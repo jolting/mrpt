@@ -589,7 +589,8 @@ void CICPCriteriaERD<GRAPH_t>::checkIfInvalidDataset(
 	if (m_consecutive_invalid_format_instances > m_consecutive_invalid_format_instances_thres) {
 		this->logFmt(LVL_ERROR,
 				"Can't find usuable data in the given dataset.\nMake sure dataset contains valid CObservation2DRangeScan/CObservation3DRangeScan data.");
-		std::this_thread::sleep_for(5000ms);
+		using namespace std::literals;
+		std::this_thread::sleep_for(5s);
 		m_checked_for_usuable_dataset = true;
 	}
 

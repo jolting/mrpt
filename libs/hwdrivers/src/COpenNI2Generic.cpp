@@ -16,6 +16,8 @@
 // Universal include for all versions of OpenCV
 #include <mrpt/otherlibs/do_opencv_includes.h>
 
+#include <thread>
+
 #if MRPT_HAS_OPENNI2
 
 // This seems to be assumed by OpenNI.h and undefined for some reason in GCC/Ubuntu

@@ -12,6 +12,8 @@
 #include <mrpt/system/filesystem.h>
 #include <mrpt/system/os.h>
 
+#include <thread>
+
 using namespace mrpt;
 using namespace mrpt::utils;
 using namespace mrpt::obs;

@@ -85,7 +85,6 @@ CKinect::CKinect()  :
 	m_f_dev(nullptr), // The "freenect_device", or nullptr if closed
 	m_tim_latest_depth(0),
 	m_tim_latest_rgb(0),
-	m_latest_obs_cs("m_latest_obs_cs"),
 #endif
 	m_relativePoseIntensityWRTDepth(0,-0.02,0, DEG2RAD(-90),DEG2RAD(0),DEG2RAD(-90)),
 	m_initial_tilt_angle(360),
@@ -93,8 +92,7 @@ CKinect::CKinect()  :
 	m_grab_image(true),
 	m_grab_depth(true),
 	m_grab_3D_points(true),
-	m_grab_IMU(true),
-	m_video_channel(VIDEO_CHANNEL_RGB)
+	m_grab_IMU(true)
 {
 	calculate_range2meters();
 

@@ -1134,7 +1134,7 @@ int main()
 					{
 						cout<<"VIDEO OFF"<<endl;
 						data.showvideo=!data.showvideo; // this kill the thread
-						joinThread(screen_hd); //Wait till thread finish
+						screen_hd.join(); //Wait till thread finish
 						win.~CDisplayWindow();
 					}
 					break;
@@ -1256,11 +1256,11 @@ int main()
 				}
 
 				if(data.features_taken)	//End features thread
-					joinThread(featuring_hd);
+					featuring_hd.join();
 				if(data.matching_done)	//End matching thread
-					joinThread(matching_hd);
+					matching_hd.join();
 				if(data.fm_calculated)	//End getFM thread
-					joinThread(fm_hd);
+					fm_hd.join();
 
 				std::this_thread::sleep_for(10ms);
 			}while(decision!='.');

@@ -10,8 +10,10 @@
 #include <mrpt/hwdrivers/CInterfaceFTDI.h>
 #include <mrpt/system/os.h>
 #include <mrpt/system/datetime.h>
+
 #include <cstdio>
 #include <iostream>
+#include <thread>
 
 using namespace mrpt;
 using namespace mrpt::hwdrivers;

@@ -41,10 +41,13 @@
 #include <windows.h>
 #endif
 
+#include <thread>
+
 using namespace mrpt;
 using namespace mrpt::utils;
 using namespace mrpt::hwdrivers;
 using namespace std;
+using namespace std::literals;
 
 // ctor
 CSerialPort::CSerialPort( const string &portName, bool openNow ) :

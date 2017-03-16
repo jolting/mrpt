@@ -405,7 +405,7 @@ void export_slam()
 
     // CMetricMapBuilderICP
     {
-        scope s = class_<CMetricMapBuilderICP, bases<CMetricMapBuilder> >("CMetricMapBuilderICP", init<>())
+        scope s = class_<CMetricMapBuilderICP, bases<CMetricMapBuilder>, boost::noncopyable>("CMetricMapBuilderICP", init<>())
             .def("initialize", &CMetricMapBuilderICP_initialize, "Initialize the method, starting with a known location PDF \"x0\"(if supplied, set to nullptr to left unmodified) and a given fixed, past map.")
             .def_readwrite("ICP_options", &CMetricMapBuilderICP::ICP_options)
             .def_readwrite("ICP_params", &CMetricMapBuilderICP::ICP_params)

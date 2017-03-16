@@ -342,7 +342,7 @@ void CIbeoLuxETH::initialize()
 	// boost threads:
 	//boost::thread dataCollectionThread(boost::bind(&CIbeoLuxETH::dataCollection,this));
 
-	dataCollectionThread = std::thread( &CIbeoLuxETH::dataCollection,this)
+	dataCollectionThread = std::thread( &CIbeoLuxETH::dataCollection,this);
 }
 
 void CIbeoLuxETH::doProcess()

@@ -11,6 +11,9 @@
 
 #include <mrpt/utils/types_simple.h>
 
+#include <thread>
+#include <mutex>
+
 namespace mrpt
 {
 namespace synch

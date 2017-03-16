@@ -193,7 +193,7 @@ void CFaceDetection::detectObjects_Impl(const mrpt::obs::CObservation *obs, vect
 					if ( m_options.useRegionsFilter )
 						m_leave_checkIfFaceRegions.get_future().wait();
 					if ( m_options.useSizeDistanceRelationFilter || m_options.useDiagonalDistanceFilter )
-						m_leave_checkIfDiagonalSurface.waitForSignal();
+						m_leave_checkIfDiagonalSurface.get_future().wait();
 
 					// Check resutls
 					if ( !m_checkIfFacePlaneCov_res || !m_checkIfFaceRegions_res

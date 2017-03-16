@@ -16,6 +16,8 @@
 #include <mrpt/system/filesystem.h>
 #include <mrpt/utils/bits.h> // for reverseBytesInPlace()
 
+#include <thread>
+
 // socket's hdrs:
 #ifdef MRPT_OS_WINDOWS
 	#define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -256,7 +258,7 @@ bool CVelodyneScanner::getNextObservation(
 					if (m_pcap) {
 						// Keep the reader from blowing through the file.
 						if (!m_pcap_read_fast)
-							std::this_thread::sleep_for(std::chrono::milliseconds(m_pcap_read_full_scan_delay_ms));
+							std::this_thread::sleep_for(std::chrono::duration<double,std::milli>(m_pcap_read_full_scan_delay_ms));
 					}
 				}
 			}
@@ -815,7 +817,7 @@ bool CVelodyneScanner::internal_read_PCAP_packet(
 		if (m_pcap_repeat_delay > 0.0)
 		{
 			if (m_pcap_verbose) printf("[CVelodyneScanner] INFO: end of file reached -- delaying %.3f seconds.\n", m_pcap_repeat_delay);
-			std::this_thread::sleep_for(std::chrono::milliseconds(m_pcap_repeat_delay * 1000.0));
+			std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(m_pcap_repeat_delay * 1000.0));
 		}
 
 		if (m_pcap_verbose) printf("[CVelodyneScanner] INFO: replaying Velodyne dump file.\n");
