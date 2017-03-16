@@ -68,7 +68,7 @@ int ArMutex::lock()
     return(STATUS_FAILED_INIT);
   }
 
-  if (pthread_mutex_lock(myMutex) < 0)
+  if (pthread_mutex_lock(&myMutex) < 0)
   {
     if (errno == EDEADLK)
     {
@@ -99,7 +99,7 @@ int ArMutex::tryLock()
     return(STATUS_FAILED_INIT);
   }
 
-  if (pthread_mutex_trylock(myMutex) < 0)
+  if (pthread_mutex_trylock(&myMutex) < 0)
   {
     if (errno == EBUSY)
     {
@@ -132,7 +132,7 @@ int ArMutex::unlock()
     return(STATUS_FAILED_INIT);
   }
 
-  if (pthread_mutex_unlock(myMutex) < 0)
+  if (pthread_mutex_unlock(&myMutex) < 0)
   {
     if (errno == EPERM)
     {
