@@ -73,16 +73,16 @@ public:
 #else
 #ifdef _MACOS
         if (timeout !=0 ) {
-            if (pthread_mutex_lock(_lock) == 0) return LOCK_OK;
+            if (pthread_mutex_lock(&_lock) == 0) return LOCK_OK;
         }
 #else
         if (timeout == 0xFFFFFFFF){
-            if (pthread_mutex_lock(_lock) == 0) return LOCK_OK;
+            if (pthread_mutex_lock(&_lock) == 0) return LOCK_OK;
         }
 #endif
         else if (timeout == 0)
         {
-            if (pthread_mutex_trylock(_lock) == 0) return LOCK_OK;
+            if (pthread_mutex_trylock(&_lock) == 0) return LOCK_OK;
         }
 #ifndef _MACOS
         else
@@ -99,7 +99,7 @@ public:
                ++wait_time.tv_sec;
                wait_time.tv_nsec -= 1000000000;
             }
-            switch (pthread_mutex_timedlock(_lock,&wait_time))
+            switch (pthread_mutex_timedlock(&_lock,&wait_time))
             {
             case 0:
                 return LOCK_OK;
@@ -119,7 +119,7 @@ public:
 #ifdef _WIN32
         ReleaseMutex(_lock);
 #else
-        pthread_mutex_unlock(_lock);
+        pthread_mutex_unlock(&_lock);
 #endif
     }
 
