@@ -108,7 +108,7 @@ void  CMetricMapBuilderRBPF::processActionObservation(
 					CSensoryFrame		&observations )
 {
 	MRPT_START
-	std::lock_guard<std::mutex> csl(&critZoneChangingMap); // Enter critical section (updating map)
+	std::lock_guard<std::mutex> csl(critZoneChangingMap); // Enter critical section (updating map)
 
 	// Update the traveled distance estimations:
 	{

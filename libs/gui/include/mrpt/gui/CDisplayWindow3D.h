@@ -107,7 +107,7 @@ namespace mrpt
 			friend class CMyGLCanvas_DisplayWindow3D;
 
 			mrpt::opengl::COpenGLScene::Ptr          m_3Dscene; //!< Internal OpenGL object (see general discussion in about usage of this object)
-			std::recursive_mutex m_csAccess3DScene; //!< Critical section for accesing m_3Dscene
+			mutable std::recursive_mutex m_csAccess3DScene; //!< Critical section for accesing m_3Dscene
 
 			void  createOpenGLContext(); //!< Throws an exception on initialization error
 

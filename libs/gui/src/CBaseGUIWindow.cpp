@@ -29,8 +29,7 @@ CBaseGUIWindow::CBaseGUIWindow(void* winobj_voidptr, int CMD_CREATE_WIN, int CMD
 	: m_CMD_CREATE_WIN(CMD_CREATE_WIN),
 	  m_CMD_DESTROY_WIN(CMD_DESTROY_WIN),
 	  m_winobj_voidptr(winobj_voidptr),
-	  m_semThreadReady(0,1),
-	  m_semWindowDestroyed(0,1),
+	  m_threadReady(false),
 	  m_caption(initial_caption),
 	  m_hwnd(nullptr),
   	  m_keyPushed(false),
@@ -44,12 +43,12 @@ CBaseGUIWindow::CBaseGUIWindow(void* winobj_voidptr, int CMD_CREATE_WIN, int CMD
  ---------------------------------------------------------------*/
 void CBaseGUIWindow::createWxWindow(unsigned int initialWidth, unsigned int initialHeight)
 {
-	MRPT_UNUSED_PARAM(initialWidth); MRPT_UNUSED_PARAM(initialHeight);
-	MRPT_START
+    MRPT_UNUSED_PARAM(initialWidth); MRPT_UNUSED_PARAM(initialHeight);
+    MRPT_START
 #if MRPT_HAS_WXWIDGETS
-	// Create the main wxThread:
-	// -------------------------------
-	if (!WxSubsystem::createOneInstanceMainThread() )
+    // Create the main wxThread:
+    // -------------------------------
+    if (!WxSubsystem::createOneInstanceMainThread() )
         return; // Error!
 
     // Create window:
@@ -81,8 +80,8 @@ void CBaseGUIWindow::createWxWindow(unsigned int initialWidth, unsigned int init
 	const char *envVal = getenv("MRPT_WXSUBSYS_TIMEOUT_MS");
 	if (envVal) maxTimeout = atoi(envVal);
 
-
-	if(!m_cvThreadReady.waitForSignal(maxTimeout))  // 2 secs should be enough...
+	std::unique_lock<std::mutex> lock(m_mutex);
+	if(!m_cvThreadReady.wait_for(lock, std::chrono::milliseconds(maxTimeout),[&](){return this->m_threadReady;}))  // 2 secs should be enough...
 	{
 		cerr << "[CBaseGUIWindow::ctor] Timeout waiting window creation." << endl;
 	}
@@ -129,7 +128,8 @@ void CBaseGUIWindow::destroyWxWindow()
 	#else
 			6000;
 	#endif
-		if(!m_semWindowDestroyed.waitForSignal(maxTimeout))  // 2 secs should be enough...
+		std::unique_lock<std::mutex> lock(m_mutex);
+		if(!m_cvWindowDestroyed.wait_for(lock,std::chrono::milliseconds(maxTimeout),[&](){return this->m_windowDestroyed;}))  // 2 secs should be enough...
 		{
 			cerr << "[CBaseGUIWindow::dtor] Timeout waiting window destruction." << endl;
 		}
@@ -144,7 +144,6 @@ void CBaseGUIWindow::destroyWxWindow()
  ---------------------------------------------------------------*/
 void CBaseGUIWindow::notifyChildWindowDestruction()
 {
-    //cout << "[CBaseGUIWindow::notifyChildWindowDestruction] Called." << endl;
     m_hwnd = nullptr;
 }
 
@@ -219,5 +218,7 @@ bool CBaseGUIWindow::isOpen()
  ---------------------------------------------------------------*/
 void CBaseGUIWindow::notifySemThreadReady()
 {
-	m_semThreadReady.release();
+	std::unique_lock<std::mutex> lock(m_mutex);
+	m_threadReady = true;
+	m_cvThreadReady.notify_one();
 }

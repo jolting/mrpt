@@ -19,6 +19,7 @@
 #include <mrpt/obs/CActionCollection.h>
 
 #include <mrpt/slam/link_pragmas.h>
+#include <mutex>
 
 namespace mrpt
 {
@@ -36,9 +37,9 @@ namespace slam
 	protected:
 		std::mutex   critZoneChangingMap; //!< Critical zones
 		/** Enter critical section for map updating */
-		inline void  enterCriticalSection() { critZoneChangingMap.enter(); }
+		inline void  enterCriticalSection() { critZoneChangingMap.lock(); }
 		/** Leave critical section for map updating */
-		inline void  leaveCriticalSection() { critZoneChangingMap.leave(); }
+		inline void  leaveCriticalSection() { critZoneChangingMap.unlock(); }
 	public:
 		CMetricMapBuilder();           //!< Constructor
 		virtual ~CMetricMapBuilder( ); //!< Destructor.

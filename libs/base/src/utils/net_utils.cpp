@@ -16,8 +16,8 @@
 #include <mrpt/system/string_utils.h>
 #include <mrpt/synch/CThreadSafeVariable.h>
 
-#include <condition_variable>
 #include <thread>
+#include <future>
 #include <cstring>
 #include <stdio.h>
 
@@ -403,28 +403,6 @@ mrpt::utils::net::http_get(
 }
 
 
-// ===========   net::DNS_resolve_async   ==============
-// Yeah, it's gonna got pretty complicated...
-struct TDNSThreadData
-{
-	TDNSThreadData() :
-		solved(false),
-		quit(false),
-		in_servername(),
-		out_solved_ip()
-	{}
-	bool solved;
-	bool quit;
-	std::condition_variable cv_solved;
-	std::condition_variable cv_quit;
-	std::mutex mutex;
-	std::string			in_servername;
-	CThreadSafeVariable<std::string>  out_solved_ip;  // Will be set to nullptr by the caller if the function returns.
-};
-
-void thread_DNS_solver_async(TDNSThreadData &dat); // Frd decl.
-
-
 
 /** Resolve a server address by its name, returning its IP address as a string - This method has a timeout for the maximum time to wait for the DNS server.
   *   For example: server_name="www.google.com" -> out_ip="209.85.227.99"
@@ -448,25 +426,52 @@ bool net::DNS_resolve_async(
 
 	// Solve DNS --------------
 	// It seems that the only reliable way of *with a timeout* is to launch a separate thread.
-	TDNSThreadData param;
-	param.in_servername = server_name;
 
-	std::thread th ( &thread_DNS_solver_async, std::ref(param) );
+	std::future<std::string> dns_result = std::async(std::launch::async, [&](){
+		// Windows-specific stuff:
+#ifdef MRPT_OS_WINDOWS
+		{
+			// Init the WinSock Library:
+			WORD		wVersionRequested = MAKEWORD( 2, 0 );
+			WSADATA		wsaData;
+			if (WSAStartup( wVersionRequested, &wsaData ) )
+			{
+				std::cerr << "thread_DNS_solver_async: Error calling WSAStartup";
+				return;
+			}
+		}
+#endif
 
-	bool res;
-	// Let the thread now about me quitting:
-	{
-		std::unique_lock<std::mutex> lk(param.mutex);
-		res = param.cv_solved.wait_for(lk, std::chrono::milliseconds(timeout_ms),[&](){return param.solved;});
-		param.quit = true;
-		param.cv_quit.notify_one();
-	}
-	th.join();
+		// Do the DNS lookup:
+		std::string  dns_result;
 
-	if (res)
+		hostent *he = gethostbyname(server_name.c_str() );
+		if (!he)
+		{
+			dns_result.clear();  // empty string -> error.
+		}
+		else
+		{
+			struct in_addr ADDR;
+			::memcpy(&ADDR, he->h_addr, sizeof(ADDR)); // Was: *((struct in_addr *)he->h_addr);
+			// Convert address to text:
+			dns_result = string( inet_ntoa(ADDR) );
+		}
+
+
+
+#ifdef MRPT_OS_WINDOWS
+		WSACleanup();
+#endif
+		return dns_result;
+	});
+
+	auto status = dns_result.wait_for(std::chrono::milliseconds(timeout_ms));		
+
+	if (status == std::future_status::ready)
 	{
 		// Done: Anyway, it can still be an error result:
-		out_ip = param.out_solved_ip;
+		out_ip = dns_result.get();
 		return !out_ip.empty();
 	}
 	else
@@ -476,56 +481,6 @@ bool net::DNS_resolve_async(
 
 		return false;
 	}
-}
-
-void thread_DNS_solver_async(TDNSThreadData &param)
-{
-	// Windows-specific stuff:
-#ifdef MRPT_OS_WINDOWS
-	{
-		// Init the WinSock Library:
-		WORD		wVersionRequested = MAKEWORD( 2, 0 );
-		WSADATA		wsaData;
-		if (WSAStartup( wVersionRequested, &wsaData ) )
-		{
-			std::cerr << "thread_DNS_solver_async: Error calling WSAStartup";
-			return;
-		}
-	}
-#endif
-
-	// Do the DNS lookup:
-	std::string  dns_result;
-
-	hostent *he = gethostbyname( param.in_servername.c_str() );
-	if (!he)
-	{
-		dns_result.clear();  // empty string -> error.
-	}
-	else
-	{
-		struct in_addr ADDR;
-		::memcpy(&ADDR, he->h_addr, sizeof(ADDR)); // Was: *((struct in_addr *)he->h_addr);
-		// Convert address to text:
-		dns_result = string( inet_ntoa(ADDR) );
-	}
-
-	// Save in the caller string:
-	param.out_solved_ip.set( dns_result );
-
-	// and signal we're done:
-	{
-		std::unique_lock<std::mutex> lk(param.mutex);
-		param.solved = true;
-		param.cv_solved.notify_one();
-
-		// Finally, wait for the main thread to end so we can safely free the shared struct:
-		param.cv_quit.wait(lk, [&](){return param.quit;});
-	}
-
-#ifdef MRPT_OS_WINDOWS
-	WSACleanup();
-#endif
 }
 
 /** Returns a description of the last Sockets error */

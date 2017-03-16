@@ -40,11 +40,11 @@ using namespace mrpt::gui;
 using namespace mrpt::utils;
 using namespace std;
 
-synch::CCriticalSection  	WxSubsystem::CWXMainFrame::cs_windowCount;
+std::mutex  	WxSubsystem::CWXMainFrame::cs_windowCount;
 int                       	WxSubsystem::CWXMainFrame::m_windowCount = 0;
 
 std::queue<WxSubsystem::TRequestToWxMainThread*> * WxSubsystem::listPendingWxRequests = nullptr;
-synch::CCriticalSection             * WxSubsystem::cs_listPendingWxRequests = nullptr;
+std::mutex             * WxSubsystem::cs_listPendingWxRequests = nullptr;
 
 volatile WxSubsystem::CWXMainFrame* WxSubsystem::CWXMainFrame::oneInstance = nullptr;
 volatile bool WxSubsystem::isConsoleApp = true;
@@ -230,7 +230,7 @@ WxSubsystem::TRequestToWxMainThread * WxSubsystem::popPendingWxRequest()
 {
 	if (!cs_listPendingWxRequests)
 	{
-		cs_listPendingWxRequests= new CCriticalSection();
+		cs_listPendingWxRequests= new std::mutex();
 		listPendingWxRequests = new std::queue<TRequestToWxMainThread*>;
 	}
 
@@ -261,7 +261,7 @@ void WxSubsystem::pushPendingWxRequest( WxSubsystem::TRequestToWxMainThread *dat
 
 	if (!cs_listPendingWxRequests)
 	{
-		cs_listPendingWxRequests= new CCriticalSection();
+		cs_listPendingWxRequests= new std::mutex();
 		listPendingWxRequests = new std::queue<TRequestToWxMainThread*>;
 	}
 
