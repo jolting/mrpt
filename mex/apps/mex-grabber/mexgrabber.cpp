@@ -153,7 +153,7 @@ MEX_DEFINE(read) (int nlhs, mxArray* plhs[],
 
     // See if we have observations and process them:
     {
-        synch::std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
+        std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
         copy_of_global_list_obs.clear();
 
         if (!global_list_obs.empty())
@@ -256,7 +256,7 @@ void SensorThread(TThreadParams params)
             sensor->getObservations( lstObjs );
 
             {
-                synch::std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
+                std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
                 // Control maximum number of stored observations to prevent excesive growth of list between calls
                 if ( global_list_obs.size() < 2 * max_num_obs ) // .size() is returning 2 countings for each pair
                     global_list_obs.insert( lstObjs.begin(), lstObjs.end() );

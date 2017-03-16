@@ -77,8 +77,8 @@ void CAbstractPTGBasedReactive::preDestructor()
 	m_closing_navigator = true;
 
 	// Wait to end of navigation (multi-thread...)
-	m_nav_cs.enter();
-	m_nav_cs.leave();
+	m_nav_cs.lock();
+	m_nav_cs.unlock();
 
 	// Just in case.
 	try {

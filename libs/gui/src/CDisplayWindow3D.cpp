@@ -26,9 +26,6 @@ using namespace mrpt::opengl;
 using namespace mrpt::math;
 using namespace std;
 
-
-IMPLEMENTS_MRPT_OBJECT(CDisplayWindow3D,CBaseGUIWindow,mrpt::gui)
-
 #if MRPT_HAS_OPENGL_GLUT
 	#ifdef MRPT_OS_WINDOWS
 		// Windows:
@@ -306,7 +303,7 @@ void C3DWindowDialog::OnClose(wxCloseEvent& event)
     WxSubsystem::CWXMainFrame::notifyWindowDestruction();
 
 	// Signal we are destroyed:
-    m_win3D->m_semWindowDestroyed.release();
+    m_win3D->m_windowDestroyed.set_value();
 
     event.Skip(); // keep processing by parent classes.
 }
@@ -397,13 +394,11 @@ CDisplayWindow3D::CDisplayWindow3D(
 	unsigned int		initialWindowWidth,
 	unsigned int		initialWindowHeight )
 	: CBaseGUIWindow(static_cast<void*>(this),300,399, windowCaption),
-      m_csAccess3DScene(),
       m_grab_imgs_prefix(),
       m_grab_imgs_idx(0),
       m_is_capturing_imgs(false),
-      m_last_captured_img_cs("m_last_captured_img_cs"),
-	  m_lastFullScreen (mrpt::system::now()),
-	  m_last_FPS(10)
+      m_lastFullScreen (mrpt::system::now()),
+      m_last_FPS(10)
 {
 //	static mrpt::utils::CStdOutStream oo;
 //	m_csAccess3DScene.m_debugOut = &oo;

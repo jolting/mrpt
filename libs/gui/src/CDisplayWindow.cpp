@@ -25,7 +25,6 @@ using namespace mrpt::system;
 using namespace std;
 
 
-IMPLEMENTS_MRPT_OBJECT(CDisplayWindow,CBaseGUIWindow,mrpt::gui)
 
 
 #if MRPT_HAS_WXWIDGETS
@@ -216,12 +215,7 @@ void CWindowDialog::OnClose(wxCloseEvent& event)
     // Decrement number of windows:
     WxSubsystem::CWXMainFrame::notifyWindowDestruction();
 
-	// Signal we are destroyed:
-    {
-      std::unique_lock<std::mutex> lock(m_win2D->m_mutex);
-      m_win2D->m_windowDestroyed = true;
-      m_win2D->m_cvWindowDestroyed.notify_one();
-    }
+    m_win2D->m_windowDestroyed.set_value();
 
     event.Skip(); // keep processing by parent classes.
 }

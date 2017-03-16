@@ -71,7 +71,7 @@ CHMTSLAM::TMessageLSLAMfromAA::Ptr CHMTSLAM::areaAbstraction(
 		} // end of LMH's critical section lock
 
 		{
-			synch::std::lock_guard<std::mutex> locker ( &LMH->m_robotPosesGraph.lock );
+			std::lock_guard<std::mutex> locker ( &LMH->m_robotPosesGraph.lock );
 
 			// Add to the graph partitioner:
 			LMH->m_robotPosesGraph.partitioner.options = obj->m_options.AA_options;
@@ -85,7 +85,7 @@ CHMTSLAM::TMessageLSLAMfromAA::Ptr CHMTSLAM::areaAbstraction(
 
 	vector< vector_uint >   partitions;
 	{
-		synch::std::lock_guard<std::mutex> locker ( &LMH->m_robotPosesGraph.lock );
+		std::lock_guard<std::mutex> locker ( &LMH->m_robotPosesGraph.lock );
 		// Recompute partitions:
 		LMH->m_robotPosesGraph.partitioner.markAllNodesForReconsideration(); // We will have always small local maps.
 		LMH->m_robotPosesGraph.partitioner.updatePartitions( partitions );

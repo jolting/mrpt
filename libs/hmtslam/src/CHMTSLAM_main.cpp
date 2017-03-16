@@ -145,7 +145,7 @@ CHMTSLAM::~CHMTSLAM()
 
 	// Delete TLC-detectors
 	{
-		synch::std::lock_guard<std::mutex>	lock(m_topLCdets_cs );
+		std::lock_guard<std::mutex>	lock(m_topLCdets_cs );
 
 		// Clear old list:
 		for (std::deque<CTopLCDetectorBase*>::iterator it=m_topLCdets.begin();it!=m_topLCdets.end();++it)
@@ -419,7 +419,7 @@ void  CHMTSLAM::initializeEmptyMap()
 	// ------------------------------------
 	CHMHMapNode::TNodeID	firstAreaID;
 	{
-		synch::std::lock_guard<std::mutex>	lock(m_map_cs );
+		std::lock_guard<std::mutex>	lock(m_map_cs );
 
 		// Initialize hierarchical structures:
 		// -----------------------------------------------------
@@ -442,7 +442,7 @@ void  CHMTSLAM::initializeEmptyMap()
 	// CLEAR LIST OF HYPOTHESES
 	// ------------------------------------
 	{
-		synch::std::lock_guard<std::mutex>	lock(m_LMHs_cs );
+		std::lock_guard<std::mutex>	lock(m_LMHs_cs );
 
 		// Add to the list:
 		m_LMHs.clear();
@@ -479,7 +479,7 @@ void  CHMTSLAM::initializeEmptyMap()
 	//  Topological LC detectors:
 	// ------------------------------------
 	{
-		synch::std::lock_guard<std::mutex>	lock(m_topLCdets_cs );
+		std::lock_guard<std::mutex>	lock(m_topLCdets_cs );
 
 		// Clear old list:
 		for (std::deque<CTopLCDetectorBase*>::iterator it=m_topLCdets.begin();it!=m_topLCdets.end();++it)
@@ -631,7 +631,7 @@ void  CHMTSLAM::readFromStream(mrpt::utils::CStream &in,int version)
 			//std::map< THypothesisID, CLocalMetricHypothesis >::const_iterator it;
 
 			//std::lock_guard<std::mutex> LMHs( & m_LMHs_cs );
-			//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.enter();
+			//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.lock();
 
 			std::lock_guard<std::mutex> lock_map( &m_map_cs );
 
@@ -649,7 +649,7 @@ void  CHMTSLAM::readFromStream(mrpt::utils::CStream &in,int version)
 			// Save options??? Better allow changing them...
 
 			// Release all critical sections:
-			//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.enter();
+			//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.lock();
 
 		} break;
 	default:
@@ -673,7 +673,7 @@ void  CHMTSLAM::writeToStream(mrpt::utils::CStream &out, int *version) const
 		//std::map< THypothesisID, CLocalMetricHypothesis >::const_iterator it;
 
 		//std::lock_guard<std::mutex> LMHs( & m_LMHs_cs );
-		//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.enter();
+		//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.lock();
 
 		std::lock_guard<std::mutex> lock_map( &m_map_cs );
 
@@ -691,7 +691,7 @@ void  CHMTSLAM::writeToStream(mrpt::utils::CStream &out, int *version) const
 		// Save options??? Better allow changing them...
 
 		// Release all critical sections:
-		//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.enter();
+		//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.lock();
 
 
 	}

@@ -572,7 +572,7 @@ void CLocalMetricHypothesis::changeCoordinateOrigin( const TPoseID &newOrigin )
 
 	// Change coords in incr. partitioning as well:
 	{
-		synch::std::lock_guard<std::mutex> locker ( &m_robotPosesGraph.lock );
+		std::lock_guard<std::mutex> locker ( &m_robotPosesGraph.lock );
 
 		CSimpleMap *SFseq = m_robotPosesGraph.partitioner.getSequenceOfFrames();
 		for (std::map<uint32_t,TPoseID>::const_iterator it=m_robotPosesGraph.idx2pose.begin();it!=m_robotPosesGraph.idx2pose.end();++it)
@@ -685,7 +685,7 @@ void CLocalMetricHypothesis::removeAreaFromLMH( const CHMHMapNode::TNodeID areaI
 	// 	- the graph partitioner.
 	// ----------------------------------------------------------------------
 	{
-		synch::std::lock_guard<std::mutex> locker ( &m_robotPosesGraph.lock );
+		std::lock_guard<std::mutex> locker ( &m_robotPosesGraph.lock );
 
 		vector_uint	indexesToRemove;
 		indexesToRemove.reserve( lstPoseIDs.size() );
@@ -766,7 +766,7 @@ void CLocalMetricHypothesis::updateAreaFromLMH(
 
 	CHMHMapNode::Ptr node;
 	{
-		synch::std::lock_guard<std::mutex>  ( &m_parent->m_map_cs );
+		std::lock_guard<std::mutex>  ( &m_parent->m_map_cs );
 		node = m_parent->m_map.getNodeByID( areaID );
 		ASSERT_(node);
 		ASSERT_(node->m_hypotheses.has( m_ID ));

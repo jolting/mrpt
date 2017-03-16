@@ -119,7 +119,7 @@ namespace mrpt
 
 			bool				m_is_capturing_imgs;
 			mrpt::utils::CImage::Ptr		m_last_captured_img;
-			std::mutex		m_last_captured_img_cs;
+			mutable std::mutex		m_last_captured_img_cs;
 
 			void  doRender();
 
