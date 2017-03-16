@@ -48,7 +48,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     if (thre.idThread == 0) // Unitialized
     {
         printf("Thread was unitialized, launching new timerThread\n");
-        thre = createThread(timerThread);
+        thre = std::thread(timerThread);
     }
 
     printf("Counter: %d\n", counter);

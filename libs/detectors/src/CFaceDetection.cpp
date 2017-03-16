@@ -99,11 +99,11 @@ void CFaceDetection::init(const mrpt::utils::CConfigFileBase &cfg )
 	if ( m_options.multithread )
 	{
 		if ( m_options.useRegionsFilter )
-			m_thread_checkIfFaceRegions = createThread( dummy_checkIfFaceRegions, this );
+			m_thread_checkIfFaceRegions = std::thread( dummy_checkIfFaceRegions, this );
 		if ( m_options.useCovFilter )
-			m_thread_checkIfFacePlaneCov = createThread( dummy_checkIfFacePlaneCov, this );
+			m_thread_checkIfFacePlaneCov = std::thread( dummy_checkIfFacePlaneCov, this );
 		if ( m_options.useSizeDistanceRelationFilter || m_options.useDiagonalDistanceFilter )
-			m_thread_checkIfDiagonalSurface = createThread( dummy_checkIfDiagonalSurface, this );
+			m_thread_checkIfDiagonalSurface = std::thread( dummy_checkIfDiagonalSurface, this );
 
 		m_checkIfFacePlaneCov_res	= false;
 		m_checkIfFaceRegions_res	= true;

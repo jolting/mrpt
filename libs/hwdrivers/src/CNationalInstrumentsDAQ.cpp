@@ -471,7 +471,7 @@ void  CNationalInstrumentsDAQ::initialize()
 
 			MRPT_DAQmx_ErrChk (MRPT_DAQmxStartTask(taskHandle));
 
-			ipt.hThread = mrpt::system::createThreadFromObjectMethodRef<CNationalInstrumentsDAQ,TInfoPerTask>(this, &CNationalInstrumentsDAQ::grabbing_thread, ipt);
+			ipt.hThread = std::thread(&CNationalInstrumentsDAQ::grabbing_thread, this, ipt);
 			
 
 		}

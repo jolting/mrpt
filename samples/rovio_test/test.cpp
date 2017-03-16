@@ -1062,7 +1062,7 @@ int main()
 			//cout<<MenuJoystick<<endl;
 
 			//Calling Joystick in other thread
-			//createThread(JoystickControl,&data);
+			//std::thread(JoystickControl,&data);
 
 			do{
 				decision=mrpt::system::os::getch();
@@ -1128,7 +1128,7 @@ int main()
 					{
 						cout<<"VIDEO ON"<<endl;
 						data.showvideo=!data.showvideo;
-						screen_hd=createThread(videowindow, &data);
+						screen_hd=std::thread(videowindow, &data);
 					}
 					else //close the window
 					{
@@ -1166,29 +1166,29 @@ int main()
 				case 'f': //Take Features
 					act=0; output=false;
 					data.features_taken=false;	//this var checks if the function TestExtractFeatures has finished
-					featuring_hd=createThread(TestExtractFeatures, &data);
+					featuring_hd=std::thread(TestExtractFeatures, &data);
 					break;
 				case 'b': //Match Features without epipolar restriction
 					act=0; output=false;
 					data.matching_done=false;	//this var checks if the function TestExtractFeatures has finished
 					data.matching_type=complete_match;
-					matching_hd=createThread(matching, &data);
+					matching_hd=std::thread(matching, &data);
 					break;
 				case '1': //Change the matching to complete matching, get all the correspondences using epipolar restriction
 					act=0; output=false;
 					data.matching_done=false;	//this var checks if the function TestExtractFeatures has finished
 					data.matching_type=epipolar_match;
-					matching_hd=createThread(matching, &data);
+					matching_hd=std::thread(matching, &data);
 					break;
 				case '*': //Calculate Fundamental Matrix
 					act=0; output=false;
 					data.fm_calculated=false;	//this var checks if the function TestExtractFeatures has finished
-					fm_hd=createThread(getFMat, &data);
+					fm_hd=std::thread(getFMat, &data);
 					break;
 				case '/': //Calculate Fundamental Matrix
 					act=0; output=false;
 					data.fm_calculated=false;	//this var checks if the function TestExtractFeatures has finished
-					fm_hd=createThread(getFMat_from_txt, &data);
+					fm_hd=std::thread(getFMat_from_txt, &data);
 					break;
 				case '2': //Calculate the Translation & Rotation Matrix for the camera
 					act=0; output=false;
