@@ -60,8 +60,8 @@ namespace mrpt
 			void*		m_winobj_voidptr;
 
 		protected:
-			mutable std::promise<bool> m_threadReady;	//!< This semaphore will be signaled when the wx window is built and ready.
-			mutable std::promise<bool> m_windowDestroyed; //!< This semaphore will be signaled when the wx window is destroyed.
+			mutable std::promise<void> m_threadReady;	//!< This semaphore will be signaled when the wx window is built and ready.
+			mutable std::promise<void> m_windowDestroyed; //!< This semaphore will be signaled when the wx window is destroyed.
 			std::string			m_caption;	//!< The caption of the window
 			mrpt::utils::void_ptr_noncopy	m_hwnd;	//!< The window handle
 

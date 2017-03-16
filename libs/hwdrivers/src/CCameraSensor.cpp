@@ -966,7 +966,7 @@ void CCameraSensor::getNextFrame( vector<CSerializable::Ptr> & out_obs )
 		{	// Stereo obs  -------
 			if (m_external_images_own_thread)
 			{
-				m_csToSaveList.enter();
+				m_csToSaveList.lock();
 
 				// Select the "m_toSaveList" with the shortest pending queue:
 				size_t idx_min = 0;
@@ -976,7 +976,7 @@ void CCameraSensor::getNextFrame( vector<CSerializable::Ptr> & out_obs )
                 // Insert:
 				m_toSaveList[idx_min].insert( TListObsPair( stObs->timestamp, stObs ) );
 
-				m_csToSaveList.leave();
+				m_csToSaveList.unlock();
 
 				delayed_insertion_in_obs_queue = true;
 			}
@@ -1003,7 +1003,7 @@ void CCameraSensor::getNextFrame( vector<CSerializable::Ptr> & out_obs )
 		{	// Monocular image obs  -------
 			if (m_external_images_own_thread)
 			{
-				m_csToSaveList.enter();
+				m_csToSaveList.lock();
 
 				// Select the "m_toSaveList" with the shortest pending queue:
 				size_t idx_min = 0;
@@ -1014,7 +1014,7 @@ void CCameraSensor::getNextFrame( vector<CSerializable::Ptr> & out_obs )
                 // Insert:
 				m_toSaveList[idx_min].insert( TListObsPair( obs->timestamp, obs ) );
 
-				m_csToSaveList.leave();
+				m_csToSaveList.unlock();
 				delayed_insertion_in_obs_queue = true;
 			}
 			else
@@ -1322,9 +1322,9 @@ void CCameraSensor::thread_save_images(unsigned int my_working_thread_index)
 		TListObservations newObs;
 
 		// is there any new image?
-		m_csToSaveList.enter();
+		m_csToSaveList.lock();
 		m_toSaveList[my_working_thread_index].swap(newObs);
-		m_csToSaveList.leave();
+		m_csToSaveList.unlock();
 
 		for (TListObservations::const_iterator i=newObs.begin();i!=newObs.end();++i)
 		{

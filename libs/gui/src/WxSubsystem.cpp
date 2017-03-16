@@ -234,7 +234,7 @@ WxSubsystem::TRequestToWxMainThread * WxSubsystem::popPendingWxRequest()
 		listPendingWxRequests = new std::queue<TRequestToWxMainThread*>;
 	}
 
-	synch::std::lock_guard<std::mutex>	locker( cs_listPendingWxRequests );
+	std::lock_guard<std::mutex>	locker( cs_listPendingWxRequests );
 
     // Is empty?
     if (listPendingWxRequests->empty())
@@ -853,9 +853,9 @@ void WxSubsystem::waitWxShutdownsIfNoWindows()
     	while (!done && --maxTimeout >0)
     	{
     		system::sleep(10);
-			WxSubsystem::GetWxMainThreadInstance().m_csWxMainThreadId.enter();
+			WxSubsystem::GetWxMainThreadInstance().m_csWxMainThreadId.lock();
 			done = WxSubsystem::GetWxMainThreadInstance().m_wxMainThreadId.isClear();
-			WxSubsystem::GetWxMainThreadInstance().m_csWxMainThreadId.leave();
+			WxSubsystem::GetWxMainThreadInstance().m_csWxMainThreadId.unlock();
     	}
 
     	if (maxTimeout<=0)

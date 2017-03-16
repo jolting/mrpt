@@ -528,10 +528,10 @@ void CKinect::getNextObservation(
 	const TTimeStamp tim0 = mrpt::system::now();
 
 	// Reset these timestamp flags so if they are !=0 in the next call we're sure they're new frames.
-	m_latest_obs_cs.enter();
+	m_latest_obs_cs.lock();
 	m_tim_latest_rgb   = 0;
 	m_tim_latest_depth = 0;
-	m_latest_obs_cs.leave();
+	m_latest_obs_cs.unlock();
 
 	while (freenect_process_events(f_ctx)>=0 && mrpt::system::now()<(tim0+max_wait) )
 	{
@@ -555,10 +555,10 @@ void CKinect::getNextObservation(
 		m_latest_obs.hasRangeImage = true;
 		m_latest_obs.range_is_depth = true;
 
-		m_latest_obs_cs.enter(); // Important: if system is running slow, etc. we cannot tell for sure that the depth buffer is not beeing filled right now:
+		m_latest_obs_cs.lock(); // Important: if system is running slow, etc. we cannot tell for sure that the depth buffer is not beeing filled right now:
 		m_latest_obs.rangeImage.setSize(m_cameraParamsDepth.nrows,m_cameraParamsDepth.ncols);
 		m_latest_obs.rangeImage.setConstant(0); // "0" means: error in range
-		m_latest_obs_cs.leave();
+		m_latest_obs_cs.unlock();
 		there_is_obs=true;
 	}
 
@@ -570,9 +570,9 @@ void CKinect::getNextObservation(
 	// We DO have a fresh new observation:
 
 	// Quick save the observation to the user's object:
-	m_latest_obs_cs.enter();
+	m_latest_obs_cs.lock();
 		_out_obs.swap(m_latest_obs);
-	m_latest_obs_cs.leave();
+	m_latest_obs_cs.unlock();
 #endif
 
 	// Set common data into observation:

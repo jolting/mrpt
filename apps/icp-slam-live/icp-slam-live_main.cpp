@@ -138,7 +138,7 @@ void SensorThread(TThreadParams params)
 			CGenericSensor::TListObservations	lstObjs;
 			sensor->getObservations( lstObjs );
 			{
-				synch::std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
+				std::lock_guard<std::mutex>	lock (&cs_global_list_obs);
 				global_list_obs.insert( lstObjs.begin(), lstObjs.end() );
 			}
 			lstObjs.clear();
