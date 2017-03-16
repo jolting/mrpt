@@ -31,8 +31,6 @@ using namespace std;
    -------------------------------------------------------- */
 CNTRIPClient::CNTRIPClient() :
 	m_thread(),
-	m_sem_sock_closed(0,1),
-	m_sem_first_connect_done(0,1),
 	m_thread_exit (false),
 	m_thread_do_process(false),
 	m_waiting_answer_connection(false),
@@ -65,7 +63,8 @@ void CNTRIPClient::close()
 	m_upload_data.clear();
 	if (!m_thread_do_process) return;
 	m_thread_do_process = false;
-	m_sem_sock_closed.waitForSignal(500);
+	MRPT_TODO("Is this a race condition if we are not checking for timeout?");
+	m_sem_sock_closed.wait_for(std::chrono::milliseconds(500));
 }
 
 /* --------------------------------------------------------

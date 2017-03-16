@@ -1177,15 +1177,15 @@ CCameraSensor::Ptr mrpt::hwdrivers::prepareVideoSourceFromUserSelection()
 		return CCameraSensor::Ptr(); // Error!
 	}
 
-	mrpt::synch::CSemaphore  semDlg(0,10);
-	mrpt::gui::detail::TReturnAskUserOpenCamera dlgSelection;
+	std::promise<void>  semDlg;
+	std::promise<mrpt::gui::detail::TReturnAskUserOpenCamera> dlgSelection;
 
     // Create window:
     WxSubsystem::TRequestToWxMainThread  *REQ = new WxSubsystem::TRequestToWxMainThread[1];
     REQ->OPCODE   = 700;
     REQ->sourceCameraSelectDialog = true;
-	REQ->voidPtr = reinterpret_cast<void*>(&semDlg);
-	REQ->voidPtr2 = reinterpret_cast<void*>(&dlgSelection);
+    REQ->voidPtr = reinterpret_cast<void*>(&semDlg);
+    REQ->voidPtr2 = reinterpret_cast<void*>(&dlgSelection);
     WxSubsystem::pushPendingWxRequest( REQ );
 
     // Wait for the window to realize and signal it's alive:
@@ -1206,21 +1206,17 @@ CCameraSensor::Ptr mrpt::hwdrivers::prepareVideoSourceFromUserSelection()
 	const char *envVal = getenv("MRPT_WXSUBSYS_TIMEOUT_MS");
 	if (envVal) maxTimeout = atoi(envVal);
 
-	if(!semDlg.waitForSignal(maxTimeout))
+	if(!semDlg.get_future().wait_for(std::chrono::milliseconds(maxTimeout)))
 	{
 		cerr << "[prepareVideoSourceFromUserSelection] Timeout waiting window creation." << endl;
 		return CCameraSensor::Ptr();
 	}
 
-    // wait for user selection:
-   	if(!semDlg.waitForSignal())
-	{
-		cerr << "[prepareVideoSourceFromUserSelection] Timeout waiting user selection." << endl;
-		return CCameraSensor::Ptr();
-	}
+	// wait for user selection:
+	dlgSelection.get_future().wait()
 
 	// If the user didn't accept the dialog, return now:
-	if (!dlgSelection.accepted_by_user)
+	if (!dlgSelection.get().accepted_by_user)
 		return CCameraSensor::Ptr();
 
 	CCameraSensor::Ptr cam = CCameraSensor::Ptr(new CCameraSensor);

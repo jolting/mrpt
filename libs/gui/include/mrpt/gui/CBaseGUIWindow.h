@@ -27,7 +27,7 @@ namespace mrpt
 {
 	namespace gui
 	{
-		DEFINE_MRPT_OBJECT_PRE_CUSTOM_LINKAGE( CBaseGUIWindow, GUI_IMPEXP )
+//		DEFINE_MRPT_OBJECT_PRE_CUSTOM_LINKAGE( CBaseGUIWindow, GUI_IMPEXP )
 
 		/** The base class for GUI window classes.
 		  *
@@ -43,13 +43,8 @@ namespace mrpt
 		  *    so all your code in the handler must be thread safe.
 		  * \ingroup mrpt_gui_grp
 		  */
-		class GUI_IMPEXP CBaseGUIWindow :
-			public mrpt::utils::CObject,
-			public mrpt::utils::CObservable
+		class GUI_IMPEXP CBaseGUIWindow : public mrpt::utils::CObservable
 		{
-			// This must be added to any CSerializable derived class:
-			DEFINE_VIRTUAL_SERIALIZABLE( CBaseGUIWindow )
-
 			friend class CWindowDialog;
 			friend class C3DWindowDialog;
 			friend class CWindowDialogPlots;

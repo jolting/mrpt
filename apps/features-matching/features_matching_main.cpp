@@ -13,7 +13,6 @@
 #include <mrpt/utils/CMemoryStream.h>
 #include <mrpt/utils/metaprogramming.h>
 #include <mrpt/math/data_utils.h>
-#include <mrpt/system/threads.h>
 
 using namespace mrpt::utils;
 using namespace mrpt::math;

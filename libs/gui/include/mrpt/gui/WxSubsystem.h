@@ -161,9 +161,9 @@ namespace mrpt
 
 			struct TWxMainThreadData
 			{
-				TWxMainThreadData();
 				std::thread  m_wxMainThreadId; //!< The thread ID of wxMainThread, or 0 if it is not running.
-				std::promise<void> m_isReady; //!< This is signaled when wxMainThread is ready.
+				std::promise<void> m_semWxMainThreadReady; //!< This is signaled when wxMainThread is ready.
+				std::promise<void> m_done;
 				std::mutex m_csWxMainThreadId; //!< The critical section for accessing "m_wxMainThreadId"
 			};
 
