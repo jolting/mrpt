@@ -61,6 +61,8 @@
 
 #endif
 
+#include <mutex>
+
 namespace mrpt
 {
 	namespace gui

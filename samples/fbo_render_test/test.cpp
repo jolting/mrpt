@@ -14,10 +14,15 @@
 #include <mrpt/opengl/CFBORender.h>
 #include <mrpt/gui/CDisplayWindow.h>
 
+#include <thread>
+#include <chrono>
+
 using namespace mrpt;
 using namespace mrpt::gui;
 using namespace mrpt::utils;
 using namespace mrpt::opengl;
+
+using namespace std::literals;
 
 // ------------------------------------------------------
 //				TestDisplay3D

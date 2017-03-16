@@ -234,7 +234,7 @@ WxSubsystem::TRequestToWxMainThread * WxSubsystem::popPendingWxRequest()
 		listPendingWxRequests = new std::queue<TRequestToWxMainThread*>;
 	}
 
-	std::lock_guard<std::mutex>	locker( cs_listPendingWxRequests );
+	std::lock_guard<std::mutex>	locker(*cs_listPendingWxRequests );
 
     // Is empty?
     if (listPendingWxRequests->empty())
@@ -265,7 +265,7 @@ void WxSubsystem::pushPendingWxRequest( WxSubsystem::TRequestToWxMainThread *dat
 		listPendingWxRequests = new std::queue<TRequestToWxMainThread*>;
 	}
 
-	std::lock_guard<std::mutex> locker(cs_listPendingWxRequests);
+	std::lock_guard<std::mutex> locker(*cs_listPendingWxRequests);
     listPendingWxRequests->push( data );
 }
 
@@ -275,7 +275,7 @@ void WxSubsystem::pushPendingWxRequest( WxSubsystem::TRequestToWxMainThread *dat
   */
 void WxSubsystem::CWXMainFrame::OnTimerProcessRequests(wxTimerEvent& event)
 {
-	bool app_closed = false;
+    bool app_closed = false;
     try
     {
         TRequestToWxMainThread *msg;
@@ -664,25 +664,28 @@ void WxSubsystem::CWXMainFrame::OnTimerProcessRequests(wxTimerEvent& event)
                 case 700:
 				if (msg->sourceCameraSelectDialog)
                 {
-                	mrpt::synch::CSemaphore *sem = reinterpret_cast<mrpt::synch::CSemaphore*>(msg->voidPtr);
+					std::promise<void> *sem = reinterpret_cast<std::promise<void>*>(msg->voidPtr);
 
 					CDialogAskUserForCamera *dlg = new CDialogAskUserForCamera();
 					// Signal that the window is ready:
-					sem->release(1);
+					sem->set_value();
 
 					// Show
 					const bool wasOk = (dlg->ShowModal() == wxID_OK);
 
 					// send selection to caller:
-					mrpt::gui::detail::TReturnAskUserOpenCamera *ret = reinterpret_cast<mrpt::gui::detail::TReturnAskUserOpenCamera*>(msg->voidPtr2);
+					std::promise<mrpt::gui::detail::TReturnAskUserOpenCamera> *promise = reinterpret_cast<std::promise<mrpt::gui::detail::TReturnAskUserOpenCamera>*>(msg->voidPtr2);
+					mrpt::gui::detail::TReturnAskUserOpenCamera ret;
 
 					// Parse selection as a config text block:
-					dlg->panel->writeConfigFromVideoSourcePanel("CONFIG",&ret->selectedConfig);
-					ret->accepted_by_user = wasOk;
+					dlg->panel->writeConfigFromVideoSourcePanel("CONFIG",&ret.selectedConfig);
+					ret.accepted_by_user = wasOk;
+
+					promise->set_value(ret);
 
 					delete dlg;
 
-					sem->release(1);
+					sem->set_value();
 
                 } break;
 
@@ -794,7 +797,7 @@ bool CDisplayWindow_WXAPP::OnInit()
 
 	// We are ready!!
 	//cout << "[wxMainThread] Signaling semaphore." << endl;
-	WxSubsystem::GetWxMainThreadInstance().m_semWxMainThreadReady.release();
+	WxSubsystem::GetWxMainThreadInstance().m_semWxMainThreadReady.set_value();
 
 	return true;
 }
@@ -810,7 +813,6 @@ int CDisplayWindow_WXAPP::OnExit()
 
 	wxApp::OnExit();
 	CleanUp();
-	//WxSubsystem::GetWxMainThreadInstance().m_wxMainThreadId.clear(); // Moved to wxMainThread()
 	return 0;
 }
 
@@ -846,19 +848,11 @@ void WxSubsystem::waitWxShutdownsIfNoWindows()
     	bool done=false;
 		int maxTimeout =
 #ifdef _DEBUG
-			3000;
+			30000;
 #else
-			500;
+			5000;
 #endif
-    	while (!done && --maxTimeout >0)
-    	{
-    		system::sleep(10);
-			WxSubsystem::GetWxMainThreadInstance().m_csWxMainThreadId.lock();
-			done = WxSubsystem::GetWxMainThreadInstance().m_wxMainThreadId.isClear();
-			WxSubsystem::GetWxMainThreadInstance().m_csWxMainThreadId.unlock();
-    	}
-
-    	if (maxTimeout<=0)
+    	if (m_done.wait_for(std::chrono::milliseconds(maxTimeout)) == std::future_status::timeout)
     	{
     		cerr << "[WxSubsystem::waitWxShutdownsIfNoWindows] Timeout waiting for WxWidgets thread to shutdown!" << endl;
     	}
@@ -958,7 +952,7 @@ void WxSubsystem::wxMainThread()
 #endif
 
 		// Now this thread is ready. The main thread is free to end now:
-		WxSubsystem::GetWxMainThreadInstance().m_wxMainThreadId.clear();
+		WxSubsystem::GetWxMainThreadInstance().m_done.set_value();
 	}
 	else
 	{
@@ -976,7 +970,7 @@ void WxSubsystem::wxMainThread()
 #ifdef WXSUBSYSTEM_VERBOSE
 		cout << "[wxMainThread] Signaling semaphore." << endl;
 #endif
-		WxSubsystem::GetWxMainThreadInstance().m_semWxMainThreadReady.release();
+		WxSubsystem::GetWxMainThreadInstance().m_semWxMainThreadReady.set_value();
 
 	}
 
@@ -993,12 +987,6 @@ WxSubsystem::TWxMainThreadData& WxSubsystem::GetWxMainThreadInstance()
 	return *dat;
 }
 
-WxSubsystem::TWxMainThreadData::TWxMainThreadData() :
-	m_wxMainThreadId(),
-	m_semWxMainThreadReady(0,1),
-	m_csWxMainThreadId("csWxMainThreadId")
-{
-}
 
 
 /*---------------------------------------------------------------
@@ -1010,7 +998,7 @@ bool WxSubsystem::createOneInstanceMainThread()
 	std::lock_guard<std::mutex>	lock(wxmtd.m_csWxMainThreadId);
 
 	wxAppConsole *app_con = wxApp::GetInstance();
-	if (app_con && wxmtd.m_wxMainThreadId.isClear())
+	if (app_con && wxmtd.m_wxMainThreadId.get_id() == std::thread::id())
 	{
 		// We are NOT in a console application: There is already a wxApp instance running and it's not us.
 		WxSubsystem::isConsoleApp = false;
@@ -1030,13 +1018,13 @@ bool WxSubsystem::createOneInstanceMainThread()
 	{
 		//cout << "[createOneInstanceMainThread] Mode: Console." << endl;
 		WxSubsystem::isConsoleApp = true;
-		if (wxmtd.m_wxMainThreadId.isClear())
+		if (wxmtd.m_wxMainThreadId.get_id() == std::thread::id())
 		{
 #ifdef WXSUBSYSTEM_VERBOSE
-		printf("[WxSubsystem::createOneInstanceMainThread] Launching wxMainThread() thread...\n");
+			printf("[WxSubsystem::createOneInstanceMainThread] Launching wxMainThread() thread...\n");
 #endif
 			// Create a thread for message processing there:
-			wxmtd.m_wxMainThreadId = system::createThread( wxMainThread );
+			wxmtd.m_wxMainThreadId = std::thread( wxMainThread );
 
 			int maxTimeout =
 #ifdef _DEBUG
@@ -1050,7 +1038,7 @@ bool WxSubsystem::createOneInstanceMainThread()
 			if (envVal)
 				maxTimeout = atoi(envVal);
 
-			if(! wxmtd.m_semWxMainThreadReady.waitForSignal(maxTimeout) )  // A few secs should be enough...
+			if(wxmtd.m_semWxMainThreadReady.get_future().wait_for(std::chrono::milliseconds(maxTimeout)) == std::future_status::timeout)  // A few secs should be enough...
 			{
 				cerr << "[WxSubsystem::createOneInstanceMainThread] Timeout waiting wxApplication to start up!" << endl;
 				return false;

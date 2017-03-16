@@ -23,7 +23,6 @@ namespace mrpt
 		class C3DWindowDialog;
 		class CMyGLCanvas_DisplayWindow3D;
 
-		DEFINE_MRPT_OBJECT_PRE_CUSTOM_BASE_LINKAGE(CDisplayWindow3D, mrpt::gui::CBaseGUIWindow, GUI_IMPEXP)
 
 		/** A graphical user interface (GUI) for efficiently rendering 3D scenes in real-time.
 		  *  This class always contains internally an instance of opengl::COpenGLScene, which
@@ -99,9 +98,9 @@ namespace mrpt
 		  */
 		class GUI_IMPEXP CDisplayWindow3D : public mrpt::gui::CBaseGUIWindow
 		{
-			// This must be added to any CObject derived class:
-			DEFINE_MRPT_OBJECT( CDisplayWindow3D )
-
+		public:
+			using Ptr = std::shared_ptr<CDisplayWindow3D>;
+			using ConstPtr = std::shared_ptr<const CDisplayWindow3D>;
 		protected:
 			friend class C3DWindowDialog;
 			friend class CMyGLCanvas_DisplayWindow3D;
@@ -314,7 +313,6 @@ namespace mrpt
 			void internal_emitGrabImageEvent(const std::string &fil); //!< called by CMyGLCanvas_DisplayWindow3D::OnPostRenderSwapBuffers
 
 		}; // End of class def.
-		DEFINE_MRPT_OBJECT_POST_CUSTOM_BASE_LINKAGE(CDisplayWindow3D, mrpt::gui::CBaseGUIWindow, GUI_IMPEXP)
 
 
 		/** @name Events specific to CDisplayWindow3D
