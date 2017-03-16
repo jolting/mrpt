@@ -68,9 +68,9 @@ CFaceDetection::~CFaceDetection()
 	m_enter_checkIfFaceRegions.set_value();
 	m_enter_checkIfDiagonalSurface.set_value();
 
-	joinThread(m_thread_checkIfFaceRegions);
-	joinThread(m_thread_checkIfFacePlaneCov);
-	joinThread(m_thread_checkIfDiagonalSurface);
+	m_thread_checkIfFaceRegions.join();
+	m_thread_checkIfFacePlaneCov.join();
+	m_thread_checkIfDiagonalSurface.join();
 }
 
 //------------------------------------------------------------------------
