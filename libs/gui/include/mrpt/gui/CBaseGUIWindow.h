@@ -20,7 +20,8 @@
 
 #include <mrpt/gui/link_pragmas.h>
 
-#include <condition_variable>
+#include <mutex>
+#include <future>
 
 namespace mrpt
 {
@@ -59,10 +60,8 @@ namespace mrpt
 			void*		m_winobj_voidptr;
 
 		protected:
-			std::condition_variable 	m_cvThreadReady;	//!< This semaphore will be signaled when the wx window is built and ready.
-			bool				m_threadReady = false;
-			std::condition_variable 	m_cvWindowDestroyed; //!< This semaphore will be signaled when the wx window is destroyed.
-			bool				m_windowDestroyed = false;
+			mutable std::promise<bool> m_threadReady;	//!< This semaphore will be signaled when the wx window is built and ready.
+			mutable std::promise<bool> m_windowDestroyed; //!< This semaphore will be signaled when the wx window is destroyed.
 			std::string			m_caption;	//!< The caption of the window
 			mrpt::utils::void_ptr_noncopy	m_hwnd;	//!< The window handle
 

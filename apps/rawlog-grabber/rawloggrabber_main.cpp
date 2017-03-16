@@ -58,7 +58,7 @@ void SensorThread(TThreadParams params);
 
 
 CGenericSensor::TListObservations		global_list_obs;
-synch::CCriticalSection					cs_global_list_obs;
+std::mutex					cs_global_list_obs;
 
 bool									allThreadsMustExit = false;
 

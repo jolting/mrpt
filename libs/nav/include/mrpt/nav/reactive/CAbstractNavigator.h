@@ -18,6 +18,8 @@
 
 #include <mrpt/nav/link_pragmas.h>
 
+#include <mutex>
+
 namespace mrpt
 {
   namespace nav
@@ -150,7 +152,7 @@ namespace mrpt
 
 		CRobot2NavInterface   &m_robot; //!< The navigator-robot interface.
 
-		std::mutexRecursive m_nav_cs; //!< mutex for all navigation methods
+		std::recursive_mutex m_nav_cs; //!< mutex for all navigation methods
 
 		struct NAV_IMPEXP TRobotPoseVel
 		{

@@ -119,7 +119,7 @@ using namespace std;
 #endif
 
 // Critical section for updating the scene:
-synch::CCriticalSection	critSec_UpdateScene;
+std::mutex	critSec_UpdateScene;
 
 // The file to open (from cmd line), or an empty string
 extern std::string     global_fileToOpen;
