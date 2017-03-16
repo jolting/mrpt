@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 			threParms.cfgFile		= &iniFile;
 			threParms.sensor_label	= *it;
 
-			std::thread	thre = createThread(SensorThread, threParms);
+			std::thread	thre = std::thread(SensorThread, threParms);
 
 			lstThreads.push_back(thre);
 			std::this_thread::sleep_for(std::chrono::milliseconds(time_between_launches));

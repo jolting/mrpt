@@ -46,7 +46,7 @@ CNTRIPClient::CNTRIPClient() :
 CNTRIPClient::~CNTRIPClient()
 {
 	this->close();
-	if (m_thread.get_id() != std::thread::id())
+	if (m_thread.joinable())
 	{
 		m_thread_exit = true;
 		m_thread.join();
@@ -93,7 +93,7 @@ bool CNTRIPClient::open(const NTRIPArgs &params, string &out_errmsg)
 	m_thread_do_process = true;
 
 	// Wait until the thread tell us the initial result...
-	if (!m_sem_first_connect_done.waitForSignal(6000))
+	if (m_sem_first_connect_done.get_future().wait(6s) == std::future_status::timeout)
 	{
 		out_errmsg = "Timeout waiting thread response";
 		return false;
