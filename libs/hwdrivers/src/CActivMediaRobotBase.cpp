@@ -17,6 +17,8 @@
 #include <mrpt/obs/CObservationRange.h>
 #include <mrpt/obs/CObservationOdometry.h>
 
+#include <thread>
+
 #if MRPT_HAS_ARIA
 	#include "Aria.h"
 #endif

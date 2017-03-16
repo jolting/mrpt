@@ -17,6 +17,8 @@
 // Universal include for all versions of OpenCV
 #include <mrpt/otherlibs/do_opencv_includes.h> 
 
+#include <thread>
+
 using namespace mrpt::detectors;
 using namespace mrpt::obs;
 using namespace mrpt::utils;

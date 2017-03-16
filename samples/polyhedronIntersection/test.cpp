@@ -58,7 +58,7 @@ void piThreadFunction(PIThreadParam &p)	{
 }
 
 inline std::thread piCreateThread(PIThreadParam &p)	{
-	return createThread<PIThreadParam &>(&piThreadFunction,p);
+	return std::thread(&piThreadFunction,p);
 }
 
 class AggregatorFunctor	{
@@ -78,7 +78,7 @@ CSetOfLines::Ptr getIntersections(const vector<pair<CPolyhedron::Ptr,CPolyhedron
 		vector<std::thread> threads(v.size());
 		transform(v.begin(),v.end(),pars.begin(),&PIThreadParam::createObject);
 		transform(pars.begin(),pars.end(),threads.begin(),&piCreateThread);
-		for_each(threads.begin(),threads.end(),&joinThread);
+		for_each(threads.begin(),threads.end(),&std::thread::join);
 		for_each(pars.begin(),pars.end(),AggregatorFunctor(sgms));
 	#else
 		vector<TObject3D> ints,TMP;

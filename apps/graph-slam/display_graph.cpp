@@ -11,7 +11,6 @@
 //#include <mrpt/graphslam/levmarq.h>
 #include <mrpt/gui.h>
 #include <mrpt/utils/CObserver.h>
-#include <mrpt/system/threads.h>
 #include <mrpt/opengl/gl_utils.h>
 #include <mrpt/opengl/CPointCloud.h>
 #include <mrpt/opengl/CSetOfObjects.h>

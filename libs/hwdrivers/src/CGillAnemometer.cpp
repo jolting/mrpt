@@ -16,6 +16,7 @@
 #include <iostream>
 #include <iterator>
 #include <sstream>
+#include <thread>
 
 using namespace std;
 using namespace mrpt::utils;

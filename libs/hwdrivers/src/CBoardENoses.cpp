@@ -14,6 +14,8 @@
 #include <mrpt/utils/CMessage.h>
 #include <mrpt/math/ops_vectors.h>
 
+#include <thread>
+
 using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace mrpt::obs;

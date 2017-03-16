@@ -15,6 +15,8 @@
 #include <mrpt/obs/CObservation3DRangeScan.h>
 #include <mrpt/utils/CClientTCPSocket.h>
 
+#include <thread>
+
 namespace mrpt
 {
 	namespace hwdrivers

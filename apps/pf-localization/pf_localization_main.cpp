@@ -34,7 +34,6 @@
 #include <mrpt/maps/CMultiMetricMap.h>
 
 #include <mrpt/system/os.h>
-#include <mrpt/system/threads.h> // std::this_thread::sleep_for(ms)
 #include <mrpt/system/vector_loadsave.h>
 #include <mrpt/math/distributions.h>
 #include <mrpt/math/utils.h>

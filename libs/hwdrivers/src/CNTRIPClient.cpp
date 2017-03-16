@@ -46,11 +46,10 @@ CNTRIPClient::CNTRIPClient() :
 CNTRIPClient::~CNTRIPClient()
 {
 	this->close();
-	if (!m_thread.isClear())
+	if (m_thread.get_id() != std::thread::id())
 	{
 		m_thread_exit = true;
-		joinThread(m_thread);
-		m_thread.clear();
+		m_thread.join();
 	}
 }
 
@@ -64,7 +63,7 @@ void CNTRIPClient::close()
 	if (!m_thread_do_process) return;
 	m_thread_do_process = false;
 	MRPT_TODO("Is this a race condition if we are not checking for timeout?");
-	m_sem_sock_closed.wait_for(std::chrono::milliseconds(500));
+	m_sem_sock_closed.wait_for(500ms);
 }
 
 /* --------------------------------------------------------
@@ -146,7 +145,7 @@ void CNTRIPClient::private_ntrip_thread()
 			}
 
 			if (last_thread_do_process) // Let the waiting caller continue now.
-				m_sem_sock_closed.release();
+				m_sem_sock_closed.set_value();
 
 			last_thread_do_process = m_thread_do_process;
 			std::this_thread::sleep_for(100ms);
@@ -249,7 +248,7 @@ void CNTRIPClient::private_ntrip_thread()
 				m_waiting_answer_connection = false;
 
 				m_answer_connection = connect_res;
-				m_sem_first_connect_done.release(1);
+				m_sem_first_connect_done.set_value();
 			}
 
 			if (connect_res!=connOk)

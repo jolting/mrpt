@@ -16,7 +16,7 @@
 #include <mrpt/obs/CObservation3DRangeScan.h>
 #include <mrpt/obs/obs_frwds.h>
 
-#include <promise>
+#include <future>
 
 namespace mrpt
 {

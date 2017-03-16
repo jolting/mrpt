@@ -1,12 +1,11 @@
 /* +---------------------------------------------------------------------------+
-	 |                     Mobile Robot Programming Toolkit (MRPT)               |
-	 |                          http://www.mrpt.org/                             |
-	 |                                                                           |
-	 | Copyright (c) 2005-2017, Individual contributors, see AUTHORS file        |
-	 | See: http://www.mrpt.org/Authors - All rights reserved.                   |
-	 | Released under BSD License. See details in http://www.mrpt.org/License    |
-	 +---------------------------------------------------------------------------+ */
-
+   |                     Mobile Robot Programming Toolkit (MRPT)               |
+   |                          http://www.mrpt.org/                             |
+   |                                                                           |
+   | Copyright (c) 2005-2017, Individual contributors, see AUTHORS file        |
+   | See: http://www.mrpt.org/Authors - All rights reserved.                   |
+   | Released under BSD License. See details in http://www.mrpt.org/License    |
+   +---------------------------------------------------------------------------+ */
 #ifndef CGRAPHSLAMENGINE_IMPL_H
 #define CGRAPHSLAMENGINE_IMPL_H
 
@@ -1458,7 +1457,8 @@ void CGraphSlamEngine<GRAPH_t>::queryObserverForEvents() {
 		}
 
 		while (m_program_paused) {
-			std::this_thread::sleep_for(1000ms);
+			using namespace std::literals;
+			std::this_thread::sleep_for(1s);
 			this->queryObserverForEvents();
 		}
 	}

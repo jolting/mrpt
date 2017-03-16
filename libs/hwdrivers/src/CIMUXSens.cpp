@@ -13,11 +13,13 @@
 #include <mrpt/hwdrivers/CIMUXSens.h>
 #include <mrpt/obs/CObservationIMU.h>
 
+#include <thread>
 IMPLEMENTS_GENERIC_SENSOR(CIMUXSens,mrpt::hwdrivers)
 
 using namespace mrpt::utils;
 using namespace mrpt::obs;
 using namespace mrpt::hwdrivers;
+using namespace std::literals;
 
 #if MRPT_HAS_xSENS_MT3
 	#include "xSens_MT3/cmt1.h"
@@ -33,7 +35,6 @@ using namespace mrpt::hwdrivers;
 	#include "xSens_MT3/xsens_std.h"
 	#include "xSens_MT3/xsens_time.h"
 #endif
-
 
 // Adaptors for the "void*" memory blocks:
 #define cmt3	    (*static_cast<xsens::Cmt3*>(m_cmt3_ptr))
