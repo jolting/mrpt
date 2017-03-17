@@ -133,7 +133,6 @@ namespace mrpt
 
 
 		}; // End of class def.
-		DEFINE_MRPT_OBJECT_POST_CUSTOM_LINKAGE( CBaseGUIWindow, GUI_IMPEXP )
 
 
 		/** @name Events common to all GUI windows:
