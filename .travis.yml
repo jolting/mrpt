@@ -4,7 +4,7 @@ sudo: false
 dist: trusty
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; alias sudo='' ; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then  alias sudo='' ; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then  sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y  ; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y ;
