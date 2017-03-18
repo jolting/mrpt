@@ -3,8 +3,8 @@
 MRPT_DIR=`pwd`
 BUILD_DIR=build
 
-CMAKE_C_FLAGS="-Wall -Wextra -Wabi -O2"
-CMAKE_CXX_FLAGS="-Wall -Wextra -Wabi -O2"
+CMAKE_C_FLAGS="-Wall -Wextra -Wabi -O0"
+CMAKE_CXX_FLAGS="-Wall -Wextra -Wabi -O0"
 
 function build ()
 {
