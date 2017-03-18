@@ -3,24 +3,44 @@ cache: ccache
 sudo: false
 dist: trusty
 
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - v-launchpad-jochen-sprickerhof-de-pcl
+    packages:
+    - g++-6
+    - clang-3.8
+    - build-essential
+    - pkg-config
+    - cmake
+    - libwxgtk3.0-dev
+    - libftdi-dev
+    - freeglut3-dev
+    - zlib1g-dev
+    - libusb-1.0-0-dev
+    - libdc1394-22-dev
+    - libavformat-dev
+    - libswscale-dev
+    - libassimp-dev
+    - libjpeg-dev
+    - libopencv-dev
+    - libgtest-dev
+    - libeigen3-dev
+    - libsuitesparse-dev
+    - libpcl-all
+    - libopenni2-dev
+    - libudev-dev
+    - gdb
+    - libboost-python-dev
+    - libpython-dev python-numpy 
+    - lcov
+    
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then fakeroot add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y  ; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    fakeroot add-apt-repository ppa:ubuntu-toolchain-r/test -y ;
-    apt-get update ;
-    apt-get install gcc-6 g++-6 clang-3.8 ;
-    rm -rf /usr/local ;
-    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100 ;
-    update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100 ;
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 20 ;
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 20 ;
-    fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then  sudo apt-get update -d  ; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update          ; fi
 
 
 install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then  sudo apt-get install build-essential pkg-config cmake libwxgtk3.0-dev libftdi-dev freeglut3-dev zlib1g-dev libusb-1.0-0-dev  libdc1394-22-dev libavformat-dev libswscale-dev libassimp-dev libjpeg-dev libopencv-dev libgtest-dev libeigen3-dev libsuitesparse-dev libpcl-all libopenni2-dev libudev-dev gdb libboost-python-dev libpython-dev python-numpy -y ; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew tap homebrew/science ;
     brew install eigen ;
@@ -29,9 +49,6 @@ install:
     brew install assimp ;
     fi
   - if [ "$BUILD_TYPE" == "Coverage" ]; then
-    wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz ;
-    tar xf lcov_1.11.orig.tar.gz ;
-    make -C lcov-1.11/ install ;
     gem install coveralls-lcov ;
     fi
 
