@@ -37,6 +37,7 @@ addons:
     - lcov
     
 before_install:
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then ps --no-headers --format args ax ; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update          ; fi
 
 
