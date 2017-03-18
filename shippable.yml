@@ -5,8 +5,7 @@ compiler:
   - clang
   
 env:
-  -TASK="build"
-  -CCACHE_SLOPPINESS="pch_defines,time_macros"
+  - TASK="build" CCACHE_SLOPPINESS="pch_defines,time_macros"
 
 build:
   ci:
