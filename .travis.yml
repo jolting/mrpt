@@ -4,9 +4,9 @@ sudo: false
 dist: trusty
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y  ; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then fakeroot add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl -y  ; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    add-apt-repository ppa:ubuntu-toolchain-r/test -y ;
+    fakeroot add-apt-repository ppa:ubuntu-toolchain-r/test -y ;
     apt-get update ;
     apt-get install gcc-6 g++-6 clang-3.8 ;
     rm -rf /usr/local ;
