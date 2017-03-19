@@ -3,7 +3,9 @@ language: c
 compiler:
   - gcc
   - clang
-  
+
+cache: true
+
 env:
   - TASK="build" CCACHE_SLOPPINESS="pch_defines,time_macros"
 
