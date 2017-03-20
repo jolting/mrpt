@@ -4,8 +4,6 @@ compiler:
   - gcc
   - clang
 
-cache: true
-
 env:
   - TASK="prefetch"
   - TASK="build" CCACHE_SLOPPINESS="pch_defines,time_macros"
@@ -16,6 +14,7 @@ matrix:
       env: TASK="prefetch"
 
 build:
+  cache: true
   pre_ci_boot:
     image_name: drydock/u16cppall
   ci:
