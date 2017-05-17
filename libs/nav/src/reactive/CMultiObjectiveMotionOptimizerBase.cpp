@@ -212,11 +212,8 @@ CMultiObjectiveMotionOptimizerBase * CMultiObjectiveMotionOptimizerBase::Create(
 CMultiObjectiveMotionOptimizerBase::TParamsBase::TParamsBase()
 {
 	// Default scores:
-	formula_score["collision_free_distance"] = "collision_free_distance";
 	formula_score["path_index_near_target"] = "var dif:=abs(target_k-move_k); if (dif>(num_paths/2)) { dif:=num_paths-dif; }; exp(-abs(dif / (num_paths/10.0)));";
 	formula_score["euclidean_nearness"] = "(ref_dist - dist_eucl_final) / ref_dist";
-	formula_score["hysteresis"] = "hysteresis";
-	formula_score["clearance"] = "clearance";
 
 	// Default:
 	scores_to_normalize.push_back("clearance");
