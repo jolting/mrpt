@@ -20,7 +20,12 @@
 #include <mrpt/gui/CDisplayWindowPlots.h>
 
 
+#include "opencv2/features2d.hpp"
+#include "opencv2/xfeatures2d.hpp"
+
+
 using namespace cv;
+using namespace cv::xfeatures2d;
 using namespace std;
 using namespace mrpt::vision;
 using namespace mrpt::utils;
@@ -69,6 +74,26 @@ DetectorDialog::DetectorDialog(QWidget *detector_gui, QString filePath, int dete
                                "Dispersion of the Image, \n"
                                "Computatioanl Cost\n"
                                "Number of found points </b>\n");
+
+
+
+    string file = filePath.toStdString();
+
+    Mat img_1 = imread( file, IMREAD_GRAYSCALE );
+
+    //-- Step 1: Detect the keypoints using SURF Detector
+    int minHessian = 400;
+    Ptr<SURF> detector = SURF::create( minHessian );
+    std::vector<KeyPoint> keypoints_1, keypoints_2;
+    detector->detect( img_1, keypoints_1 );
+    //-- Draw keypoints
+    Mat img_keypoints_1;
+    drawKeypoints( img_1, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
+   //-- Show detected (drawn) keypoints
+    imshow("Keypoints 1", img_keypoints_1 );
+   waitKey(0);
+
+
 
     layout_grid->addWidget(label,0,1,1,1);
     layout_grid->addWidget(showResults,2,1,1,1);
