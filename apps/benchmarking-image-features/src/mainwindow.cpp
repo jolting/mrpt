@@ -3,8 +3,16 @@
 #include <string>
 #include <string.h>
 #include <iostream>
-#include "detectordialog.h"
+
 #include <QButtonGroup>
+#include <QLineEdit>
+
+#include "detectordialog.h"
+#include "descriptordialog.h"
+#include "featuredialog.h"
+
+
+
 
 
 using namespace std;
@@ -12,16 +20,7 @@ using namespace std;
 void MainWindow::on_button_generate_clicked()
 {
     ReadInputFormat();
-    if(detector_selected == -1 || descriptor_selected == -1)
-    {
-        QMessageBox::information(this,"Detector / Descriptor Evaluation Metric"," Please select both the detector and the descriptor before viewing the performance results");
-        return;
-    }
-
-
-    QString details("You have selected the DETECTOR" + QString::number(detector_selected) + " and DESCRIPTOR " + QString::number(descriptor_selected) + "\nThe selected image "+ QString::number(currentInputIndex) + " has the following characteristics");
-    QMessageBox::information(this,"Detector Characteristics for the selected input", details);
-
+    FeatureDialog feature_dialog (this, inputFilePath->text(),detector_selected, descriptor_selected, numFeatures);
 }
 
 void MainWindow::button_close_clicked()
@@ -37,23 +36,8 @@ void MainWindow::button_close_clicked()
  * */
 void MainWindow::on_detector_button_clicked()
 {
-    ReadInputFormat();
-    if(detector_selected == -1)
-    {
-        QMessageBox::information(this,"Warning", "Please select the detector");
-        return;
-    }
-
-
-    // CALL DETECTOR DIALOG HERE TO CREATE DIALOG FOR PARAMETERS/EVALUATION
-
-    QString details("You have selected the DETECTOR" + QString::number(detector_selected) + " ,The selected image "+ QString::number(currentInputIndex) + " has the following characteristics");
-    //QMessageBox::information(this,"Detector Characteristics for the selected input", details);
-
-    buttonGroup1->checkedId();
-    cout << groupBox->isEnabled();
-    //connect(window_gui,SIGNAL(objectNameChanged(inputFilePath)),detect_dialog,SLOT());
-    DetectorDialog detect_dialog(this, inputFilePath->text(), detector_selected);//= new DetectorDialog(d);
+    ReadInputFormat();   
+    DetectorDialog detect_dialog(this, inputFilePath->text(), detector_selected);
 }
 
 /*
@@ -64,16 +48,7 @@ void MainWindow::on_detector_button_clicked()
 void MainWindow::on_descriptor_button_clicked()
 {
     ReadInputFormat();
-    if(descriptor_selected == -1)
-    {
-        QMessageBox::information(this,"Warning", "Please select the descriptor before viewing the performance metrics");
-        return;
-    }
-
-    // CALL DESCRIPTOR DIALOG HERE TO CREATE DIALOG FOR PARAMETERS/EVALUATION
-
-    QString details("You have selected the DESCRIPTOR" + QString::number(descriptor_selected) + "The selected image"+ QString::number(currentInputIndex) +"has the following characteristics");
-    QMessageBox::information(this,"Descriptor Characteristics for the selected input", details);
+    DescriptorDialog descriptor_dialog(this, inputFilePath->text(), descriptor_selected);
 }
 
 /*
@@ -139,14 +114,16 @@ void MainWindow::ReadInputFormat()
             break;
         }
     }
+
+    numFeatures = numFeaturesLineEdit->text().toInt();
 }
 
 MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
 {
     inputFormat = 0;
     currentInputIndex = 0;
-    detector_selected = 0;
-    descriptor_selected = 0;
+    detector_selected = -1;
+    descriptor_selected = -1;
 
     window_gui = new QWidget;
     window_gui->setWindowTitle("GUI app for benchmarking image detectors and descriptord");
@@ -155,11 +132,19 @@ MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
     groupBox = new QGroupBox(tr("Select your detector"));
 
     buttonGroup1 = new QButtonGroup;
+
     string detector_names[] = {"KLT Detector", "Harris Corner Detector",
                      "BCD (Binary Corner Detector)", "SIFT",
                      "SURF", "FAST Detector",
                      "FASTER Detector", "AKAZE Detector",
                      "LSD Detector"};
+
+    // remove QMap detectors if not used in future
+    detectors_map = new QMap<string,int>;
+    for(int i=0 ; i<NUM_DETECTORS ; i++)
+    {
+        detectors_map->insert(detector_names[i],i);
+    }
     for(int i=0 ; i<NUM_DETECTORS ; i++)
     {
         detectors[i] = new QRadioButton(this);
@@ -187,10 +172,17 @@ MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
     groupBox2 = new QGroupBox(tr("Select your descriptor"));
     string descriptor_names[] = {"SIFT Descriptor", "SURF Descriptor",
                                  "Intensity-domain spin image descriptor", "Polar Images descriptor",
-                                 "Log-polar image descriptor", "LATCH Descriptor",
-                                 "BLD Descriptor"};
+                                 "Log-polar image descriptor", "ORB Descriptors",
+                                 "LATCH Descriptor", "BLD Descriptor"};
                                   //"BRIEF Descriptors"};
-    for(int i=0 ; i<NUM_DETECTORS ; i++)
+
+    // remove QMap descriptors if not used in future
+    descriptors_map = new QMap<string,int>;
+    for(int i=0 ; i<NUM_DESCRIPTORS ; i++)
+    {
+        detectors_map->insert(detector_names[i],i);
+    }
+    for(int i=0 ; i<NUM_DESCRIPTORS ; i++)
     {
         descriptors[i] = new QRadioButton(this);
         descriptors[i]->setText(descriptor_names[i].c_str());
@@ -220,12 +212,22 @@ MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
     QPushButton *browse_button = new QPushButton("Browse");
     connect(browse_button, SIGNAL(clicked()), this, SLOT(on_browse_button_clicked()));
 
+    QLabel *numFeaturesLabel = new QLabel("Enter the number of features to be detected");
+    numFeaturesLineEdit = new QLineEdit;
+    numFeaturesLineEdit->setText("enter a number here");
+
     QVBoxLayout *inputVbox = new QVBoxLayout;
+    inputVbox->addWidget(numFeaturesLabel);
+    inputVbox->addWidget(numFeaturesLineEdit);
     inputVbox->addWidget(inputLabel);
     inputVbox->addWidget(inputs);
     inputVbox->addWidget(inputFilePath);
     inputVbox->addWidget(browse_button);
     inputGroupBox->setLayout(inputVbox);
+
+
+
+
 
 
 
@@ -241,10 +243,14 @@ MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
     groupBox_buttons->setLayout(hbox1);
 
 
+
+
     layout_grid = new QGridLayout;
     layout_grid->addWidget(groupBox,1,0,1,1);
     layout_grid->addWidget(groupBox2,1,1,1,1);
     layout_grid->addWidget(groupBox_buttons,2,1,1,1);
+
+
     layout_grid->addWidget(inputGroupBox,1,3,1,1);
     //layout_grid->addWidget(dialog,1,4,1,1);
 

@@ -12,8 +12,20 @@
 #include <stdlib.h>
 #include <iostream>
 #include <QMessageBox>
+#include <string>
+
+#include <mrpt/vision/CFeatureExtraction.h>
+#include <mrpt/gui/CDisplayWindow.h>
+#include <mrpt/utils/CMemoryStream.h>
+#include <mrpt/gui/CDisplayWindowPlots.h>
+
 
 using namespace cv;
+using namespace std;
+using namespace mrpt::vision;
+using namespace mrpt::utils;
+using namespace mrpt;
+using namespace mrpt::gui;
 
 void DetectorDialog::onshow_results_clicked()
 {
@@ -27,15 +39,14 @@ void DetectorDialog::oncloseDialog_clicked()
     return;
 }
 
-DetectorDialog::DetectorDialog(QWidget *detector_gui, QString str, int detector) :QDialog(detector_gui)
+DetectorDialog::DetectorDialog(QWidget *detector_gui, QString filePath, int detector_id) :QDialog(detector_gui)
 {
     detector_gui = new QWidget;
     detector_gui->setWindowTitle("Detector Evaluation");
     QGridLayout *layout_grid = new QGridLayout;
 
-    QLabel *label = new QLabel("I am a label detector");
-    QLabel *label2 = new QLabel;
-    label2->setText(str);// + "I am a label");
+
+
 
     QPushButton *showResults = new QPushButton("Show Results");
     connect(showResults, SIGNAL(clicked(bool)), this, SLOT(onshow_results_clicked()) );
@@ -43,17 +54,23 @@ DetectorDialog::DetectorDialog(QWidget *detector_gui, QString str, int detector)
     connect(closeDialog, SIGNAL(clicked()), this, SLOT(oncloseDialog_clicked()) );
 
 
-    cv::Mat img = imread(str.toStdString(), IMREAD_COLOR);
-    if(img.empty())
+    cv::Mat img = imread(filePath.toStdString(), IMREAD_COLOR);
+
+    if(img.empty() || detector_id == -1)
     {
-        QMessageBox::information(this,"Image read error","Please specify a valid path for the image..");
+        QMessageBox::information(this,"Image/Detector read error","Please specify a valid inputs for the image / detector..");
         return;
     }
 
 
 
+    QLabel *label = new QLabel("Following are the Detector evaluation metrics\n"
+                                "<b>Repeatability \n"
+                               "Dispersion of the Image, \n"
+                               "Computatioanl Cost\n"
+                               "Number of found points </b>\n");
+
     layout_grid->addWidget(label,0,1,1,1);
-    layout_grid->addWidget(label2,1,1,1,1);
     layout_grid->addWidget(showResults,2,1,1,1);
     layout_grid->addWidget(closeDialog,3,1,1,1);
 
@@ -65,9 +82,4 @@ DetectorDialog::DetectorDialog(QWidget *detector_gui, QString str, int detector)
 
     //cv::imshow("sample image",img);
     //cv::waitKey(0);
-}
-
-void computeDetector(int detector_id)
-{
-
 }

@@ -13,14 +13,13 @@
 #include <QVBoxLayout>
 #include <QCheckBox>
 #include <QRadioButton>
-#include <QtGui>
-#include <QtCore>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QGroupBox>
 #include <QListWidget>
 #include <QComboBox>
 #include <QFileDialog>
+#include <QMap>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,6 +41,7 @@ public:
 
 public:
 
+
     QWidget *window_gui;
     QLabel *detector_label;
     QPushButton *button_generate;
@@ -60,10 +60,13 @@ public:
 
     QComboBox *inputs;
     QLineEdit *inputFilePath;
+    QLineEdit *numFeaturesLineEdit;
+    int numFeatures;
 
     QRadioButton *detectors[NUM_DETECTORS];
     QRadioButton *descriptors[NUM_DESCRIPTORS];
-
+    QMap<string,int> *detectors_map;
+    QMap<string,int> *descriptors_map;
 
 signals:
 

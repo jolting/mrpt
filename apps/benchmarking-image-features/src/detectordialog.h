@@ -12,8 +12,8 @@ class DetectorDialog : public QDialog
     Q_OBJECT
 public:
 
-    explicit DetectorDialog(QWidget *parent = 0, QString  str="/home", int detector=0);
-    void computeDetector(int detector_id);
+    explicit DetectorDialog(QWidget *parent = 0, QString  filePath="/home", int detector_id=-1);
+
 
 public:
     QWidget *detector_gui;
