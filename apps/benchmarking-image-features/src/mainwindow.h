@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#define NUM_DETECTORS 9
+#define NUM_DETECTORS 11
 #define NUM_DESCRIPTORS 8
 #define IMAGE_WIDTH 500
 #define IMAGE_HEIGHT 500
@@ -33,8 +33,12 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include <mrpt/vision/CFeatureExtraction.h>
+
 using namespace cv;
 using namespace std;
+using namespace mrpt::vision;
+using namespace mrpt::utils;
 
 class MainWindow : public QMainWindow
 {
@@ -107,6 +111,29 @@ public:
     QLineEdit *param5_edit;
 
     QLabel *output1;
+
+    CFeatureExtraction fext;
+    CFeatureList featsImage1, featsImage2;
+    CImage img1, img2;
+
+    int numFeats;
+
+
+    struct FASTOptions
+    {
+        float threshold;
+        float min_distance;
+        bool non_max_suppresion;
+        bool use_KLT_response;
+    }fast_opts;
+
+    struct KLTOptions
+    {
+        float threshold;
+        int radius;
+        float min_distance;
+        bool tile_image;
+    }klt_opts;
 
     struct HarrisOptions
     {

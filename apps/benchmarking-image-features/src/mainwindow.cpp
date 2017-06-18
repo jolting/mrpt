@@ -97,6 +97,20 @@ void MainWindow::on_detector_choose(int choice)
 {
 
     makeAllParamsVisible(true);
+
+    if(choice == 0)
+    {
+        param1->setText("Enter min distance : ");
+        param2->setText("Enter radius : ");
+        param3->setText("Enter threshold : ");
+        param4->setText("Enter if tile-image true/false : ");
+        param1_edit->setText("7");
+        param2_edit->setText("7");
+        param3_edit->setText("0.1");
+        param4_edit->setText("true");
+        param5->setVisible(false);
+        param5_edit->setVisible(false);
+    }
     // for Harris Features
     if (choice ==1) {
         param1->setText("Enter threshold : ");
@@ -109,6 +123,11 @@ void MainWindow::on_detector_choose(int choice)
         param3_edit->setText("1.5");
         param4_edit->setText("3");
         param5_edit->setText("true");
+    }
+    // BCD Features not implemented yet
+    else if(choice == 2)
+    {
+        makeAllParamsVisible(false);
     }
     //for SIFT Features
     else if (choice == 3)
@@ -125,7 +144,7 @@ void MainWindow::on_detector_choose(int choice)
         param5_edit->setVisible(false);
 
     }
-    // for SURF Features
+        // for SURF Features
     else if(choice == 4)
     {
         param1->setText("Enter hessianThreshold: ");
@@ -139,10 +158,25 @@ void MainWindow::on_detector_choose(int choice)
 
         param5->setVisible(false);
         param5_edit->setVisible(false);
+    }
+    // for FAST, FASTER9, FASTER10, FASTER12 features
+    else if(choice == 5 || choice == 6 || choice==7 || choice == 8)
+    {
+        param1->setText("Enter Threshold: ");
+        param2->setText("Enter minimumDistance: ");
+        param3->setText("Enable non maximal supression (true/false): ");
+        param4->setText("Enable use KLT response (true/false): ");
+        param1_edit->setText("20");
+        param2_edit->setText("5");
+        param3_edit->setText("true");
+        param4_edit->setText("true");
+
+        param5->setVisible(false);
+        param5_edit->setVisible(false);
 
 
     }
-    if (choice ==8)
+    if (choice ==9)
     {
         param1->setText("Enter the scale below");
         param2->setText("Enter the number of Octaves here:");
@@ -184,34 +218,41 @@ void MainWindow::on_detector_button_clicked()
     ReadInputFormat();
 
     // Feature Extraction Starts here
-    CFeatureExtraction fext;
-    CFeatureList featsHarris1,featsHarris2;
-    CFeatureList featsSIFT1, featsSIFT2;
-    CFeatureList featsSURF1, featsSURF2;
 
-    CImage img1, img2;
+
+
+    numFeats = numFeaturesLineEdit->text().toInt();
 
     img1.loadFromFile(file_path1);
     img2.loadFromFile(file_path2);
 
     if(detector_selected == 0)
     {
+        klt_opts.min_distance = param1_edit->text().toFloat();
+        klt_opts.radius = param2_edit->text().toInt();
+        klt_opts.threshold = param3_edit->text().toFloat();
+        string temp_str = param4_edit->text().toStdString();
+        bool temp_bool = temp_str.compare("true") == 0;
+        klt_opts.tile_image = temp_bool;
 
+        fext.options.featsType = featKLT;
+
+        fext.options.KLTOptions.min_distance =klt_opts.min_distance;
+        fext.options.KLTOptions.radius = klt_opts.radius;
+        fext.options.KLTOptions.threshold = klt_opts.threshold;
+        fext.options.KLTOptions.tile_image = klt_opts.tile_image;
+
+        cout << "detecting KLT Features " << endl ;
     }
     else if(detector_selected == 1)
     {
-
         harris_opts.threshold = param1_edit->text().toFloat();
         harris_opts.k = param2_edit->text().toFloat();
         harris_opts.sigma = param3_edit->text().toFloat();
         harris_opts.radius = param4_edit->text().toFloat();
-        //harris_opts.tile_image =  true;
-
         string temp_str = param5_edit->text().toStdString();
         bool temp_bool = temp_str.compare("true") ? false : true;
         harris_opts.tile_image = temp_bool;
-
-        cout <<  temp_bool << endl;
 
         fext.options.featsType = featHarris;
 
@@ -222,96 +263,25 @@ void MainWindow::on_detector_button_clicked()
         //fext.options.harrisOptions.min_distance = 100;
         fext.options.harrisOptions.tile_image = harris_opts.tile_image;
 
-        fext.detectFeatures(img1, featsHarris1);
-        fext.detectFeatures(img2, featsHarris2);
-        cout << "Harris Threshold:  " << harris_opts.threshold << endl;
-        cout << "Fext Harris Threshold:  " << fext.options.harrisOptions.threshold << endl;
-        cout << "Number of Harris Features: " << featsHarris1.size() << endl;
-
-        cv::Mat cvImg1 = cv::cvarrToMat(img1.getAs<IplImage>());
-        cv::Mat cvImg2 = cv::cvarrToMat(img2.getAs<IplImage>());
-
-
-        // Drawing a circle around corners for image 1
-        //C++: void circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
-        for(int i=0 ; i<featsHarris1.size() ; i++)
-        {
-            int temp_x = (int) featsHarris1.getFeatureX(i);
-            int temp_y = (int) featsHarris1.getFeatureY(i);
-            circle(cvImg1, Point(temp_x, temp_y), 5, Scalar(1), 2, 8, 0);
-        }
-        // Drawing a circle around corners for image 2
-        for(int i=0 ; i<featsHarris2.size() ; i++)
-        {
-            int temp_x = (int) featsHarris2.getFeatureX(i);
-            int temp_y = (int) featsHarris2.getFeatureY(i);
-            circle(cvImg2, Point(temp_x, temp_y), 5, Scalar(1), 2, 8, 0);
-        }
-
-        // converting the cv::Mat to a QImage and changing the resolution of the output images
-        cv::Mat temp1 (cvImg1.cols,cvImg1.rows,cvImg1.type());
-        cvtColor(cvImg1, temp1, CV_BGR2RGB);
-        QImage dest1 = QImage((uchar*) temp1.data, temp1.cols, temp1.rows, temp1.step, QImage::Format_RGB888);
-        QImage qscaled1 = dest1.scaled(IMAGE_WIDTH, IMAGE_HEIGHT, Qt::KeepAspectRatio);
-        image1->setPixmap(QPixmap::fromImage(qscaled1));
-
-        cv::Mat temp2(cvImg2.cols, cvImg2.rows, cvImg2.type());
-        cvtColor(cvImg2, temp2, CV_BGR2RGB);
-        QImage dest2 = QImage((uchar*) temp2.data, temp2.cols, temp2.rows, temp2.step, QImage::Format_RGB888);
-        QImage qscaled2 = dest2.scaled(IMAGE_WIDTH, IMAGE_HEIGHT, Qt::KeepAspectRatio);
-        image2->setPixmap(QPixmap::fromImage(qscaled2));
+        cout << "detecting Harris Features " << endl ;
+    }
+    else if(detector_selected == 2) // not implemented in MRPT yet
+    {
+        fext.options.featsType = featBCD;
+        cout <<"detecting BCD Features" << endl;
 
     }
     else if(detector_selected == 3)
     {
-        fext.options.featsType = featSIFT;
         SIFT_opts.threshold = param1_edit->text().toFloat();
         SIFT_opts.edge_threshold = param2_edit->text().toFloat();
 
+        fext.options.featsType = featSIFT;
 
         fext.options.SIFTOptions.threshold = SIFT_opts.threshold;
         fext.options.SIFTOptions.edgeThreshold = SIFT_opts.edge_threshold;
 
         cout << "detecting SIFT Features " << endl ;
-
-        fext.detectFeatures(img1, featsSIFT1);
-        fext.detectFeatures(img2, featsSIFT2);
-        //featsSIFT1.saveToTextFile("BCDFeatures.txt");
-
-        cout << "Number of Harris Features: " << featsSIFT1.size() << endl;
-
-        cv::Mat cvImg1 = cv::cvarrToMat(img1.getAs<IplImage>());
-        cv::Mat cvImg2 = cv::cvarrToMat(img2.getAs<IplImage>());
-
-
-        // Drawing a circle around corners for image 1
-        //C++: void circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
-        for(int i=0 ; i<featsSIFT1.size() ; i++)
-        {
-            int temp_x = (int) featsSIFT1.getFeatureX(i);
-            int temp_y = (int) featsSIFT1.getFeatureY(i);
-            circle(cvImg1, Point(temp_x, temp_y), 5, Scalar(1), 2, 8, 0);
-        }
-        // Drawing a circle around corners for image 2
-        for(int i=0 ; i<featsSIFT2.size() ; i++)
-        {
-            int temp_x = (int) featsSIFT2.getFeatureX(i);
-            int temp_y = (int) featsSIFT2.getFeatureY(i);
-            circle(cvImg2, Point(temp_x, temp_y), 5, Scalar(1), 2, 8, 0);
-        }
-
-        // converting the cv::Mat to a QImage and changing the resolution of the output images
-        cv::Mat temp1 (cvImg1.cols,cvImg1.rows,cvImg1.type());
-        cvtColor(cvImg1, temp1, CV_BGR2RGB);
-        QImage dest1 = QImage((uchar*) temp1.data, temp1.cols, temp1.rows, temp1.step, QImage::Format_RGB888);
-        QImage qscaled1 = dest1.scaled(IMAGE_WIDTH, IMAGE_HEIGHT, Qt::KeepAspectRatio);
-        image1->setPixmap(QPixmap::fromImage(qscaled1));
-
-        cv::Mat temp2(cvImg2.cols, cvImg2.rows, cvImg2.type());
-        cvtColor(cvImg2, temp2, CV_BGR2RGB);
-        QImage dest2 = QImage((uchar*) temp2.data, temp2.cols, temp2.rows, temp2.step, QImage::Format_RGB888);
-        QImage qscaled2 = dest2.scaled(IMAGE_WIDTH, IMAGE_HEIGHT, Qt::KeepAspectRatio);
-        image2->setPixmap(QPixmap::fromImage(qscaled2));
 
     }
     else if (detector_selected == 4)
@@ -321,7 +291,7 @@ void MainWindow::on_detector_button_clicked()
         SURF_opts.nLayersPerOctave = param2_edit->text().toInt();
         SURF_opts.nOctaves = param3_edit->text().toInt();
         string temp_str = param4_edit->text().toStdString();
-        bool temp_bool = temp_str.compare("true") ? false : true;
+        bool temp_bool = temp_str.compare("true") == 0;
         SURF_opts.rotation_invariant = temp_bool;
         cout <<  temp_bool << endl;
 
@@ -329,56 +299,82 @@ void MainWindow::on_detector_button_clicked()
         fext.options.SURFOptions.nLayersPerOctave = SURF_opts.nLayersPerOctave;
         fext.options.SURFOptions.nOctaves = SURF_opts.nOctaves;
         fext.options.SURFOptions.rotation_invariant = SURF_opts.rotation_invariant;
-
-        cout << "detecting SURF Features " << endl ;
-
-        fext.detectFeatures(img1, featsSURF1);
-        fext.detectFeatures(img2, featsSURF2);
-
-        cout << "Number of SURF Features: " << featsSURF1.size() << endl;
-
-        cv::Mat cvImg1 = cv::cvarrToMat(img1.getAs<IplImage>());
-        cv::Mat cvImg2 = cv::cvarrToMat(img2.getAs<IplImage>());
-
-
-        // Drawing a circle around corners for image 1
-        //C++: void circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
-        for(int i=0 ; i<featsSURF1.size() ; i++)
-        {
-            int temp_x = (int) featsSURF1.getFeatureX(i);
-            int temp_y = (int) featsSURF1.getFeatureY(i);
-            circle(cvImg1, Point(temp_x, temp_y), 5, Scalar(1), 2, 8, 0);
-        }
-        // Drawing a circle around corners for image 2
-        for(int i=0 ; i<featsSURF2.size() ; i++)
-        {
-            int temp_x = (int) featsSURF2.getFeatureX(i);
-            int temp_y = (int) featsSURF2.getFeatureY(i);
-            circle(cvImg2, Point(temp_x, temp_y), 5, Scalar(1), 2, 8, 0);
-        }
-
-        // converting the cv::Mat to a QImage and changing the resolution of the output images
-        cv::Mat temp1 (cvImg1.cols,cvImg1.rows,cvImg1.type());
-        cvtColor(cvImg1, temp1, CV_BGR2RGB);
-        QImage dest1 = QImage((uchar*) temp1.data, temp1.cols, temp1.rows, temp1.step, QImage::Format_RGB888);
-        QImage qscaled1 = dest1.scaled(IMAGE_WIDTH, IMAGE_HEIGHT, Qt::KeepAspectRatio);
-        image1->setPixmap(QPixmap::fromImage(qscaled1));
-
-        cv::Mat temp2(cvImg2.cols, cvImg2.rows, cvImg2.type());
-        cvtColor(cvImg2, temp2, CV_BGR2RGB);
-        QImage dest2 = QImage((uchar*) temp2.data, temp2.cols, temp2.rows, temp2.step, QImage::Format_RGB888);
-        QImage qscaled2 = dest2.scaled(IMAGE_WIDTH, IMAGE_HEIGHT, Qt::KeepAspectRatio);
-        image2->setPixmap(QPixmap::fromImage(qscaled2));
     }
-    if(detector_selected == 7)
+    else if(detector_selected == 5 || detector_selected == 6 || detector_selected == 7)
     {
+        fast_opts.threshold = param1_edit->text().toFloat();
+        fast_opts.min_distance = param2_edit->text().toFloat();
+        string temp_str = param3_edit->text().toStdString();
+        bool temp_bool = temp_str.compare("true") == 0;
+        fast_opts.use_KLT_response = temp_bool;
 
+        temp_str = param4_edit->text().toStdString();
+        temp_bool = temp_str.compare("true") == 0;
+        fast_opts.non_max_suppresion = temp_bool;
+
+        if(detector_selected == 5)
+            fext.options.featsType = featFAST;
+        else if(detector_selected == 6)
+            fext.options.featsType = featFASTER9;
+        else if(detector_selected == 7)
+            fext.options.featsType =featFASTER10;
+        else
+            fext.options.featsType = featFASTER12;
+
+        fext.options.FASTOptions.threshold = fast_opts.threshold;
+        fext.options.FASTOptions.min_distance = fast_opts.min_distance;
+        fext.options.FASTOptions.use_KLT_response = fast_opts.use_KLT_response;
+        fext.options.FASTOptions.nonmax_suppression = fast_opts.non_max_suppresion;
     }
 
-    if(detector_selected == 8)
+    cout << "Number of Features: " << featsImage1.size() << endl;
+
+    fext.detectFeatures(img1, featsImage1, 0, numFeats);
+    fext.detectFeatures(img2, featsImage2, 0, numFeats);
+
+    cv::Mat cvImg1 = cv::cvarrToMat(img1.getAs<IplImage>());
+    cv::Mat cvImg2 = cv::cvarrToMat(img2.getAs<IplImage>());
+
+    // Drawing a circle around corners for image 1
+    //C++: void circle(Mat& img, Point center, int radius, const Scalar& color, int thickness=1, int lineType=8, int shift=0)
+    for(int i=0 ; i<featsImage1.size() ; i++)
+    {
+        int temp_x = (int) featsImage1.getFeatureX(i);
+        int temp_y = (int) featsImage1.getFeatureY(i);
+        circle(cvImg1, Point(temp_x, temp_y), 5, Scalar(1), 2, 8, 0);
+    }
+    // Drawing a circle around corners for image 2
+    for(int i=0 ; i<featsImage2.size() ; i++)
+    {
+        int temp_x = (int) featsImage2.getFeatureX(i);
+        int temp_y = (int) featsImage2.getFeatureY(i);
+        circle(cvImg2, Point(temp_x, temp_y), 5, Scalar(1), 2, 8, 0);
+    }
+
+    // converting the cv::Mat to a QImage and changing the resolution of the output images
+    cv::Mat temp1 (cvImg1.cols,cvImg1.rows,cvImg1.type());
+    cvtColor(cvImg1, temp1, CV_BGR2RGB);
+    QImage dest1 = QImage((uchar*) temp1.data, temp1.cols, temp1.rows, temp1.step, QImage::Format_RGB888);
+    QImage qscaled1 = dest1.scaled(IMAGE_WIDTH, IMAGE_HEIGHT, Qt::KeepAspectRatio);
+    image1->setPixmap(QPixmap::fromImage(qscaled1));
+
+    cv::Mat temp2(cvImg2.cols, cvImg2.rows, cvImg2.type());
+    cvtColor(cvImg2, temp2, CV_BGR2RGB);
+    QImage dest2 = QImage((uchar*) temp2.data, temp2.cols, temp2.rows, temp2.step, QImage::Format_RGB888);
+    QImage qscaled2 = dest2.scaled(IMAGE_WIDTH, IMAGE_HEIGHT, Qt::KeepAspectRatio);
+    image2->setPixmap(QPixmap::fromImage(qscaled2));
+
+
+
+    if(detector_selected == 9)
+    {
+        computeBSD();
+    }
+
+    if(detector_selected == 10)
     {
         cv::Mat img = imread(file_path1);
-        cv::Mat img2 = imread(file_path1);
+        cv::Mat img2 = imread(file_path2);
 
 
         int scale = param1_edit->text().toInt();
@@ -386,9 +382,6 @@ void MainWindow::on_detector_button_clicked()
 
         cv::Mat ff = computeLSD(img,scale,numOctaves);
         cv::Mat ff2 = computeLSD(img2,scale,numOctaves);
-
-
-
 
         qimage1 = QImage((uchar*) ff.data, ff.cols, ff.rows, ff.step, QImage::Format_RGB888);
         //image1->setPixmap(QPixmap::fromImage(qimage1));
@@ -405,55 +398,6 @@ void MainWindow::on_detector_button_clicked()
 
 
     }
-    if(detector_selected == 6)
-    {
-        computeBSD();
-    }
-    if(detector_selected == 7)
-    {
-        cv::Mat imageMat = imread("/home/raghavender/Downloads/robot2.png");
-        /* create a random binary mask */
-              cv::Mat mask = Mat::ones( imageMat.size(), CV_8UC1 );
-
-              /* create a pointer to a BinaryDescriptor object with deafult parameters */
-              Ptr<LSDDetector> bd = LSDDetector::createLSDDetector();
-
-              /* create a structure to store extracted lines */
-              vector<KeyLine> lines;
-
-              /* extract lines */
-              cv::Mat output = imageMat.clone();
-              bd->detect( imageMat, lines, 2, 1, mask );
-
-              /* draw lines extracted from octave 0 */
-              if( output.channels() == 1 )
-                cvtColor( output, output, COLOR_GRAY2BGR );
-             for ( size_t i = 0; i < lines.size(); i++ )
-             {
-               KeyLine kl = lines[i];
-               if( kl.octave == 0)
-               {
-                 /* get a random color */
-                 int R = ( rand() % (int) ( 255 + 1 ) );
-                 int G = ( rand() % (int) ( 255 + 1 ) );
-                 int B = ( rand() % (int) ( 255 + 1 ) );
-
-                 /* get extremes of line */
-                 Point pt1 = Point2f( kl.startPointX, kl.startPointY );
-                 Point pt2 = Point2f( kl.endPointX, kl.endPointY );
-
-                 /* draw line */
-                 line( output, pt1, pt2, Scalar( B, G, R ), 3 );
-               }
-
-             }
-
-             /* show lines on image */
-             imshow( "LSD lines", output );
-             waitKey();
-
-    }
-    //DetectorDialog detect_dialog(this, inputFilePath->text(), detector_selected);
 }
 
 /*
@@ -464,6 +408,17 @@ void MainWindow::on_detector_button_clicked()
 void MainWindow::on_descriptor_button_clicked()
 {
     ReadInputFormat();
+    if(descriptor_selected == 1)
+    {
+        TDescriptorType desc_to_compute = TDescriptorType (1); // 1=sift or descSIFT
+        if(desc_to_compute != TDescriptorType(-1) && desc_to_compute !=descAny)
+        {
+            fext.computeDescriptors(img1, featsImage1, desc_to_compute);
+            fext.computeDescriptors(img2, featsImage2, desc_to_compute);
+
+            featsImage1.saveToTextFile("/home/raghavender/SIFTfeatures.txt");
+        }
+    }
     //DescriptorDialog descriptor_dialog(this, inputFilePath->text(), descriptor_selected);
 }
 
@@ -486,14 +441,17 @@ void MainWindow::on_browse_button_clicked()
     else if(currentInputIndex == 2 || currentInputIndex == 3)
     {
         dialog.setFileMode(QFileDialog::Directory);
-    }
+    } else
+        return;
 
     //dialog.setNameFilter(tr("Images (*.png *.xpm *.jpg)"));
     dialog.setViewMode(QFileDialog::Detail);
     QStringList fileNames;
     if(dialog.exec())
         fileNames = dialog.selectedFiles();
-    inputFilePath->setText(fileNames.at(0));
+
+    if(fileNames.size() != 0)
+        inputFilePath->setText(fileNames.at(0));
 
 
 
@@ -520,7 +478,9 @@ void MainWindow::on_browse_button_clicked2()
     QStringList fileNames;
     if(dialog.exec())
         fileNames = dialog.selectedFiles();
-    inputFilePath2->setText(fileNames.at(0));
+
+    if(fileNames.size() != 0)
+        inputFilePath2->setText(fileNames.at(0));
 
 
 
@@ -562,7 +522,8 @@ MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
     string detector_names[] = {"KLT Detector", "Harris Corner Detector",
                      "BCD (Binary Corner Detector)", "SIFT",
                      "SURF", "FAST Detector",
-                     "FASTER Detector", "AKAZE Detector",
+                     "FASTER9 Detector", "FASTER10 Detector",
+                     "FASTER12", "AKAZE Detector",
                      "LSD Detector"};
     detectors_select = new QComboBox;
 
@@ -656,7 +617,7 @@ MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
     //ask user for the number of feature
     QLabel *numFeaturesLabel = new QLabel("Enter the number of features to be detected");
     numFeaturesLineEdit = new QLineEdit;
-    numFeaturesLineEdit->setText("enter a number here");
+    numFeaturesLineEdit->setText("1000");
 
     QVBoxLayout *inputVbox = new QVBoxLayout;
     inputVbox->addWidget(numFeaturesLabel);
