@@ -139,7 +139,7 @@ void MainWindow::on_detector_choose(int choice)
         param5->setVisible(false);
         param5_edit->setVisible(false);
     }
-        // for Harris Features
+    // for Harris Features
     else if (choice ==1) {
         param1->setText("Enter threshold : ");
         param2->setText("Enter sensitivity, k : ");
@@ -152,12 +152,12 @@ void MainWindow::on_detector_choose(int choice)
         param4_edit->setText("3");
         param5_edit->setText("true");
     }
-        // BCD Features not implemented yet
+    // BCD Features not implemented yet in MRPT library
     else if(choice == 2)
     {
         makeAllDetectorParamsVisible(false);
     }
-        //for SIFT Features
+    //for SIFT Features
     else if (choice == 3)
     {
         param1->setText("Enter Threshold: ");
@@ -172,7 +172,7 @@ void MainWindow::on_detector_choose(int choice)
         param5_edit->setVisible(false);
 
     }
-        // for SURF Features
+    // for SURF Features
     else if(choice == 4)
     {
         param1->setText("Enter hessianThreshold: ");
@@ -187,7 +187,7 @@ void MainWindow::on_detector_choose(int choice)
         param5->setVisible(false);
         param5_edit->setVisible(false);
     }
-        // for FAST, FASTER9, FASTER10, FASTER12 features
+    // for FAST, FASTER9, FASTER10, FASTER12 features
     else if(choice == 5 || choice == 6 || choice==7 || choice == 8)
     {
         param1->setText("Enter Threshold: ");
@@ -203,6 +203,21 @@ void MainWindow::on_detector_choose(int choice)
         param5_edit->setVisible(false);
 
 
+    }
+    // ORB Features
+    else if (choice == 9)
+    {
+        param1->setText("Enter Min Distance: ");
+        param2->setText("Enter if extract patch true / false: ");
+        param3->setText("Enter number of levels: ");
+        param4->setText("Enter Scale factor: ");
+        param1_edit->setText("0");
+        param2_edit->setText("false");
+        param3_edit->setText("8");
+        param4_edit->setText("1.2");
+
+        param5->setVisible(false);
+        param5_edit->setVisible(false);
     }
     else
     {
@@ -302,7 +317,9 @@ void MainWindow::fillDetectorInfo()
 
     cout << file_path1 << " File Path in fillDetectorInfo " << endl;
     img1.loadFromFile(file_path1);
-    img2.loadFromFile(file_path2);
+
+    if(currentInputIndex == 1 || currentInputIndex ==4) // stereo image or stereo dataset
+        img2.loadFromFile(file_path2);
 
     cout << file_path1 << " File Path in fillDetectorInfo AFTER IMAGE READ " << endl;
 
@@ -406,6 +423,24 @@ void MainWindow::fillDetectorInfo()
         fext.options.FASTOptions.min_distance = fast_opts.min_distance;
         fext.options.FASTOptions.use_KLT_response = fast_opts.use_KLT_response;
         fext.options.FASTOptions.nonmax_suppression = fast_opts.non_max_suppresion;
+    }
+    else if(detector_selected == 9) // ORB Feature detector
+    {
+        fext.options.featsType = featORB;
+
+        ORB_opts.min_distance = param1_edit->text().toInt();
+        string temp_str = param2_edit->text().toStdString();
+        bool temp_bool = temp_str.compare("true") == 0;
+        ORB_opts.extract_patch = temp_bool;
+        ORB_opts.n_levels = param3_edit->text().toInt();
+        ORB_opts.scale_factor = param4_edit->text().toFloat();
+
+
+        fext.options.ORBOptions.min_distance = ORB_opts.min_distance;
+        fext.options.ORBOptions.extract_patch = ORB_opts.extract_patch;
+        fext.options.ORBOptions.n_levels = ORB_opts.n_levels;
+        fext.options.ORBOptions.scale_factor = ORB_opts.scale_factor;
+
     }
 }
 
@@ -614,19 +649,9 @@ void MainWindow::on_descriptor_button_clicked()
     else if (descriptor_selected == 1)
         desc_to_compute = TDescriptorType  (2); //!< SURF descriptors
     else if (descriptor_selected == 2)
-    {
-        desc_to_compute = TDescriptorType(4); //!< Intensity-domain spin image descriptors
-        fext.options.SpinImagesOptions.radius = 13;
-        fext.options.SpinImagesOptions.hist_size_distance = 10;
-        fext.options.SpinImagesOptions.hist_size_intensity = 10;
-
-    }
+        desc_to_compute = TDescriptorType(4); //!< Intensity-domain spin image descriptor
     else if (descriptor_selected == 3)
-    {
         desc_to_compute = TDescriptorType(8); //!< Polar image descriptor
-
-        fext.options.PolarImagesOptions.radius = 10;
-    }
     else if (descriptor_selected == 4)
         desc_to_compute = TDescriptorType (16); //!< Log-Polar image descriptor
 
@@ -641,7 +666,7 @@ void MainWindow::on_descriptor_button_clicked()
         fext.computeDescriptors(img1, featsImage1, desc_to_compute);
         fext.computeDescriptors(img2, featsImage2, desc_to_compute);
 
-        featsImage1.saveToTextFile("/home/raghavender/SIFTfeatures.txt");
+        featsImage1.saveToTextFile("/home/raghavender/Key_Descriptors.txt");
     }
 }
 
@@ -868,8 +893,9 @@ MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
                      "BCD (Binary Corner Detector)", "SIFT",
                      "SURF", "FAST Detector",
                      "FASTER9 Detector", "FASTER10 Detector",
-                     "FASTER12", "AKAZE Detector",
-                     "LSD Detector"};
+                     "FASTER12", "ORB Detector",
+                     "AKAZE Detector", "LSD Detector"};
+
     detectors_select = new QComboBox;
 
     for(int i=0 ; i<NUM_DETECTORS ; i++)
@@ -1096,8 +1122,6 @@ MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
     hbox2->addWidget(prev_button);
     hbox2->addWidget(next_button);
     groupBox_buttons2->setLayout(hbox2);
-
-
 
     layout_grid = new QGridLayout;
     layout_grid->addWidget(groupBox1,1,0,1,1);

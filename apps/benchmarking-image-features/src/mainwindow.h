@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#define NUM_DETECTORS 11
+#define NUM_DETECTORS 12
 #define NUM_DESCRIPTORS 8
 #define IMAGE_WIDTH 500
 #define IMAGE_HEIGHT 500
@@ -176,6 +176,14 @@ public:
         int nOctaves;
         bool rotation_invariant;
     }SURF_opts;
+
+    struct ORBOptions
+    {
+        int min_distance;
+        int n_levels;
+        float scale_factor;
+        bool extract_patch;
+    }ORB_opts;
 
     //DESCRIPTOR OPTIONS
     struct SpinImageOptions
