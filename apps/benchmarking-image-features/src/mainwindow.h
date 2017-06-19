@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #define NUM_DETECTORS 12
-#define NUM_DESCRIPTORS 8
+#define NUM_DESCRIPTORS 7
 #define IMAGE_WIDTH 500
 #define IMAGE_HEIGHT 500
 
@@ -218,8 +218,6 @@ public:
     void fillDescriptorInfo();
     void readFilesFromFolder(int next_prev);
     void displayImagesWithoutDetector();
-
-
 
 public slots:
     void on_button_generate_clicked();

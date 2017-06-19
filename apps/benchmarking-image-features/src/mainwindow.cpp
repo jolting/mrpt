@@ -459,8 +459,8 @@ void MainWindow::fillDescriptorInfo()
 
     if(descriptor_selected == 0) //!< SIFT Descriptors
     {
-        SIFT_opts.threshold = param1_edit->text().toFloat();
-        SIFT_opts.edge_threshold = param2_edit->text().toFloat();
+        SIFT_opts.threshold = param1_edit_desc->text().toFloat();
+        SIFT_opts.edge_threshold = param2_edit_desc->text().toFloat();
 
         desc_to_compute = TDescriptorType (1); //!< SIFT descriptors
 
@@ -470,18 +470,18 @@ void MainWindow::fillDescriptorInfo()
     }
     else if(descriptor_selected == 1)
     {
-        desc_to_compute = TDescriptorType  (2); //!< SURF descriptors
+        desc_to_compute = TDescriptorType (2); //!< SURF descriptors
 
-        SURF_opts.hessianThreshold = param1_edit->text().toInt();
-        SURF_opts.nLayersPerOctave = param2_edit->text().toInt();
-        SURF_opts.nOctaves = param3_edit->text().toInt();
-        string temp_str = param4_edit->text().toStdString();
+        SURF_opts.hessianThreshold = param1_edit_desc->text().toInt();
+        SURF_opts.nLayersPerOctave = param2_edit_desc->text().toInt();
+        SURF_opts.nOctaves = param3_edit_desc->text().toInt();
+        string temp_str = param4_edit_desc->text().toStdString();
         bool temp_bool = temp_str.compare("true") == 0;
         SURF_opts.rotation_invariant = temp_bool;
         cout <<  temp_bool << endl;
 
-        fext.options.SURFOptions.hessianThreshold = SURF_opts.hessianThreshold;
-        fext.options.SURFOptions.nLayersPerOctave = SURF_opts.nLayersPerOctave;
+        fext.options.SURFOptions.hessianThreshold =  SURF_opts.hessianThreshold;
+        fext.options.SURFOptions.nLayersPerOctave =  SURF_opts.nLayersPerOctave;
         fext.options.SURFOptions.nOctaves = SURF_opts.nOctaves;
         fext.options.SURFOptions.rotation_invariant = SURF_opts.rotation_invariant;
     }
@@ -660,14 +660,20 @@ void MainWindow::on_descriptor_button_clicked()
         fext.options.patchSize = 0;
 
 
+    // find a way to clear off past detector/descriptor info stored in featsImage
 
     if(desc_to_compute != TDescriptorType(-1) && desc_to_compute !=descAny)
     {
         fext.computeDescriptors(img1, featsImage1, desc_to_compute);
-        fext.computeDescriptors(img2, featsImage2, desc_to_compute);
+        if (currentInputIndex == 1 || currentInputIndex == 4)
+        {
+            fext.computeDescriptors(img2, featsImage2, desc_to_compute);
+            featsImage2.saveToTextFile("/home/raghavender/Key_Descriptors2");
+        }
+        featsImage1.saveToTextFile("/home/raghavender/Key_Descriptors1.txt");
 
-        featsImage1.saveToTextFile("/home/raghavender/Key_Descriptors.txt");
     }
+
 }
 
 /*
@@ -919,7 +925,7 @@ MainWindow::MainWindow(QWidget *window_gui) : QMainWindow(window_gui)
     groupBox2 = new QGroupBox(tr("Select your descriptor"));
     string descriptor_names[] = {"SIFT Descriptor", "SURF Descriptor",
                                  "Intensity-domain spin image descriptor", "Polar Images descriptor",
-                                 "Log-polar image descriptor", "ORB Descriptors",
+                                 "Log-polar image descriptor",
                                  "LATCH Descriptor", "BLD Descriptor"};
                                   //"BRIEF Descriptors"};
 
