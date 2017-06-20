@@ -51,9 +51,6 @@ public:
     void ReadInputFormat();
 
 public:
-
-
-
     QWidget *window_gui;
     QLabel *detector_label;
 
@@ -69,9 +66,7 @@ public:
 
     QPushButton *browse_button;
     QPushButton *browse_button2;
-
     QGridLayout *layout_grid;
-
 
     int currentInputIndex;
     int detector_selected;
@@ -80,7 +75,6 @@ public:
     QGroupBox *groupBox1;
     QGroupBox *groupBox2;
     QGroupBox *groupBox_images;
-
 
     QComboBox *inputs;
     QLineEdit *inputFilePath;
@@ -222,16 +216,19 @@ public:
 public slots:
     void on_button_generate_clicked();
     void button_close_clicked();
+
     void on_detector_button_clicked();
     void on_descriptor_button_clicked();
+
     void on_browse_button_clicked();
     void on_browse_button_clicked2();
+
     void on_descriptor_choose(int choice);
-
     void on_detector_choose(int choice);
-    void on_file_input_choose(int choice);
 
+    void on_file_input_choose(int choice);
     void onStereoMatchingChecked(int state);
+
     void on_next_button_clicked();
     void on_prev_button_clicked();
 

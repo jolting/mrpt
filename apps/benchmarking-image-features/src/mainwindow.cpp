@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "visualizedialog.h"
+
 #include <QButtonGroup>
 #include <QtWidgets>
 #include <dirent.h>
@@ -30,9 +32,13 @@ using namespace cv::xfeatures2d;
 void MainWindow::on_button_generate_clicked()
 {
     ReadInputFormat();
-    //FeatureDialog feature_dialog (this, inputFilePath->text(),detector_selected, descriptor_selected, numFeatures);
-    qimage1.load("/home/raghavender/Downloads/images.jpeg");
-    image1->setPixmap(QPixmap::fromImage(my_image));
+    featsImage1.saveToTextFile("/home/raghavender/Features1.txt");
+    featsImage2.saveToTextFile("/home/raghavender/Features2.txt");
+    VisualizeDialog visualize_dialog (this, inputFilePath->text(), detector_selected, descriptor_selected );
+
+
+    //qimage1.load("/home/raghavender/Downloads/images.jpeg");
+    //image1->setPixmap(QPixmap::fromImage(my_image));
 }
 
 void MainWindow::button_close_clicked()
