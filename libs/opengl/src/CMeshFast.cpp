@@ -179,7 +179,7 @@ void  CMeshFast::assignImageAndZ( const CImage& img, const mrpt::math::CMatrixTe
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CMeshFast::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CMeshFast>::writeToStream(const CMeshFast& o, mrpt::utils::CStream &out,int *version)
 {
 
 	if (version)

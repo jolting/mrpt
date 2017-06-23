@@ -262,7 +262,7 @@ namespace mrpt{
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  COctoMapVoxels::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<COctoMapVoxels>::writeToStream(const COctoMapVoxels& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version) *version=2;
 	else

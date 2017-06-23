@@ -79,7 +79,7 @@ void   CSimpleLine::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CSimpleLine::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CSimpleLine>::writeToStream(const CSimpleLine& o, mrpt::utils::CStream &out,int *version)
 {
 
 	if (version)

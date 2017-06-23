@@ -64,7 +64,7 @@ const mrpt::poses::CPose3D &CKinematicChain::getOriginPose() const
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of CSerializable objects
   ---------------------------------------------------------------*/
-void  CKinematicChain::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CKinematicChain>::writeToStream(const CKinematicChain& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;

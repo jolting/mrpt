@@ -27,7 +27,7 @@ namespace mrpt
 		  * \sa mrpt::vision::CCamModel, the application <a href="http://www.mrpt.org/Application:camera-calib-gui" >camera-calib-gui</a> for calibrating a camera
 		 * \ingroup mrpt_base_grp
 		 */
-		class BASE_IMPEXP TCamera : public mrpt::utils::CSerializable
+		class BASE_IMPEXP TCamera : public mrpt::utils::CSerializableCRTP<TCamera>
 		{
 			DEFINE_SERIALIZABLE( TCamera )
 

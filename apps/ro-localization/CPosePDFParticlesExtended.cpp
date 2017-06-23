@@ -305,7 +305,7 @@ void CPosePDFParticlesExtended::getCovarianceAndMean(CMatrixDouble33 &cov,CPose2
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPosePDFParticlesExtended::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPosePDFParticlesExtended>::writeToStream(const CPosePDFParticlesExtended& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
@@ -325,7 +325,7 @@ void  CPosePDFParticlesExtended::writeToStream(mrpt::utils::CStream &out,int *ve
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPosePDFParticlesExtended::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CPosePDFParticlesExtended>::readFromStream(CPosePDFParticlesExtended& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

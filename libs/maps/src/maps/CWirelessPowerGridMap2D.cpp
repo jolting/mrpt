@@ -245,7 +245,7 @@ struct TOldCellTypeInVersion1
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CWirelessPowerGridMap2D::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CWirelessPowerGridMap2D>::readFromStream(CWirelessPowerGridMap2D& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

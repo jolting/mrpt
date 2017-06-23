@@ -24,10 +24,9 @@ namespace mrpt
 		  * \ sa mrpt::math::spline, mrpt::poses::CPose3DInterpolator
 		 * \ingroup interpolation_grp
 		 */
-		class BASE_IMPEXP CSplineInterpolator1D : public mrpt::utils::CSerializable
+		class BASE_IMPEXP CSplineInterpolator1D : public mrpt::utils::CSerializableCRTP<CSplineInterpolator1D>
 		{
-			DEFINE_SERIALIZABLE( CSplineInterpolator1D )
-
+			friend mrpt::utils::CSerializer<CSplineInterpolator1D>;
 		private:
 			/** The placeholders for the data */
 			std::map<double,double>	m_x2y;

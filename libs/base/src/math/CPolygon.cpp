@@ -19,29 +19,30 @@ using namespace mrpt::math;
 using namespace mrpt::utils;
 using namespace std;
 
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CPolygon, CSerializable, mrpt::math)
-
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 	Implements the writing to a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPolygon::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <>
+void  CSerializer<CPolygon>::writeToStream(const CPolygon &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
 		// The number of vertexs:
-		const uint32_t n = (uint32_t)TPolygon2D::size();
+		const uint32_t n = (uint32_t)o.size();
 
 		// Size:
 		out << n;
 
 		// Vertices:
 		if (n)
-			out.WriteBufferFixEndianness<double>( (double*)&TPolygon2D::operator[](0), 2*n);
+			out.WriteBufferFixEndianness<double>( (double*)&o[0], 2*n);
 	}
 
 }
@@ -50,7 +51,8 @@ void  CPolygon::writeToStream(mrpt::utils::CStream &out, int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPolygon::readFromStream(mrpt::utils::CStream &in, int version)
+template <>
+void CSerializer<CPolygon>::readFromStream(CPolygon &o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -69,11 +71,11 @@ void  CPolygon::readFromStream(mrpt::utils::CStream &in, int version)
 			in >> f; //cx=f;
 			in >> f; //cy=f;
 
-			TPolygon2D::resize(n);
+			o.resize(n);
 
 			// The vertexs arrays:
-			for (i=0;i<n;i++) { in >> f; TPolygon2D::operator[](i).x = f;	}
-			for (i=0;i<n;i++) { in >> f; TPolygon2D::operator[](i).y = f;	}
+			for (i=0;i<n;i++) { in >> f; o[i].x = f;	}
+			for (i=0;i<n;i++) { in >> f; o[i].y = f;	}
 		} break;
 
 	case 1:
@@ -86,11 +88,11 @@ void  CPolygon::readFromStream(mrpt::utils::CStream &in, int version)
 			in >> n >> dumm >> dumm >> dumm >> dumm >> dumm >> dumm;
 			        //max_x >> max_y >> min_x >> min_y >> cx >> cy;
 
-			TPolygon2D::resize(n);
+			o.resize(n);
 
 			// The vertexs arrays:
-			for (size_t i=0;i<n;i++) { in >> dumm; TPolygon2D::operator[](i).x = dumm;	}
-			for (size_t i=0;i<n;i++) { in >> dumm; TPolygon2D::operator[](i).y = dumm;	}
+			for (size_t i=0;i<n;i++) { in >> dumm; o[i].x = dumm;	}
+			for (size_t i=0;i<n;i++) { in >> dumm; o[i].y = dumm;	}
 		} break;
 	case 2:
 		{
@@ -100,17 +102,20 @@ void  CPolygon::readFromStream(mrpt::utils::CStream &in, int version)
 			// All elemental typed variables:
 			in >> n;
 
-			TPolygon2D::resize(n);
+			o.resize(n);
 
 			// The vertexs arrays:
 			if (n>0)
-				in.ReadBufferFixEndianness<double>( (double*)&TPolygon2D::operator[](0), 2*n);
+				in.ReadBufferFixEndianness<double>( (double*)&o[0], 2*n);
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 
+}
+
+}
 }
 
 /*---------------------------------------------------------------

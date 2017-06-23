@@ -290,7 +290,7 @@ void  CMultiMetricMap::writeToStream(mrpt::utils::CStream &out, int *version) co
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CMultiMetricMap::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CMultiMetricMap>::readFromStream(CMultiMetricMap& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

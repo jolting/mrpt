@@ -16,30 +16,36 @@
 using namespace mrpt::utils;
 using namespace mrpt::poses;
 
-IMPLEMENTS_SERIALIZABLE(CPose2DInterpolator, CSerializable, mrpt::poses)
-
-void CPose2DInterpolator::writeToStream(mrpt::utils::CStream &out,int *version) const
+namespace mrpt
+{
+namespace utils
+{
+template <>
+void CSerializer<CPose2DInterpolator>::writeToStream(const CPose2DInterpolator &o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << m_path;
+		out << o.m_path;
 	}
 }
 
-void CPose2DInterpolator::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CPose2DInterpolator>::readFromStream(CPose2DInterpolator &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			in >> m_path;
+			in >> o.m_path;
 		}
 	break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 namespace mrpt {

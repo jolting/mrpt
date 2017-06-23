@@ -63,7 +63,7 @@ void  PbMap::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  PbMap::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<PbMap>::readFromStream(PbMap& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

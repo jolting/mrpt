@@ -29,10 +29,9 @@ namespace poses
 	 * \ingroup poses_pdf_grp
 	 * \sa CPose3DPDF
 	 */
-	class BASE_IMPEXP CPose3DPDFSOG : public CPose3DPDF
+	class BASE_IMPEXP CPose3DPDFSOG : public mrpt::utils::CSerializableCRTP<CPose3DPDFSOG,CPose3DPDF>
 	{
-		DEFINE_SERIALIZABLE( CPose3DPDFSOG )
-
+		friend mrpt::utils::CSerializer<CPose3DPDFSOG>;
 	public:
 		/** The struct for each mode:
 		 */

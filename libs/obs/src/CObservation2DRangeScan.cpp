@@ -131,7 +131,7 @@ void CObservation2DRangeScan::truncateByDistanceAndAngle(float min_distance, flo
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservation2DRangeScan::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservation2DRangeScan>::readFromStream(CObservation2DRangeScan& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

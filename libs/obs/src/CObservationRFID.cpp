@@ -54,7 +54,7 @@ void  CObservationRFID::writeToStream(mrpt::utils::CStream &out, int *version) c
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationRFID::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationRFID>::readFromStream(CObservationRFID& o, mrpt::utils::CStream &in, int version)
 {
 	//MRPT_UNUSED_PARAM(in);
 	switch(version)

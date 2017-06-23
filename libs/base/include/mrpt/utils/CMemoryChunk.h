@@ -22,12 +22,10 @@ namespace mrpt
 		 * \sa CStream
 		 * \ingroup mrpt_base_grp
 		 */
-		class BASE_IMPEXP CMemoryChunk : public CSerializable, public CMemoryStream
+		class BASE_IMPEXP CMemoryChunk : public CSerializableCRTP<CMemoryChunk>, public CMemoryStream
 		{
-			DEFINE_SERIALIZABLE( CMemoryChunk )
-
+			friend CSerializer<CMemoryChunk>;
 		}; // End of class def.
-		DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CMemoryChunk, mrpt::utils::CSerializable )
 
 	} // End of namespace
 } // end of namespace

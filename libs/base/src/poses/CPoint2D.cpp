@@ -18,20 +18,23 @@ using namespace mrpt::poses;
 using namespace mrpt::utils;
 using namespace mrpt::math;
 
-IMPLEMENTS_SERIALIZABLE(CPoint2D, CSerializable, mrpt::poses)
-
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CPoint2D::writeToStream(mrpt::utils::CStream &out, int *version) const
+namespace mrpt
+{
+namespace utils
+{
+template <>
+void  CSerializer<CPoint2D>::writeToStream(const CPoint2D &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
 		// The coordinates:
-		out << m_coords[0] << m_coords[1];
+		out << o.m_coords[0] << o.m_coords[1];
 	}
 }
 
@@ -39,7 +42,8 @@ void  CPoint2D::writeToStream(mrpt::utils::CStream &out, int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPoint2D::readFromStream(mrpt::utils::CStream &in, int version)
+template <>
+void  CSerializer<CPoint2D>::readFromStream(CPoint2D &o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -47,17 +51,19 @@ void  CPoint2D::readFromStream(mrpt::utils::CStream &in, int version)
 		{
 			// The coordinates:
 			float f;
-			in >> f; m_coords[0]=f;
-			in >> f; m_coords[1]=f;
+			in >> f; o.m_coords[0]=f;
+			in >> f; o.m_coords[1]=f;
 		} break;
 	case 1:
 		{
 			// The coordinates:
-			in >> m_coords[0] >> m_coords[1];
+			in >> o.m_coords[0] >> o.m_coords[1];
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 /*---------------------------------------------------------------

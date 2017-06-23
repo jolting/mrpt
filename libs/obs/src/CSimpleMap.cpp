@@ -261,7 +261,7 @@ void  CSimpleMap::insert(
 	Implements the writing to a CStream capability of
 	  CSerializable objects
   ---------------------------------------------------------------*/
-void  CSimpleMap::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CSimpleMap>::writeToStream(const CSimpleMap& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;
@@ -278,7 +278,7 @@ void  CSimpleMap::writeToStream(mrpt::utils::CStream &out,int *version) const
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  CSimpleMap::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CSimpleMap>::readFromStream(CSimpleMap& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

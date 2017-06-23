@@ -17,8 +17,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE( CPoses2DSequence, CSerializable ,mrpt::poses)
-
 /*---------------------------------------------------------------
 			Default constructor
   ---------------------------------------------------------------*/
@@ -36,11 +34,12 @@ size_t CPoses2DSequence::posesCount()
 }
 
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CPoses2DSequence::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPoses2DSequence>::writeToStream(const CPoses2DSequence& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
@@ -49,9 +48,9 @@ void  CPoses2DSequence::writeToStream(mrpt::utils::CStream &out,int *version) co
 		uint32_t	i,n;
 
 		// The poses:
-		n = poses.size();
+		n = o.poses.size();
 		out << n;
-		for (i=0;i<n;i++) out << poses[i];
+		for (i=0;i<n;i++) out << o.poses[i];
 	}
 }
 
@@ -59,7 +58,7 @@ void  CPoses2DSequence::writeToStream(mrpt::utils::CStream &out,int *version) co
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPoses2DSequence::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CPoses2DSequence>::readFromStream(CPoses2DSequence& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -69,13 +68,16 @@ void  CPoses2DSequence::readFromStream(mrpt::utils::CStream &in, int version)
 
 			// The poses:
 			in >> n;
-			poses.resize(n);
-			for (i=0;i<n;i++)	in >> poses[i];
+			o.poses.resize(n);
+			for (i=0;i<n;i++)	in >> o.poses[i];
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+
+}
 }
 
 

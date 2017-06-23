@@ -48,7 +48,7 @@ IMPLEMENTS_SERIALIZABLE( CEllipsoidRangeBearing2D, CRenderizableDisplayList, mrp
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CEllipsoidRangeBearing2D::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CEllipsoidRangeBearing2D>::writeToStream(const CEllipsoidRangeBearing2D& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;

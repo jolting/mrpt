@@ -343,7 +343,7 @@ void  CMesh3D::writeToStream(mrpt::utils::CStream &out, int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CMesh3D::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CMesh3D>::readFromStream(CMesh3D& o, mrpt::utils::CStream &in, int version)
 {
 	//********** To do ************
 	

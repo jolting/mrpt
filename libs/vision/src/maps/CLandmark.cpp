@@ -110,7 +110,7 @@ void  CLandmark::writeToStream(mrpt::utils::CStream &out, int *version) const
    Implements the reading from a CStream capability of
       CSerializable objects
   ---------------------------------------------------------------*/
-void  CLandmark::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CLandmark>::readFromStream(CLandmark& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

@@ -435,7 +435,7 @@ static void light_update(Lib3dsLight *l,Lib3dsFile	*file)
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  C3DSScene::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<C3DSScene>::writeToStream(const C3DSScene& o, mrpt::utils::CStream &out,int *version)
 {
 #if MRPT_HAS_LIB3DS
 	if (version)

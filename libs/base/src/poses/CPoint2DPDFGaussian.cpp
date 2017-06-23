@@ -56,33 +56,40 @@ CPoint2DPDFGaussian::CPoint2DPDFGaussian(
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPoint2DPDFGaussian::writeToStream(mrpt::utils::CStream &out,int *version) const
+namespace mrpt
+{
+namespace utils
+{
+template <>
+void  CSerializer<CPoint2DPDFGaussian>::writeToStream(const CPoint2DPDFGaussian &o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << CPoint2D(mean) << cov;
+		out << CPoint2D(o.mean) << o.cov;
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPoint2DPDFGaussian::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CPoint2DPDFGaussian>::readFromStream(CPoint2DPDFGaussian &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			in >> mean >> cov;
+			in >> o.mean >> o.cov;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 }
-
+}
+}
 
 void  CPoint2DPDFGaussian::copyFrom(const CPoint2DPDF &o)
 {

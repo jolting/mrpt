@@ -108,7 +108,7 @@ static void triangle_readFromStream(mrpt::utils::CStream &i, CSetOfTriangles::TT
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CSetOfTriangles::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CSetOfTriangles>::writeToStream(const CSetOfTriangles& o, mrpt::utils::CStream &out,int *version)
 {
 
 	if (version)

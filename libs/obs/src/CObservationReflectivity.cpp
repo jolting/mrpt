@@ -51,7 +51,7 @@ void  CObservationReflectivity::writeToStream(mrpt::utils::CStream &out, int *ve
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationReflectivity::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationReflectivity>::readFromStream(CObservationReflectivity& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

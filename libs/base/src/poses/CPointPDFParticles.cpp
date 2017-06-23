@@ -133,19 +133,24 @@ void CPointPDFParticles::getCovarianceAndMean(CMatrixDouble33 &cov, CPoint3D &me
 	MRPT_END
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPointPDFParticles::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <>
+void  CSerializer<CPointPDFParticles>::writeToStream(const CPointPDFParticles &o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		uint32_t	N = size();
+		uint32_t	N = o.size();
 		out << N;
 
-		for (CParticleList::const_iterator	it=m_particles.begin();it!=m_particles.end();++it)
+		for (CPointPDFParticles::CParticleList::const_iterator	it=o.m_particles.begin();it!=o.m_particles.end();++it)
 			out << it->log_w << it->d->x << it->d->y << it->d->z;
 	}
 }
@@ -153,7 +158,8 @@ void  CPointPDFParticles::writeToStream(mrpt::utils::CStream &out,int *version) 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPointPDFParticles::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CPointPDFParticles>::readFromStream(CPointPDFParticles &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -161,15 +167,17 @@ void  CPointPDFParticles::readFromStream(mrpt::utils::CStream &in,int version)
 		{
 			uint32_t	N;
 			in >> N;
-			setSize(N);
+			o.setSize(N);
 
-			for (CParticleList::iterator	it=m_particles.begin();it!=m_particles.end();++it)
+			for (CPointPDFParticles::CParticleList::iterator	it=o.m_particles.begin();it!=o.m_particles.end();++it)
 				in >> it->log_w >> it->d->x >> it->d->y >> it->d->z;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+}
 }
 
 void  CPointPDFParticles::copyFrom(const CPointPDF &o)
@@ -292,11 +300,14 @@ void  CPointPDFParticles::bayesianFusion( const  CPointPDF &p1_, const  CPointPD
 	MRPT_END
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  TSimple3DPoint::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<TSimple3DPoint>::writeToStream(const TSimple3DPoint& o, mrpt::utils::CStream &out,int *version)
 {
 	MRPT_UNUSED_PARAM(out); MRPT_UNUSED_PARAM(version);
 	THROW_EXCEPTION("Shouldn't arrive here!");
@@ -305,8 +316,10 @@ void  TSimple3DPoint::writeToStream(mrpt::utils::CStream &out,int *version) cons
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  TSimple3DPoint::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<TSimple3DPoint>::readFromStream(TSimple3DPoint &o, mrpt::utils::CStream &in,int version)
 {
 	MRPT_UNUSED_PARAM(in); MRPT_UNUSED_PARAM(version);
 	THROW_EXCEPTION("Shouldn't arrive here!");
+}
+}
 }

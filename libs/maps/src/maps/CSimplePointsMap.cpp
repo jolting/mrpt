@@ -147,7 +147,7 @@ void  CSimplePointsMap::writeToStream(mrpt::utils::CStream &out, int *version) c
    Implements the reading from a CStream capability of
       CSerializable objects
   ---------------------------------------------------------------*/
-void  CSimplePointsMap::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CSimplePointsMap>::readFromStream(CSimplePointsMap& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

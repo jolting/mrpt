@@ -71,7 +71,7 @@ IMPLEMENTS_SERIALIZABLE(Plane, CSerializable, mrpt::pbmap)
 ///*---------------------------------------------------------------
 //						readFromStream
 // ---------------------------------------------------------------*/
-//void  Plane::readFromStream(mrpt::utils::CStream &in, int version)
+//template <> void CSerializer<Plane>::readFromStream(Plane& o, mrpt::utils::CStream &in, int version)
 //{
 //	switch(version)
 //	{
@@ -211,7 +211,7 @@ void  Plane::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  Plane::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<Plane>::readFromStream(Plane& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

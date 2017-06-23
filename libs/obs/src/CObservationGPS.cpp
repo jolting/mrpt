@@ -68,7 +68,7 @@ void  CObservationGPS::writeToStream(mrpt::utils::CStream &out, int *version) co
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationGPS::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o, mrpt::utils::CStream &in, int version)
 {
 	this->clear();
 

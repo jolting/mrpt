@@ -23,9 +23,8 @@ namespace poses
 	/** Data within each particle
 	 * \ingroup poses_pdf_grp
 	  */
-	class BASE_IMPEXP TSimple3DPoint : public mrpt::utils::CSerializable
+	class BASE_IMPEXP TSimple3DPoint : public mrpt::utils::CSerializableCRTP<TSimple3DPoint>
 	{
-		DEFINE_SERIALIZABLE( TSimple3DPoint )
 	public:
 		TSimple3DPoint(const TSimple3DPoint&o) : x(o.x),y(o.y),z(o.z)
 		{
@@ -41,7 +40,6 @@ namespace poses
 
 		float	x,y,z;
 	};
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( TSimple3DPoint, mrpt::utils::CSerializable )
 
 
 	/** A probability distribution of a 2D/3D point, represented as a set of random samples (particles).
@@ -53,8 +51,6 @@ namespace poses
 		public mrpt::bayes::CParticleFilterData<TSimple3DPoint>,
 		public mrpt::bayes::CParticleFilterDataImpl<CPointPDFParticles,mrpt::bayes::CParticleFilterData<TSimple3DPoint>::CParticleList>
 	{
-		DEFINE_SERIALIZABLE( CPointPDFParticles )
-
 	 public:
 		/** Default constructor */
 		CPointPDFParticles(size_t numParticles = 1);

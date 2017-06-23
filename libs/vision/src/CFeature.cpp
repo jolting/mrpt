@@ -316,7 +316,7 @@ void CFeature::dumpToConsole() const
     dumpToTextStream( myOut );
 }
 
-void  CFeature::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CFeature>::writeToStream(const CFeature& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 2;

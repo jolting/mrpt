@@ -62,7 +62,7 @@ void  CObservationBeaconRanges::writeToStream(mrpt::utils::CStream &out, int *ve
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationBeaconRanges::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationBeaconRanges>::readFromStream(CObservationBeaconRanges& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

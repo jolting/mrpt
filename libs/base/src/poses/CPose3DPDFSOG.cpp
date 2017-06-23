@@ -108,18 +108,19 @@ void CPose3DPDFSOG::getCovarianceAndMean(mrpt::math::CMatrixDouble66 &estCovOut,
 	estCovOut = estCov;
 }
 
+namespace mrpt{ namespace utils{
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPose3DPDFSOG::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPose3DPDFSOG>::writeToStream(const CPose3DPDFSOG& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
-		uint32_t	N = m_modes.size();
+		uint32_t	N = o.m_modes.size();
 		out << N;
-		for (const_iterator it=m_modes.begin();it!=m_modes.end();++it)
+		for (CPose3DPDFSOG::const_iterator it=o.m_modes.begin();it!=o.m_modes.end();++it)
 		{
 			out << (it)->log_w;
 			out << (it)->val.mean;
@@ -131,7 +132,7 @@ void  CPose3DPDFSOG::writeToStream(mrpt::utils::CStream &out,int *version) const
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPose3DPDFSOG::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CPose3DPDFSOG>::readFromStream(CPose3DPDFSOG& o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -141,9 +142,9 @@ void  CPose3DPDFSOG::readFromStream(mrpt::utils::CStream &in,int version)
 		{
 			uint32_t		N;
 			in >> N;
-			this->resize(N);
+			o.resize(N);
 
-			for (iterator it=m_modes.begin();it!=m_modes.end();++it)
+			for (CPose3DPDFSOG::iterator it=o.m_modes.begin();it!=o.m_modes.end();++it)
 			{
 				in >> (it)->log_w;
 
@@ -168,6 +169,7 @@ void  CPose3DPDFSOG::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 }
+}}
 
 void  CPose3DPDFSOG::copyFrom(const CPose3DPDF &o)
 {

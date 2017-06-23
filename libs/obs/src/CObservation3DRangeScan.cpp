@@ -226,7 +226,7 @@ void  CObservation3DRangeScan::writeToStream(mrpt::utils::CStream &out, int *ver
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservation3DRangeScan::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservation3DRangeScan>::readFromStream(CObservation3DRangeScan& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

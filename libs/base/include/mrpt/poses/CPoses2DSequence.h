@@ -23,9 +23,9 @@ namespace poses
 	 * \sa CPose2D, CMultiMetricMap
 	 * \ingroup poses_grp
 	 */
-	class BASE_IMPEXP CPoses2DSequence : public mrpt::utils::CSerializable
+	class BASE_IMPEXP CPoses2DSequence : public mrpt::utils::CSerializableCRTP<CPoses2DSequence>
 	{
-		DEFINE_SERIALIZABLE( CPoses2DSequence )
+		friend mrpt::utils::CSerializer<CPoses2DSequence>;
 	public:
 		/** Default constructor
 		 */

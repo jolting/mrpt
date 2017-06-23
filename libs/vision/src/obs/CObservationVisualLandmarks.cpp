@@ -47,7 +47,7 @@ void  CObservationVisualLandmarks::writeToStream(mrpt::utils::CStream &out, int 
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationVisualLandmarks::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationVisualLandmarks>::readFromStream(CObservationVisualLandmarks& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

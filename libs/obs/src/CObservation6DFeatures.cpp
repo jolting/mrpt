@@ -63,7 +63,7 @@ void  CObservation6DFeatures::writeToStream(mrpt::utils::CStream &out, int *vers
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservation6DFeatures::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservation6DFeatures>::readFromStream(CObservation6DFeatures& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

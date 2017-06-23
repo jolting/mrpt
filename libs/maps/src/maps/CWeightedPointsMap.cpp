@@ -188,7 +188,7 @@ void  CWeightedPointsMap::writeToStream(mrpt::utils::CStream &out, int *version)
    Implements the reading from a CStream capability of
       CSerializable objects
   ---------------------------------------------------------------*/
-void  CWeightedPointsMap::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CWeightedPointsMap>::readFromStream(CWeightedPointsMap& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

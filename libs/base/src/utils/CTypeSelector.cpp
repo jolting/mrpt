@@ -18,28 +18,27 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CTypeSelector, CSerializable, mrpt::utils)
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CTypeSelector::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template <>
+void CSerializer<CTypeSelector>::writeToStream(const CTypeSelector &o, mrpt::utils::CStream &out, int *out_Version)
 {
 	if (out_Version)
 		*out_Version = 0;
 	else
 	{
 		std::vector<std::string>::const_iterator	it;
-		uint32_t							n = (uint32_t)possibleTypes.size();
+		uint32_t							n = (uint32_t)o.possibleTypes.size();
 
 		out << n;
 
-		for (it=possibleTypes.begin();it<possibleTypes.end();++it)
+		for (it=o.possibleTypes.begin();it<o.possibleTypes.end();++it)
 			out << *it;
 
 		// Selection:
-		out << (uint32_t)selection;
+		out << (uint32_t)o.selection;
 	}
 
 }
@@ -47,7 +46,7 @@ void  CTypeSelector::writeToStream(mrpt::utils::CStream &out, int *out_Version) 
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CTypeSelector::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CTypeSelector>::readFromStream(CTypeSelector& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -57,24 +56,24 @@ void  CTypeSelector::readFromStream(mrpt::utils::CStream &in, int version)
 
 			in >> n;
 
-			possibleTypes.clear();
+			o.possibleTypes.clear();
 
 			for (i=0;i<n;i++)
 			{
 				std::string		aux;
 				in >> aux;
-				possibleTypes.push_back( aux );
+				o.possibleTypes.push_back( aux );
 			}
 
 			// Selection:
-			in >> i; selection = i;
+			in >> i; o.selection = i;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 }
-
+}}
 
 /*---------------------------------------------------------------
 						Constructor

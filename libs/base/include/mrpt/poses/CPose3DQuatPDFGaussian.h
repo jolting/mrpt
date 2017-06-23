@@ -35,10 +35,8 @@ namespace poses
 	 * \sa CPose3DQuat, CPose3DQuatPDF, CPose3DPDF, CPose3DQuatPDFGaussianInf
 	 * \ingroup poses_pdf_grp
 	 */
-	class BASE_IMPEXP CPose3DQuatPDFGaussian : public CPose3DQuatPDF
+	class BASE_IMPEXP CPose3DQuatPDFGaussian : public mrpt::utils::CSerializableCRTP<CPose3DQuatPDFGaussian, CPose3DQuatPDF>
 	{
-		DEFINE_SERIALIZABLE( CPose3DQuatPDFGaussian )
-
 	protected:
 		/** Assures the symmetry of the covariance matrix (eventually certain operations in the math-coprocessor lead to non-symmetric matrixes!)
 		  */
@@ -112,7 +110,6 @@ namespace poses
 		double mahalanobisDistanceTo( const CPose3DQuatPDFGaussian& theOther);
 
 	}; // End of class def.
-	DEFINE_SERIALIZABLE_POST_CUSTOM_BASE( CPose3DQuatPDFGaussian , CPose3DQuatPDF )
 
 
 	bool BASE_IMPEXP operator==(const CPose3DQuatPDFGaussian &p1,const CPose3DQuatPDFGaussian &p2);

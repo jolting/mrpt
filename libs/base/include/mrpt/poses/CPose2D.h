@@ -33,11 +33,9 @@ namespace poses
 	 * \sa CPoseOrPoint,CPoint2D
 	 * \ingroup poses_grp
 	 */
-	class BASE_IMPEXP CPose2D : public CPose<CPose2D>, public mrpt::utils::CSerializable
+	class BASE_IMPEXP CPose2D : public CPose<CPose2D>, public mrpt::utils::CSerializableCRTP<CPose2D>
 	{
-	public:
-		DEFINE_SERIALIZABLE( CPose2D )
-
+		friend mrpt::utils::CSerializer<CPose2D>;
 	public:
 		mrpt::math::CArrayDouble<2>   m_coords; //!< [x,y]
 

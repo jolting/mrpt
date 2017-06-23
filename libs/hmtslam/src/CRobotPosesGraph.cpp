@@ -23,7 +23,7 @@ IMPLEMENTS_SERIALIZABLE( CRobotPosesGraph, CSerializable , mrpt::hmtslam)
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CRobotPosesGraph::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CRobotPosesGraph>::writeToStream(const CRobotPosesGraph& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;

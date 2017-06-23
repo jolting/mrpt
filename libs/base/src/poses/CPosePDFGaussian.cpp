@@ -31,9 +31,6 @@ using namespace mrpt::system;
 
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFGaussian, CPosePDF, mrpt::poses )
-
-
 /*---------------------------------------------------------------
 	Constructor
   ---------------------------------------------------------------*/
@@ -60,59 +57,61 @@ CPosePDFGaussian::CPosePDFGaussian(const CPose2D  &init_Mean ) : mean(init_Mean)
 	cov.zeros();
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPosePDFGaussian::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPosePDFGaussian>::writeToStream(const CPosePDFGaussian& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
-		out << mean;
-		out << cov(0,0) << cov(1,1) << cov(2,2);
-		out << cov(0,1) << cov(0,2) << cov(1,2);
+		out << o.mean;
+		out << o.cov(0,0) << o.cov(1,1) << o.cov(2,2);
+		out << o.cov(0,1) << o.cov(0,2) << o.cov(1,2);
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPosePDFGaussian::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CPosePDFGaussian>::readFromStream(CPosePDFGaussian &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 2:
 		{
 			double	x;
-			in >> mean;
+			in >> o.mean;
 
-			in >> x; cov(0,0) = x;
-			in >> x; cov(1,1) = x;
-			in >> x; cov(2,2) = x;
+			in >> x; o.cov(0,0) = x;
+			in >> x; o.cov(1,1) = x;
+			in >> x; o.cov(2,2) = x;
 
-			in >> x; cov(1,0) = x; cov(0,1) = x;
-			in >> x; cov(2,0) = x; cov(0,2) = x;
-			in >> x; cov(1,2) = x; cov(2,1) = x;
+			in >> x; o.cov(1,0) = x; o.cov(0,1) = x;
+			in >> x; o.cov(2,0) = x; o.cov(0,2) = x;
+			in >> x; o.cov(1,2) = x; o.cov(2,1) = x;
 		} break;
 	case 1:
 		{
 			float	x;
-			in >> mean;
+			in >> o.mean;
 
-			in >> x; cov(0,0) = x;
-			in >> x; cov(1,1) = x;
-			in >> x; cov(2,2) = x;
+			in >> x; o.cov(0,0) = x;
+			in >> x; o.cov(1,1) = x;
+			in >> x; o.cov(2,2) = x;
 
-			in >> x; cov(1,0) = x; cov(0,1) = x;
-			in >> x; cov(2,0) = x; cov(0,2) = x;
-			in >> x; cov(1,2) = x; cov(2,1) = x;
+			in >> x; o.cov(1,0) = x; o.cov(0,1) = x;
+			in >> x; o.cov(2,0) = x; o.cov(0,2) = x;
+			in >> x; o.cov(1,2) = x; o.cov(2,1) = x;
 		} break;
 	case 0:
 		{
 			CMatrix		auxCov;
-			in >> mean >> auxCov;
-			cov = auxCov.cast<double>();
+			in >> o.mean >> auxCov;
+			o.cov = auxCov.cast<double>();
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
@@ -120,7 +119,7 @@ void  CPosePDFGaussian::readFromStream(mrpt::utils::CStream &in,int version)
 	};
 }
 
-
+}}
 
 /*---------------------------------------------------------------
 						copyFrom

@@ -630,7 +630,7 @@ void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CImage::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CImage>::readFromStream(CImage& o, mrpt::utils::CStream &in, int version)
 {
 #if !MRPT_HAS_OPENCV
 	if (version==100)

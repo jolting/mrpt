@@ -83,7 +83,7 @@ void   CSphere::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CSphere::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CSphere>::writeToStream(const CSphere& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;

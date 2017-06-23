@@ -20,9 +20,9 @@ namespace utils
 	 * \sa CSerializable
 	 * \ingroup mrpt_base_grp
 	 */
-	class BASE_IMPEXP CTypeSelector : public mrpt::utils::CSerializable
+	class BASE_IMPEXP CTypeSelector : public mrpt::utils::CSerializableCRTP<CTypeSelector>
 	{
-		DEFINE_SERIALIZABLE( CTypeSelector )
+		friend CSerializer<CTypeSelector>;
 	protected:
 		/** The possibilities
 		  */

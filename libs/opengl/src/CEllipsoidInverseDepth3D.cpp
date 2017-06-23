@@ -53,7 +53,7 @@ IMPLEMENTS_SERIALIZABLE( CEllipsoidInverseDepth3D, CRenderizableDisplayList, mrp
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CEllipsoidInverseDepth3D::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CEllipsoidInverseDepth3D>::writeToStream(const CEllipsoidInverseDepth3D& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;

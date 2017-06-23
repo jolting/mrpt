@@ -21,8 +21,8 @@ namespace mrpt
 		  *
 		  * \sa mrpt::vision, the application stereo-calib-gui for calibrating a stereo camera
 		 */
-        class BASE_IMPEXP TStereoCamera : public mrpt::utils::CSerializable
-		{
+        class BASE_IMPEXP TStereoCamera : public mrpt::utils::CSerializableCRTP<TStereoCamera>
+	{
             DEFINE_SERIALIZABLE( TStereoCamera )
         public:
 		    TCamera     leftCamera, rightCamera;  //!< Intrinsic and distortion parameters of the left and right cameras

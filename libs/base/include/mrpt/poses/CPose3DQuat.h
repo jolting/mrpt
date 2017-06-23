@@ -20,8 +20,6 @@ namespace mrpt
 {
 namespace poses
 {
-	DEFINE_SERIALIZABLE_PRE( CPose3DQuat )
-
 	/** A class used to store a 3D pose as a translation (x,y,z) and a quaternion (qr,qx,qy,qz).
 	 *
 	 *  For a complete description of Points/Poses, see mrpt::poses::CPoseOrPoint, or refer
@@ -38,10 +36,8 @@ namespace poses
 	 * \sa CPose3D (for a class based on a 4x4 matrix instead of a quaternion), mrpt::math::TPose3DQuat, mrpt::poses::CPose3DQuatPDF for a probabilistic version of this class,  mrpt::math::CQuaternion, CPoseOrPoint
 	 * \ingroup poses_grp
 	 */
-	class BASE_IMPEXP CPose3DQuat : public CPose<CPose3DQuat>, public mrpt::utils::CSerializable
+	class BASE_IMPEXP CPose3DQuat : public CPose<CPose3DQuat>, public mrpt::utils::CSerializableCRTP<CPose3DQuat>
 	{
-		DEFINE_SERIALIZABLE( CPose3DQuat )
-
 	public:
 		mrpt::math::CArrayDouble<3>     m_coords; //!< The translation vector [x,y,z]
 		mrpt::math::CQuaternionDouble   m_quat;   //!< The quaternion.

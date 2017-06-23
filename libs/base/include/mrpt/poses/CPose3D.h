@@ -69,11 +69,10 @@ namespace poses
 	 * \ingroup poses_grp
 	 * \sa CPoseOrPoint,CPoint3D, mrpt::math::CQuaternion
 	 */
-	class BASE_IMPEXP CPose3D : public CPose<CPose3D>, public mrpt::utils::CSerializable
+	class BASE_IMPEXP CPose3D : public CPose<CPose3D>, public mrpt::utils::CSerializableCRTP<CPose3D>
 	{
-		DEFINE_SERIALIZABLE( CPose3D )
-
-        // This must be added for declaration of MEX-related functions
+		friend mrpt::utils::CSerializer<CPose3D>;
+		// This must be added for declaration of MEX-related functions
         DECLARE_MEX_CONVERSION
 
 	public:

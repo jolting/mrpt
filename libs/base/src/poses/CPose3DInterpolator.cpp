@@ -16,19 +16,21 @@
 using namespace mrpt::utils;
 using namespace mrpt::poses;
 
-IMPLEMENTS_SERIALIZABLE(CPose3DInterpolator, CSerializable, mrpt::poses)
-
-void  CPose3DInterpolator::writeToStream(mrpt::utils::CStream &out,int *version) const
+namespace mrpt {
+namespace utils {
+template <>
+void  CSerializer<CPose3DInterpolator>::writeToStream(const CPose3DInterpolator &o,mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
-		out << m_path; // v1: change container element CPose3D->TPose3D
+		out << o.m_path; // v1: change container element CPose3D->TPose3D
 	}
 }
 
-void  CPose3DInterpolator::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CPose3DInterpolator>::readFromStream(CPose3DInterpolator &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -36,20 +38,22 @@ void  CPose3DInterpolator::readFromStream(mrpt::utils::CStream &in,int version)
 		{
 			std::map<mrpt::system::TTimeStamp, mrpt::poses::CPose3D> old_path;
 			in >> old_path;
-			m_path.clear();
+			o.m_path.clear();
 			for (const auto &p: old_path) {
-				m_path[p.first] = mrpt::math::TPose3D(p.second);
+				o.m_path[p.first] = mrpt::math::TPose3D(p.second);
 			}
 		}
 	break;
 	case 1:
 		{
-			in >> m_path;
+			in >> o.m_path;
 		}
 	break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 namespace mrpt {

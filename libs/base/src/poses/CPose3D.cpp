@@ -139,17 +139,19 @@ CPose3D::CPose3D(const CPose3DRotVec &p )
     this->setRotationMatrix( this->exp_rotation( p.m_rotvec ) );
 }
 
+namespace mrpt {
+namespace utils {
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CPose3D::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPose3D>::writeToStream(const CPose3D& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
-		const CPose3DQuat  q(*this);
+		const CPose3DQuat  q(o);
 		// The coordinates:
 		out << q[0] << q[1] << q[2] << q[3] << q[4] << q[5] << q[6];
 	}
@@ -159,7 +161,8 @@ void  CPose3D::writeToStream(mrpt::utils::CStream &out,int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPose3D::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CPose3D>::readFromStream(CPose3D &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -170,12 +173,12 @@ void  CPose3D::readFromStream(mrpt::utils::CStream &in,int version)
 			in >> HM2;
 			ASSERT_(mrpt::math::size(HM2,1)==4 && HM2.isSquare())
 
-			m_ROT = HM2.block(0,0,3,3).cast<double>();
+			o.m_ROT = HM2.block(0,0,3,3).cast<double>();
 
-			m_coords[0] = HM2.get_unsafe(0,3);
-			m_coords[1] = HM2.get_unsafe(1,3);
-			m_coords[2] = HM2.get_unsafe(2,3);
-			m_ypr_uptodate = false;
+			o.m_coords[0] = HM2.get_unsafe(0,3);
+			o.m_coords[1] = HM2.get_unsafe(1,3);
+			o.m_coords[2] = HM2.get_unsafe(2,3);
+			o.m_ypr_uptodate = false;
 		} break;
 	case 1:
 		{
@@ -183,12 +186,12 @@ void  CPose3D::readFromStream(mrpt::utils::CStream &in,int version)
 			CMatrixDouble44 HM;
 			in >> HM;
 
-			m_ROT = HM.block(0,0,3,3);
+			o.m_ROT = HM.block(0,0,3,3);
 
-			m_coords[0] = HM.get_unsafe(0,3);
-			m_coords[1] = HM.get_unsafe(1,3);
-			m_coords[2] = HM.get_unsafe(2,3);
-			m_ypr_uptodate = false;
+			o.m_coords[0] = HM.get_unsafe(0,3);
+			o.m_coords[1] = HM.get_unsafe(1,3);
+			o.m_coords[2] = HM.get_unsafe(2,3);
+			o.m_ypr_uptodate = false;
 		} break;
 	case 2:
 		{
@@ -197,16 +200,18 @@ void  CPose3D::readFromStream(mrpt::utils::CStream &in,int version)
 			in >>p[0]>>p[1]>>p[2]>>p[3]>>p[4]>>p[5]>>p[6];
 
 			// Extract XYZ + ROT from quaternion:
-			m_ypr_uptodate = false;
-			m_coords[0] = p.x();
-			m_coords[1] = p.y();
-			m_coords[2] = p.z();
-			p.quat().rotationMatrixNoResize(m_ROT);
+			o.m_ypr_uptodate = false;
+			o.m_coords[0] = p.x();
+			o.m_coords[1] = p.y();
+			o.m_coords[2] = p.z();
+			p.quat().rotationMatrixNoResize(o.m_ROT);
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+}
 }
 
 /**  Textual output stream function.

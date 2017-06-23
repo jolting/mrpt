@@ -21,9 +21,9 @@ namespace mrpt
 		 * \note For a complete introduction to Matrices and vectors in MRPT, see: http://www.mrpt.org/Matrices_vectors_arrays_and_Linear_Algebra_MRPT_and_Eigen_classes
 		 * \ingroup mrpt_base_grp
 		 */
-		class BASE_IMPEXP CMatrixB : public mrpt::utils::CSerializable, public CMatrixBool
+		class BASE_IMPEXP CMatrixB : public mrpt::utils::CSerializableCRTP<CMatrixB>, public CMatrixBool
 		{
-			DEFINE_SERIALIZABLE( CMatrixB )
+			friend mrpt::utils::CSerializer<CMatrixB>;
 		public:
 			/** Constructor */
 			CMatrixB(size_t row = 1, size_t col = 1) : CMatrixBool(row,col) { }

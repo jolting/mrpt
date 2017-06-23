@@ -40,7 +40,7 @@ void  CObservationRawDAQ::writeToStream(mrpt::utils::CStream &out, int *version)
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationRawDAQ::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationRawDAQ>::readFromStream(CObservationRawDAQ& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

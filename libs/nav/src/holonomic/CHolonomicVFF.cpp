@@ -98,7 +98,7 @@ void CHolonomicVFF::navigate(const NavInput & ni, NavOutput &no)
 	}
 }
 
-void  CHolonomicVFF::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CHolonomicVFF>::writeToStream(const CHolonomicVFF& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
@@ -126,7 +126,7 @@ void  CHolonomicVFF::readFromStream(mrpt::utils::CStream &in,int version)
 	Implements the writing to a CStream capability of
 	  CSerializable objects
   ---------------------------------------------------------------*/
-void  CLogFileRecord_VFF::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CLogFileRecord_VFF>::writeToStream(const CLogFileRecord_VFF& o, mrpt::utils::CStream &out,int *version)
 {
 	MRPT_UNUSED_PARAM(out);
 	if (version)

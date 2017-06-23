@@ -96,7 +96,7 @@ namespace mrpt
 		 * \sa mrpt::vision, mrpt::vision::CFeatureExtractor, mrpt::vision::CImagePyramid, CSerializable, CCanvas
 		 * \ingroup mrpt_base_grp
 		 */
-		class BASE_IMPEXP CImage : public mrpt::utils::CSerializable, public CCanvas
+		class BASE_IMPEXP CImage : public mrpt::utils::CSerializableCRTP<CImage>, public CCanvas
 		{
 			DEFINE_SERIALIZABLE( CImage )
 

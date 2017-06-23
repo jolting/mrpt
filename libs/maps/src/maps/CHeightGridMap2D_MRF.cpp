@@ -202,7 +202,7 @@ void  CHeightGridMap2D_MRF::writeToStream(mrpt::utils::CStream &out, int *versio
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CHeightGridMap2D_MRF::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CHeightGridMap2D_MRF>::readFromStream(CHeightGridMap2D_MRF& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

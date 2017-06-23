@@ -22,7 +22,7 @@ namespace mrpt
 		 * \note For a complete introduction to Matrices and vectors in MRPT, see: http://www.mrpt.org/Matrices_vectors_arrays_and_Linear_Algebra_MRPT_and_Eigen_classes
 		 * \ingroup mrpt_base_grp
 		 */
-		class BASE_IMPEXP_TEMPL CMatrix : public mrpt::utils::CSerializable, public CMatrixFloat
+		class BASE_IMPEXP_TEMPL CMatrix : public mrpt::utils::CSerializableCRTP<CMatrix>, public CMatrixFloat
 		{
 			DEFINE_SERIALIZABLE_CUSTOM_LINKAGE( CMatrix, void BASE_IMPEXP, static BASE_IMPEXP, virtual BASE_IMPEXP )
 

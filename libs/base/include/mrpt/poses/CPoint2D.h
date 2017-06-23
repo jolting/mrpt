@@ -33,7 +33,7 @@ namespace poses
 	 * \sa CPoseOrPoint,CPose, CPoint
 	 * \ingroup poses_grp
 	 */
-	class BASE_IMPEXP CPoint2D : public CPoint<CPoint2D>, public mrpt::utils::CSerializable
+	class BASE_IMPEXP CPoint2D : public CPoint<CPoint2D>, public mrpt::utils::CSerializableCRTP<CPoint2D>
 	{
 		DEFINE_SERIALIZABLE( CPoint2D )
 
