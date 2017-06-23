@@ -504,20 +504,22 @@ unsigned char*  CImage::get_unsafe(
 #endif
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <>
+void CSerializer<CImage>::writeToStream(const CImage &o, mrpt::utils::CStream &out, int *version)
 {
 #if !MRPT_HAS_OPENCV
 	if (version)
 		*version = 100;
 	else
 	{
-		out << m_imgIsExternalStorage;
+		out << o.m_imgIsExternalStorage;
 
-		if (m_imgIsExternalStorage)
-			out << m_externalFile;
+		if (o.m_imgIsExternalStorage)
+			out << o.m_externalFile;
 		// Nothing else to serialize!
 	}
 #else
@@ -526,17 +528,17 @@ void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
 	else
 	{
 		// Added in version 6: possibility of being stored offline:
-		out << m_imgIsExternalStorage;
+		out << o.m_imgIsExternalStorage;
 
-		if (m_imgIsExternalStorage)
+		if (o.m_imgIsExternalStorage)
 		{
-			out << m_externalFile;
+			out << o.m_externalFile;
 		}
 		else
 		{ // Normal image loaded in memory:
-			ASSERT_(img!=nullptr);
+			ASSERT_(o.img!=nullptr);
 
-			const bool hasColor = isColor();
+			const bool hasColor = o.isColor();
 
 			out << hasColor;
 
@@ -546,10 +548,10 @@ void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
 				// GRAY-SCALE: Raw bytes:
 				// Version 3: ZIP compression!
 				// Version 4: Skip zip if the image size <= 16Kb
-				int32_t width = ((IplImage*)img)->width;
-				int32_t height = ((IplImage*)img)->height;
-				int32_t origin = ((IplImage*)img)->origin;
-				int32_t imageSize = ((IplImage*)img)->imageSize;
+				int32_t width = ((IplImage*)o.img)->width;
+				int32_t height = ((IplImage*)o.img)->height;
+				int32_t origin = ((IplImage*)o.img)->origin;
+				int32_t imageSize = ((IplImage*)o.img)->imageSize;
 
 				out << width << height << origin << imageSize;
 
@@ -563,8 +565,8 @@ void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
 				{
 					std::vector<unsigned char>	tempBuf;
 					compress::zip::compress(
-						((IplImage*)img)->imageData,		// Data
-						((IplImage*)img)->imageSize,		// Size
+						((IplImage*)o.img)->imageData,		// Data
+						((IplImage*)o.img)->imageSize,		// Size
 						tempBuf);
 
 					int32_t zipDataLen = (int32_t )tempBuf.size();
@@ -576,7 +578,7 @@ void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
 				}
 				else
 				{
-					out.WriteBuffer( ((IplImage*)img)->imageData,((IplImage*)img)->imageSize );
+					out.WriteBuffer( ((IplImage*)o.img)->imageData,((IplImage*)o.img)->imageSize );
 				}
 			}
 			else
@@ -584,8 +586,8 @@ void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
 				// COLOR: High quality JPEG image
 
 				// v7: If size is 0xN or Nx0, don't call "saveToStreamAsJPEG"!!
-				const int32_t width = ((IplImage*)img)->width;
-				const int32_t height = ((IplImage*)img)->height;
+				const int32_t width = ((IplImage*)o.img)->width;
+				const int32_t height = ((IplImage*)o.img)->height;
 
 				// v8: If DISABLE_JPEG_COMPRESSION
 				if (!CImage::DISABLE_JPEG_COMPRESSION)
@@ -597,7 +599,7 @@ void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
 					{
 						// Save to temporary memory stream:
 						CMemoryStream		aux;
-						saveToStreamAsJPEG( aux, CImage::SERIALIZATION_JPEG_QUALITY );
+						o.saveToStreamAsJPEG( aux, CImage::SERIALIZATION_JPEG_QUALITY );
 
 						const uint32_t nBytes = static_cast<uint32_t>(aux.getTotalBytesCount());
 
@@ -615,14 +617,14 @@ void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
 					out << neg_width << neg_height;
 
 					// Dump raw image data:
-					const IplImage *ipl = static_cast<const IplImage*>(img);
+					const IplImage *ipl = static_cast<const IplImage*>(o.img);
 					const size_t bytes_per_row = ipl->width * 3;
 
 					out.WriteBuffer( &ipl->imageData[0], bytes_per_row*ipl->height );
 
 				}
 			}
-		} // end m_imgIsExternalStorage=false
+		} // end o.m_imgIsExternalStorage=false
 	}
 #endif
 }
@@ -630,29 +632,29 @@ void  CImage::writeToStream(mrpt::utils::CStream &out, int *version) const
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CImage::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CImage>::readFromStream(CImage& o, mrpt::utils::CStream &in, int version)
 {
 #if !MRPT_HAS_OPENCV
 	if (version==100)
 	{
-		in >> m_imgIsExternalStorage;
-		if (m_imgIsExternalStorage)
-			in >> m_externalFile;
+		in >> o.m_imgIsExternalStorage;
+		if (o.m_imgIsExternalStorage)
+			in >> o.m_externalFile;
 		else
 		{
 			THROW_EXCEPTION("[CImage] Cannot deserialize image since MRPT has been compiled without OpenCV")
 		}
 	}
 #else
-	releaseIpl();  // First, free current image.
+	o.releaseIpl();  // First, free current image.
 
 	switch(version)
 	{
 	case 100: // Saved from an MRPT build without OpenCV:
 		{
-			in >> m_imgIsExternalStorage;
-			if (m_imgIsExternalStorage)
-				in >> m_externalFile;
+			in >> o.m_imgIsExternalStorage;
+			if (o.m_imgIsExternalStorage)
+				in >> o.m_externalFile;
 		}
 		break;
 	case 0:
@@ -662,8 +664,8 @@ void  CImage::readFromStream(mrpt::utils::CStream &in, int version)
 
 			in >> width >> height >> nChannels >> originTopLeft >> imgLength;
 
-			changeSize(width, height, nChannels, originTopLeft !=0 );
-			in.ReadBuffer( ((IplImage*)img)->imageData, imgLength );
+			o.changeSize(width, height, nChannels, originTopLeft !=0 );
+			in.ReadBuffer( ((IplImage*)o.img)->imageData, imgLength );
 		} break;
 	case 1:
 		{
@@ -678,7 +680,7 @@ void  CImage::readFromStream(mrpt::utils::CStream &in, int version)
 
 			aux.Seek(0);
 
-			loadFromStreamAsJPEG( aux );
+			o.loadFromStreamAsJPEG( aux );
 
 		} break;
 	case 2:
@@ -689,138 +691,139 @@ void  CImage::readFromStream(mrpt::utils::CStream &in, int version)
 	case 7:
 	case 8:
 		{
-			// Version 6: 	m_imgIsExternalStorage ??
+			// Version 6: 	o.m_imgIsExternalStorage ??
 			if (version>=6)
-					in >> m_imgIsExternalStorage;
-			else	m_imgIsExternalStorage=false;
+					in >> o.m_imgIsExternalStorage;
+			else	o.m_imgIsExternalStorage=false;
 
-			if (m_imgIsExternalStorage)
+			if (o.m_imgIsExternalStorage)
 			{
 				// Just the file name:
-				in >> m_externalFile;
-			}
-			else
-			{  // Normal, the whole image data:
+			in >> o.m_externalFile;
+		}
+		else
+		{  // Normal, the whole image data:
 
-				// Version 2: Color->JPEG, GrayScale->BYTE's array!
-				uint8_t		hasColor;
-				in >> hasColor;
-				if (!hasColor)
+			// Version 2: Color->JPEG, GrayScale->BYTE's array!
+			uint8_t		hasColor;
+			in >> hasColor;
+			if (!hasColor)
+			{
+				// GRAY SCALE:
+				int32_t		width,height,origin, imageSize;
+				in >> width >> height >> origin >> imageSize;
+
+				o.changeSize(width, height, 1, origin == 0 );
+				ASSERT_( imageSize == ((IplImage*)o.img)->imageSize );
+
+				if (version==2)
 				{
-					// GRAY SCALE:
-					int32_t		width,height,origin, imageSize;
-					in >> width >> height >> origin >> imageSize;
-
-					changeSize(width, height, 1, origin == 0 );
-					ASSERT_( imageSize == ((IplImage*)img)->imageSize );
-
-					if (version==2)
-					{
-						// RAW BYTES:
-						in.ReadBuffer( ((IplImage*)img)->imageData, imageSize );
-					}
-					else
-					{
-						// Version 3: ZIP compression!
-						bool	imageIsZIP = true;
-
-						// Version 4: Skip zip if the image size <= 16Kb
-						// Version 5: Use CImage::DISABLE_ZIP_COMPRESSION
-						if (version==4 && imageSize<=16*1024)
-							imageIsZIP = false;
-
-						if (version>=5)
-						{
-							// It is stored int the stream:
-							in >> imageIsZIP;
-						}
-
-						if (imageIsZIP)
-						{
-							uint32_t	zipDataLen;
-							in >> zipDataLen;
-
-							size_t	outDataBufferSize = imageSize;
-							size_t	outDataActualSize;
-
-							compress::zip::decompress(
-								in,
-								zipDataLen,
-								((IplImage*)img)->imageData,
-								outDataBufferSize,
-								outDataActualSize );
-
-							ASSERT_(outDataActualSize==outDataBufferSize);
-						}
-						else
-						{
-							// Raw bytes:
-							in.ReadBuffer( ((IplImage*)img)->imageData,((IplImage*)img)->imageSize );
-						}
-					}
+					// RAW BYTES:
+					in.ReadBuffer( ((IplImage*)o.img)->imageData, imageSize );
 				}
 				else
 				{
-					bool	loadJPEG=true;
+					// Version 3: ZIP compression!
+					bool	imageIsZIP = true;
 
-					if (version>=7)
+					// Version 4: Skip zip if the image size <= 16Kb
+					// Version 5: Use CImage::DISABLE_ZIP_COMPRESSION
+					if (version==4 && imageSize<=16*1024)
+						imageIsZIP = false;
+
+					if (version>=5)
 					{
-						int32_t width, height;
-						in >> width >> height;
-
-						if (width>=1 && height>=1)
-						{
-							loadJPEG = true;
-						}
-						else
-						{
-							loadJPEG = false;
-
-							if (width<0 && height<0)
-							{
-								// v8: raw image:
-								const int32_t real_w = -width;
-								const int32_t real_h = -height;
-
-								this->changeSize(real_w,real_h,3,true);
-
-								const IplImage *ipl = static_cast<const IplImage*>(img);
-								const size_t bytes_per_row = ipl->width * 3;
-								for (int y=0;y<ipl->height;y++)
-								{
-									const size_t nRead = in.ReadBuffer( &ipl->imageData[y*ipl->widthStep], bytes_per_row);
-									if (nRead!=bytes_per_row) THROW_EXCEPTION("Error: Truncated data stream while parsing raw image?")
-								}
-							}
-							else
-							{
-								// it's a 0xN or Nx0 image: just resize and load nothing:
-								this->changeSize(width,height,3,true);
-							}
-						}
+						// It is stored int the stream:
+						in >> imageIsZIP;
 					}
 
-					// COLOR IMAGE: JPEG
-					if (loadJPEG)
+					if (imageIsZIP)
 					{
-						CMemoryStream		aux;
-						uint32_t			nBytes;
-						in >> nBytes;
-						aux.changeSize( nBytes + 10 );
-						in.ReadBuffer( aux.getRawBufferData(), nBytes );
-						aux.Seek(0);
-						loadFromStreamAsJPEG( aux );
+						uint32_t	zipDataLen;
+						in >> zipDataLen;
+
+						size_t	outDataBufferSize = imageSize;
+						size_t	outDataActualSize;
+
+						compress::zip::decompress(
+							in,
+							zipDataLen,
+							((IplImage*)o.img)->imageData,
+							outDataBufferSize,
+							outDataActualSize );
+
+						ASSERT_(outDataActualSize==outDataBufferSize);
+					}
+					else
+					{
+						// Raw bytes:
+						in.ReadBuffer( ((IplImage*)o.img)->imageData,((IplImage*)o.img)->imageSize );
 					}
 				}
 			}
+			else
+			{
+				bool	loadJPEG=true;
 
-		} break;
-	default:
-		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
+				if (version>=7)
+				{
+					int32_t width, height;
+					in >> width >> height;
 
-	};
+					if (width>=1 && height>=1)
+					{
+						loadJPEG = true;
+					}
+					else
+					{
+						loadJPEG = false;
+
+						if (width<0 && height<0)
+						{
+							// v8: raw image:
+							const int32_t real_w = -width;
+							const int32_t real_h = -height;
+
+							o.changeSize(real_w,real_h,3,true);
+
+							const IplImage *ipl = static_cast<const IplImage*>(o.img);
+							const size_t bytes_per_row = ipl->width * 3;
+							for (int y=0;y<ipl->height;y++)
+							{
+								const size_t nRead = in.ReadBuffer( &ipl->imageData[y*ipl->widthStep], bytes_per_row);
+								if (nRead!=bytes_per_row) THROW_EXCEPTION("Error: Truncated data stream while parsing raw image?")
+							}
+						}
+						else
+						{
+							// it's a 0xN or Nx0 image: just resize and load nothing:
+							o.changeSize(width,height,3,true);
+						}
+					}
+				}
+
+				// COLOR IMAGE: JPEG
+				if (loadJPEG)
+				{
+					CMemoryStream		aux;
+					uint32_t			nBytes;
+					in >> nBytes;
+					aux.changeSize( nBytes + 10 );
+					in.ReadBuffer( aux.getRawBufferData(), nBytes );
+					aux.Seek(0);
+					o.loadFromStreamAsJPEG( aux );
+				}
+			}
+		}
+
+	} break;
+default:
+	MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
+
+};
 #endif
 }
+}}
 
 /*---------------------------------------------------------------
   Implements the writing to a mxArray for Matlab

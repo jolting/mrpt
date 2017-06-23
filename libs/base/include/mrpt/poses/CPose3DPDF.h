@@ -36,10 +36,8 @@ namespace poses
 	 * \sa CPose3D, CPosePDF, CPointPDF
 	 * \ingroup poses_pdf_grp
 	 */
-	class BASE_IMPEXP CPose3DPDF : public mrpt::utils::CSerializable, public mrpt::utils::CProbabilityDensityFunction<CPose3D,6>
+	class BASE_IMPEXP CPose3DPDF : public mrpt::utils::CSerializableCRTPVirtual<CPose3DPDF>, public mrpt::utils::CProbabilityDensityFunction<CPose3D,6>
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE( CPose3DPDF )
-
 	 public:
 		/** Copy operator, translating if necesary (for example, between particles and gaussian representations)
 		  * \sa createFrom2D

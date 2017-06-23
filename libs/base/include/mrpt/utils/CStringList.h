@@ -27,9 +27,9 @@ namespace mrpt
 		  *  Also methods are provided for accesing the text by key if they are formated as "key=value" lines.
 		 * \ingroup mrpt_base_grp
 		 */
-		class BASE_IMPEXP CStringList : public mrpt::utils::CSerializable
+		class BASE_IMPEXP CStringList : public mrpt::utils::CSerializableCRTP<CStringList>
 		{
-			DEFINE_SERIALIZABLE( CStringList )
+			friend CSerializer<CStringList>; 
 
 		protected:
 			/** The internal list of strings

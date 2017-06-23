@@ -163,7 +163,7 @@ void   CPlanarLaserScan::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CPlanarLaserScan::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPlanarLaserScan>::writeToStream(const CPlanarLaserScan& o, mrpt::utils::CStream &out,int *version)
 {
 
 	if (version)

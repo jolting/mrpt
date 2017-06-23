@@ -187,7 +187,7 @@ void  CColouredPointsMap::writeToStream(mrpt::utils::CStream &out, int *version)
    Implements the reading from a CStream capability of
       CSerializable objects
   ---------------------------------------------------------------*/
-void  CColouredPointsMap::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CColouredPointsMap>::readFromStream(CColouredPointsMap& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

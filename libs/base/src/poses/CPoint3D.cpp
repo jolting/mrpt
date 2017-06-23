@@ -31,19 +31,23 @@ CPoint3D::CPoint3D( const CPose2D &p) { m_coords[0]=p.x(); m_coords[1]=p.y(); m_
 /** Constructor from an CPose3D object. */
 CPoint3D::CPoint3D( const CPose3D &p) { m_coords[0]=p.x(); m_coords[1]=p.y(); m_coords[2]=p.z(); }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CPoint3D::writeToStream(mrpt::utils::CStream &out,int *version) const
+template<>
+void CSerializer<CPoint3D>::writeToStream(const CPoint3D &o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
 		// The coordinates:
-		out << m_coords[0] << m_coords[1] << m_coords[2];
+		out << o.m_coords[0] << o.m_coords[1] << o.m_coords[2];
 	}
 }
 
@@ -51,25 +55,28 @@ void  CPoint3D::writeToStream(mrpt::utils::CStream &out,int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPoint3D::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CPoint3D>::readFromStream(CPoint3D &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
 			float f;
-			in >> f; m_coords[0]=f;
-			in >> f; m_coords[1]=f;
-			in >> f; m_coords[2]=f;
+			in >> f; o.m_coords[0]=f;
+			in >> f; o.m_coords[1]=f;
+			in >> f; o.m_coords[2]=f;
 		} break;
 	case 1:
 		{
 			// The coordinates:
-			in >> m_coords[0] >> m_coords[1] >> m_coords[2];
+			in >> o.m_coords[0] >> o.m_coords[1] >> o.m_coords[2];
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 /*---------------------------------------------------------------

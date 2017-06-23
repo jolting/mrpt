@@ -86,7 +86,7 @@ void  CSensoryFrame::clear()
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CSensoryFrame::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CSensoryFrame>::writeToStream(const CSensoryFrame& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 2;

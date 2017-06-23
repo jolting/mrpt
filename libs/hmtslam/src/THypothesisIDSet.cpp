@@ -39,7 +39,7 @@ void  THypothesisIDSet::writeToStream(mrpt::utils::CStream &out, int *version) c
    Implements the reading from a CStream capability of
       CSerializable objects
   ---------------------------------------------------------------*/
-void  THypothesisIDSet::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<THypothesisIDSet>::readFromStream(THypothesisIDSet& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

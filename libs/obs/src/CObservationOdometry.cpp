@@ -60,7 +60,7 @@ void  CObservationOdometry::writeToStream(mrpt::utils::CStream &out, int *versio
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationOdometry::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationOdometry>::readFromStream(CObservationOdometry& o, mrpt::utils::CStream &in, int version)
 {
 	MRPT_UNUSED_PARAM(in);
 	switch(version)

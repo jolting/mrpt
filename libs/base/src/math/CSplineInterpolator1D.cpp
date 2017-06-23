@@ -107,18 +107,22 @@ double & CSplineInterpolator1D::query( double x, double &y, bool &out_valid ) co
 	return y = math::spline(x,xs, ys, m_wrap2pi);
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 	Implements the writing to a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CSplineInterpolator1D::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <>
+void  CSerializer<CSplineInterpolator1D>::writeToStream(const CSplineInterpolator1D &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << m_x2y << m_wrap2pi;
+		out << o.m_x2y << o.m_wrap2pi;
 	}
 
 }
@@ -127,15 +131,18 @@ void  CSplineInterpolator1D::writeToStream(mrpt::utils::CStream &out, int *versi
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CSplineInterpolator1D::readFromStream(mrpt::utils::CStream &in, int version)
+template <>
+void  CSerializer<CSplineInterpolator1D>::readFromStream(CSplineInterpolator1D &o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
 	case 0:  // floats
 		{
-			in >> m_x2y >> m_wrap2pi;
+			in >> o.m_x2y >> o.m_wrap2pi;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }

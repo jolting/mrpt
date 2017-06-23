@@ -22,9 +22,9 @@ namespace utils
 /**  This class implements the tables of databases.
  * \sa CSimpleDatabase \ingroup mrpt_base_grp
  */
-class BASE_IMPEXP CSimpleDatabaseTable : public mrpt::utils::CSerializable
+class BASE_IMPEXP CSimpleDatabaseTable : public mrpt::utils::CSerializableCRTP<CSimpleDatabaseTable>
 {
-	DEFINE_SERIALIZABLE( CSimpleDatabaseTable )
+	friend CSerializer<CSimpleDatabaseTable>;
 public:
 	/** Default constructor
 	  */
@@ -114,9 +114,9 @@ private:
   *
   * \sa CSimpleDatabaseTable
   */
-class BASE_IMPEXP CSimpleDatabase  : public mrpt::utils::CSerializable
+class BASE_IMPEXP CSimpleDatabase  : public mrpt::utils::CSerializableCRTP<CSimpleDatabase>
 {
-	DEFINE_SERIALIZABLE( CSimpleDatabase )
+	friend CSerializer<CSimpleDatabase>;
 
 public:
 	/** Default constructor

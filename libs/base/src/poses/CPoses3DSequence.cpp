@@ -17,8 +17,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE( CPoses3DSequence, CSerializable ,mrpt::poses)
-
 /*---------------------------------------------------------------
 			Default constructor
   ---------------------------------------------------------------*/
@@ -36,11 +34,12 @@ size_t	CPoses3DSequence::posesCount()
 	return m_poses.size();
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CPoses3DSequence::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPoses3DSequence>::writeToStream(const CPoses3DSequence& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
@@ -49,9 +48,9 @@ void  CPoses3DSequence::writeToStream(mrpt::utils::CStream &out,int *version) co
 		uint32_t		i,n;
 
 		// The poses:
-		n = m_poses.size();
+		n = o.m_poses.size();
 		out << n;
-		for (i=0;i<n;i++) out << m_poses[i];
+		for (i=0;i<n;i++) out << o.m_poses[i];
 	}
 }
 
@@ -59,7 +58,7 @@ void  CPoses3DSequence::writeToStream(mrpt::utils::CStream &out,int *version) co
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPoses3DSequence::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CPoses3DSequence>::readFromStream(CPoses3DSequence& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -69,14 +68,15 @@ void  CPoses3DSequence::readFromStream(mrpt::utils::CStream &in, int version)
 
 			// The poses:
 			in >> n;
-			m_poses.resize(n);
-			for (i=0;i<n;i++)	in >> m_poses[i];
+			o.m_poses.resize(n);
+			for (i=0;i<n;i++)	in >> o.m_poses[i];
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 }
+}}
 
 /*---------------------------------------------------------------
 Reads the stored pose at index "ind", where the first one is 0, the last "posesCount() - 1"

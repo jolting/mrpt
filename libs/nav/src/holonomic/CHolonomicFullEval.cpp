@@ -513,7 +513,7 @@ CLogFileRecord_FullEval::CLogFileRecord_FullEval() :
 {
 }
 
-void  CLogFileRecord_FullEval::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CLogFileRecord_FullEval>::writeToStream(const CLogFileRecord_FullEval& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 3;
@@ -650,7 +650,7 @@ void CHolonomicFullEval::TOptions::saveToConfigFile(mrpt::utils::CConfigFileBase
 	MRPT_END;
 }
 
-void  CHolonomicFullEval::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CHolonomicFullEval>::writeToStream(const CHolonomicFullEval& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 4;

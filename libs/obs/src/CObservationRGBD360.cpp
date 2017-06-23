@@ -97,7 +97,7 @@ void  CObservationRGBD360::writeToStream(mrpt::utils::CStream &out, int *version
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationRGBD360::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationRGBD360>::readFromStream(CObservationRGBD360& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

@@ -62,7 +62,7 @@ void  CObservationGasSensors::writeToStream(mrpt::utils::CStream &out, int *vers
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationGasSensors::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationGasSensors>::readFromStream(CObservationGasSensors& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

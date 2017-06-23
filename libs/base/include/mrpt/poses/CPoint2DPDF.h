@@ -31,10 +31,8 @@ namespace poses
 	 * \ingroup poses_pdf_grp
 	 * \sa CPoint2D, CPointPDF
 	 */
-	class BASE_IMPEXP CPoint2DPDF : public mrpt::utils::CSerializable, public mrpt::utils::CProbabilityDensityFunction<CPoint2D,2>
+	class BASE_IMPEXP CPoint2DPDF : public mrpt::utils::CSerializableCRTPVirtual<CPoint2DPDF>, public mrpt::utils::CProbabilityDensityFunction<CPoint2D,2>
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE( CPoint2DPDF )
-
 	 public:
 		/** Copy operator, translating if necesary (for example, between particles and gaussian representations)
 		  */

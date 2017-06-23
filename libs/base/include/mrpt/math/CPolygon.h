@@ -20,7 +20,7 @@ namespace math
 	/** A wrapper of a TPolygon2D class, implementing CSerializable.
 	 * \ingroup geometry_grp
 	 */
-	class BASE_IMPEXP CPolygon : public mrpt::utils::CSerializable, public mrpt::math::TPolygon2D
+	class BASE_IMPEXP CPolygon : public mrpt::utils::CSerializableCRTP<CPolygon>, public mrpt::math::TPolygon2D
 	{
 		DEFINE_SERIALIZABLE( CPolygon )
 

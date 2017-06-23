@@ -138,7 +138,7 @@ void  CBeaconMap::writeToStream(mrpt::utils::CStream &out, int *version) const
    Implements the reading from a CStream capability of
       CSerializable objects
   ---------------------------------------------------------------*/
-void  CBeaconMap::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CBeaconMap>::readFromStream(CBeaconMap& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

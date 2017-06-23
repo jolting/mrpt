@@ -129,21 +129,23 @@ void CPointPDFSOG::getCovarianceAndMean(CMatrixDouble33 &estCov, CPoint3D &p) co
 	}
 }
 
+namespace mrpt {
+namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPointPDFSOG::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPointPDFSOG>::writeToStream(const CPointPDFSOG& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
-		uint32_t	N = m_modes.size();
-		CListGaussianModes::const_iterator		it;
+		uint32_t	N = o.m_modes.size();
+		CPointPDFSOG::CListGaussianModes::const_iterator		it;
 
 		out << N;
 
-		for (it=m_modes.begin();it!=m_modes.end();++it)
+		for (it=o.m_modes.begin();it!=o.m_modes.end();++it)
 		{
 			out << it->log_w;
 			out << it->val.mean;
@@ -156,7 +158,7 @@ void  CPointPDFSOG::writeToStream(mrpt::utils::CStream &out,int *version) const
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPointPDFSOG::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CPointPDFSOG>::readFromStream(CPointPDFSOG &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -164,14 +166,14 @@ void  CPointPDFSOG::readFromStream(mrpt::utils::CStream &in,int version)
 	case 1:
 		{
 			uint32_t							N;
-			CListGaussianModes::iterator		it;
+			CPointPDFSOG::CListGaussianModes::iterator		it;
 			double								x;
 
 			in >> N;
 
-			this->resize(N);
+			o.resize(N);
 
-			for (it=m_modes.begin();it!=m_modes.end();++it)
+			for (it=o.m_modes.begin();it!=o.m_modes.end();++it)
 			{
 				in >> it->log_w;
 
@@ -195,6 +197,8 @@ void  CPointPDFSOG::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 }
+
+}}
 
 void  CPointPDFSOG::copyFrom(const CPointPDF &o)
 {

@@ -186,7 +186,7 @@ void   CAxis::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CAxis::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CAxis>::writeToStream(const CAxis& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;

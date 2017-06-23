@@ -27,9 +27,6 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFSOG, CPosePDF, mrpt::poses )
-
-
 /*---------------------------------------------------------------
 	Constructor
   ---------------------------------------------------------------*/
@@ -113,19 +110,20 @@ void CPosePDFSOG::getCovarianceAndMean(CMatrixDouble33 &estCov, CPose2D &estMean
 	}
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPosePDFSOG::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPosePDFSOG>::writeToStream(const CPosePDFSOG& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
-		uint32_t	N = m_modes.size();
+		uint32_t	N = o.m_modes.size();
 		out << N;
 
-		for (const_iterator it=m_modes.begin();it!=m_modes.end();++it)
+		for (CPosePDFSOG::const_iterator it=o.m_modes.begin();it!=o.m_modes.end();++it)
 		{
 			out << (it)->log_w;
 			out << (it)->mean;
@@ -138,7 +136,8 @@ void  CPosePDFSOG::writeToStream(mrpt::utils::CStream &out,int *version) const
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPosePDFSOG::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CPosePDFSOG>::readFromStream(CPosePDFSOG &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -152,9 +151,9 @@ void  CPosePDFSOG::readFromStream(mrpt::utils::CStream &in,int version)
 
 			in >> N;
 
-			resize(N);
+			o.resize(N);
 
-			for (iterator it=m_modes.begin();it!=m_modes.end();++it)
+			for (CPosePDFSOG::iterator it=o.m_modes.begin();it!=o.m_modes.end();++it)
 			{
 				in >> (it)->log_w;
 
@@ -192,6 +191,7 @@ void  CPosePDFSOG::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 }
+}}
 
 void  CPosePDFSOG::copyFrom(const CPosePDF &o)
 {

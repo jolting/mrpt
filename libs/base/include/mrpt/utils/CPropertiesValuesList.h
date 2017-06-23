@@ -21,9 +21,9 @@ namespace mrpt
 		 * \sa CSerializable, CMHPropertiesValuesList, mrpt::utils::TParameters
 		 * \ingroup mrpt_base_grp
 		 */
-		class BASE_IMPEXP CPropertiesValuesList : public mrpt::utils::CSerializable
+		class BASE_IMPEXP CPropertiesValuesList : public mrpt::utils::CSerializableCRTP<CPropertiesValuesList>
 		{
-			DEFINE_SERIALIZABLE( CPropertiesValuesList )
+			friend CSerializer<CPropertiesValuesList>;
 		protected:
 			struct BASE_IMPEXP  TPropertyValuePair
 			{

@@ -46,7 +46,7 @@ CLogFileRecord::CLogFileRecord() :
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CLogFileRecord::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CLogFileRecord>::writeToStream(const CLogFileRecord& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 26;

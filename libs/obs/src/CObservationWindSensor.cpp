@@ -50,7 +50,7 @@ void  CObservationWindSensor::writeToStream(mrpt::utils::CStream &out, int *vers
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationWindSensor::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationWindSensor>::readFromStream(CObservationWindSensor& o, mrpt::utils::CStream &in, int version)
 {
 	//MRPT_UNUSED_PARAM(in);
 	switch(version)

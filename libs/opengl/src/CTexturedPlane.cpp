@@ -99,7 +99,7 @@ void   CTexturedPlane::render_texturedobj() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CTexturedPlane::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CTexturedPlane>::writeToStream(const CTexturedPlane& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 2;

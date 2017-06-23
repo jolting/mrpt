@@ -73,7 +73,7 @@ namespace mrpt
 		  *  \sa THypothesisID, CHierarchicalMHMap
 		  * \ingroup mrpt_hmtslam_grp
 		  */
-		class HMTSLAM_IMPEXP THypothesisIDSet : public mrpt::utils::CSerializable, public std::set<THypothesisID>
+		class HMTSLAM_IMPEXP THypothesisIDSet : public mrpt::utils::CSerializableCRTP<THypothesisIDSet>, public std::set<THypothesisID>
 		{
 			DEFINE_SERIALIZABLE( THypothesisIDSet )
 

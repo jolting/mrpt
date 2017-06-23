@@ -17,36 +17,35 @@
 using namespace mrpt::utils;
 using namespace mrpt::system;
 
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CMHPropertiesValuesList, CSerializable, mrpt::utils)
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CMHPropertiesValuesList::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template <>
+void CSerializer<CMHPropertiesValuesList>::writeToStream(const CMHPropertiesValuesList &o,mrpt::utils::CStream &out, int *out_Version)
 {
 	if (out_Version)
 		*out_Version = 0;
 	else
 	{
-		uint32_t	i,n = (uint32_t)m_properties.size();
+		uint32_t	i,n = (uint32_t)o.m_properties.size();
 		uint8_t		isNull;
 		out << n;
 
 		for (i=0;i<n;i++)
 		{
 			// Name:
-			out << m_properties[i].name.c_str();
+			out << o.m_properties[i].name.c_str();
 
 			// Object:
-			isNull = !m_properties[i].value;
+			isNull = !o.m_properties[i].value;
 			out << isNull;
 
 			if (!isNull)
-				out << *m_properties[i].value;
+				out << *o.m_properties[i].value;
 
 			// Hypot. ID:
-			out << m_properties[i].ID;
+			out << o.m_properties[i].ID;
 		}
 
 	}
@@ -56,7 +55,7 @@ void  CMHPropertiesValuesList::writeToStream(mrpt::utils::CStream &out, int *out
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CMHPropertiesValuesList::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CMHPropertiesValuesList>::readFromStream(CMHPropertiesValuesList& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -66,28 +65,28 @@ void  CMHPropertiesValuesList::readFromStream(mrpt::utils::CStream &in, int vers
 			uint8_t		isNull;
 
 			// Erase previous contents:
-			clear();
+			o.clear();
 
 			in >> n;
 
-			m_properties.resize(n);
+			o.m_properties.resize(n);
 			for (i=0;i<n;i++)
 			{
 				char	nameBuf[1024];
 				// Name:
 				in >> nameBuf;
-				m_properties[i].name = nameBuf;
+				o.m_properties[i].name = nameBuf;
 
 				// Object:
 				in >> isNull;
 
 				if (isNull)
-					m_properties[i].value.reset();
+					o.m_properties[i].value.reset();
 				else
-					in >> m_properties[i].value;
+					in >> o.m_properties[i].value;
 
 				// Hypot. ID:
-				in >> m_properties[i].ID;
+				in >> o.m_properties[i].ID;
 			}
 
 		} break;
@@ -97,6 +96,7 @@ void  CMHPropertiesValuesList::readFromStream(mrpt::utils::CStream &in, int vers
 	};
 }
 
+}}
 
 /*---------------------------------------------------------------
 						Constructor

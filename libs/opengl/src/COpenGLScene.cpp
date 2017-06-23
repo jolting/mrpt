@@ -124,7 +124,7 @@ void  COpenGLScene::render() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  COpenGLScene::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<COpenGLScene>::writeToStream(const COpenGLScene& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;

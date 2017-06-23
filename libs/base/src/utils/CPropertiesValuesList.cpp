@@ -25,27 +25,29 @@ IMPLEMENTS_SERIALIZABLE(CPropertiesValuesList, CSerializable, mrpt::utils)
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CPropertiesValuesList::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+namespace mrpt { namespace utils {
+template <>
+void CSerializer<CPropertiesValuesList>::writeToStream(const CPropertiesValuesList &o, mrpt::utils::CStream &out, int *out_Version)
 {
 	if (out_Version)
 		*out_Version = 0;
 	else
 	{
-		uint32_t	i,n = (uint32_t)size();
+		uint32_t	i,n = (uint32_t)o.size();
 		uint8_t		isNull;
 		out << n;
 
 		for (i=0;i<n;i++)
 		{
 			// Name:
-			out << m_properties[i].name.c_str();
+			out << o.m_properties[i].name.c_str();
 
 			// Object:
-			isNull = m_properties[i].value ? 1:0;
+			isNull = o.m_properties[i].value ? 1:0;
 			out << isNull;
 
-			if (m_properties[i].value)
-				out << *m_properties[i].value;
+			if (o.m_properties[i].value)
+				out << *o.m_properties[i].value;
 		}
 	}
 }
@@ -53,7 +55,7 @@ void  CPropertiesValuesList::writeToStream(mrpt::utils::CStream &out, int *out_V
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CPropertiesValuesList::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CPropertiesValuesList>::readFromStream(CPropertiesValuesList& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -63,25 +65,25 @@ void  CPropertiesValuesList::readFromStream(mrpt::utils::CStream &in, int versio
 			uint8_t		isNull;
 
 			// Erase previous contents:
-			clear();
+			o.clear();
 
 			in >> n;
 
-			m_properties.resize(n);
+			o.m_properties.resize(n);
 			for (i=0;i<n;i++)
 			{
 				char	nameBuf[1024];
 				// Name:
 				in >> nameBuf;
-				m_properties[i].name = nameBuf;
+				o.m_properties[i].name = nameBuf;
 
 				// Object:
 				in >> isNull;
 
 				if (isNull)
-					m_properties[i].value.reset(  static_cast<CSerializable*>(nullptr) );
+					o.m_properties[i].value.reset(  static_cast<CSerializable*>(nullptr) );
 				else
-					in >> m_properties[i].value;
+					in >> o.m_properties[i].value;
 			}
 		} break;
 	default:
@@ -89,7 +91,7 @@ void  CPropertiesValuesList::readFromStream(mrpt::utils::CStream &in, int versio
 
 	};
 }
-
+}}
 
 /*---------------------------------------------------------------
 						Constructor

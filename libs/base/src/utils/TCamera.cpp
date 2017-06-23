@@ -19,9 +19,6 @@ using namespace mrpt::math;
 using namespace std;
 
 
-/* Implements serialization for the TCamera struct as it will be included within CObservations objects */
-IMPLEMENTS_SERIALIZABLE( TCamera, CSerializable, mrpt::utils )
-
 /** Dumps all the parameters as a multi-line string, with the same format than \a saveToConfigFile.  \sa saveToConfigFile */
 std::string TCamera::dumpAsText() const
 {
@@ -30,24 +27,26 @@ std::string TCamera::dumpAsText() const
 	return cfg.getContent();
 }
 
-
+namespace mrpt { namespace utils {
 // WriteToStream
-void TCamera::writeToStream( CStream &out, int *version ) const
+template <>
+void CSerializer<TCamera>::writeToStream(const TCamera &o, CStream &out, int *version )
 {
 	if( version )
 		*version = 2;
 	else
 	{
-		out << focalLengthMeters;
-		for(unsigned int k = 0; k < 5; k++) out << dist[k];
-		out << intrinsicParams;
+		out << o.focalLengthMeters;
+		for(unsigned int k = 0; k < 5; k++) out << o.dist[k];
+		out << o.intrinsicParams;
 		// version 0 did serialize here a "CMatrixDouble15"
-		out << nrows << ncols; // New in v2
+		out << o.nrows << o.ncols; // New in v2
 	} // end else
 }
 
 // ReadFromStream
-void TCamera::readFromStream( CStream &in, int version )
+template<>
+void CSerializer<TCamera>::readFromStream(TCamera &o, CStream &in, int version )
 {
 	switch( version )
 	{
@@ -55,12 +54,12 @@ void TCamera::readFromStream( CStream &in, int version )
 	case 1:
 	case 2:
 		{
-			in >> focalLengthMeters;
+			in >> o.focalLengthMeters;
 
 			for(unsigned int k = 0; k < 5; k++)
-				in >> dist[k];
+				in >> o.dist[k];
 
-			in >> intrinsicParams;
+			in >> o.intrinsicParams;
 
 			if (version==0)
 			{
@@ -69,10 +68,10 @@ void TCamera::readFromStream( CStream &in, int version )
 			}
 
 			if (version>=2)
-				in >> nrows >> ncols;
+				in >> o.nrows >> o.ncols;
 			else {
-				nrows = 480;
-				ncols = 640;
+				o.nrows = 480;
+				o.ncols = 640;
 			}
 
 
@@ -81,6 +80,8 @@ void TCamera::readFromStream( CStream &in, int version )
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION( version )
 	}
 }
+
+}}
 
 /*---------------------------------------------------------------
   Implements the writing to a mxArray for Matlab

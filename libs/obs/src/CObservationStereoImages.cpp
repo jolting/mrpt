@@ -89,7 +89,7 @@ void  CObservationStereoImages::writeToStream(mrpt::utils::CStream &out, int *ve
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationStereoImages::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationStereoImages>::readFromStream(CObservationStereoImages& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

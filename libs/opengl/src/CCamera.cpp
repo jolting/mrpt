@@ -40,7 +40,7 @@ CCamera::CCamera()	:
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CCamera::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CCamera>::writeToStream(const CCamera& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;

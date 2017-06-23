@@ -59,21 +59,24 @@ void TStereoCamera::loadFromConfigFile(const std::string &section,  const mrpt::
 	rightCameraPose.fromString( cfg.read_string(section+string("_LEFT2RIGHT_POSE"), "pose_quaternion","" ) );
 }
 
+namespace mrpt { namespace utils {
 // WriteToStream
-void TStereoCamera::writeToStream( CStream &out, int *version ) const
+template <>
+void CSerializer<TStereoCamera>::writeToStream(const TStereoCamera &o, CStream &out, int *version )
 {
 	if( version )
 		*version = 1;
 	else
 	{
-	    out << leftCamera
-            << rightCamera
-            << rightCameraPose;
+	    out << o.leftCamera
+            << o.rightCamera
+            << o.rightCameraPose;
 	} // end else
 }
 
 // ReadFromStream
-void TStereoCamera::readFromStream( CStream &in, int version )
+template <>
+void CSerializer<TStereoCamera>::readFromStream(TStereoCamera &o, CStream &in, int version )
 {
 	switch( version )
 	{
@@ -86,14 +89,15 @@ void TStereoCamera::readFromStream( CStream &in, int version )
 			in  >> _model;  // unused now
 		}
 
-        in  >> leftCamera
-            >> rightCamera
-            >> rightCameraPose;
+        in  >> o.leftCamera
+            >> o.rightCamera
+            >> o.rightCameraPose;
     } break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION( version )
 	}
 }
+}}
 
 std::string TStereoCamera::dumpAsText() const
 {

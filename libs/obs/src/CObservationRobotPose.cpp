@@ -47,7 +47,7 @@ void  CObservationRobotPose::writeToStream(mrpt::utils::CStream &out, int *versi
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationRobotPose::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationRobotPose>::readFromStream(CObservationRobotPose& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

@@ -99,64 +99,65 @@ void CPosePDFGrid::getCovarianceAndMean(CMatrixDouble33 &cov, CPose2D &p) const
 	auxParts.getCovarianceAndMean(cov,p);
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPosePDFGrid::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPosePDFGrid>::writeToStream(const CPosePDFGrid& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
 		// The size:
-		out << m_xMin << m_xMax
-			<< m_yMin << m_yMax
-			<< m_phiMin << m_phiMax
-			<< m_resolutionXY << m_resolutionPhi
-			<< static_cast<int32_t>(m_sizeX) << static_cast<int32_t>(m_sizeY) << static_cast<int32_t>(m_sizePhi) << static_cast<int32_t>(m_sizeXY)
-			<< static_cast<int32_t>(m_idxLeftX) << static_cast<int32_t>(m_idxLeftY) << static_cast<int32_t>(m_idxLeftPhi);
+		out << o.m_xMin << o.m_xMax
+			<< o.m_yMin << o.m_yMax
+			<< o.m_phiMin << o.m_phiMax
+			<< o.m_resolutionXY << o.m_resolutionPhi
+			<< static_cast<int32_t>(o.m_sizeX) << static_cast<int32_t>(o.m_sizeY) << static_cast<int32_t>(o.m_sizePhi) << static_cast<int32_t>(o.m_sizeXY)
+			<< static_cast<int32_t>(o.m_idxLeftX) << static_cast<int32_t>(o.m_idxLeftY) << static_cast<int32_t>(o.m_idxLeftPhi);
 
 		// The data:
-		out << m_data;
+		out << o.m_data;
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPosePDFGrid::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CPosePDFGrid>::readFromStream(CPosePDFGrid& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
 			// The size:
-			in  >> m_xMin >> m_xMax
-				>> m_yMin >> m_yMax
-				>> m_phiMin >> m_phiMax
-				>> m_resolutionXY >> m_resolutionPhi;
+			in  >> o.m_xMin >> o.m_xMax
+				>> o.m_yMin >> o.m_yMax
+				>> o.m_phiMin >> o.m_phiMax
+				>> o.m_resolutionXY >> o.m_resolutionPhi;
 
 			int32_t	sizeX,sizeY,sizePhi,sizeXY,idxLeftX,idxLeftY,idxLeftPhi;
 
 			in >> sizeX >> sizeY >> sizePhi >> sizeXY >> idxLeftX >> idxLeftY >> idxLeftPhi;
 
-			m_sizeX   = sizeX;
-			m_sizeY   = sizeY;
-			m_sizePhi = sizePhi;
-			m_sizeXY  = sizeXY;
-			m_idxLeftX= idxLeftX;
-			m_idxLeftY= idxLeftY;
-			m_idxLeftPhi=idxLeftPhi;
+			o.m_sizeX   = sizeX;
+			o.m_sizeY   = sizeY;
+			o.m_sizePhi = sizePhi;
+			o.m_sizeXY  = sizeXY;
+			o.m_idxLeftX= idxLeftX;
+			o.m_idxLeftY= idxLeftY;
+			o.m_idxLeftPhi=idxLeftPhi;
 
 			// The data:
-			in >> m_data;
+			in >> o.m_data;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 }
-
+}}
 /*---------------------------------------------------------------
 						saveToTextFile
   ---------------------------------------------------------------*/

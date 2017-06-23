@@ -54,7 +54,7 @@ void  CObservationCANBusJ1939::writeToStream(mrpt::utils::CStream &out, int *ver
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationCANBusJ1939::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationCANBusJ1939>::readFromStream(CObservationCANBusJ1939& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

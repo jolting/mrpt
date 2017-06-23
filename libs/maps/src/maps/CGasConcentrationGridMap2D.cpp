@@ -327,7 +327,7 @@ struct TOldCellTypeInVersion1
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CGasConcentrationGridMap2D::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CGasConcentrationGridMap2D>::readFromStream(CGasConcentrationGridMap2D& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

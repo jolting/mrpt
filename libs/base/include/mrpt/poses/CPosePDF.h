@@ -34,9 +34,8 @@ namespace poses
 	 * \sa CPose2D, CPose3DPDF, CPoseRandomSampler
 	 * \ingroup poses_pdf_grp
 	 */
-	class BASE_IMPEXP CPosePDF : public mrpt::utils::CSerializable, public mrpt::utils::CProbabilityDensityFunction<CPose2D,3>
+	class BASE_IMPEXP CPosePDF : public mrpt::utils::CSerializableCRTPVirtual<CPosePDF>, public mrpt::utils::CProbabilityDensityFunction<CPose2D,3>
 	{
-		DEFINE_VIRTUAL_SERIALIZABLE( CPosePDF )
 
 	public:
 		/** Copy operator, translating if necesary (for example, between particles and gaussian representations)

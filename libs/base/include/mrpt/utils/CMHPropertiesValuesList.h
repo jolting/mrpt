@@ -36,9 +36,9 @@ namespace mrpt
          * \sa CSerializable, CPropertiesValuesList
 	 * \ingroup mrpt_base_grp
          */
-        class BASE_IMPEXP CMHPropertiesValuesList : public mrpt::utils::CSerializable
+        class BASE_IMPEXP CMHPropertiesValuesList : public mrpt::utils::CSerializableCRTP<CMHPropertiesValuesList>
         {
-            DEFINE_SERIALIZABLE( CMHPropertiesValuesList )
+		friend CSerializer<CMHPropertiesValuesList>;
 
 		private:
 			std::vector<TPropertyValueIDTriplet>	m_properties;

@@ -161,7 +161,7 @@ void   CEllipsoid::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CEllipsoid::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CEllipsoid>::writeToStream(const CEllipsoid& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;

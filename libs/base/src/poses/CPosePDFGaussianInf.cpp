@@ -31,9 +31,6 @@ using namespace mrpt::system;
 
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFGaussianInf, CPosePDF, mrpt::poses )
-
-
 /*---------------------------------------------------------------
 	Constructor
   ---------------------------------------------------------------*/
@@ -56,26 +53,27 @@ CPosePDFGaussianInf::CPosePDFGaussianInf(
 CPosePDFGaussianInf::CPosePDFGaussianInf(const CPose2D  &init_Mean ) : mean(init_Mean), cov_inv()
 {
 }
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPosePDFGaussianInf::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPosePDFGaussianInf>::writeToStream(const CPosePDFGaussianInf& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << mean.x() << mean.y() << mean.phi();
-		out << cov_inv(0,0) << cov_inv(1,1) << cov_inv(2,2);
-		out << cov_inv(0,1) << cov_inv(0,2) << cov_inv(1,2);
+		out << o.mean.x() << o.mean.y() << o.mean.phi();
+		out << o.cov_inv(0,0) << o.cov_inv(1,1) << o.cov_inv(2,2);
+		out << o.cov_inv(0,1) << o.cov_inv(0,2) << o.cov_inv(1,2);
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPosePDFGaussianInf::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CPosePDFGaussianInf>::readFromStream(CPosePDFGaussianInf &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -83,16 +81,16 @@ void  CPosePDFGaussianInf::readFromStream(mrpt::utils::CStream &in,int version)
 		{
 			TPose2D p;
 			in >> p.x >> p.y >> p.phi;
-			mean = CPose2D(p);
+			o.mean = CPose2D(p);
 
-			in >> cov_inv(0,0) >> cov_inv(1,1) >> cov_inv(2,2);
-			in >> cov_inv(0,1) >> cov_inv(0,2) >> cov_inv(1,2);
+			in >> o.cov_inv(0,0) >> o.cov_inv(1,1) >> o.cov_inv(2,2);
+			in >> o.cov_inv(0,1) >> o.cov_inv(0,2) >> o.cov_inv(1,2);
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
-
+}}
 
 /*---------------------------------------------------------------
 						copyFrom

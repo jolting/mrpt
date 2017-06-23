@@ -536,7 +536,7 @@ void  COpenGLViewport::render( const int render_width, const int render_height  
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  COpenGLViewport::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<COpenGLViewport>::writeToStream(const COpenGLViewport& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 3;

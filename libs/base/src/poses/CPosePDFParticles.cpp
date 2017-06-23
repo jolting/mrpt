@@ -177,37 +177,37 @@ void CPosePDFParticles::getCovarianceAndMean(CMatrixDouble33 &cov, CPose2D &mean
 	}
 }
 
-
+namespace mrpt { namespace utils { 
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPosePDFParticles::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPosePDFParticles>::writeToStream(const CPosePDFParticles& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		writeParticlesToStream( out );
+		o.writeParticlesToStream( out );
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPosePDFParticles::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CPosePDFParticles>::readFromStream(CPosePDFParticles& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			readParticlesFromStream( in );
+			o.readParticlesFromStream( in );
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 }
-
+}}
 
 /*---------------------------------------------------------------
 							resetDeterministic

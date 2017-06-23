@@ -29,6 +29,7 @@ namespace mrpt
 	namespace utils
 	{
 
+
 		/** The virtual base class which provides a unified interface for all persistent objects in MRPT.
 		 *  Many important properties of this class are inherited from mrpt::utils::CObject. See that class for more details.
 		 *	 Refer to the tutorial about <a href="http://www.mrpt.org/Serialization" >serialization</a> online.
@@ -79,7 +80,67 @@ namespace mrpt
 #endif
 		}; // End of class def.
 
-		DEFINE_MRPT_OBJECT_POST( CSerializable )
+		template <typename T>
+		class BASE_IMPEXP CSerializer
+		{
+		public:
+			static const char* getClassName();
+			static const mrpt::utils::TRuntimeClassId* getBaseClass();
+			static void writeToStream(const T& obj, mrpt::utils::CStream &out, int *getVersion);
+			static void readFromStream(T& obj, mrpt::utils::CStream &in, int version);
+		};
+
+		template <typename T, typename BASE = CSerializable>
+		class BASE_IMPEXP CSerializableCRTPVirtual : public BASE
+		{
+                public:
+                        /*! A typedef for the associated smart pointer */
+			using Ptr = std::shared_ptr<T>;
+			using ConstPtr = std::shared_ptr<const T>;
+			static const mrpt::utils::TRuntimeClassId runtimeClassId;
+		
+			static const mrpt::utils::TRuntimeClassId *classinfo;
+
+			const mrpt::utils::TRuntimeClassId* GetRuntimeClass() const override
+			{
+				return &runtimeClassId;
+			}
+		public:
+			void  writeToStream(mrpt::utils::CStream &out, int *getVersion) const override
+			{
+				CSerializer<T>::writeToStream(*static_cast<const T*>(this), out,getVersion);
+			}
+			void  readFromStream(mrpt::utils::CStream &in, int version) override
+			{
+				CSerializer<T>::readFromStream(*static_cast<T*>(this), in, version);
+			}
+		};
+		
+		template <typename T, typename BASE>
+		const mrpt::utils::TRuntimeClassId CSerializableCRTPVirtual<T,BASE>::runtimeClassId
+			{
+				CSerializer<T>::getClassName(),
+				nullptr,
+				[](){return &BASE::runtimeClassId;}
+			};
+		template <typename T, typename BASE>
+		const mrpt::utils::TRuntimeClassId *CSerializableCRTPVirtual<T,BASE>::classinfo = 
+			&CSerializableCRTPVirtual<T,BASE>::runtimeClassId;
+
+		
+		template <typename T, typename BASE = CSerializable>
+		class BASE_IMPEXP CSerializableCRTP : public CSerializableCRTPVirtual<T, BASE>
+		{
+		public:
+			static mrpt::utils::CObject* CreateObject()
+			{
+				return static_cast<mrpt::utils::CObject*>( new T);
+			}
+			mrpt::utils::CObject *clone() const override
+			{
+				return static_cast<mrpt::utils::CObject*>( new T(*static_cast<const T*>(this)) );
+			}
+		};
 
 		/** \addtogroup noncstream_serialization Non-CStream serialization functions (in #include <mrpt/utils/CSerializable.h>)
 		  * \ingroup mrpt_base_grp
@@ -137,11 +198,6 @@ namespace mrpt
 		#define DEFINE_SERIALIZABLE_CUSTOM_LINKAGE(class_name, _VOID_LINKAGE_, _STATIC_LINKAGE_, _VIRTUAL_LINKAGE_ ) \
 			DEFINE_MRPT_OBJECT_CUSTOM_LINKAGE(class_name, _STATIC_LINKAGE_, _VIRTUAL_LINKAGE_ ) \
 		protected: \
-			/*! @name CSerializable virtual methods */ \
-			/*! @{ */ \
-			_VOID_LINKAGE_ writeToStream(mrpt::utils::CStream &out, int *getVersion) const override;\
-			_VOID_LINKAGE_ readFromStream(mrpt::utils::CStream &in, int version) override; \
-			/*! @} */
 
 		/** This declaration must be inserted in all CSerializable classes definition, within the class declaration. */
 		#define DEFINE_SERIALIZABLE(class_name) \
@@ -173,7 +229,6 @@ namespace mrpt
 
 		/** This must be inserted in all CSerializable classes implementation files */
 		#define IMPLEMENTS_SERIALIZABLE(class_name, base,NameSpace) \
-			IMPLEMENTS_MRPT_OBJECT(class_name, base,NameSpace) \
 
 		/** This declaration must be inserted in virtual CSerializable classes definition: */
 		#define DEFINE_VIRTUAL_SERIALIZABLE(class_name) \
@@ -183,7 +238,6 @@ namespace mrpt
 		  *  virtual CSerializable classes:
 		  */
 		#define IMPLEMENTS_VIRTUAL_SERIALIZABLE(class_name, base_class_name,NameSpace) \
-			IMPLEMENTS_VIRTUAL_MRPT_OBJECT(class_name, base_class_name,NameSpace) \
 
 		/** This must be inserted if a custom conversion method for MEX API is implemented in the class */
 		#if MRPT_HAS_MATLAB

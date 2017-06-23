@@ -29,22 +29,26 @@ CMatrixD::CMatrixD( const TPoint2D &p) : CMatrixDouble(p) {}
 /** Constructor from a TPoint3D, which generates a 3x1 matrix \f$ [x y z]^T \f$ */
 CMatrixD::CMatrixD( const TPoint3D &p) : CMatrixDouble(p) {}
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CMatrixD::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template <>
+void  CSerializer<CMatrixD>::writeToStream(const CMatrixD &o, mrpt::utils::CStream &out, int *out_Version)
 {
 	if (out_Version)
 		*out_Version = 0;
 	else
 	{
 		// First, write the number of rows and columns:
-		out << (uint32_t)rows() << (uint32_t)cols();
+		out << (uint32_t)o.rows() << (uint32_t)o.cols();
 
-		if (rows()>0 && cols()>0)
-			for (Index i=0;i<rows();i++)
-				out.WriteBufferFixEndianness<Scalar>(&coeff(i,0),cols());
+		if (o.rows()>0 && o.cols()>0)
+			for (CMatrixD::Index i=0;i<o.rows();i++)
+				out.WriteBufferFixEndianness<CMatrixD::Scalar>(&o.coeff(i,0),o.cols());
 	}
 
 }
@@ -52,7 +56,8 @@ void  CMatrixD::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CMatrixD::readFromStream(mrpt::utils::CStream &in, int version)
+template <>
+void  CSerializer<CMatrixD>::readFromStream(CMatrixD &o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -63,15 +68,16 @@ void  CMatrixD::readFromStream(mrpt::utils::CStream &in, int version)
 			// First, write the number of rows and columns:
 			in >> nRows >> nCols;
 
-			setSize(nRows,nCols);
+			o.setSize(nRows,nCols);
 
 			if (nRows>0 && nCols>0)
-				for (Index i=0;i<rows();i++)
-					in.ReadBufferFixEndianness<Scalar>(&coeffRef(i,0),nCols);
+				for (CMatrixD::Index i=0;i<o.rows();i++)
+					in.ReadBufferFixEndianness<CMatrixD::Scalar>(&o.coeffRef(i,0),nCols);
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 }
-
+}
+}

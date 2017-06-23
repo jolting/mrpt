@@ -104,7 +104,7 @@ void   CGridPlaneXY::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CGridPlaneXY::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CGridPlaneXY>::writeToStream(const CGridPlaneXY& o, mrpt::utils::CStream &out,int *version)
 {
 
 	if (version)

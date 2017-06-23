@@ -32,21 +32,26 @@ CMatrix::CMatrix( const TPoint2D &p) : CMatrixFloat(p) {}
 /** Constructor from a TPoint3D, which generates a 3x1 matrix \f$ [x y z]^T \f$ */
 CMatrix::CMatrix( const TPoint3D &p) : CMatrixFloat(p) {}
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CMatrix::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template <>
+void  CSerializer<CMatrix>::writeToStream(const CMatrix &o, mrpt::utils::CStream &out, int *out_Version)
 {
 	if (out_Version)
 		*out_Version = 0;
 	else
 	{
 		// First, write the number of rows and columns:
-		out << (uint32_t)rows() << (uint32_t)cols();
+		out << (uint32_t)o.rows() << (uint32_t)o.cols();
 
-		if (rows()>0 && cols()>0)
-			for (Index i=0;i<rows();i++)
-				out.WriteBufferFixEndianness<Scalar>(&coeff(i,0),cols());
+		if (o.rows()>0 && o.cols()>0)
+			for (mrpt::math::CMatrix::Index i=0;i<o.rows();i++)
+				out.WriteBufferFixEndianness<CMatrix::Scalar>(&o.coeff(i,0),o.cols());
 	}
 
 }
@@ -54,7 +59,8 @@ void  CMatrix::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CMatrix::readFromStream(mrpt::utils::CStream &in, int version)
+template <>
+void  CSerializer<CMatrix>::readFromStream(CMatrix &o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -65,14 +71,16 @@ void  CMatrix::readFromStream(mrpt::utils::CStream &in, int version)
 			// First, write the number of rows and columns:
 			in >> nRows >> nCols;
 
-			setSize(nRows,nCols);
+			o.setSize(nRows,nCols);
 
 			if (nRows>0 && nCols>0)
-				for (Index i=0;i<rows();i++)
-					in.ReadBufferFixEndianness<Scalar>(&coeffRef(i,0),nCols);
+				for (CMatrix::Index i=0;i<o.rows();i++)
+					in.ReadBufferFixEndianness<CMatrix::Scalar>(&o.coeffRef(i,0),nCols);
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+}
 }

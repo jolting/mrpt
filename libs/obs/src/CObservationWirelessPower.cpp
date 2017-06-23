@@ -48,7 +48,7 @@ void  CObservationWirelessPower::writeToStream(mrpt::utils::CStream &out, int *v
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationWirelessPower::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CObservationWirelessPower>::readFromStream(CObservationWirelessPower& o, mrpt::utils::CStream &in, int version)
 {
 	//MRPT_UNUSED_PARAM(in);
 	switch(version)

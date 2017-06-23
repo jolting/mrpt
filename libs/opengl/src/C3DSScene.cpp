@@ -430,12 +430,12 @@ static void light_update(Lib3dsLight *l,Lib3dsFile	*file)
 }
 #endif
 
-
+namespace mrpt { namespace utils{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  C3DSScene::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<C3DSScene>::writeToStream(const C3DSScene& o, mrpt::utils::CStream &out,int *version)
 {
 #if MRPT_HAS_LIB3DS
 	if (version)
@@ -467,7 +467,7 @@ void  C3DSScene::writeToStream(mrpt::utils::CStream &out,int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  C3DSScene::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<C3DSScene>::readFromStream(C3DSScene &o, mrpt::utils::CStream &in,int version)
 {
 #if MRPT_HAS_LIB3DS
 	switch(version)
@@ -476,10 +476,10 @@ void  C3DSScene::readFromStream(mrpt::utils::CStream &in,int version)
 	case 1:
 	case 2:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
 			// Read the memory block, save to a temp. "3dsfile" and load...
-			clear();
+			o.clear();
 
 			CMemoryChunk chunk;
 			in >> chunk;
@@ -492,7 +492,7 @@ void  C3DSScene::readFromStream(mrpt::utils::CStream &in,int version)
 
 				try
 				{
-					loadFrom3DSFile( tmpFil );
+					o.loadFrom3DSFile( tmpFil );
 				}
 				catch (...)
 				{
@@ -509,11 +509,11 @@ void  C3DSScene::readFromStream(mrpt::utils::CStream &in,int version)
 					double dummy_scale;
 					in >> dummy_scale >> dummy_scale >> dummy_scale;
 				}
-				in >> m_enable_extra_lighting;
+				in >> o.m_enable_extra_lighting;
 			}
 			else
 			{
-				m_enable_extra_lighting = false;
+				o.m_enable_extra_lighting = false;
 			}
 
 		} break;

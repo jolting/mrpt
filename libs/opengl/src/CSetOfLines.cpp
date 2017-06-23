@@ -120,7 +120,7 @@ void   CSetOfLines::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CSetOfLines::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CSetOfLines>::writeToStream(const CSetOfLines& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version) *version=4;
 	else	{

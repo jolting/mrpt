@@ -52,7 +52,7 @@ void   CSetOfObjects::render() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CSetOfObjects::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CSetOfObjects>::writeToStream(const CSetOfObjects& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;

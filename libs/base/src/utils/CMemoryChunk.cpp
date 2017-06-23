@@ -14,24 +14,22 @@
 
 using namespace mrpt::utils;
 
-
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CMemoryChunk, CSerializable, mrpt::utils)
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CMemoryChunk::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template <>
+void CSerializer<CMemoryChunk>::writeToStream(const CMemoryChunk &o, mrpt::utils::CStream &out, int *out_Version)
 {
 	if (out_Version)
 		*out_Version = 0;
 	else
 	{
-		out << static_cast<uint64_t>(m_bytesWritten);
-		if (m_bytesWritten)
+		out << static_cast<uint64_t>(o.m_bytesWritten);
+		if (o.m_bytesWritten)
 		{
-			ASSERT_(m_memory.get())
-			out.WriteBuffer(m_memory.get(),m_bytesWritten);
+			ASSERT_(o.m_memory.get())
+			out.WriteBuffer(o.m_memory.get(),o.m_bytesWritten);
 		}
 	}
 
@@ -40,7 +38,7 @@ void  CMemoryChunk::writeToStream(mrpt::utils::CStream &out, int *out_Version) c
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CMemoryChunk::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CMemoryChunk>::readFromStream(CMemoryChunk& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -48,12 +46,12 @@ void  CMemoryChunk::readFromStream(mrpt::utils::CStream &in, int version)
 		{
 			uint64_t   N;
 			in >> N;
-			resize(N);
+			o.resize(N);
 
-			m_bytesWritten = N;
-			m_position     = 0;
+			o.m_bytesWritten = N;
+			o.m_position     = 0;
 			if (N)
-				in.ReadBuffer( m_memory.get(), N );
+				in.ReadBuffer( o.m_memory.get(), N );
 
 		} break;
 	default:
@@ -62,4 +60,4 @@ void  CMemoryChunk::readFromStream(mrpt::utils::CStream &in, int version)
 	};
 }
 
-
+}}

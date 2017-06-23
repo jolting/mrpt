@@ -141,7 +141,7 @@ void  CMultiMetricMapPDF::getEstimatedPosePDFAtTime(
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CRBPFParticleData::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CRBPFParticleData>::writeToStream(const CRBPFParticleData& o, mrpt::utils::CStream &out,int *version)
 {
 	MRPT_UNUSED_PARAM(out); MRPT_UNUSED_PARAM(version);
 	THROW_EXCEPTION("Shouldn't arrive here")
@@ -150,7 +150,7 @@ void  CRBPFParticleData::writeToStream(mrpt::utils::CStream &out,int *version) c
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CRBPFParticleData::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CRBPFParticleData>::readFromStream(CRBPFParticleData& o, mrpt::utils::CStream &in, int version)
 {
 	MRPT_UNUSED_PARAM(in); MRPT_UNUSED_PARAM(version);
 	THROW_EXCEPTION("Shouldn't arrive here")
@@ -159,7 +159,7 @@ void  CRBPFParticleData::readFromStream(mrpt::utils::CStream &in, int version)
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CMultiMetricMapPDF::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CMultiMetricMapPDF>::writeToStream(const CMultiMetricMapPDF& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
@@ -185,7 +185,7 @@ void  CMultiMetricMapPDF::writeToStream(mrpt::utils::CStream &out,int *version) 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CMultiMetricMapPDF::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CMultiMetricMapPDF>::readFromStream(CMultiMetricMapPDF& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

@@ -116,7 +116,7 @@ void  CColouredOctoMap::writeToStream(mrpt::utils::CStream &out, int *version) c
    Implements the reading from a CStream capability of
       CSerializable objects
   ---------------------------------------------------------------*/
-void  CColouredOctoMap::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CColouredOctoMap>::readFromStream(CColouredOctoMap& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{

@@ -36,10 +36,9 @@ namespace mrpt
 	 * \sa CPose3DQuat, CPose3DQuatPDF, CPose3DPDF, CPose3DQuatPDFGaussian
 	 * \ingroup poses_pdf_grp
 	 */
-	class BASE_IMPEXP CPose3DQuatPDFGaussianInf : public CPose3DQuatPDF
+	class BASE_IMPEXP CPose3DQuatPDFGaussianInf : public mrpt::utils::CSerializableCRTP<CPose3DQuatPDFGaussianInf, CPose3DQuatPDF>
 	{
 		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE( CPose3DQuatPDFGaussianInf );
 		typedef CPose3DQuatPDFGaussianInf self_t;
 
 	 public:

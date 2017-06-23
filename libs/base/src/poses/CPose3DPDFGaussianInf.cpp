@@ -80,43 +80,45 @@ void CPose3DPDFGaussianInf::copyFrom( const CPose3DQuatPDFGaussian &o)
 	this->copyFrom(p);
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPose3DPDFGaussianInf::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPose3DPDFGaussianInf>::writeToStream(const CPose3DPDFGaussianInf& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << mean;
-		for (size_t r=0;r<size(cov_inv,1);r++)
-			out << cov_inv.get_unsafe(r,r);
-		for (size_t r=0;r<size(cov_inv,1);r++)
-			for (size_t c=r+1;c<size(cov_inv,2);c++)
-				out << cov_inv.get_unsafe(r,c);
+		out << o.mean;
+		for (size_t r=0;r<size(o.cov_inv,1);r++)
+			out << o.cov_inv.get_unsafe(r,r);
+		for (size_t r=0;r<size(o.cov_inv,1);r++)
+			for (size_t c=r+1;c<size(o.cov_inv,2);c++)
+				out << o.cov_inv.get_unsafe(r,c);
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPose3DPDFGaussianInf::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CPose3DPDFGaussianInf>::readFromStream(CPose3DPDFGaussianInf &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			in >> mean;
+			in >> o.mean;
 
-			for (size_t r=0;r<size(cov_inv,1);r++)
-				in >> cov_inv.get_unsafe(r,r);
-			for (size_t r=0;r<size(cov_inv,1);r++)
-				for (size_t c=r+1;c<size(cov_inv,2);c++)
+			for (size_t r=0;r<size(o.cov_inv,1);r++)
+				in >> o.cov_inv.get_unsafe(r,r);
+			for (size_t r=0;r<size(o.cov_inv,1);r++)
+				for (size_t c=r+1;c<size(o.cov_inv,2);c++)
 				{
 					double x;
 					in >> x;
-					cov_inv.get_unsafe(r,c) = cov_inv.get_unsafe(c,r) = x;
+					o.cov_inv.get_unsafe(r,c) = o.cov_inv.get_unsafe(c,r) = x;
 				}
 		} break;
 	default:
@@ -124,6 +126,7 @@ void  CPose3DPDFGaussianInf::readFromStream(mrpt::utils::CStream &in,int version
 
 	};
 }
+}}
 
 void  CPose3DPDFGaussianInf::copyFrom(const CPose3DPDF &o)
 {

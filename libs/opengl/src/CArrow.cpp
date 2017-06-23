@@ -177,7 +177,7 @@ void   CArrow::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CArrow::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CArrow>::writeToStream(const CArrow& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;

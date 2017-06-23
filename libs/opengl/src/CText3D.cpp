@@ -79,7 +79,7 @@ void   CText3D::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CText3D::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CText3D>::writeToStream(const CText3D& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;

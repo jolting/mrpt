@@ -55,7 +55,7 @@ void   CDisk::render_dl() const
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CDisk::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CDisk>::writeToStream(const CDisk& o, mrpt::utils::CStream &out,int *version)
 {
 
 	if (version)

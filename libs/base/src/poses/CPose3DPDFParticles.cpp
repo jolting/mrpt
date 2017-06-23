@@ -22,8 +22,6 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE( CPose3DPDFParticles, CPose3DPDF, mrpt::poses )
-
 /*---------------------------------------------------------------
 	Constructor
   ---------------------------------------------------------------*/
@@ -205,37 +203,37 @@ void CPose3DPDFParticles::getCovarianceAndMean(CMatrixDouble66 &cov,CPose3D &mea
 	MRPT_END
 }
 
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPose3DPDFParticles::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPose3DPDFParticles>::writeToStream(const CPose3DPDFParticles& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		writeParticlesToStream(out);
+		o.writeParticlesToStream(out);
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPose3DPDFParticles::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CPose3DPDFParticles>::readFromStream(CPose3DPDFParticles& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			readParticlesFromStream(in);
+			o.readParticlesFromStream(in);
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 }
-
+}}
 /*---------------------------------------------------------------
 						saveToTextFile
    Save PDF's m_particles to a text file. In each line it

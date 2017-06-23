@@ -120,7 +120,7 @@ void  COccupancyGridMap2D::writeToStream(mrpt::utils::CStream &out, int *version
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  COccupancyGridMap2D::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<COccupancyGridMap2D>::readFromStream(COccupancyGridMap2D& o, mrpt::utils::CStream &in, int version)
 {
 	m_is_empty = false;
 

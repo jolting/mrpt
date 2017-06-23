@@ -36,10 +36,8 @@ namespace mrpt
 		  *  \sa opengl::COpenGLScene, mrpt::opengl
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CRenderizable : public mrpt::utils::CSerializable
+		class OPENGL_IMPEXP CRenderizable : public mrpt::utils::CSerializableCRTPVirtual<CRenderizable>
 		{
-			DEFINE_VIRTUAL_SERIALIZABLE( CRenderizable )
-
 			friend class mrpt::opengl::COpenGLViewport;
 			friend class mrpt::opengl::CSetOfObjects;
 

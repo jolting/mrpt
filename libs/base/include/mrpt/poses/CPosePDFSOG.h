@@ -32,9 +32,9 @@ namespace mrpt
 		 * \sa CPose2D, CPosePDF, CPosePDFParticles
 		 * \ingroup poses_pdf_grp
 		 */
-		class BASE_IMPEXP CPosePDFSOG : public CPosePDF
+		class BASE_IMPEXP CPosePDFSOG : public mrpt::utils::CSerializableCRTP<CPosePDFSOG, CPosePDF>
 		{
-			DEFINE_SERIALIZABLE( CPosePDFSOG )
+			friend mrpt::utils::CSerializer<CPosePDFSOG>;
 
 		public:
 			/** The struct for each mode:

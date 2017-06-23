@@ -218,64 +218,67 @@ void CPose3DPDFGaussian::copyFrom( const CPose3DQuatPDFGaussian &o)
 	MRPT_END
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPose3DPDFGaussian::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPose3DPDFGaussian>::writeToStream(const CPose3DPDFGaussian& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
-		out << mean;
-		for (size_t r=0;r<size(cov,1);r++)
-			out << cov.get_unsafe(r,r);
-		for (size_t r=0;r<size(cov,1);r++)
-			for (size_t c=r+1;c<size(cov,2);c++)
-				out << cov.get_unsafe(r,c);
+		out << o.mean;
+		for (size_t r=0; r < size(o.cov,1); r++)
+			out << o.cov.get_unsafe(r,r);
+		for (size_t r=0; r < size(o.cov,1); r++)
+			for (size_t c=r+1;c<size(o.cov,2);c++)
+				out << o.cov.get_unsafe(r,c);
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPose3DPDFGaussian::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CPose3DPDFGaussian>::readFromStream(CPose3DPDFGaussian &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			in >> mean;
+			in >> o.mean;
 
-			for (size_t r=0;r<size(cov,1);r++)
-				in >> cov.get_unsafe(r,r);
-			for (size_t r=0;r<size(cov,1);r++)
-				for (size_t c=r+1;c<size(cov,2);c++)
+			for (size_t r=0;r<size(o.cov,1);r++)
+				in >> o.cov.get_unsafe(r,r);
+			for (size_t r=0;r<size(o.cov,1);r++)
+				for (size_t c=r+1;c<size(o.cov,2);c++)
 				{
 					float x;
 					in >> x;
-					cov.get_unsafe(r,c) = cov.get_unsafe(c,r) = x;
+					o.cov.get_unsafe(r,c) = o.cov.get_unsafe(c,r) = x;
 				}
 
 		} break;
 	case 1:
 		{
-			in >> mean;
+			in >> o.mean;
 
-			for (size_t r=0;r<size(cov,1);r++)
-				in >> cov.get_unsafe(r,r);
-			for (size_t r=0;r<size(cov,1);r++)
-				for (size_t c=r+1;c<size(cov,2);c++)
+			for (size_t r=0;r<size(o.cov,1);r++)
+				in >> o.cov.get_unsafe(r,r);
+			for (size_t r=0;r<size(o.cov,1);r++)
+				for (size_t c=r+1;c<size(o.cov,2);c++)
 				{
 					double x;
 					in >> x;
-					cov.get_unsafe(r,c) = cov.get_unsafe(c,r) = x;
+					o.cov.get_unsafe(r,c) = o.cov.get_unsafe(c,r) = x;
 				}
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+}
 }
 
 void  CPose3DPDFGaussian::copyFrom(const CPose3DPDF &o)

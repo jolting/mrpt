@@ -21,9 +21,6 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CStringList, CSerializable, mrpt::utils)
-
 /*---------------------------------------------------------------
 						Constructor
   ---------------------------------------------------------------*/
@@ -214,22 +211,23 @@ void  CStringList::saveToFile(const string &fileName) const
 	MRPT_END
 }
 
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CStringList::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template<>
+void CSerializer<CStringList>::writeToStream(const CStringList &o, mrpt::utils::CStream &out, int *out_Version)
 {
 	if (out_Version)
 		*out_Version = 0;
 	else
 	{
-		uint32_t	i,N = (uint32_t) m_strings.size();
+		uint32_t	i,N = (uint32_t) o.m_strings.size();
 
 		out << N;
 
 		for (i=0;i<N;i++)
-			out << m_strings[i];
+			out << o.m_strings[i];
 	}
 
 }
@@ -237,7 +235,7 @@ void  CStringList::writeToStream(mrpt::utils::CStream &out, int *out_Version) co
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CStringList::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CStringList>::readFromStream(CStringList& o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
@@ -247,10 +245,10 @@ void  CStringList::readFromStream(mrpt::utils::CStream &in, int version)
 
 			in >> N;
 
-			m_strings.resize(N);
+			o.m_strings.resize(N);
 
 			for (i=0;i<N;i++)
-				in >> m_strings[i];
+				in >> o.m_strings[i];
 
 		} break;
 	default:
@@ -258,7 +256,7 @@ void  CStringList::readFromStream(mrpt::utils::CStream &in, int version)
 
 	};
 }
-
+}}
 /*---------------------------------------------------------------
 						size
  ---------------------------------------------------------------*/

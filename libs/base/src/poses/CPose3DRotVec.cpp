@@ -25,8 +25,6 @@ using namespace mrpt::math;
 using namespace mrpt::utils;
 using namespace mrpt::poses;
 
-IMPLEMENTS_SERIALIZABLE(CPose3DRotVec, CSerializable ,mrpt::poses)
-
 MRPT_TODO("Complete missing methods")
 
 /*---------------------------------------------------------------
@@ -63,17 +61,18 @@ CPose3DRotVec::CPose3DRotVec(const mrpt::math::CQuaternionDouble &q, const doubl
     m_rotvec[2] = k*q.z();
 }
 
+namespace mrpt{ namespace utils {
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CPose3DRotVec::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> void CSerializer<CPose3DRotVec>::writeToStream(const CPose3DRotVec& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << m_coords[0] << m_coords[1] << m_coords[2] << m_rotvec[0] << m_rotvec[1] << m_rotvec[2];
+		out << o.m_coords[0] << o.m_coords[1] << o.m_coords[2] << o.m_rotvec[0] << o.m_rotvec[1] << o.m_rotvec[2];
 	}
 }
 
@@ -81,18 +80,19 @@ void  CPose3DRotVec::writeToStream(mrpt::utils::CStream &out,int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPose3DRotVec::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CPose3DRotVec>::readFromStream(CPose3DRotVec &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-            in >> m_coords[0] >> m_coords[1] >> m_coords[2] >> m_rotvec[0] >> m_rotvec[1] >> m_rotvec[2];
+            in >> o.m_coords[0] >> o.m_coords[1] >> o.m_coords[2] >> o.m_rotvec[0] >> o.m_rotvec[1] >> o.m_rotvec[2];
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
+}}
 
 void CPose3DRotVec::setFromXYZAndAngles( const double x,const double  y,const double  z,const double  yaw, const double  pitch, const double roll)
 {

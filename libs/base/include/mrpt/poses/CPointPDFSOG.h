@@ -33,7 +33,7 @@ namespace mrpt
 		 */
 		class BASE_IMPEXP  CPointPDFSOG : public CPointPDF
 		{
-			DEFINE_SERIALIZABLE( CPointPDFSOG )
+			friend mrpt::utils::CSerializer <CPointPDFSOG>;
 
 		public:
 			/** The struct for each mode:

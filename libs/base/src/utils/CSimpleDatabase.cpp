@@ -23,24 +23,22 @@ using namespace std;
 
 #include <iostream>
 
-// This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CSimpleDatabase, CSerializable, mrpt::utils)
-IMPLEMENTS_SERIALIZABLE(CSimpleDatabaseTable, CSerializable, mrpt::utils)
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CSimpleDatabase::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template <>
+void  CSerializer<CSimpleDatabase>::writeToStream(const CSimpleDatabase &o, mrpt::utils::CStream &out, int *out_Version)
 {
 	if (out_Version)
 		*out_Version = 0;
 	else
 	{
 		// Save all tables in DB:
-		uint32_t n = (uint32_t)m_tables.size();
+		uint32_t n = (uint32_t)o.m_tables.size();
 		out << n;
 
-		for (const_iterator i=m_tables.begin();i!=m_tables.end();++i)
+		for (CSimpleDatabase::const_iterator i=o.m_tables.begin();i!=o.m_tables.end();++i)
 		{
 			out << i->first; //.c_str();
 			out << *i->second;
@@ -50,7 +48,7 @@ void  CSimpleDatabase::writeToStream(mrpt::utils::CStream &out, int *out_Version
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CSimpleDatabase::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CSimpleDatabase>::readFromStream(CSimpleDatabase& o, mrpt::utils::CStream &in, int version)
 {
 	switch (version)
 	{
@@ -59,7 +57,7 @@ void  CSimpleDatabase::readFromStream(mrpt::utils::CStream &in, int version)
 		std::string	aux;
 
 		// Clear existing tables:
-		clear();
+		o.clear();
 
 		// Load all tables in DB:
 		uint32_t n;
@@ -72,7 +70,7 @@ void  CSimpleDatabase::readFromStream(mrpt::utils::CStream &in, int version)
 			CSimpleDatabaseTable::Ptr newTb = std::make_shared<CSimpleDatabaseTable>();
 			in >> (*newTb);
 
-			m_tables[aux] = newTb;
+			o.m_tables[aux] = newTb;
 		}
 	}
 	break;
@@ -85,28 +83,28 @@ void  CSimpleDatabase::readFromStream(mrpt::utils::CStream &in, int version)
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  CSimpleDatabaseTable::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template <> void  CSerializer<CSimpleDatabaseTable>::writeToStream(const CSimpleDatabaseTable &o,mrpt::utils::CStream &out, int *out_Version) 
 {
 	if (out_Version)
 		*out_Version = 0;
 	else
 	{
-		uint32_t	row,col,nRec = (uint32_t) getRecordCount(), nFie=(uint32_t) fieldsCount();
+		uint32_t	row,col,nRec = (uint32_t) o.getRecordCount(), nFie=(uint32_t) o.fieldsCount();
 
 		out << nRec << nFie;
 
 		for (col=0;col<nFie;col++)
-			out << field_names[col]; //.c_str();
+			out << o.field_names[col]; //.c_str();
 
 		for (row=0;row<nRec;row++)
 			for (col=0;col<nFie;col++)
-				out << data[row][col]; //.c_str();
+				out << o.data[row][col]; //.c_str();
 	}
 }
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CSimpleDatabaseTable::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CSimpleDatabaseTable>::readFromStream(CSimpleDatabaseTable& o, mrpt::utils::CStream &in, int version)
 {
 	switch (version)
 	{
@@ -117,18 +115,18 @@ void  CSimpleDatabaseTable::readFromStream(mrpt::utils::CStream &in, int version
 
 		in >> nRec >> nFie;
 
-		data.resize(nRec);
-		field_names.resize(nFie);
+		o.data.resize(nRec);
+		o.field_names.resize(nFie);
 
 		for (col=0;col<nFie;col++)
-			in >> field_names[col];
+			in >> o.field_names[col];
 
 		for (row=0;row<nRec;row++)
 		{
-			data[row].resize(nFie);
+			o.data[row].resize(nFie);
 
 			for (col=0;col<nFie;col++)
-				in >> data[row][col];
+				in >> o.data[row][col];
 		}
 	}
 	break;
@@ -137,6 +135,7 @@ void  CSimpleDatabaseTable::readFromStream(mrpt::utils::CStream &in, int version
 
 	};
 }
+}}
 
 /*---------------------------------------------------------------
 						Constructor

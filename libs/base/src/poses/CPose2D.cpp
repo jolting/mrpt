@@ -22,8 +22,6 @@ using namespace mrpt::math;
 using namespace mrpt::poses;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(CPose2D, CSerializable ,mrpt::poses)
-
 /*---------------------------------------------------------------
 	Constructors
   ---------------------------------------------------------------*/
@@ -52,18 +50,23 @@ CPose2D::CPose2D(const CPose3D &p) : m_phi(p.yaw()),m_cossin_uptodate(false)
 	m_coords[1] = p.y();
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CPose2D::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <>
+void CSerializer<CPose2D>::writeToStream(const CPose2D &o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
 		// The coordinates:
-		out << m_coords[0] << m_coords[1] << m_phi;
+		out << o.m_coords[0] << o.m_coords[1] << o.m_phi;
 	}
 }
 
@@ -71,7 +74,8 @@ void  CPose2D::writeToStream(mrpt::utils::CStream &out,int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPose2D::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CPose2D>::readFromStream(CPose2D &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -80,19 +84,21 @@ void  CPose2D::readFromStream(mrpt::utils::CStream &in,int version)
 			// The coordinates:
 			float x0,y0,phi0;
 			in >> x0 >> y0 >> phi0;
-			m_coords[0] = x0;
-			m_coords[1] = y0;
-			this->phi( phi0 );
+			o.m_coords[0] = x0;
+			o.m_coords[1] = y0;
+			o.phi( phi0 );
 		} break;
 	case 1:
 		{
 			// The coordinates:
-			in >> m_coords[0] >> m_coords[1] >> m_phi;
-			m_cossin_uptodate=false;
+			in >> o.m_coords[0] >> o.m_coords[1] >> o.m_phi;
+			o.m_cossin_uptodate=false;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 /**  Textual output stream function.

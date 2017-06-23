@@ -23,9 +23,6 @@ using namespace mrpt::math;
 using namespace mrpt::random;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE( CPointPDFGaussian, CPointPDF, mrpt::poses )
-
-
 /*---------------------------------------------------------------
 	Constructor
   ---------------------------------------------------------------*/
@@ -72,41 +69,49 @@ void CPointPDFGaussian::getCovarianceAndMean(CMatrixDouble33 &C,CPoint3D &p) con
 	C=cov;
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
-void  CPointPDFGaussian::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <>
+void  CSerializer<CPointPDFGaussian>::writeToStream(const CPointPDFGaussian &o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
-		out << CPoint3D(mean) << cov;
+		out << CPoint3D(o.mean) << o.cov;
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CPointPDFGaussian::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CPointPDFGaussian>::readFromStream(CPointPDFGaussian &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			in >> mean;
+			in >> o.mean;
 
 			CMatrix c;
-			in >> c; cov = c.cast<double>();
+			in >> c; o.cov = c.cast<double>();
 		} break;
 	case 1:
 		{
-			in >> mean >> cov;
+			in >> o.mean >> o.cov;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+}
 }
 
 
