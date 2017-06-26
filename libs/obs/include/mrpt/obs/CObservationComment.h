@@ -24,7 +24,7 @@ namespace obs
 	 * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationComment : public CObservation
+	class OBS_IMPEXP CObservationComment : public mrpt::utils::CSerializableCRTP<CObservationComment, CObservation>
 	{
 		DEFINE_SERIALIZABLE( CObservationComment )
 

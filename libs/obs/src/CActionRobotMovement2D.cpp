@@ -44,61 +44,66 @@ CActionRobotMovement2D::CActionRobotMovement2D() :
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CActionRobotMovement2D::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <>
+void  CSerializer<CActionRobotMovement2D>::writeToStream(const CActionRobotMovement2D& o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 7;
 	else
 	{
-		uint32_t	i  = static_cast<uint32_t>(estimationMethod);
+		uint32_t	i  = static_cast<uint32_t>(o.estimationMethod);
 
 		out << i;
 
 		// Added in version 2:
 		// If the estimation method is emOdometry, save the rawOdo + config data instead of
 		//  the PDF itself:
-		if ( estimationMethod == emOdometry )
+		if ( o.estimationMethod == o.emOdometry )
 		{
 			// The odometry data:
-            out << rawOdometryIncrementReading;
+			out << o.rawOdometryIncrementReading;
 
-			i = static_cast<uint32_t>(motionModelConfiguration.modelSelection);
+			i = static_cast<uint32_t>(o.motionModelConfiguration.modelSelection);
 			out << i;
-			out << motionModelConfiguration.gaussianModel.a1
-                << motionModelConfiguration.gaussianModel.a2
-                << motionModelConfiguration.gaussianModel.a3
-                << motionModelConfiguration.gaussianModel.a4
-                << motionModelConfiguration.gaussianModel.minStdXY
-                << motionModelConfiguration.gaussianModel.minStdPHI;
+			out << o.motionModelConfiguration.gaussianModel.a1
+			<< o.motionModelConfiguration.gaussianModel.a2
+			<< o.motionModelConfiguration.gaussianModel.a3
+			<< o.motionModelConfiguration.gaussianModel.a4
+			<< o.motionModelConfiguration.gaussianModel.minStdXY
+			<< o.motionModelConfiguration.gaussianModel.minStdPHI;
 
-			out << motionModelConfiguration.thrunModel.nParticlesCount
-				<< motionModelConfiguration.thrunModel.alfa1_rot_rot
-				<< motionModelConfiguration.thrunModel.alfa2_rot_trans
-				<< motionModelConfiguration.thrunModel.alfa3_trans_trans
-				<< motionModelConfiguration.thrunModel.alfa4_trans_rot
-				<< motionModelConfiguration.thrunModel.additional_std_XY
-				<< motionModelConfiguration.thrunModel.additional_std_phi;
+			out << o.motionModelConfiguration.thrunModel.nParticlesCount
+				<< o.motionModelConfiguration.thrunModel.alfa1_rot_rot
+				<< o.motionModelConfiguration.thrunModel.alfa2_rot_trans
+				<< o.motionModelConfiguration.thrunModel.alfa3_trans_trans
+				<< o.motionModelConfiguration.thrunModel.alfa4_trans_rot
+				<< o.motionModelConfiguration.thrunModel.additional_std_XY
+				<< o.motionModelConfiguration.thrunModel.additional_std_phi;
 		}
 		else
 		{
 			// The PDF:
-			out << (*poseChange);
+			out << *o.poseChange;
 		}
 
 		// Added in version 1:
-		out << hasVelocities;
-		if (hasVelocities)
-			out << velocityLocal; // v7
+		out << o.hasVelocities;
+		if (o.hasVelocities)
+			out << o.velocityLocal; // v7
 
-		out << hasEncodersInfo;
-		if (hasEncodersInfo)
-			out << encoderLeftTicks << encoderRightTicks;  // added if() in v7
+		out << o.hasEncodersInfo;
+		if (o.hasEncodersInfo)
+			out << o.encoderLeftTicks << o.encoderRightTicks;  // added if() in v7
 
 		// Added in version 6
-		out << timestamp;
+		out << o.timestamp;
 	}
 }
 
@@ -118,78 +123,78 @@ template <> void CSerializer<CActionRobotMovement2D>::readFromStream(CActionRobo
 
 			// Read the estimation method first:
 			in >> i;
-			estimationMethod = static_cast<TEstimationMethod>(i);
+			o.estimationMethod = static_cast<CActionRobotMovement2D::TEstimationMethod>(i);
 
 			// If the estimation method is emOdometry, save the rawOdo + config data instead of
 			//  the PDF itself:
-			if ( estimationMethod == emOdometry )
+			if ( o.estimationMethod == o.emOdometry )
 			{
 				// The odometry data:
-				in >> rawOdometryIncrementReading;
+				in >> o.rawOdometryIncrementReading;
 
 				in >> i;
-				motionModelConfiguration.modelSelection = static_cast<TDrawSampleMotionModel>(i);
+				o.motionModelConfiguration.modelSelection = static_cast<CActionRobotMovement2D::TDrawSampleMotionModel>(i);
 
-				in >> motionModelConfiguration.gaussianModel.a1
-					>> motionModelConfiguration.gaussianModel.a2
-					>> motionModelConfiguration.gaussianModel.a3
-					>> motionModelConfiguration.gaussianModel.a4
-					>> motionModelConfiguration.gaussianModel.minStdXY
-					>> motionModelConfiguration.gaussianModel.minStdPHI;
+				in >> o.motionModelConfiguration.gaussianModel.a1
+					>> o.motionModelConfiguration.gaussianModel.a2
+					>> o.motionModelConfiguration.gaussianModel.a3
+					>> o.motionModelConfiguration.gaussianModel.a4
+					>> o.motionModelConfiguration.gaussianModel.minStdXY
+					>> o.motionModelConfiguration.gaussianModel.minStdPHI;
 
-				in  >> i; motionModelConfiguration.thrunModel.nParticlesCount=i;
-				in  >> motionModelConfiguration.thrunModel.alfa1_rot_rot
-					>> motionModelConfiguration.thrunModel.alfa2_rot_trans
-					>> motionModelConfiguration.thrunModel.alfa3_trans_trans
-					>> motionModelConfiguration.thrunModel.alfa4_trans_rot;
+				in  >> i; o.motionModelConfiguration.thrunModel.nParticlesCount=i;
+				in  >> o.motionModelConfiguration.thrunModel.alfa1_rot_rot
+					>> o.motionModelConfiguration.thrunModel.alfa2_rot_trans
+					>> o.motionModelConfiguration.thrunModel.alfa3_trans_trans
+					>> o.motionModelConfiguration.thrunModel.alfa4_trans_rot;
 
 				if (version>=5)
 				{
-					in  >> motionModelConfiguration.thrunModel.additional_std_XY
-						>> motionModelConfiguration.thrunModel.additional_std_phi;
+					in  >> o.motionModelConfiguration.thrunModel.additional_std_XY
+						>> o.motionModelConfiguration.thrunModel.additional_std_phi;
 				}
 				else
 				{
-					motionModelConfiguration.thrunModel.additional_std_XY =
-					motionModelConfiguration.thrunModel.additional_std_phi = 0;
+					o.motionModelConfiguration.thrunModel.additional_std_XY =
+					o.motionModelConfiguration.thrunModel.additional_std_phi = 0;
 				}
 
 				// Re-build the PDF:
-				computeFromOdometry( rawOdometryIncrementReading,motionModelConfiguration );
+				o.computeFromOdometry( o.rawOdometryIncrementReading, o.motionModelConfiguration );
 			}
 			else
 			{
 				// Read the PDF directly from the stream:
 				CPosePDF::Ptr pc;
 				in >> pc;
-				poseChange = pc;
+				o.poseChange = pc;
 			}
 
-			in >> hasVelocities;
+			in >> o.hasVelocities;
 			if (version >= 7) {
-				if (hasVelocities)
-					in >> velocityLocal;
+				if (o.hasVelocities)
+					in >> o.velocityLocal;
 			}
 			else {
 				float velocityLin, velocityAng;
 				in >> velocityLin >> velocityAng;
-				velocityLocal.vx = velocityLin;
-				velocityLocal.vy = .0f;
-				velocityLocal.omega = velocityAng;
+				o.velocityLocal.vx = velocityLin;
+				o.velocityLocal.vy = .0f;
+				o.velocityLocal.omega = velocityAng;
 			}
-			in >> hasEncodersInfo;
-			if (version < 7 || hasEncodersInfo) {
-				in >> i; encoderLeftTicks = i;
-				in >> i; encoderRightTicks = i;
+			in >> o.hasEncodersInfo;
+			if (version < 7 || o.hasEncodersInfo) {
+				in >> i; o.encoderLeftTicks = i;
+				in >> i; o.encoderRightTicks = i;
 			}
 			else {
-				encoderLeftTicks = 0;
-				encoderRightTicks = 0;
+				o.encoderLeftTicks = 0;
+				o.encoderRightTicks = 0;
 			}
 
 			if (version>=6)
-				in >> timestamp;
-			else	timestamp = INVALID_TIMESTAMP;
+				in >> o.timestamp;
+			else	o.timestamp = INVALID_TIMESTAMP;
 
 		} break;
 
@@ -199,50 +204,50 @@ template <> void CSerializer<CActionRobotMovement2D>::readFromStream(CActionRobo
 
 			// Read the estimation method first:
 			in >> i;
-			estimationMethod = static_cast<TEstimationMethod>(i);
+			o.estimationMethod = static_cast<CActionRobotMovement2D::TEstimationMethod>(i);
 
 			// If the estimation method is emOdometry, save the rawOdo + config data instead of
 			//  the PDF itself:
-			if ( estimationMethod == emOdometry )
+			if ( o.estimationMethod == o.emOdometry )
 			{
 				// The odometry data:
-				in >> rawOdometryIncrementReading;
+				in >> o.rawOdometryIncrementReading;
 
 				in >> i;
-				motionModelConfiguration.modelSelection = static_cast<TDrawSampleMotionModel>(i);
+				o.motionModelConfiguration.modelSelection = static_cast<CActionRobotMovement2D::TDrawSampleMotionModel>(i);
 
 				float   dum1,dum2,dum3;
 
-				in >> dum1 >> dum2 >> dum3 >> motionModelConfiguration.gaussianModel.minStdXY >> motionModelConfiguration.gaussianModel.minStdPHI;
+				in >> dum1 >> dum2 >> dum3 >> o.motionModelConfiguration.gaussianModel.minStdXY >> o.motionModelConfiguration.gaussianModel.minStdPHI;
 
 				// Leave the default values for a1,a2,a3,a4:
-				in  >> i; motionModelConfiguration.thrunModel.nParticlesCount=i;
-				in  >> motionModelConfiguration.thrunModel.alfa1_rot_rot;
-				in  >> motionModelConfiguration.thrunModel.alfa2_rot_trans >> motionModelConfiguration.thrunModel.alfa3_trans_trans >> motionModelConfiguration.thrunModel.alfa4_trans_rot;
+				in  >> i; o.motionModelConfiguration.thrunModel.nParticlesCount=i;
+				in  >> o.motionModelConfiguration.thrunModel.alfa1_rot_rot;
+				in  >> o.motionModelConfiguration.thrunModel.alfa2_rot_trans >> o.motionModelConfiguration.thrunModel.alfa3_trans_trans >> o.motionModelConfiguration.thrunModel.alfa4_trans_rot;
 
 				// Re-build the PDF:
-				computeFromOdometry( rawOdometryIncrementReading,motionModelConfiguration );
+				o.computeFromOdometry( o.rawOdometryIncrementReading,o.motionModelConfiguration );
 			}
 			else
 			{
 				// Read the PDF directly from the stream:
 				CPosePDF::Ptr pc;
 				in >> pc;
-				poseChange = pc;
+				o.poseChange = pc;
 			}
 
-			in >> hasVelocities;
+			in >> o.hasVelocities;
 			{
 				float velocityLin, velocityAng;
 				in >> velocityLin >> velocityAng;
-				velocityLocal.vx = velocityLin;
-				velocityLocal.vy = .0f;
-				velocityLocal.omega = velocityAng;
+				o.velocityLocal.vx = velocityLin;
+				o.velocityLocal.vy = .0f;
+				o.velocityLocal.omega = velocityAng;
 			}
-			in >> hasEncodersInfo;
+			in >> o.hasEncodersInfo;
 
-			in >> i; encoderLeftTicks=i;
-			in >> i; encoderRightTicks=i;
+			in >> i; o.encoderLeftTicks=i;
+			in >> i; o.encoderRightTicks=i;
 
 		} break;
 
@@ -252,44 +257,44 @@ template <> void CSerializer<CActionRobotMovement2D>::readFromStream(CActionRobo
 
 			// Read the estimation method first:
 			in >> i;
-			estimationMethod = static_cast<TEstimationMethod>(i);
+			o.estimationMethod = static_cast<CActionRobotMovement2D::TEstimationMethod>(i);
 
 			// If the estimation method is emOdometry, save the rawOdo + config data instead of
 			//  the PDF itself:
-			if ( estimationMethod == emOdometry )
+			if ( o.estimationMethod == o.emOdometry )
 			{
 				// The odometry data:
-				in >> rawOdometryIncrementReading;
+				in >> o.rawOdometryIncrementReading;
 
 //				TMotionModelOptions_OLD_VERSION_2	dummy;
 //				in.ReadBuffer( &dummy, sizeof(TMotionModelOptions_OLD_VERSION_2) );
 				uint8_t		dummy[44];
 				in.ReadBuffer( &dummy, sizeof(dummy) );
 
-				motionModelConfiguration = TMotionModelOptions();
+				o.motionModelConfiguration = CActionRobotMovement2D::TMotionModelOptions();
 
 				// Re-build the PDF:
-				computeFromOdometry( rawOdometryIncrementReading,motionModelConfiguration );
+				o.computeFromOdometry( o.rawOdometryIncrementReading,o.motionModelConfiguration );
 			}
 			else
 			{
 				// Read the PDF directly from the stream:
 				CPosePDF::Ptr pc;
 				in >> pc;
-				poseChange = pc;
+				o.poseChange = pc;
 			}
 
-			in >> hasVelocities;
+			in >> o.hasVelocities;
 			{
 				float velocityLin, velocityAng;
 				in >> velocityLin >> velocityAng;
-				velocityLocal.vx = velocityLin;
-				velocityLocal.vy = .0f;
-				velocityLocal.omega = velocityAng;
+				o.velocityLocal.vx = velocityLin;
+				o.velocityLocal.vy = .0f;
+				o.velocityLocal.omega = velocityAng;
 			}
-			in >> hasEncodersInfo;
-			in >> i; encoderLeftTicks=i;
-			in >> i; encoderRightTicks=i;
+			in >> o.hasEncodersInfo;
+			in >> i; o.encoderLeftTicks=i;
+			in >> i; o.encoderRightTicks=i;
 
 		} break;
 	case 0:
@@ -299,38 +304,38 @@ template <> void CSerializer<CActionRobotMovement2D>::readFromStream(CActionRobo
 			{
 				CPosePDF::Ptr pc;
 				in >> pc;
-				poseChange = pc;
+				o.poseChange = pc;
 			}
 			in >> i;
 
 			// copy:
-			estimationMethod = static_cast<TEstimationMethod>(i);
+			o.estimationMethod = static_cast<CActionRobotMovement2D::TEstimationMethod>(i);
 
 			// Simulate the "rawOdometryIncrementReading" as the mean value:
-			if (estimationMethod==emOdometry)
-					poseChange->getMean( rawOdometryIncrementReading );
-			else	rawOdometryIncrementReading = CPose2D(0,0,0);
+			if (o.estimationMethod==o.emOdometry)
+					o.poseChange->getMean( o.rawOdometryIncrementReading );
+			else	o.rawOdometryIncrementReading = CPose2D(0,0,0);
 
 			if (version>=1)
 			{
-				in >> hasVelocities;
+				in >> o.hasVelocities;
 				{
 					float velocityLin, velocityAng;
 					in >> velocityLin >> velocityAng;
-					velocityLocal.vx = velocityLin;
-					velocityLocal.vy = .0f;
-					velocityLocal.omega = velocityAng;
+					o.velocityLocal.vx = velocityLin;
+					o.velocityLocal.vy = .0f;
+					o.velocityLocal.omega = velocityAng;
 				}
-				in >> hasEncodersInfo;
-				in >> i; encoderLeftTicks = i;
-				in >> i; encoderRightTicks = i;
+				in >> o.hasEncodersInfo;
+				in >> i; o.encoderLeftTicks = i;
+				in >> i; o.encoderRightTicks = i;
 			}
 			else
 			{
 				// Default values:
-				hasVelocities  = hasEncodersInfo = false;
-				encoderLeftTicks= encoderRightTicks= 0;
-				velocityLocal = mrpt::math::TTwist2D(.0, .0, .0);
+				o.hasVelocities  = o.hasEncodersInfo = false;
+				o.encoderLeftTicks= o.encoderRightTicks= 0;
+				o.velocityLocal = mrpt::math::TTwist2D(.0, .0, .0);
 			}
 
 		} break;
@@ -340,7 +345,8 @@ template <> void CSerializer<CActionRobotMovement2D>::readFromStream(CActionRobo
 	};
 
 }
-
+}
+}
 /*---------------------------------------------------------------
 					computeFromEncoders
  ---------------------------------------------------------------*/

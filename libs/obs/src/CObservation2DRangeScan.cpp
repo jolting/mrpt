@@ -64,37 +64,151 @@ CObservation2DRangeScan::~CObservation2DRangeScan()
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservation2DRangeScan::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservation2DRangeScan>::writeToStream(const CObservation2DRangeScan &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 7;
 	else
 	{
 		// The data
-		out << aperture << rightToLeft << maxRange << sensorPose;
-		uint32_t	N = scan.size();
+		out <<o. aperture << o.rightToLeft << o.maxRange << o.sensorPose;
+		uint32_t	N = o.scan.size();
 		out << N;
-		ASSERT_(validRange.size() == scan.size() );
+		ASSERT_(o.validRange.size() == o.scan.size() );
 		if (N)
 		{
-			out.WriteBufferFixEndianness( &m_scan[0], N );
-			out.WriteBuffer( &m_validRange[0],sizeof(m_validRange[0])*N );
+			out.WriteBufferFixEndianness( &o.m_scan[0], N );
+			out.WriteBuffer( &o.m_validRange[0],sizeof(o.m_validRange[0])*N );
 		}
-		out << stdError;
-		out << timestamp;
-		out << beamAperture;
+		out << o.stdError;
+		out << o.timestamp;
+		out << o.beamAperture;
 
-		out << sensorLabel;
+		out << o.sensorLabel;
 
-		out << deltaPitch;
+		out << o.deltaPitch;
 
-		out << hasIntensity();
-		if(hasIntensity())
-			out.WriteBufferFixEndianness( &m_intensity[0], N );
+		out << o.hasIntensity();
+		if(o.hasIntensity())
+			out.WriteBufferFixEndianness( &o.m_intensity[0], N );
 	}
+}
+
+/*---------------------------------------------------------------
+  Implements the reading from a CStream capability of CSerializable objects
+ ---------------------------------------------------------------*/
+template <> void CSerializer<CObservation2DRangeScan>::readFromStream(CObservation2DRangeScan& o, mrpt::utils::CStream &in, int version)
+{
+	switch(version)
+	{
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+		{
+			CMatrix covSensorPose;
+			in >> o.aperture >> o.rightToLeft  >> o.maxRange >> o.sensorPose >> covSensorPose;
+			uint32_t		N,i;
+
+			in >> N;
+
+			o.resizeScan(N);
+			if (N)
+				in.ReadBufferFixEndianness( &o.m_scan[0], N);
+
+			if (version>=1)
+			{	// Load validRange:
+				if (N)
+					in.ReadBuffer( &o.m_validRange[0], sizeof(o.m_validRange[0])*N );
+			}
+			else
+			{
+				// validRange: Default values: If distance is not maxRange
+				for (i=0;i<N;i++)
+					o.m_validRange[i]= o.scan[i] < o.maxRange;
+			}
+
+			if (version>=2)
+			{
+				in >> o.stdError;
+			}
+			else
+			{
+				o.stdError = 0.01f;
+			}
+
+			if (version>=3)
+			{
+				in >> o.timestamp;
+			}
+
+			// Default values for newer versions:
+			o.beamAperture = DEG2RAD(0.25f);
+
+			o.deltaPitch  = 0;
+			o.sensorLabel = "";
+
+		} break;
+
+	case 4:
+	case 5:
+	case 6:
+	case 7:
+		{
+			uint32_t		N;
+
+			CMatrix covSensorPose;
+			in >> o.aperture >> o.rightToLeft  >> o.maxRange >> o.sensorPose;
+
+			if (version<6) // covSensorPose was removed in version 6
+				in  >> covSensorPose;
+
+			in >> N;
+			o.resizeScan(N);
+			if (N)
+			{
+				in.ReadBufferFixEndianness( &o.m_scan[0], N);
+				in.ReadBuffer( &o.m_validRange[0], sizeof(o.m_validRange[0])*N );
+			}
+			in >> o.stdError;
+			in.ReadBufferFixEndianness( &o.timestamp, 1);
+			in >> o.beamAperture;
+
+			if (version>=5)
+			{
+				in >> o.sensorLabel;
+				in >> o.deltaPitch;
+			}
+			else
+			{
+				o.sensorLabel = "";
+				o.deltaPitch  = 0;
+			}
+			if (version>=7)
+			{
+				bool hasIntensity;
+				in >> hasIntensity;
+				o.setScanHasIntensity(hasIntensity);
+				if (hasIntensity && N) {
+					in.ReadBufferFixEndianness( &o.m_intensity[0], N);
+				}
+			}
+		} break;
+	default:
+		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
+	};
+
+	o.m_cachedMap.reset();
+}
+
+}
 }
 
 /*---------------------------------------------------------------
@@ -128,112 +242,6 @@ void CObservation2DRangeScan::truncateByDistanceAndAngle(float min_distance, flo
 	}
 }
 
-/*---------------------------------------------------------------
-  Implements the reading from a CStream capability of CSerializable objects
- ---------------------------------------------------------------*/
-template <> void CSerializer<CObservation2DRangeScan>::readFromStream(CObservation2DRangeScan& o, mrpt::utils::CStream &in, int version)
-{
-	switch(version)
-	{
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-		{
-			CMatrix covSensorPose;
-			in >> aperture >> rightToLeft  >> maxRange >> sensorPose >> covSensorPose;
-			uint32_t		N,i;
-
-			in >> N;
-
-			this->resizeScan(N);
-			if (N)
-				in.ReadBufferFixEndianness( &m_scan[0], N);
-
-			if (version>=1)
-			{	// Load validRange:
-				if (N)
-					in.ReadBuffer( &m_validRange[0], sizeof(m_validRange[0])*N );
-			}
-			else
-			{
-				// validRange: Default values: If distance is not maxRange
-				for (i=0;i<N;i++)
-					m_validRange[i]= scan[i] < maxRange;
-			}
-
-			if (version>=2)
-			{
-				in >> stdError;
-			}
-			else
-			{
-				stdError = 0.01f;
-			}
-
-			if (version>=3)
-			{
-				in >> timestamp;
-			}
-
-			// Default values for newer versions:
-			beamAperture = DEG2RAD(0.25f);
-
-			deltaPitch  = 0;
-			sensorLabel = "";
-
-		} break;
-
-	case 4:
-	case 5:
-	case 6:
-	case 7:
-		{
-			uint32_t		N;
-
-			CMatrix covSensorPose;
-			in >> aperture >> rightToLeft  >> maxRange >> sensorPose;
-
-			if (version<6) // covSensorPose was removed in version 6
-				in  >> covSensorPose;
-
-			in >> N;
-			this->resizeScan(N);
-			if (N)
-			{
-				in.ReadBufferFixEndianness( &m_scan[0], N);
-				in.ReadBuffer( &m_validRange[0], sizeof(m_validRange[0])*N );
-			}
-			in >> stdError;
-			in.ReadBufferFixEndianness( &timestamp, 1);
-			in >> beamAperture;
-
-			if (version>=5)
-			{
-				in >> sensorLabel;
-				in >> deltaPitch;
-			}
-			else
-			{
-				sensorLabel = "";
-				deltaPitch  = 0;
-			}
-			if (version>=7)
-			{
-				bool hasIntensity;
-				in >> hasIntensity;
-				setScanHasIntensity(hasIntensity);
-				if (hasIntensity && N) {
-					in.ReadBufferFixEndianness( &m_intensity[0], N);
-				}
-			}
-		} break;
-	default:
-		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
-	};
-
-	m_cachedMap.reset();
-}
 
 /*---------------------------------------------------------------
   Implements the writing to a mxArray for Matlab

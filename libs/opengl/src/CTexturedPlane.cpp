@@ -95,6 +95,10 @@ void   CTexturedPlane::render_texturedobj() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -105,12 +109,12 @@ template <> void CSerializer<CTexturedPlane>::writeToStream(const CTexturedPlane
 		*version = 2;
 	else
 	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 
-		out << m_xMin << m_xMax;
-		out << m_yMin << m_yMax;
+		out << o.m_xMin << o.m_xMax;
+		out << o.m_yMin << o.m_yMax;
 
-		writeToStreamTexturedObject(out);
+		o.writeToStreamTexturedObject(out);
 	}
 }
 
@@ -118,43 +122,43 @@ template <> void CSerializer<CTexturedPlane>::writeToStream(const CTexturedPlane
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CTexturedPlane::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<CTexturedPlane>::readFromStream(CTexturedPlane &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			readFromStreamRender(in);
-			in >> m_textureImage >> m_textureImageAlpha;
-			in >> m_xMin >> m_xMax;
-			in >> m_yMin >> m_yMax;
+			o.readFromStreamRender(in);
+			in >> o.m_textureImage >> o.m_textureImageAlpha;
+			in >> o.m_xMin >> o.m_xMax;
+			in >> o.m_yMin >> o.m_yMax;
 
-			assignImage( m_textureImage, m_textureImageAlpha );
+			o.assignImage( o.m_textureImage, o.m_textureImageAlpha );
 
 		} break;
 	case 1:
 	case 2:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
-			in >> m_xMin >> m_xMax;
-			in >> m_yMin >> m_yMax;
+			in >> o.m_xMin >> o.m_xMax;
+			in >> o.m_yMin >> o.m_yMax;
 
 			if (version>=2)
 			{
-				readFromStreamTexturedObject(in);
+				o.readFromStreamTexturedObject(in);
 			}
 			else
 			{	// Old version.
-				in >> CTexturedObject::m_enableTransparency;
-				in >> CTexturedObject::m_textureImage;
-				if (CTexturedObject::m_enableTransparency)
+				in >> o.m_enableTransparency;
+				in >> o.m_textureImage;
+				if (o.m_enableTransparency)
 				{
-					in >> CTexturedObject::m_textureImageAlpha;
-					assignImage( CTexturedObject::m_textureImage, CTexturedObject::m_textureImageAlpha );
+					in >> o.m_textureImageAlpha;
+					o.assignImage( o.m_textureImage, o.m_textureImageAlpha );
 				}
 				else
-					assignImage( CTexturedObject::m_textureImage );
+					o.assignImage( o.m_textureImage );
 			}
 
 		} break;
@@ -162,7 +166,9 @@ void  CTexturedPlane::readFromStream(mrpt::utils::CStream &in,int version)
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 bool CTexturedPlane::traceRay(const mrpt::poses::CPose3D &o,double &dist) const	{

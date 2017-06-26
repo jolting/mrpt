@@ -75,6 +75,10 @@ void   CText3D::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -85,12 +89,12 @@ template <> void CSerializer<CText3D>::writeToStream(const CText3D& o, mrpt::uti
 		*version = 0;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_str
-			<< m_fontName
-			<< (uint32_t)m_text_style
-			<< m_text_spacing
-			<< m_text_kerning;
+		o.writeToStreamRender(out);
+		out << o.m_str
+			<< o.m_fontName
+			<< (uint32_t)o.m_text_style
+			<< o.m_text_spacing
+			<< o.m_text_kerning;
 	}
 }
 
@@ -98,29 +102,32 @@ template <> void CSerializer<CText3D>::writeToStream(const CText3D& o, mrpt::uti
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CText3D::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CText3D>::readFromStream(CText3D &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
 			uint32_t	i;
-			in >> m_str
-				>> m_fontName
+			in >> o.m_str
+				>> o.m_fontName
 				>> i
-				>> m_text_spacing
-				>> m_text_kerning;
+				>> o.m_text_spacing
+				>> o.m_text_kerning;
 
-			m_text_style = TOpenGLFontStyle(i);
+			o.m_text_style = TOpenGLFontStyle(i);
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 void CText3D::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const

@@ -150,25 +150,30 @@ void CVectorField3D::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void CVectorField3D::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <> 
+void CSerializer<CVectorField3D>::writeToStream(const CVectorField3D &o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 
-		out << x_vf << y_vf << z_vf;
-		out << x_p << y_p << z_p;
-		out << m_LineWidth;
-		out << m_pointSize;
-		out << m_antiAliasing;
-		out << m_point_color;
-		out << m_field_color;
+		out << o.x_vf << o.y_vf << o.z_vf;
+		out << o.x_p << o.y_p << o.z_p;
+		out << o.m_LineWidth;
+		out << o.m_pointSize;
+		out << o.m_antiAliasing;
+		out << o.m_point_color;
+		out << o.m_field_color;
 	}
 }
 
@@ -176,27 +181,30 @@ void CVectorField3D::writeToStream(mrpt::utils::CStream &out,int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void CVectorField3D::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CVectorField3D>::readFromStream(CVectorField3D &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 		case 0:
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
-            in >> x_vf >> y_vf >> z_vf;
-            in >> x_p >> y_p >> z_p;
-			in >> m_LineWidth;
-			in >> m_pointSize;
-			in >> m_antiAliasing;
-			in >> m_point_color;
-			in >> m_field_color;
+			in >> o.x_vf >> o.y_vf >> o.z_vf;
+			in >> o.x_p >> o.y_p >> o.z_p;
+			in >> o.m_LineWidth;
+			in >> o.m_pointSize;
+			in >> o.m_antiAliasing;
+			in >> o.m_point_color;
+			in >> o.m_field_color;
 			break;
 
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 			break;
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 

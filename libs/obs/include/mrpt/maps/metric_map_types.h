@@ -62,9 +62,9 @@ namespace mrpt
 		};
 
 		/** Common params to all maps derived from mrpt::maps::CMetricMap  */
-		class OBS_IMPEXP TMapGenericParams : public mrpt::utils::CLoadableOptions, public mrpt::utils::CSerializable
+		class OBS_IMPEXP TMapGenericParams : public mrpt::utils::CLoadableOptions, public mrpt::utils::CSerializableCRTP<TMapGenericParams>
 		{
-			DEFINE_SERIALIZABLE( TMapGenericParams )
+			friend mrpt::utils::CSerializer<TMapGenericParams>;
 		public:
 			bool  enableSaveAs3DObject;        //!< (Default=true) If false, calling CMetricMap::getAs3DObject() will have no effects
 			bool  enableObservationLikelihood; //!< (Default=true) Enable computing observation likelihoods with this map

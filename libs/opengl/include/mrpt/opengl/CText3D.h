@@ -38,9 +38,9 @@ namespace mrpt
 		  * \note This class is based on code from libcvd (LGPL, http://www.edwardrosten.com/cvd/ )
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CText3D : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CText3D : public mrpt::utils::CSerializableCRTP<CText3D, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CText3D )
+			friend mrpt::utils::CSerializer<CText3D>;
 		protected:
 			std::string		m_str;
             std::string		m_fontName;

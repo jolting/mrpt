@@ -38,7 +38,7 @@ namespace mrpt
 		  *
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CEllipsoid : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CEllipsoid : public mrpt::utils::CSerializableCRTP<CEllipsoid, CRenderizableDisplayList>
 		{
 			friend mrpt::utils::CSerializer<CEllipsoid>;
 

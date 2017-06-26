@@ -114,25 +114,30 @@ void CVectorField2D::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void CVectorField2D::writeToStream(mrpt::utils::CStream &out,int *version) const
+template <>
+void CSerializer<CVectorField2D>::writeToStream(const CVectorField2D &o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 
-		out << xcomp << ycomp;
-		out << xMin << xMax << yMin << yMax;
-		out << m_LineWidth;
-		out << m_pointSize;
-		out << m_antiAliasing;
-		out << m_point_color;
-		out << m_field_color;
+		out << o.xcomp << o.ycomp;
+		out << o.xMin << o.xMax << o.yMin << o.yMax;
+		out << o.m_LineWidth;
+		out << o.m_pointSize;
+		out << o.m_antiAliasing;
+		out << o.m_point_color;
+		out << o.m_field_color;
 
 	}
 }
@@ -141,29 +146,31 @@ void CVectorField2D::writeToStream(mrpt::utils::CStream &out,int *version) const
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void CVectorField2D::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CVectorField2D>::readFromStream(CVectorField2D &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 		case 0:
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
-			in >> xcomp >> ycomp;
-			in >> xMin >> xMax >> yMin >> yMax;
-			in >> m_LineWidth;
-			in >> m_pointSize;
-			in >> m_antiAliasing;
-			in >> m_point_color;
-			in >> m_field_color;
+			in >> o.xcomp >> o.ycomp;
+			in >> o.xMin >> o.xMax >> o.yMin >> o.yMax;
+			in >> o.m_LineWidth;
+			in >> o.m_pointSize;
+			in >> o.m_antiAliasing;
+			in >> o.m_point_color;
+			in >> o.m_field_color;
 			break;
 
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 			break;
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
 }
-
+}
+}
 
 void CVectorField2D::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const
 {

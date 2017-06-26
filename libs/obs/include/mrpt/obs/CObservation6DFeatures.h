@@ -24,9 +24,8 @@ namespace obs
 	 * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservation6DFeatures : public CObservation
+	class OBS_IMPEXP CObservation6DFeatures : public mrpt::utils::CSerializableCRTP<CObservation6DFeatures, CObservation>
 	{
-		DEFINE_SERIALIZABLE( CObservation6DFeatures )
 	 public:
 		CObservation6DFeatures( );  //!< Default ctor
 

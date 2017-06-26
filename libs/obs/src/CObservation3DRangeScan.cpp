@@ -164,61 +164,65 @@ CObservation3DRangeScan::~CObservation3DRangeScan()
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservation3DRangeScan::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservation3DRangeScan>::writeToStream(const CObservation3DRangeScan &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 8;
 	else
 	{
 		// The data
-		out << maxRange << sensorPose;
+		out << o.maxRange << o.sensorPose;
 
-		out << hasPoints3D;
-		if (hasPoints3D)
+		out << o.hasPoints3D;
+		if (o.hasPoints3D)
 		{
-			ASSERT_(points3D_x.size()==points3D_y.size() && points3D_x.size()==points3D_z.size() && points3D_idxs_x.size()==points3D_x.size() && points3D_idxs_y.size()==points3D_x.size())
-			uint32_t N = points3D_x.size();
+			ASSERT_(o.points3D_x.size()==o.points3D_y.size() && o.points3D_x.size()==o.points3D_z.size() && o.points3D_idxs_x.size()==o.points3D_x.size() && o.points3D_idxs_y.size()==o.points3D_x.size())
+			uint32_t N = o.points3D_x.size();
 			out << N;
 			if (N)
 			{
-				out.WriteBufferFixEndianness( &points3D_x[0], N );
-				out.WriteBufferFixEndianness( &points3D_y[0], N );
-				out.WriteBufferFixEndianness( &points3D_z[0], N );
-				out.WriteBufferFixEndianness( &points3D_idxs_x[0], N );  // New in v8
-				out.WriteBufferFixEndianness( &points3D_idxs_y[0], N );  // New in v8
+				out.WriteBufferFixEndianness( &o.points3D_x[0], N );
+				out.WriteBufferFixEndianness( &o.points3D_y[0], N );
+				out.WriteBufferFixEndianness( &o.points3D_z[0], N );
+				out.WriteBufferFixEndianness( &o.points3D_idxs_x[0], N );  // New in v8
+				out.WriteBufferFixEndianness( &o.points3D_idxs_y[0], N );  // New in v8
 			}
 		}
 
-		out << hasRangeImage; if (hasRangeImage) out << rangeImage;
-		out << hasIntensityImage; if (hasIntensityImage)  out << intensityImage;
-		out << hasConfidenceImage; if (hasConfidenceImage) out << confidenceImage;
+		out << o.hasRangeImage; if (o.hasRangeImage) out << o.rangeImage;
+		out << o.hasIntensityImage; if (o.hasIntensityImage)  out << o.intensityImage;
+		out << o.hasConfidenceImage; if (o.hasConfidenceImage) out << o.confidenceImage;
 
-		out << cameraParams; // New in v2
-		out << cameraParamsIntensity; // New in v4
-		out << relativePoseIntensityWRTDepth; // New in v4
+		out << o.cameraParams; // New in v2
+		out << o.cameraParamsIntensity; // New in v4
+		out << o.relativePoseIntensityWRTDepth; // New in v4
 
-		out << stdError;
-		out << timestamp;
-		out << sensorLabel;
+		out << o.stdError;
+		out << o.timestamp;
+		out << o.sensorLabel;
 
 		// New in v3:
-		out << m_points3D_external_stored << m_points3D_external_file;
-		out << m_rangeImage_external_stored << m_rangeImage_external_file;
+		out << o.m_points3D_external_stored << o.m_points3D_external_file;
+		out << o.m_rangeImage_external_stored << o.m_rangeImage_external_file;
 
 		// New in v5:
-		out << range_is_depth;
+		out << o.range_is_depth;
 
 		// New in v6:
-		out << static_cast<int8_t>(intensityImageChannel);
+		out << static_cast<int8_t>(o.intensityImageChannel);
 
 		// New in v7:
-		out << hasPixelLabels();
-		if (hasPixelLabels())
+		out << o.hasPixelLabels();
+		if (o.hasPixelLabels())
 		{
-			pixelLabels->writeToStream(out);
+			o.pixelLabels->writeToStream(out);
 		}
 	}
 }
@@ -242,22 +246,22 @@ template <> void CSerializer<CObservation3DRangeScan>::readFromStream(CObservati
 		{
 			uint32_t		N;
 
-			in >> maxRange >> sensorPose;
+			in >> o.maxRange >> o.sensorPose;
 
 			if (version>0)
-				in >> hasPoints3D;
-			else hasPoints3D = true;
+				in >> o.hasPoints3D;
+			else o.hasPoints3D = true;
 
-			if (hasPoints3D)
+			if (o.hasPoints3D)
 			{
 				in >> N;
-				resizePoints3DVectors(N);
+				o.resizePoints3DVectors(N);
 
 				if (N)
 				{
-					in.ReadBufferFixEndianness( &points3D_x[0], N);
-					in.ReadBufferFixEndianness( &points3D_y[0], N);
-					in.ReadBufferFixEndianness( &points3D_z[0], N);
+					in.ReadBufferFixEndianness( &o.points3D_x[0], N);
+					in.ReadBufferFixEndianness( &o.points3D_y[0], N);
+					in.ReadBufferFixEndianness( &o.points3D_z[0], N);
 
 					if (version==0) 
 					{
@@ -265,90 +269,90 @@ template <> void CSerializer<CObservation3DRangeScan>::readFromStream(CObservati
 						in.ReadBuffer( &validRange[0], sizeof(validRange[0])*N );
 					}
 					if (version>=8) {
-						in.ReadBufferFixEndianness( &points3D_idxs_x[0], N);
-						in.ReadBufferFixEndianness( &points3D_idxs_y[0], N);
+						in.ReadBufferFixEndianness( &o.points3D_idxs_x[0], N);
+						in.ReadBufferFixEndianness( &o.points3D_idxs_y[0], N);
 					}
 				}
 			}
 			else
 			{
-				this->resizePoints3DVectors(0);
+				o.resizePoints3DVectors(0);
 			}
 
 			if (version>=1)
 			{
-				in >> hasRangeImage;
-				if (hasRangeImage)
+				in >> o.hasRangeImage;
+				if (o.hasRangeImage)
 				{
 #ifdef COBS3DRANGE_USE_MEMPOOL
 					// We should call "rangeImage_setSize()" to exploit the mempool:
-					this->rangeImage_setSize(480,640);
+					o.rangeImage_setSize(480,640);
 #endif
-					in >> rangeImage;
+					in >> o.rangeImage;
 				}
 
-				in >> hasIntensityImage;
-				if (hasIntensityImage)
-					in >>intensityImage;
+				in >> o.hasIntensityImage;
+				if (o.hasIntensityImage)
+					in >> o.intensityImage;
 
-				in >> hasConfidenceImage;
-				if (hasConfidenceImage)
-					in >> confidenceImage;
+				in >> o.hasConfidenceImage;
+				if (o.hasConfidenceImage)
+					in >> o.confidenceImage;
 
 				if (version>=2)
 				{
-					in >> cameraParams;
+					in >> o.cameraParams;
 
 					if (version>=4)
 					{
-						in >> cameraParamsIntensity
-						   >> relativePoseIntensityWRTDepth;
+						in >> o.cameraParamsIntensity
+						   >> o.relativePoseIntensityWRTDepth;
 					}
 					else
 					{
-						cameraParamsIntensity = cameraParams;
-						relativePoseIntensityWRTDepth = CPose3D();
+						o.cameraParamsIntensity = o.cameraParams;
+						o.relativePoseIntensityWRTDepth = CPose3D();
 					}
 				}
 			}
 
-			in >> stdError;
-			in >> timestamp;
-			in >> sensorLabel;
+			in >> o.stdError;
+			in >> o.timestamp;
+			in >> o.sensorLabel;
 
 			if (version>=3)
 			{
 				// New in v3:
-				in >> m_points3D_external_stored >> m_points3D_external_file;
-				in >> m_rangeImage_external_stored >> m_rangeImage_external_file;
+				in >> o.m_points3D_external_stored >> o.m_points3D_external_file;
+				in >> o.m_rangeImage_external_stored >> o.m_rangeImage_external_file;
 			}
 			else
 			{
-				m_points3D_external_stored = false;
-				m_rangeImage_external_stored = false;
+				o.m_points3D_external_stored = false;
+				o.m_rangeImage_external_stored = false;
 			}
 
 			if (version>=5)
 			{
-				in >> range_is_depth;
+				in >> o.range_is_depth;
 			}
 			else
 			{
-				range_is_depth = true;
+				o.range_is_depth = true;
 			}
 
 			if (version>=6)
 			{
 				int8_t i;
 				in >> i;
-				intensityImageChannel = static_cast<TIntensityChannelID>(i);
+				o.intensityImageChannel = static_cast<CObservation3DRangeScan::TIntensityChannelID>(i);
 			}
 			else
 			{
-				intensityImageChannel = CH_VISIBLE;
+				o.intensityImageChannel = CObservation3DRangeScan::CH_VISIBLE;
 			}
 
-			pixelLabels.reset(); // Remove existing data first (_unique() is to leave alive any user copies of the shared pointer).
+			o.pixelLabels.reset(); // Remove existing data first (_unique() is to leave alive any user copies of the shared pointer).
 			if (version>=7)
 			{
 
@@ -356,7 +360,7 @@ template <> void CSerializer<CObservation3DRangeScan>::readFromStream(CObservati
 				in >> do_have_labels;
 
 				if (do_have_labels)
-					pixelLabels.reset(TPixelLabelInfoBase::readAndBuildFromStream(in));
+					o.pixelLabels.reset(CObservation3DRangeScan::TPixelLabelInfoBase::readAndBuildFromStream(in));
 			}
 
 		} break;
@@ -365,6 +369,8 @@ template <> void CSerializer<CObservation3DRangeScan>::readFromStream(CObservati
 
 	};
 
+}
+}
 }
 
 void CObservation3DRangeScan::swap(CObservation3DRangeScan &o)

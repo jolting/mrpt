@@ -37,26 +37,29 @@ CActionRobotMovement3D::CActionRobotMovement3D() :
 	velocities.assign(.0);
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CActionRobotMovement3D::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CActionRobotMovement3D>::writeToStream(const CActionRobotMovement3D &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
-		uint32_t		i  = static_cast<uint32_t>( estimationMethod );
+		uint32_t		i  = static_cast<uint32_t>( o.estimationMethod );
 
 		out << i;
 
 		// The PDF:
-		out << poseChange;
+		out << o.poseChange;
 
-		out << hasVelocities << velocities;
+		out << o.hasVelocities << o.velocities;
 
-		out << timestamp;
+		out << o.timestamp;
 	}
 }
 
@@ -74,14 +77,14 @@ template <> void CSerializer<CActionRobotMovement3D>::readFromStream(CActionRobo
 
 			// Read the estimation method first:
 			in >> i;
-			estimationMethod = static_cast<TEstimationMethod>(i);
+			o.estimationMethod = static_cast<CActionRobotMovement3D::TEstimationMethod>(i);
 
-			in >> poseChange;
-			in >> hasVelocities >> velocities;
+			in >> o.poseChange;
+			in >> o.hasVelocities >> o.velocities;
 
 			if (version>=1)
-					in >> timestamp;
-			else	timestamp = INVALID_TIMESTAMP;
+					in >> o.timestamp;
+			else	o.timestamp = INVALID_TIMESTAMP;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
@@ -90,6 +93,8 @@ template <> void CSerializer<CActionRobotMovement3D>::readFromStream(CActionRobo
 
 }
 
+}
+}
 
 void  CActionRobotMovement3D::computeFromOdometry(
 	const CPose3D				&odometryIncrement,

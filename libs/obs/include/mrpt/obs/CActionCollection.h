@@ -26,9 +26,9 @@ namespace mrpt
 		 * \sa CAction, CRawlog
 	 	 * \ingroup mrpt_obs_grp
 		 */
-		class OBS_IMPEXP CActionCollection : public mrpt::utils::CSerializable
+		class OBS_IMPEXP CActionCollection : public mrpt::utils::CSerializableCRTP<CActionCollection>
 		{
-			DEFINE_SERIALIZABLE( CActionCollection )
+			friend mrpt::utils::CSerializer <CActionCollection>;
 
 		protected:
 			std::deque<mrpt::utils::poly_ptr_ptr<CAction::Ptr> >	m_actions;  //!< The robot "actionss"
@@ -125,7 +125,7 @@ namespace mrpt
 			 {
 				MRPT_START
 				size_t  foundCount = 0;
-				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo;
+				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo();
 				for (const_iterator it = begin();it!=end();++it)
 					if ( (*it)->GetRuntimeClass()->derivedFrom( class_ID ) )
 						if (foundCount++ == ith)

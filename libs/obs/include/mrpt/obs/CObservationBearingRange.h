@@ -25,7 +25,7 @@ namespace obs
 	 * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationBearingRange : public CObservation
+	class OBS_IMPEXP CObservationBearingRange : public mrpt::utils::CSerializableCRTP<CObservationBearingRange, CObservation>
 	{
 		DEFINE_SERIALIZABLE( CObservationBearingRange )
 

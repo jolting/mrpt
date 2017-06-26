@@ -35,28 +35,31 @@ CObservation6DFeatures::TMeasurement::TMeasurement() :
 {
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservation6DFeatures::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservation6DFeatures>::writeToStream(const CObservation6DFeatures &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << minSensorDistance << maxSensorDistance << sensorPose;
+		out << o.minSensorDistance << o.maxSensorDistance << o.sensorPose;
 
-		const uint32_t n = sensedFeatures.size();
+		const uint32_t n = o.sensedFeatures.size();
 		out << n;
 		for (uint32_t i=0;i<n;i++) 
 		{
-			const TMeasurement & m = sensedFeatures[i];
+			const CObservation6DFeatures::TMeasurement & m = o.sensedFeatures[i];
 			out << m.pose << m.id << m.inf_matrix;
 		}
 
-		out << sensorLabel
-			<< timestamp;
+		out << o.sensorLabel
+			<< o.timestamp;
 	}
 }
 
@@ -69,25 +72,27 @@ template <> void CSerializer<CObservation6DFeatures>::readFromStream(CObservatio
 	{
 	case 0:
 		{
-			in >> minSensorDistance >> maxSensorDistance >> sensorPose;
+			in >> o.minSensorDistance >> o.maxSensorDistance >> o.sensorPose;
 
 			uint32_t n;
 			in >> n;
-			sensedFeatures.clear();
-			sensedFeatures.resize(n);
+			o.sensedFeatures.clear();
+			o.sensedFeatures.resize(n);
 			for (uint32_t i=0;i<n;i++) 
 			{
-				TMeasurement & m = sensedFeatures[i];
+				CObservation6DFeatures::TMeasurement & m = o.sensedFeatures[i];
 				in >> m.pose >> m.id >> m.inf_matrix;
 			}
 
-			in >> sensorLabel
-			   >> timestamp;
+			in >> o.sensorLabel
+			   >> o.timestamp;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 
+}
+}
 }
 
 void CObservation6DFeatures::getSensorPose( CPose3D &out_sensorPose ) const 

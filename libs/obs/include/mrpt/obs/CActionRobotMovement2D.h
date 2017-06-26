@@ -28,9 +28,9 @@ namespace mrpt
 		 * \sa CAction
 	 	 * \ingroup mrpt_obs_grp
 		 */
-		class OBS_IMPEXP  CActionRobotMovement2D : public CAction
+		class OBS_IMPEXP  CActionRobotMovement2D : public mrpt::utils::CSerializableCRTP<CActionRobotMovement2D, CAction>
 		{
-			DEFINE_SERIALIZABLE( CActionRobotMovement2D )
+			friend mrpt::utils::CSerializer<CActionRobotMovement2D>;
 
 		public:
 			/** A list of posible ways for estimating the content of a CActionRobotMovement2D object.

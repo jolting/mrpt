@@ -31,9 +31,9 @@ namespace mrpt
 		  * \ingroup mrpt_opengl_grp
 		  */
 
-		class OPENGL_IMPEXP CVectorField2D : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CVectorField2D : public mrpt::utils::CSerializableCRTP<CVectorField2D, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CVectorField2D )
+			friend mrpt::utils::CSerializer<CVectorField2D>;
 		protected:
 			mrpt::math::CMatrix xcomp;				//!< X component of the vector field
 			mrpt::math::CMatrix ycomp;				//!< Y component of the vector field

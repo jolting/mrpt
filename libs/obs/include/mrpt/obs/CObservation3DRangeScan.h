@@ -136,9 +136,9 @@ namespace obs
 	 * \sa mrpt::hwdrivers::CSwissRanger3DCamera, mrpt::hwdrivers::CKinect, CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservation3DRangeScan : public CObservation
+	class OBS_IMPEXP CObservation3DRangeScan : public mrpt::utils::CSerializableCRTP<CObservation3DRangeScan,CObservation>
 	{
-		DEFINE_SERIALIZABLE( CObservation3DRangeScan )
+		friend mrpt::utils::CSerializer<CObservation3DRangeScan>;
 
 	protected:
 		bool			m_points3D_external_stored; //!< If set to true, m_points3D_external_file is valid.

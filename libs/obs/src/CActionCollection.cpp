@@ -41,10 +41,15 @@ CActionCollection::CActionCollection(CAction &a ) : m_actions()
 	m_actions.push_back(CAction::Ptr(static_cast<CAction *>(a.clone())));
 }
 
+
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CActionCollection::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CActionCollection>::writeToStream(const CActionCollection &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
@@ -52,9 +57,9 @@ void  CActionCollection::writeToStream(mrpt::utils::CStream &out, int *version) 
 	{
 		uint32_t		n;
 
-		n = static_cast<uint32_t> ( m_actions.size() );
+		n = static_cast<uint32_t> ( o.m_actions.size() );
 		out << n;
-		for (const_iterator it=begin();it!=end();++it)
+		for (CActionCollection::const_iterator it=o.begin();it!=o.end();++it)
 			out << *(*it);
 	}
 }
@@ -70,16 +75,18 @@ template <> void CSerializer<CActionCollection>::readFromStream(CActionCollectio
 		{
 			uint32_t	n;
 
-			clear();
+			o.clear();
 
 			in >> n;
-			m_actions.resize(n);
-			for_each( begin(),end(), ObjectReadFromStreamToPtrs<CAction::Ptr>(&in) );
+			o.m_actions.resize(n);
+			for_each( o.begin(),o.end(), ObjectReadFromStreamToPtrs<CAction::Ptr>(&in) );
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 /*---------------------------------------------------------------

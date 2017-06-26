@@ -22,7 +22,7 @@ namespace obs
 	 * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationCANBusJ1939 : public CObservation
+	class OBS_IMPEXP CObservationCANBusJ1939 : public mrpt::utils::CSerializableCRTP<CObservationCANBusJ1939, CObservation>
 	{
 		DEFINE_SERIALIZABLE( CObservationCANBusJ1939 )
 

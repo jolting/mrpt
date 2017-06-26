@@ -30,7 +30,7 @@ namespace obs
 	 * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationBatteryState : public CObservation
+	class OBS_IMPEXP CObservationBatteryState : public mrpt::utils::CSerializableCRTP<CObservationBatteryState, CObservation>
 	{
 		DEFINE_SERIALIZABLE( CObservationBatteryState )
 

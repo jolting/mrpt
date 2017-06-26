@@ -25,7 +25,7 @@ namespace opengl	{
 	  *  
 	  * \ingroup mrpt_opengl_grp
 	  */
-	class OPENGL_IMPEXP CCylinder:public CRenderizableDisplayList	{
+	class OPENGL_IMPEXP CCylinder:public mrpt::utils::CSerializableCRTP<CCylinder, CRenderizableDisplayList>	{
 		friend mrpt::utils::CSerializer<CCylinder>;
 	protected:
 		/**

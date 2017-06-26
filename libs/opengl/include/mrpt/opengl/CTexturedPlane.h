@@ -22,9 +22,9 @@ namespace mrpt
 		  *  \sa opengl::COpenGLScene
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CTexturedPlane : public CTexturedObject
+		class OPENGL_IMPEXP CTexturedPlane : public mrpt::utils::CSerializableCRTP<CTexturedPlane, CTexturedObject>
 		{
-			DEFINE_SERIALIZABLE( CTexturedPlane )
+			friend mrpt::utils::CSerializer<CTexturedPlane>;
 		protected:
 			mutable float				m_tex_x_min,m_tex_x_max;
 			mutable float				m_tex_y_min,m_tex_y_max;

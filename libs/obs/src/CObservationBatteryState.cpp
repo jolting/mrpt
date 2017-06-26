@@ -34,10 +34,12 @@ CObservationBatteryState::CObservationBatteryState( ) :
 {
 }
 
+namespace mrpt {
+namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationBatteryState::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservationBatteryState>::writeToStream(const CObservationBatteryState &o, mrpt::utils::CStream &out, int *version)
 {
 	MRPT_UNUSED_PARAM(out);
 	if (version)
@@ -45,14 +47,14 @@ void  CObservationBatteryState::writeToStream(mrpt::utils::CStream &out, int *ve
 	else
 	{
 		// The data
-		out << voltageMainRobotBattery
-			<< voltageMainRobotComputer
-			<< voltageMainRobotBatteryIsValid
-			<< voltageMainRobotComputerIsValid
-			<< voltageOtherBatteries
-			<< voltageOtherBatteriesValid
-			<< sensorLabel
-			<< timestamp;
+		out << o.voltageMainRobotBattery
+			<< o.voltageMainRobotComputer
+			<< o.voltageMainRobotBatteryIsValid
+			<< o.voltageMainRobotComputerIsValid
+			<< o.voltageOtherBatteries
+			<< o.voltageOtherBatteriesValid
+			<< o.sensorLabel
+			<< o.timestamp;
 	}
 }
 
@@ -68,25 +70,27 @@ template <> void CSerializer<CObservationBatteryState>::readFromStream(CObservat
 	case 1:
 	case 2:
 		{
-			in	>> voltageMainRobotBattery
-				>> voltageMainRobotComputer
-				>> voltageMainRobotBatteryIsValid
-				>> voltageMainRobotComputerIsValid
-				>> voltageOtherBatteries
-				>> voltageOtherBatteriesValid;
+			in	>> o.voltageMainRobotBattery
+				>> o.voltageMainRobotComputer
+				>> o.voltageMainRobotBatteryIsValid
+				>> o.voltageMainRobotComputerIsValid
+				>> o.voltageOtherBatteries
+				>> o.voltageOtherBatteriesValid;
 			if (version>=1)
-				in >> sensorLabel;
-			else sensorLabel="";
+				in >> o.sensorLabel;
+			else o.sensorLabel="";
 
 			if (version>=2)
-					in >> timestamp;
-			else 	timestamp = INVALID_TIMESTAMP;
+					in >> o.timestamp;
+			else 	o.timestamp = INVALID_TIMESTAMP;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
 
+}
 }
 
 // See base class docs

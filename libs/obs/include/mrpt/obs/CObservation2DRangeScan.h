@@ -39,9 +39,9 @@ namespace obs
 	  * \sa CObservation, CPointsMap, T2DScanProperties
 	  * \ingroup mrpt_obs_grp
 	  */
-	class OBS_IMPEXP CObservation2DRangeScan : public CObservation
+	class OBS_IMPEXP CObservation2DRangeScan : public mrpt::utils::CSerializableCRTP<CObservation2DRangeScan,CObservation>
 	{
-		DEFINE_SERIALIZABLE( CObservation2DRangeScan )
+		friend mrpt::utils::CSerializer<CObservation2DRangeScan>;
 		// This must be added for declaration of MEX-related functions
 		DECLARE_MEX_CONVERSION
 	private:
