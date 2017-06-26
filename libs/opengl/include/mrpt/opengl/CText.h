@@ -34,9 +34,9 @@ namespace mrpt
 		  *  \sa CText3D
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CText : public CRenderizable
+		class OPENGL_IMPEXP CText : public mrpt::utils::CSerializableCRTP<CText, CRenderizable>
 		{
-			DEFINE_SERIALIZABLE( CText )
+			friend mrpt::utils::CSerializer<CText>;
 		protected:
 			std::string		m_str;
             std::string		m_fontName;

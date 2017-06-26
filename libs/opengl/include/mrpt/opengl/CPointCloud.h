@@ -42,12 +42,12 @@ namespace mrpt
 		  * \ingroup mrpt_opengl_grp
 		  */
 		class OPENGL_IMPEXP CPointCloud :
-			public CRenderizable,
+			public mrpt::utils::CSerializableCRTP<CPointCloud, CRenderizable>,
 			public COctreePointRenderer<CPointCloud>,
 			public mrpt::utils::PLY_Importer,
 			public mrpt::utils::PLY_Exporter
 		{
-			DEFINE_SERIALIZABLE( CPointCloud )
+			friend mrpt::utils::CSerializer<CPointCloud>;
 		protected:
 			enum Axis { colNone=0, colZ, colY, colX} m_colorFromDepth;
 			std::vector<float>	m_xs,m_ys,m_zs;

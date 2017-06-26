@@ -27,9 +27,9 @@ namespace mrpt
 		  *  \sa opengl::COpenGLScene
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CSetOfObjects : public CRenderizable
+		class OPENGL_IMPEXP CSetOfObjects : public mrpt::utils::CSerializableCRTP<CSetOfObjects, CRenderizable>
 		{
-			DEFINE_SERIALIZABLE( CSetOfObjects )
+			friend mrpt::utils::CSerializer<CSetOfObjects>;
 
 		protected:
 			/** The list of child objects.
@@ -165,7 +165,7 @@ namespace mrpt
 		{
 			MRPT_START
 			size_t  foundCount = 0;
-			const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo;
+			const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo();
 			for (CListOpenGLObjects::const_iterator it = m_objects.begin();it!=m_objects.end();++it)
 				if (  *it && (*it)->GetRuntimeClass()->derivedFrom( class_ID ) )
 					if (foundCount++ == ith)

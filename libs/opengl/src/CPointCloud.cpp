@@ -185,7 +185,10 @@ void  CPointCloud::render_subset(const bool all, const std::vector<size_t>& idxs
 #endif
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -197,20 +200,20 @@ template <> void CSerializer<CPointCloud>::writeToStream(const CPointCloud& o, m
 		*version = 4;
 	else
 	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 		// Changed from bool to enum/int32_t in version 3.
-		out << static_cast<int32_t>(m_colorFromDepth);
-		out << m_xs << m_ys << m_zs;
+		out << static_cast<int32_t>(o.m_colorFromDepth);
+		out << o.m_xs << o.m_ys << o.m_zs;
 
 		// Added in version 1.
-		out << m_pointSize;
+		out << o.m_pointSize;
 
 		// New in version 2:
-		out << m_colorFromDepth_min.R << m_colorFromDepth_min.G << m_colorFromDepth_min.B;
-		out << m_colorFromDepth_max.R << m_colorFromDepth_max.G << m_colorFromDepth_max.B;
+		out << o.m_colorFromDepth_min.R << o.m_colorFromDepth_min.G << o.m_colorFromDepth_min.B;
+		out << o.m_colorFromDepth_max.R << o.m_colorFromDepth_max.G << o.m_colorFromDepth_max.B;
 
 		// New in version 4:
-		out << m_pointSmooth;
+		out << o.m_pointSmooth;
 	}
 }
 
@@ -218,7 +221,7 @@ template <> void CSerializer<CPointCloud>::writeToStream(const CPointCloud& o, m
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPointCloud::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CPointCloud>::readFromStream(CPointCloud &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -228,41 +231,41 @@ void  CPointCloud::readFromStream(mrpt::utils::CStream &in,int version)
 	case 3:
 	case 4:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 			if (version>=3)
 			{
 				int32_t axis;
 				in >> axis;
-				m_colorFromDepth = Axis(axis);
+				o.m_colorFromDepth = CPointCloud::Axis(axis);
 			}
 			else
 			{
 				bool colorFromZ;
 				in >> colorFromZ;
-				m_colorFromDepth = colorFromZ ? CPointCloud::colZ : CPointCloud::colNone;
+				o.m_colorFromDepth = colorFromZ ? CPointCloud::colZ : CPointCloud::colNone;
 			}
-			in >> m_xs >> m_ys >> m_zs;
+			in >> o.m_xs >> o.m_ys >> o.m_zs;
 
 			if (version>=1)
-				 in >> m_pointSize;
-			else m_pointSize = 1;
+				 in >> o.m_pointSize;
+			else o.m_pointSize = 1;
 
 			if (version>=2)
 			{
-				in >> m_colorFromDepth_min.R >> m_colorFromDepth_min.G >> m_colorFromDepth_min.B;
-				in  >> m_colorFromDepth_max.R >> m_colorFromDepth_max.G >> m_colorFromDepth_max.B;
+				in >> o.m_colorFromDepth_min.R >> o.m_colorFromDepth_min.G >> o.m_colorFromDepth_min.B;
+				in  >> o.m_colorFromDepth_max.R >> o.m_colorFromDepth_max.G >> o.m_colorFromDepth_max.B;
 			}
 			else
 			{
-				m_colorFromDepth_min = TColorf(0,0,0);
-				m_colorFromDepth_max.R = m_color.R*255.f;
-				m_colorFromDepth_max.G = m_color.G*255.f;
-				m_colorFromDepth_max.B = m_color.B*255.f;
+				o.m_colorFromDepth_min = TColorf(0,0,0);
+				o.m_colorFromDepth_max.R = o.m_color.R*255.f;
+				o.m_colorFromDepth_max.G = o.m_color.G*255.f;
+				o.m_colorFromDepth_max.B = o.m_color.B*255.f;
 			}
 
 			if (version>=4)
-					in >> m_pointSmooth;
-			else 	m_pointSmooth = false;
+					in >> o.m_pointSmooth;
+			else 	o.m_pointSmooth = false;
 
 		} break;
 	default:
@@ -270,7 +273,9 @@ void  CPointCloud::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 
-	markAllPointsAsNew();
+	o.markAllPointsAsNew();
+}
+}
 }
 
 /*---------------------------------------------------------------

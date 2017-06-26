@@ -29,8 +29,8 @@ namespace opengl	{
 	  *
 	  * \ingroup mrpt_opengl_grp
 	  */
-	class OPENGL_IMPEXP CPolyhedron:public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CPolyhedron)
+	class OPENGL_IMPEXP CPolyhedron:public mrpt::utils::CSerializableCRTP<CPolyhedron, CRenderizableDisplayList>	{
+		friend mrpt::utils::CSerializer<CPolyhedron>;
 	public:
 		/**
 		  * Struct used to store a polyhedron edge. The struct consists only of two vertex indices, used to access the polyhedron vertex list.

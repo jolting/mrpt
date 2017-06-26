@@ -116,6 +116,10 @@ void   CSetOfLines::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -124,10 +128,10 @@ template <> void CSerializer<CSetOfLines>::writeToStream(const CSetOfLines& o, m
 {
 	if (version) *version=4;
 	else	{
-		writeToStreamRender(out);
-		out<<mSegments<<mLineWidth;
-		out << m_antiAliasing; // Added in v3
-		out << m_verticesPointSize; // v4
+		o.writeToStreamRender(out);
+		out<<o.mSegments<<o.mLineWidth;
+		out << o.m_antiAliasing; // Added in v3
+		out << o.m_verticesPointSize; // v4
 	}
 }
 
@@ -135,49 +139,51 @@ template <> void CSerializer<CSetOfLines>::writeToStream(const CSetOfLines& o, m
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CSetOfLines::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<CSetOfLines>::readFromStream(CSetOfLines &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 	case 1:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 			CVectorFloat x0,y0,z0,x1,y1,z1;
 			in>>x0>>y0>>z0>>x1>>y1>>z1;
-			if (version>=1) in>>mLineWidth;
-			else mLineWidth=1;
+			if (version>=1) in>>o.mLineWidth;
+			else o.mLineWidth=1;
 			size_t N=x0.size();
-			mSegments.resize(N);
+			o.mSegments.resize(N);
 			for (size_t i=0;i<N;i++)	{
-				mSegments[i][0][0]=x0[i];
-				mSegments[i][0][1]=y0[i];
-				mSegments[i][0][2]=z0[i];
-				mSegments[i][1][0]=x1[i];
-				mSegments[i][1][1]=y1[i];
-				mSegments[i][1][2]=z1[i];
+				o.mSegments[i][0][0]=x0[i];
+				o.mSegments[i][0][1]=y0[i];
+				o.mSegments[i][0][2]=z0[i];
+				o.mSegments[i][1][0]=x1[i];
+				o.mSegments[i][1][1]=y1[i];
+				o.mSegments[i][1][2]=z1[i];
 			}
 		}	break;
 	case 2:
 	case 3:
 	case 4:
 		{
-			readFromStreamRender(in);
-			in>>mSegments;
-			in>>mLineWidth;
+			o.readFromStreamRender(in);
+			in>>o.mSegments;
+			in>>o.mLineWidth;
 			if (version>=3)
-				in >> m_antiAliasing;
-			else m_antiAliasing = true;
+				in >> o.m_antiAliasing;
+			else o.m_antiAliasing = true;
 			if (version >= 4)
-				in >> m_verticesPointSize; 
-			else m_verticesPointSize = .0f;
+				in >> o.m_verticesPointSize; 
+			else o.m_verticesPointSize = .0f;
 		}
 		break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 void CSetOfLines::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const

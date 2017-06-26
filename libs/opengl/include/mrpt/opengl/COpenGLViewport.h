@@ -52,11 +52,12 @@ namespace mrpt
 		  * \ingroup mrpt_opengl_grp
 		  */
 		class OPENGL_IMPEXP COpenGLViewport :
-			public mrpt::utils::CSerializable,
+			public mrpt::utils::CSerializableCRTP<COpenGLViewport>,
 			public mrpt::utils::CObservable
 		{
-			DEFINE_SERIALIZABLE( COpenGLViewport )
-			friend class COpenGLScene;
+			friend mrpt::utils::CSerializer<COpenGLViewport>;
+			friend mrpt::utils::CSerializer<COpenGLScene>;
+			friend COpenGLScene;
 		public:
 			// -------------------------------------------------------------------
 			/** @name Set the viewport "modes"
@@ -241,7 +242,7 @@ namespace mrpt
 			 {
 				MRPT_START
 				size_t  foundCount = 0;
-				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo;
+				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo();
 				for (CListOpenGLObjects::const_iterator it = m_objects.begin();it!=m_objects.end();++it)
 					if ( *it &&  (*it)->GetRuntimeClass()->derivedFrom( class_ID ) )
 						if (foundCount++ == ith)

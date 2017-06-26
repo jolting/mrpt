@@ -23,9 +23,9 @@ namespace mrpt
 		  *  \sa opengl::COpenGLScene
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CSetOfTexturedTriangles : public CTexturedObject
+		class OPENGL_IMPEXP CSetOfTexturedTriangles : public mrpt::utils::CSerializableCRTP<CSetOfTexturedTriangles, CTexturedObject>
 		{
-			DEFINE_SERIALIZABLE( CSetOfTexturedTriangles )
+			friend mrpt::utils::CSerializer<CSetOfTexturedTriangles>;
 
 		public:
 			/** Triangle vertex. This structure encapsulates the vertex coordinates and the image pixels.

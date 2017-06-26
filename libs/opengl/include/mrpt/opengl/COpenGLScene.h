@@ -44,9 +44,9 @@ namespace mrpt
 		  *    It can be also displayed in real-time using gui::CDisplayWindow3D.
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP COpenGLScene : public mrpt::utils::CSerializable
+		class OPENGL_IMPEXP COpenGLScene : public mrpt::utils::CSerializableCRTP<COpenGLScene>
 		{
-			DEFINE_SERIALIZABLE( COpenGLScene )
+			friend mrpt::utils::CSerializer<COpenGLScene>;
 		public:
 			/** Constructor
 			  */

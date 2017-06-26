@@ -30,9 +30,9 @@ namespace mrpt
 		  *
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CSetOfLines : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CSetOfLines : public mrpt::utils::CSerializableCRTP<CSetOfLines, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CSetOfLines )
+			friend mrpt::utils::CSerializer<CSetOfLines>;
 		protected:
 			std::vector<mrpt::math::TSegment3D> mSegments;
 			float   mLineWidth;

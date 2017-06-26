@@ -55,8 +55,7 @@ COpenGLScene::COpenGLScene( ) :
 /*--------------------------------------------------------------
 					Copy constructor
   ---------------------------------------------------------------*/
-COpenGLScene::COpenGLScene( const COpenGLScene &obj ) :
-	CSerializable()
+COpenGLScene::COpenGLScene( const COpenGLScene &obj )
 {
 	(*this) = obj;
 }
@@ -134,12 +133,12 @@ template <> void CSerializer<COpenGLScene>::writeToStream(const COpenGLScene& o,
 		*version = 1;
 	else
 	{
-		out << m_followCamera;
+		out << o.m_followCamera;
 
 		uint32_t	n;
-		n = (uint32_t)m_viewports.size();
+		n = (uint32_t)o.m_viewports.size();
 		out << n;
-		for (TListViewports::const_iterator	it=m_viewports.begin();it!=m_viewports.end();++it)
+		for (COpenGLScene::TListViewports::const_iterator	it=o.m_viewports.begin();it!=o.m_viewports.end();++it)
 			out << **it;
 	}
 }
@@ -148,15 +147,15 @@ template <> void CSerializer<COpenGLScene>::writeToStream(const COpenGLScene& o,
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-template <> void  CSerializer<COpenGLScene>::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<COpenGLScene>::readFromStream(COpenGLScene &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
 			// Old style: Just one viewport:
-			clear(true);
-			COpenGLViewport::Ptr view = m_viewports[0];
+			o.clear(true);
+			COpenGLViewport::Ptr view = o.m_viewports[0];
 
 			// Load objects:
 			uint32_t	n;
@@ -169,11 +168,11 @@ template <> void  CSerializer<COpenGLScene>::readFromStream(mrpt::utils::CStream
 		break;
 	case 1:
 		{
-			in >> m_followCamera;
+			in >> o.m_followCamera;
 
 			uint32_t	i,n;
 			in >> n;
-			clear(false);
+			o.clear(false);
 
 
 			for (i=0;i<n;i++)
@@ -182,8 +181,8 @@ template <> void  CSerializer<COpenGLScene>::readFromStream(mrpt::utils::CStream
 				in >> newObj;
 
 				COpenGLViewport::Ptr	newView = std::dynamic_pointer_cast<COpenGLViewport>(newObj);
-				newView->m_parent = this;
-				m_viewports.push_back( newView );
+				newView->m_parent = &o;
+				o.m_viewports.push_back( newView );
 			}
 
 		} break;

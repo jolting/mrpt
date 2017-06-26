@@ -38,12 +38,12 @@ namespace mrpt
 		  * \ingroup mrpt_opengl_grp
 		  */
 		class OPENGL_IMPEXP CPointCloudColoured :
-			public CRenderizable,
+			public mrpt::utils::CSerializableCRTP<CPointCloudColoured, CRenderizable>,
 			public COctreePointRenderer<CPointCloudColoured>,
 			public mrpt::utils::PLY_Importer,
 			public mrpt::utils::PLY_Exporter
 		{
-			DEFINE_SERIALIZABLE( CPointCloudColoured )
+			friend mrpt::utils::CSerializer<CPointCloudColoured>;
 
 		public:
 			struct TPointColour

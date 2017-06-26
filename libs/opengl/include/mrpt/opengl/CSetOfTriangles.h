@@ -24,9 +24,9 @@ namespace mrpt
 		  *  \sa opengl::COpenGLScene, CSetOfTexturedTriangles
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CSetOfTriangles : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CSetOfTriangles : public mrpt::utils::CSerializableCRTP<CSetOfTriangles, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CSetOfTriangles )
+			friend mrpt::utils::CSerializer<CSetOfTriangles>;
 		public:
 			/**
 			  * Triangle definition. Each vertex has three spatial coordinates and four color values.

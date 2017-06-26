@@ -75,6 +75,10 @@ void   CSimpleLine::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -86,10 +90,10 @@ template <> void CSerializer<CSimpleLine>::writeToStream(const CSimpleLine& o, m
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_x0 << m_y0 << m_z0;
-		out << m_x1 << m_y1 << m_z1 << m_lineWidth;
-		out << m_antiAliasing; // Added in v1
+		o.writeToStreamRender(out);
+		out << o.m_x0 << o.m_y0 << o.m_z0;
+		out << o.m_x1 << o.m_y1 << o.m_z1 << o.m_lineWidth;
+		out << o.m_antiAliasing; // Added in v1
 	}
 }
 
@@ -97,24 +101,27 @@ template <> void CSerializer<CSimpleLine>::writeToStream(const CSimpleLine& o, m
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CSimpleLine::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CSimpleLine>::readFromStream(CSimpleLine &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 1:
 		{
-			readFromStreamRender(in);
-			in >> m_x0 >> m_y0 >> m_z0;
-			in >> m_x1 >> m_y1 >> m_z1 >> m_lineWidth;
+			o.readFromStreamRender(in);
+			in >> o.m_x0 >> o.m_y0 >> o.m_z0;
+			in >> o.m_x1 >> o.m_y1 >> o.m_z1 >> o.m_lineWidth;
 			if (version>=1)
-				in >> m_antiAliasing;
-			else m_antiAliasing=true;
+				in >> o.m_antiAliasing;
+			else o.m_antiAliasing=true;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 void CSimpleLine::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const

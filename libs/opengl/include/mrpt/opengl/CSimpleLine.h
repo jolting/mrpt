@@ -22,9 +22,9 @@ namespace mrpt
 		  *  \sa opengl::COpenGLScene
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CSimpleLine : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CSimpleLine : public mrpt::utils::CSerializableCRTP<CSimpleLine, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CSimpleLine )
+			friend mrpt::utils::CSerializer<CSimpleLine>;
 
 		protected:
 			float	m_x0,m_y0,m_z0;

@@ -48,6 +48,10 @@ void   CSetOfObjects::render() const
 	mrpt::opengl::gl_utils::renderSetOfObjects(m_objects);
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -58,12 +62,12 @@ template <> void CSerializer<CSetOfObjects>::writeToStream(const CSetOfObjects& 
 		*version = 0;
 	else
 	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 
 		uint32_t	n;
-		n = (uint32_t)m_objects.size();
+		n = (uint32_t)o.m_objects.size();
 		out << n;
-		for (CListOpenGLObjects::const_iterator	it=m_objects.begin();it!=m_objects.end();++it)
+		for (CListOpenGLObjects::const_iterator	it=o.m_objects.begin();it!=o.m_objects.end();++it)
 			out << **it;
 	}
 }
@@ -72,21 +76,21 @@ template <> void CSerializer<CSetOfObjects>::writeToStream(const CSetOfObjects& 
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CSetOfObjects::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CSetOfObjects>::readFromStream(CSetOfObjects &o, mrpt::utils::CStream &in,int version)
 {
 
 	switch(version)
 	{
 	case 0:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
 			uint32_t	n;
 			in >> n;
-			clear();
-			m_objects.resize(n);
+			o.clear();
+			o.m_objects.resize(n);
 
-			for_each(m_objects.begin(),m_objects.end(), ObjectReadFromStream(&in) );
+			for_each(o.m_objects.begin(),o.m_objects.end(), ObjectReadFromStream(&in) );
 
 		} break;
 	default:
@@ -94,7 +98,8 @@ void  CSetOfObjects::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 }
-
+}
+}
 /*---------------------------------------------------------------
 					initializeAllTextures
   ---------------------------------------------------------------*/

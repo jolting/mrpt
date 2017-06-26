@@ -64,15 +64,21 @@ void COpenGLStandardObject::render_dl()	const	{
 	for_each(enabled.begin(),enabled.end(),glDisable);
 #endif
 }
+
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void COpenGLStandardObject::writeToStream(mrpt::utils::CStream &out,int *version) const	{
+template <>
+void CSerializer<COpenGLStandardObject>::writeToStream(const COpenGLStandardObject &o, mrpt::utils::CStream &out,int *version)	{
 	if (version) *version=1;
 	else	{
-		writeToStreamRender(out);
-		out<< type <<vertices<<chunkSize<<enabled;
+		o.writeToStreamRender(out);
+		out<< o.type << o.vertices << o.chunkSize << o.enabled;
 	}
 }
 
@@ -80,17 +86,21 @@ void COpenGLStandardObject::writeToStream(mrpt::utils::CStream &out,int *version
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void COpenGLStandardObject::readFromStream(mrpt::utils::CStream &in,int version)	{
+template <>
+void CSerializer<COpenGLStandardObject>::readFromStream(COpenGLStandardObject &o, mrpt::utils::CStream &in,int version)	{
 	switch (version)	{
 		case 1:	{
-				readFromStreamRender(in);
-				in>>type>>vertices>>chunkSize>>enabled;
+				o.readFromStreamRender(in);
+				in >> o.type >> o.vertices >> o.chunkSize >> o.enabled;
 			}
 			break;
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+
+}
 }
 
 bool COpenGLStandardObject::traceRay(const mrpt::poses::CPose3D &o,double &dist) const	{

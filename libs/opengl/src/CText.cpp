@@ -61,6 +61,10 @@ void   CText::render() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -71,10 +75,10 @@ template <> void CSerializer<CText>::writeToStream(const CText& o, mrpt::utils::
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_str;
-        out << m_fontName;
-        out << (uint32_t)m_fontHeight << (uint32_t)m_fontWidth;
+		o.writeToStreamRender(out);
+		out << o.m_str;
+		out << o.m_fontName;
+		out << (uint32_t)o.m_fontHeight << (uint32_t)o.m_fontWidth;
 
 	}
 }
@@ -83,7 +87,7 @@ template <> void CSerializer<CText>::writeToStream(const CText& o, mrpt::utils::
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CText::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<CText>::readFromStream(CText &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -91,19 +95,22 @@ void  CText::readFromStream(mrpt::utils::CStream &in,int version)
 	case 1:
 		{
 			uint32_t	i;
-			readFromStreamRender(in);
-			in >> m_str;
+			o.readFromStreamRender(in);
+			in >> o.m_str;
 			if (version>=1)
 			{
-				in >> m_fontName;
-				in >> i; m_fontHeight = i;
-				in >> i; m_fontWidth = i;
+				in >> o.m_fontName;
+				in >> i; o.m_fontHeight = i;
+				in >> i; o.m_fontWidth = i;
 			}
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+
+}
 }
 
 void CText::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const

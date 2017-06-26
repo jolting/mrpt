@@ -1484,32 +1484,38 @@ CStream &mrpt::opengl::operator<<(mrpt::utils::CStream& out,const CPolyhedron::T
 	return out;
 }
 
-void CPolyhedron::writeToStream(mrpt::utils::CStream &out,int *version) const	{
+namespace mrpt
+{
+namespace utils
+{
+template <>
+void CSerializer<CPolyhedron>::writeToStream(const CPolyhedron &o, mrpt::utils::CStream &out,int *version)	{
 	if (version) *version=0;
 	else	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 		//version 0
-		out<<mVertices<<mFaces<<mWireframe<<mLineWidth;
+		out<<o.mVertices<<o.mFaces<<o.mWireframe<<o.mLineWidth;
 	}
 }
-
-void CPolyhedron::readFromStream(mrpt::utils::CStream &in,int version)	{
+template <>
+void CSerializer<CPolyhedron>::readFromStream(CPolyhedron &o, mrpt::utils::CStream &in,int version)	{
 	switch (version)	{
 		case 0:
-			readFromStreamRender(in);
-			in>>mVertices>>mFaces>>mWireframe>>mLineWidth;
-			if (!checkConsistence(mVertices,mFaces)) throw std::logic_error("Inconsistent data read from stream");
-			for (vector<TPolyhedronFace>::iterator it=mFaces.begin();it!=mFaces.end();++it)	{
-				if (!setNormal(*it)) throw std::logic_error("Bad face specification");
-				addEdges(*it);
+			o.readFromStreamRender(in);
+			in>>o.mVertices>>o.mFaces>>o.mWireframe>>o.mLineWidth;
+			if (!o.checkConsistence(o.mVertices,o.mFaces)) throw std::logic_error("Inconsistent data read from stream");
+			for (vector<CPolyhedron::TPolyhedronFace>::iterator it=o.mFaces.begin();it!=o.mFaces.end();++it)	{
+				if (!o.setNormal(*it)) throw std::logic_error("Bad face specification");
+				o.addEdges(*it);
 			}
 			break;
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
 }
-
+}
+}
 
 void CPolyhedron::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const
 {

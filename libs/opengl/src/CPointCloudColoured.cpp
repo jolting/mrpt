@@ -108,7 +108,10 @@ void  CPointCloudColoured::render_subset(const bool all, const std::vector<size_
 #endif
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -120,10 +123,10 @@ template <> void CSerializer<CPointCloudColoured>::writeToStream(const CPointClo
 		*version = 2;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_points;
-		out << m_pointSize;
-		out << m_pointSmooth; // Added in v2
+		o.writeToStreamRender(out);
+		out << o.m_points;
+		out << o.m_pointSize;
+		out << o.m_pointSmooth; // Added in v2
 	}
 }
 
@@ -131,39 +134,40 @@ template <> void CSerializer<CPointCloudColoured>::writeToStream(const CPointClo
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPointCloudColoured::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<CPointCloudColoured>::readFromStream(CPointCloudColoured &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 1:
 	case 2:
 		{
-			readFromStreamRender(in);
-			in >> m_points >> m_pointSize;
+			o.readFromStreamRender(in);
+			in >> o.m_points >> o.m_pointSize;
 
 			if (version>=2)
-					in >> m_pointSmooth;
-			else 	m_pointSmooth = false;
+					in >> o.m_pointSmooth;
+			else 	o.m_pointSmooth = false;
 
 		} break;
 	case 0:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
 			// Old vector_serializable:
 			uint32_t n;
 			in >> n;
-			m_points.resize(n);
-			for (uint32_t i=0;i<n;i++) in >> m_points[i];
+			o.m_points.resize(n);
+			for (uint32_t i=0;i<n;i++) in >> o.m_points[i];
 
-			in >> m_pointSize;
+			in >> o.m_pointSize;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	markAllPointsAsNew();
+	o.markAllPointsAsNew();
 }
-
+}
+}
 CStream& mrpt::opengl::operator >> (mrpt::utils::CStream& in,  CPointCloudColoured::TPointColour &o)
 {
 	in >> o.x >> o.y >> o.z >> o.R >> o.G >> o.B;

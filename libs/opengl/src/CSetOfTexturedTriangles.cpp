@@ -69,11 +69,16 @@ void   CSetOfTexturedTriangles::render_texturedobj() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CSetOfTexturedTriangles::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <>
+void  CSerializer<CSetOfTexturedTriangles>::writeToStream(const CSetOfTexturedTriangles &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 2;
@@ -81,15 +86,15 @@ void  CSetOfTexturedTriangles::writeToStream(mrpt::utils::CStream &out, int *ver
 	{
 		uint32_t n;
 
-		writeToStreamRender(out);
-		writeToStreamTexturedObject(out);
+		o.writeToStreamRender(out);
+		o.writeToStreamTexturedObject(out);
 
-		n = (uint32_t)m_triangles.size();
+		n = (uint32_t)o.m_triangles.size();
 
 		out << n;
 
 		for (uint32_t i=0;i<n;i++)
-			m_triangles[i].writeToStream(out);
+			o.m_triangles[i].writeToStream(out);
 	}
 }
 
@@ -105,36 +110,38 @@ template <> void CSerializer<CSetOfTexturedTriangles>::readFromStream(CSetOfText
 	case 1:
 	case 2:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 			if (version>=2)
 			{
-				readFromStreamTexturedObject(in);
+				o.readFromStreamTexturedObject(in);
 			}
 			else
 			{	// Old version.
-				in >> CTexturedObject::m_textureImage;
-				in >> CTexturedObject::m_enableTransparency;
-				if (CTexturedObject::m_enableTransparency)
+				in >> o.m_textureImage;
+				in >> o.m_enableTransparency;
+				if (o.m_enableTransparency)
 				{
-					in >> CTexturedObject::m_textureImageAlpha;
-					assignImage( CTexturedObject::m_textureImage, CTexturedObject::m_textureImageAlpha );
+					in >> o.m_textureImageAlpha;
+					o.assignImage( o.m_textureImage, o.m_textureImageAlpha );
 				}
 				else
-					assignImage( CTexturedObject::m_textureImage );
+					o.assignImage( o.m_textureImage );
 			}
 
 			uint32_t n;
 			in >> n;
-			m_triangles.resize(n);
+			o.m_triangles.resize(n);
 
 			for (uint32_t i=0;i<n;i++)
-				m_triangles[i].readFromStream(in);
+				o.m_triangles[i].readFromStream(in);
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 bool CSetOfTexturedTriangles::traceRay(const mrpt::poses::CPose3D &o, double &dist) const

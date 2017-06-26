@@ -29,9 +29,9 @@ namespace mrpt
 		  *  
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CSphere : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CSphere : public mrpt::utils::CSerializableCRTP<CSphere,CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CSphere )
+			friend mrpt::utils::CSerializer<CSphere>;
 
 		protected:
 			float			m_radius;

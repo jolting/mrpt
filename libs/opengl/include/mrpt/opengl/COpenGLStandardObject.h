@@ -20,8 +20,8 @@ namespace mrpt	{
 		  * Objects of this class represent a generic openGL object without specific geometric properties.
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP COpenGLStandardObject:public CRenderizableDisplayList	{
-			DEFINE_SERIALIZABLE(COpenGLStandardObject)
+		class OPENGL_IMPEXP COpenGLStandardObject:public mrpt::utils::CSerializableCRTP<COpenGLStandardObject, CRenderizableDisplayList>	{
+			friend mrpt::utils::CSerializer<COpenGLStandardObject>;
 		protected:
 			/**
 			  * OpenGL identifier of the object type.

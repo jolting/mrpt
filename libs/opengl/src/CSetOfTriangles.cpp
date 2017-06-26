@@ -103,7 +103,10 @@ static void triangle_readFromStream(mrpt::utils::CStream &i, CSetOfTriangles::TT
 	i.ReadBufferFixEndianness(t.a,3);
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -115,14 +118,14 @@ template <> void CSerializer<CSetOfTriangles>::writeToStream(const CSetOfTriangl
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
-		uint32_t	n = (uint32_t)m_triangles.size();
+		o.writeToStreamRender(out);
+		uint32_t	n = (uint32_t)o.m_triangles.size();
 		out << n;
 		for (size_t i=0;i<n;i++)
-			triangle_writeToStream(out,m_triangles[i]);
+			triangle_writeToStream(out,o.m_triangles[i]);
 
 		// Version 1:
-		out << m_enableTransparency;
+		out << o.m_enableTransparency;
 	}
 }
 
@@ -130,30 +133,33 @@ template <> void CSerializer<CSetOfTriangles>::writeToStream(const CSetOfTriangl
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CSetOfTriangles::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<CSetOfTriangles>::readFromStream(CSetOfTriangles &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 	case 1:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 			uint32_t	n;
 			in >> n;
-			m_triangles.assign(n,TTriangle());
+			o.m_triangles.assign(n,CSetOfTriangles::TTriangle());
 			for (size_t i=0;i<n;i++)
-				triangle_readFromStream(in,m_triangles[i]);
+				triangle_readFromStream(in,o.m_triangles[i]);
 
 			if (version>=1)
-					in >> m_enableTransparency;
-			else	m_enableTransparency = true;
+					in >> o.m_enableTransparency;
+			else	o.m_enableTransparency = true;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	polygonsUpToDate=false;
-	CRenderizableDisplayList::notifyChange();
+	o.polygonsUpToDate=false;
+	o.notifyChange();
+}
+
+}
 }
 
 bool CSetOfTriangles::traceRay(const mrpt::poses::CPose3D &o,double &dist) const	{

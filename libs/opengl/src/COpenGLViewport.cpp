@@ -531,7 +531,10 @@ void  COpenGLViewport::render( const int render_width, const int render_height  
 #endif
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -543,28 +546,28 @@ template <> void CSerializer<COpenGLViewport>::writeToStream(const COpenGLViewpo
 	else
 	{
 		// Save data:
-		out << m_camera
-			<< m_isCloned << m_isClonedCamera << m_clonedViewport
-			<< m_name
-			<< m_isTransparent
-			<< m_borderWidth
-			<< m_view_x << m_view_y << m_view_width << m_view_height;
+		out << o.m_camera
+			<< o.m_isCloned << o.m_isClonedCamera << o.m_clonedViewport
+			<< o.m_name
+			<< o.m_isTransparent
+			<< o.m_borderWidth
+			<< o.m_view_x << o.m_view_y << o.m_view_width << o.m_view_height;
 
 		// Added in v1:
-		out << m_custom_backgb_color << m_background_color.R << m_background_color.G << m_background_color.B << m_background_color.A;
+		out << o.m_custom_backgb_color << o.m_background_color.R << o.m_background_color.G << o.m_background_color.B << o.m_background_color.A;
 
 		// Save objects:
 		uint32_t	n;
-		n = (uint32_t)m_objects.size();
+		n = (uint32_t)o.m_objects.size();
 		out << n;
-		for (CListOpenGLObjects::const_iterator	it=m_objects.begin();it!=m_objects.end();++it)
+		for (CListOpenGLObjects::const_iterator	it=o.m_objects.begin();it!=o.m_objects.end();++it)
 			out << **it;
 
 		// Added in v2: Global OpenGL settings:
-		out << m_OpenGL_enablePolygonNicest;
+		out << o.m_OpenGL_enablePolygonNicest;
 
 		// Added in v3: Lights
-		out << m_lights;
+		out << o.m_lights;
 
 	}
 }
@@ -573,7 +576,8 @@ template <> void CSerializer<COpenGLViewport>::writeToStream(const COpenGLViewpo
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  COpenGLViewport::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<COpenGLViewport>::readFromStream(COpenGLViewport &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -583,35 +587,35 @@ void  COpenGLViewport::readFromStream(mrpt::utils::CStream &in,int version)
 	case 3:
 		{
 			// Load data:
-			in  >> m_camera
-				>> m_isCloned >> m_isClonedCamera >> m_clonedViewport
-				>> m_name
-				>> m_isTransparent
-				>> m_borderWidth
-				>> m_view_x >> m_view_y >> m_view_width >> m_view_height;
+			in  >> o.m_camera
+				>> o.m_isCloned >> o.m_isClonedCamera >> o.m_clonedViewport
+				>> o.m_name
+				>> o.m_isTransparent
+				>> o.m_borderWidth
+				>> o.m_view_x >> o.m_view_y >> o.m_view_width >> o.m_view_height;
 
 			// in v1:
 			if (version>=1)
 			{
-				in >> m_custom_backgb_color >> m_background_color.R >> m_background_color.G >> m_background_color.B >> m_background_color.A;
+				in >> o.m_custom_backgb_color >> o.m_background_color.R >> o.m_background_color.G >> o.m_background_color.B >> o.m_background_color.A;
 			}
 			else
 			{
-				m_custom_backgb_color = false;
+				o.m_custom_backgb_color = false;
 			}
 
 			// Load objects:
 			uint32_t	n;
 			in >> n;
-			clear();
-			m_objects.resize(n);
+			o.clear();
+			o.m_objects.resize(n);
 
-			for_each(m_objects.begin(), m_objects.end(), ObjectReadFromStream(&in) );
+			for_each(o.m_objects.begin(), o.m_objects.end(), ObjectReadFromStream(&in) );
 
 			// Added in v2: Global OpenGL settings:
 			if (version>=2)
 			{
-				in >> m_OpenGL_enablePolygonNicest;
+				in >> o.m_OpenGL_enablePolygonNicest;
 			}
 			else {
 				// Defaults
@@ -619,12 +623,12 @@ void  COpenGLViewport::readFromStream(mrpt::utils::CStream &in,int version)
 
 			// Added in v3: Lights
 			if (version>=3)
-				in >>m_lights;
+				in >>o.m_lights;
 			else
 			{
 				// Default: one light from default direction
-				m_lights.clear();
-				m_lights.push_back( CLight() );
+				o.m_lights.clear();
+				o.m_lights.push_back( CLight() );
 			}
 
 		} break;
@@ -633,7 +637,8 @@ void  COpenGLViewport::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 }
-
+}
+}
 /*---------------------------------------------------------------
 							getByName
   ---------------------------------------------------------------*/

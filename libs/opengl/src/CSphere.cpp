@@ -79,6 +79,11 @@ void   CSphere::render_dl() const
 
 #endif
 }
+
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -89,10 +94,10 @@ template <> void CSerializer<CSphere>::writeToStream(const CSphere& o, mrpt::uti
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_radius;
-		out << (uint32_t)m_nDivsLongitude << (uint32_t)m_nDivsLatitude
-		    << m_keepRadiusIndependentEyeDistance;
+		o.writeToStreamRender(out);
+		out << o.m_radius;
+		out << (uint32_t)o.m_nDivsLongitude << (uint32_t)o.m_nDivsLatitude
+		    << o.m_keepRadiusIndependentEyeDistance;
 	}
 }
 
@@ -100,7 +105,7 @@ template <> void CSerializer<CSphere>::writeToStream(const CSphere& o, mrpt::uti
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CSphere::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<CSphere>::readFromStream(CSphere &o, mrpt::utils::CStream &in,int version)
 {
 
 	switch(version)
@@ -108,21 +113,24 @@ void  CSphere::readFromStream(mrpt::utils::CStream &in,int version)
 	case 0:
 	case 1:
 		{
-			readFromStreamRender(in);
-			in >> m_radius;
+			o.readFromStreamRender(in);
+			in >> o.m_radius;
 			uint32_t	i,j;
 			in >> i >> j;
-			m_nDivsLongitude = i;
-			m_nDivsLatitude = j;
+			o.m_nDivsLongitude = i;
+			o.m_nDivsLatitude = j;
 			if (version>=1)
-					in >> m_keepRadiusIndependentEyeDistance;
-			else	m_keepRadiusIndependentEyeDistance = false;
+					in >> o.m_keepRadiusIndependentEyeDistance;
+			else	o.m_keepRadiusIndependentEyeDistance = false;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+
+}
 }
 
 bool CSphere::traceRay(const mrpt::poses::CPose3D &o,double &dist) const	{
