@@ -307,12 +307,15 @@ void CMesh3D::render_dl() const	{
 #endif
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CMesh3D::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <>void  CSerializer<CMesh3D>::writeToStream(const CMesh3D &o, mrpt::utils::CStream &out, int *version)
 {
 	//********** To do **********
 	THROW_EXCEPTION("not implemented yet!")
@@ -373,7 +376,8 @@ template <> void CSerializer<CMesh3D>::readFromStream(CMesh3D& o, mrpt::utils::C
 	//};
 	//CRenderizableDisplayList::notifyChange();
 }
-
+}
+}
 
 void CMesh3D::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const
 {

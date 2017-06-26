@@ -42,7 +42,7 @@ namespace mrpt
 		class OPENGL_IMPEXP CEllipsoidInverseDepth3D : public CGeneralizedEllipsoidTemplate<3>
 		{
 			typedef CGeneralizedEllipsoidTemplate<3> BASE;
-			DEFINE_SERIALIZABLE( CEllipsoidInverseDepth3D )
+			friend mrpt::utils::CSerializer<CEllipsoidInverseDepth3D>;
 		
 		public:
 			/** The maximum range to be used as a correction when a point of the ellipsoid falls in the negative ranges (default: 1e6) */

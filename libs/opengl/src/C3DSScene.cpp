@@ -527,6 +527,9 @@ THROW_EXCEPTION("This class requires compiling MRPT against lib3ds");
 #endif
 }
 
+}
+}
+
 /*---------------------------------------------------------------
 					initializeAllTextures
   ---------------------------------------------------------------*/

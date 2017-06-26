@@ -175,6 +175,10 @@ void  CMeshFast::assignImageAndZ( const CImage& img, const mrpt::math::CMatrixTe
 	MRPT_END
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -186,17 +190,17 @@ template <> void CSerializer<CMeshFast>::writeToStream(const CMeshFast& o, mrpt:
 		*version = 0;
 	else
 	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 
-		out << m_textureImage;
-		out << m_isImage;
-		out << xMin << xMax << yMin << yMax;
-		out << X << Y << Z;  // We don't need to serialize C, it's computed
-		out << m_enableTransparency;
-		out << m_colorFromZ;
-		out << int16_t(m_colorMap);
-		out << m_pointSize;
-		out << m_pointSmooth;
+		out << o.m_textureImage;
+		out << o.m_isImage;
+		out << o.xMin << o.xMax << o.yMin << o.yMax;
+		out << o.X << o.Y << o.Z;  // We don't need to serialize C, it's computed
+		out << o.m_enableTransparency;
+		out << o.m_colorFromZ;
+		out << int16_t(o.m_colorMap);
+		out << o.m_pointSize;
+		out << o.m_pointSmooth;
 	}
 }
 
@@ -204,44 +208,47 @@ template <> void CSerializer<CMeshFast>::writeToStream(const CMeshFast& o, mrpt:
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CMeshFast::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CMeshFast>::readFromStream(CMeshFast &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 		case 0:
 			{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
-			in >> m_textureImage;
-			in >> m_isImage;
+			in >> o.m_textureImage;
+			in >> o.m_isImage;
 
-			in >> xMin;
-			in >> xMax;
-			in >> yMin;
-			in >> yMax;
+			in >> o.xMin;
+			in >> o.xMax;
+			in >> o.yMin;
+			in >> o.yMax;
 
-			in >> X >> Y >> Z;
-			in >> m_enableTransparency;
-			in >> m_colorFromZ;
+			in >> o.X >> o.Y >> o.Z;
+			in >> o.m_enableTransparency;
+			in >> o.m_colorFromZ;
 
 			int16_t	i;
 			in >> i;
-			m_colorMap =  TColormap(i);
-			in >> m_pointSize;
-			in >> m_pointSmooth;
-			m_modified_Z = true;
+			o.m_colorMap =  TColormap(i);
+			in >> o.m_pointSize;
+			in >> o.m_pointSmooth;
+			o.m_modified_Z = true;
 			}
 
-			pointsUpToDate = false;
+			o.pointsUpToDate = false;
 			break;
 
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
 }
 
+}
+}
 
 void CMeshFast::updateColorsMatrix() const
 {

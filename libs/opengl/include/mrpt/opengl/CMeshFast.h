@@ -36,9 +36,9 @@ namespace mrpt
 		  *
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CMeshFast : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CMeshFast : public mrpt::utils::CSerializableCRTP<CMeshFast, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CMeshFast )
+			friend mrpt::utils::CSerializer<CMeshFast>;
 
 		protected:
 			mrpt::utils::CImage			m_textureImage;

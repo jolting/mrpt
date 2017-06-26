@@ -24,7 +24,7 @@ namespace opengl	{
 	  * \ingroup mrpt_opengl_grp
 	  */
 	class OPENGL_IMPEXP CGeneralizedCylinder:public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CGeneralizedCylinder)
+		friend mrpt::utils::CSerializer<CGeneralizedCylinder>;
 	public:
 		/**
 		  * Auxiliary struct holding any quadrilateral, represented by foour points.

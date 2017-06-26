@@ -35,9 +35,9 @@ namespace mrpt
 		  *
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CMesh : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CMesh : public mrpt::utils::CSerializableCRTP<CMesh, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CMesh )
+			friend mrpt::utils::CSerializer<CMesh>;
 		public:
 			struct TTriangleVertexIndices { size_t vind[3]; };
 		protected:

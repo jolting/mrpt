@@ -26,11 +26,11 @@ namespace mrpt
 		  *  \sa opengl::COpenGLScene
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CCamera : public CRenderizable
+		class OPENGL_IMPEXP CCamera : public mrpt::utils::CSerializableCRTP<CCamera, CRenderizable>
 		{
 			friend class COpenGLViewport;
 
-			DEFINE_SERIALIZABLE( CCamera )
+			friend mrpt::utils::CSerializer<CCamera>;
 		protected:
 
 			float	m_pointingX,m_pointingY,m_pointingZ;

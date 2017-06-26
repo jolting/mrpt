@@ -59,16 +59,21 @@ void CCylinder::render_dl() const	{
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void CCylinder::writeToStream(mrpt::utils::CStream &out,int *version) const	{
+template <>
+void CSerializer<CCylinder>::writeToStream(const CCylinder &o, mrpt::utils::CStream &out,int *version) {
 	if (version) *version=0;
 	else	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 		//version 0
-		out<<mBaseRadius<<mTopRadius<<mHeight<<mSlices<<mStacks<<mHasBottomBase<<mHasTopBase;
+		out<<o.mBaseRadius<<o.mTopRadius<<o.mHeight<<o.mSlices<<o.mStacks<<o.mHasBottomBase<<o.mHasTopBase;
 	}
 }
 
@@ -76,16 +81,20 @@ void CCylinder::writeToStream(mrpt::utils::CStream &out,int *version) const	{
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void CCylinder::readFromStream(mrpt::utils::CStream &in,int version)	{
+template <>
+void CSerializer<CCylinder>::readFromStream(CCylinder &o, mrpt::utils::CStream &in,int version)	{
 	switch (version)	{
 		case 0:
-			readFromStreamRender(in);
-			in>>mBaseRadius>>mTopRadius>>mHeight>>mSlices>>mStacks>>mHasBottomBase>>mHasTopBase;
+			o.readFromStreamRender(in);
+			in>>o.mBaseRadius>>o.mTopRadius>>o.mHeight>>o.mSlices>>o.mStacks>>o.mHasBottomBase>>o.mHasTopBase;
 			break;
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+
+}
 }
 
 bool solveEqn(double a,double b,double c,double &t)	{	//Actually, the b from the quadratic equation is the DOUBLE of this. But this way, operations are simpler.

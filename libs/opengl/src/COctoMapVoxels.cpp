@@ -254,8 +254,6 @@ namespace mrpt{
 			return in;
 		}
 
-}
-}
 
 
 /*---------------------------------------------------------------
@@ -267,15 +265,15 @@ template <> void CSerializer<COctoMapVoxels>::writeToStream(const COctoMapVoxels
 	if (version) *version=2;
 	else
 	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 
-		out << m_voxel_sets
-			<< m_grid_cubes
-			<< m_bb_min << m_bb_max
-			<< m_enable_lighting << m_showVoxelsAsPoints <<	m_showVoxelsAsPointsSize
-			<< m_show_grids << m_grid_width << m_grid_color
-			<< m_enable_cube_transparency // added in v1
-			<< uint32_t(m_visual_mode); // added in v2
+		out << o.m_voxel_sets
+			<< o.m_grid_cubes
+			<< o.m_bb_min << o.m_bb_max
+			<< o.m_enable_lighting << o.m_showVoxelsAsPoints <<	o.m_showVoxelsAsPointsSize
+			<< o.m_show_grids << o.m_grid_width << o.m_grid_color
+			<< o.m_enable_cube_transparency // added in v1
+			<< uint32_t(o.m_visual_mode); // added in v2
 	}
 }
 
@@ -283,7 +281,7 @@ template <> void CSerializer<COctoMapVoxels>::writeToStream(const COctoMapVoxels
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  COctoMapVoxels::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<COctoMapVoxels>::readFromStream(COctoMapVoxels &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -291,25 +289,25 @@ void  COctoMapVoxels::readFromStream(mrpt::utils::CStream &in,int version)
 	case 1:
 	case 2:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
-			in  >> m_voxel_sets
-				>> m_grid_cubes
-				>> m_bb_min >> m_bb_max
-				>> m_enable_lighting >> m_showVoxelsAsPoints >> m_showVoxelsAsPointsSize
-				>> m_show_grids >> m_grid_width >> m_grid_color;
+			in  >> o.m_voxel_sets
+				>> o.m_grid_cubes
+				>> o.m_bb_min >> o.m_bb_max
+				>> o.m_enable_lighting >> o.m_showVoxelsAsPoints >> o.m_showVoxelsAsPointsSize
+				>> o.m_show_grids >> o.m_grid_width >> o.m_grid_color;
 
 			if (version>=1)
-				in >> m_enable_cube_transparency;
-			else m_enable_cube_transparency = false;
+				in >> o.m_enable_cube_transparency;
+			else o.m_enable_cube_transparency = false;
 
 			if (version>=2)
 			{
 				uint32_t i;
 				in >> i;
-				m_visual_mode = static_cast<COctoMapVoxels::visualization_mode_t>(i);
+				o.m_visual_mode = static_cast<COctoMapVoxels::visualization_mode_t>(i);
 			}
-			else m_visual_mode = COctoMapVoxels::COLOR_FROM_OCCUPANCY;
+			else o.m_visual_mode = COctoMapVoxels::COLOR_FROM_OCCUPANCY;
 		}
 		break;
 	default:
@@ -317,7 +315,9 @@ void  COctoMapVoxels::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 void COctoMapVoxels::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const

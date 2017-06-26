@@ -39,7 +39,7 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CAssimpModel : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CAssimpModel )
+			friend mrpt::utils::CSerializer<CAssimpModel>;
 
 		public:
 			void  render_dl() const override; //!< Render child objects

@@ -29,8 +29,8 @@ namespace opengl	{
 	  *  
 	  * \ingroup mrpt_opengl_grp
 	  */
-	class OPENGL_IMPEXP CColorBar :public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CColorBar)
+	class OPENGL_IMPEXP CColorBar : public mrpt::utils::CSerializableCRTP<CColorBar, CRenderizableDisplayList>	{
+		friend mrpt::utils::CSerializer<CColorBar>;
 
 	protected:
 		mrpt::utils::TColormap m_colormap;

@@ -341,6 +341,9 @@ void  CMesh::assignImageAndZ( const CImage& img, const mrpt::math::CMatrixTempla
 	MRPT_END
 }
 
+namespace mrpt {
+namespace utils {
+
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -352,17 +355,17 @@ template <> void CSerializer<CMesh>::writeToStream(const CMesh& o, mrpt::utils::
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 
 		// Version 0:
-		out << m_textureImage;
-		out << xMin << xMax << yMin << yMax;
-		out << Z << U << V << mask;  // We don't need to serialize C, it's computed
-		out << m_enableTransparency;
-		out << m_colorFromZ;
+		out << o.m_textureImage;
+		out << o.xMin << o.xMax << o.yMin << o.yMax;
+		out << o.Z << o.U << o.V << o.mask;  // We don't need to serialize C, it's computed
+		out << o.m_enableTransparency;
+		out << o.m_colorFromZ;
 		// new in v1
-		out << m_isWireFrame;
-		out << int16_t(m_colorMap);
+		out << o.m_isWireFrame;
+		out << int16_t(o.m_colorMap);
 	}
 }
 
@@ -370,47 +373,49 @@ template <> void CSerializer<CMesh>::writeToStream(const CMesh& o, mrpt::utils::
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CMesh::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CMesh>::readFromStream(CMesh &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 	case 1:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
-			in >> m_textureImage;
+			in >> o.m_textureImage;
 
-			in >> xMin;
-			in >> xMax;
-			in >> yMin;
-			in >> yMax;
+			in >> o.xMin;
+			in >> o.xMax;
+			in >> o.yMin;
+			in >> o.yMax;
 
-			in >> Z >> U >> V >> mask;
-			in >> m_enableTransparency;
-			in >> m_colorFromZ;
+			in >> o.Z >> o.U >> o.V >> o.mask;
+			in >> o.m_enableTransparency;
+			in >> o.m_colorFromZ;
 
 			if (version>=1)
 			{
-				in >> m_isWireFrame;
+				in >> o.m_isWireFrame;
 				int16_t	i;
 				in >> i;
-				m_colorMap =  TColormap(i);
+				o.m_colorMap =  TColormap(i);
 			}
-			else	m_isWireFrame = false;
+			else	o.m_isWireFrame = false;
 
-			m_modified_Z = true;
+			o.m_modified_Z = true;
 		}
-		trianglesUpToDate=false;
+		o.trianglesUpToDate=false;
 		break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	trianglesUpToDate=false;
-	CRenderizableDisplayList::notifyChange();
+	o.trianglesUpToDate=false;
+	o.notifyChange();
 }
-
+}
+}
 
 void CMesh::updateColorsMatrix() const
 {	

@@ -47,7 +47,7 @@ namespace mrpt
 		struct TTypeName
 		{
 			static std::string get() {
-				return std::string( T::classinfo->className );
+				return std::string( T::classinfo()->className );
 			}
 		};
 

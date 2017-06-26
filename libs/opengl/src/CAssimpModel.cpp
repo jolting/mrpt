@@ -82,6 +82,10 @@ void   CAssimpModel::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -92,9 +96,9 @@ template <> void CSerializer<CAssimpModel>::writeToStream(const CAssimpModel& o,
 		*version = 0;
 	else
 	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 
-		const bool empty = m_assimp_scene->scene!=nullptr;
+		const bool empty = o.m_assimp_scene->scene!=nullptr;
 		out << empty;
 
 		if (!empty)
@@ -114,7 +118,8 @@ template <> void CSerializer<CAssimpModel>::writeToStream(const CAssimpModel& o,
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CAssimpModel::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CAssimpModel>::readFromStream(CAssimpModel &o, mrpt::utils::CStream &in,int version)
 {
 	THROW_EXCEPTION("MRPT can't serialize Assimp objects yet!")
 
@@ -122,15 +127,18 @@ void  CAssimpModel::readFromStream(mrpt::utils::CStream &in,int version)
 	{
 	case 0:
 		{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
-			clear();
+			o.clear();
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+
+}
 }
 
 CAssimpModel::CAssimpModel() :

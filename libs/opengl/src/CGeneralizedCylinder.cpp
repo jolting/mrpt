@@ -123,35 +123,41 @@ void CGeneralizedCylinder::updateMesh() const	{
 	polysUpToDate=false;
 }
 
-void CGeneralizedCylinder::writeToStream(mrpt::utils::CStream &out,int *version) const	{
+namespace mrpt {
+namespace utils {
+template <>
+void CSerializer<CGeneralizedCylinder>::writeToStream(const CGeneralizedCylinder &o, mrpt::utils::CStream &out,int *version)	{
 	if (version) *version=1;
 	else	{
-		writeToStreamRender(out);
-		out<<axis<<generatrix;	//In version 0, axis was a vector<TPoint3D>. In version 1, it is a vector<CPose3D>.
+		o.writeToStreamRender(out);
+		out<<o.axis<<o.generatrix;	//In version 0, axis was a vector<TPoint3D>. In version 1, it is a vector<CPose3D>.
 	}
 }
 
-void CGeneralizedCylinder::readFromStream(mrpt::utils::CStream &in,int version)	{
+template <>
+void CSerializer<CGeneralizedCylinder>::readFromStream(CGeneralizedCylinder &o, mrpt::utils::CStream &in,int version)	{
 	switch (version)	{
 		case 0:	{
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 			vector<TPoint3D> a;
-			in>>a>>generatrix;
-			generatePoses(a,axis);
-			meshUpToDate=false;
-			polysUpToDate=false;
+			in>>a>>o.generatrix;
+			o.generatePoses(a,o.axis);
+			o.meshUpToDate=false;
+			o.polysUpToDate=false;
 			break;
 		}	case 1:
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 			//version 0
-			in>>axis>>generatrix;
-			meshUpToDate=false;
-			polysUpToDate=false;
+			in>>o.axis>>o.generatrix;
+			o.meshUpToDate=false;
+			o.polysUpToDate=false;
 			break;
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 void generatePolygon(CPolyhedron::Ptr &poly,const vector<TPoint3D> &profile,const CPose3D &pose)	{

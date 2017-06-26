@@ -26,7 +26,7 @@ namespace opengl	{
 	  * \ingroup mrpt_opengl_grp
 	  */
 	class OPENGL_IMPEXP CCylinder:public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CCylinder)
+		friend mrpt::utils::CSerializer<CCylinder>;
 	protected:
 		/**
 		  * Cylinder's radii. If mBaseRadius==mTopRadius, then the object is an actual cylinder. If both differ, it's a truncated cone. If one of the radii is zero, the object is a cone.

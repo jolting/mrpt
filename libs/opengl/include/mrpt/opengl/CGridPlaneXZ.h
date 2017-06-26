@@ -30,9 +30,9 @@ namespace mrpt
 		  *  
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CGridPlaneXZ : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CGridPlaneXZ : public mrpt::utils::CSerializableCRTP<CGridPlaneXZ, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CGridPlaneXZ )
+			friend mrpt::utils::CSerializer<CGridPlaneXZ>;
 
 		protected:
 			float	m_xMin, m_xMax;

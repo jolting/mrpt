@@ -103,6 +103,10 @@ void   CGridPlaneXZ::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -114,11 +118,11 @@ template <> void CSerializer<CGridPlaneXZ>::writeToStream(const CGridPlaneXZ& o,
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_xMin << m_xMax;
-		out << m_zMin << m_zMax << m_plane_y;
-		out << m_frequency;
-		out << m_lineWidth << m_antiAliasing; // v1
+		o.writeToStreamRender(out);
+		out << o.m_xMin << o.m_xMax;
+		out << o.m_zMin << o.m_zMax << o.m_plane_y;
+		out << o.m_frequency;
+		out << o.m_lineWidth << o.m_antiAliasing; // v1
 	}
 }
 
@@ -126,7 +130,8 @@ template <> void CSerializer<CGridPlaneXZ>::writeToStream(const CGridPlaneXZ& o,
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CGridPlaneXZ::readFromStream(mrpt::utils::CStream &in,int version)
+template<>
+void  CSerializer<CGridPlaneXZ>::readFromStream(CGridPlaneXZ &o, mrpt::utils::CStream &in,int version)
 {
 
 	switch(version)
@@ -134,23 +139,25 @@ void  CGridPlaneXZ::readFromStream(mrpt::utils::CStream &in,int version)
 	case 0:
 	case 1:
 		{
-			readFromStreamRender(in);
-			in >> m_xMin >> m_xMax;
-			in >> m_zMin >> m_zMax >> m_plane_y;
-			in >> m_frequency;
+			o.readFromStreamRender(in);
+			in >> o.m_xMin >> o.m_xMax;
+			in >> o.m_zMin >> o.m_zMax >> o.m_plane_y;
+			in >> o.m_frequency;
 			if (version>=1)
-				in >> m_lineWidth >> m_antiAliasing;
+				in >> o.m_lineWidth >> o.m_antiAliasing;
 			else
 			{
-				m_lineWidth=1.0f;
-				m_antiAliasing=true;
+				o.m_lineWidth=1.0f;
+				o.m_antiAliasing=true;
 			}
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 void CGridPlaneXZ::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const

@@ -157,21 +157,26 @@ void CColorBar::render_dl() const	{
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void CColorBar::writeToStream(mrpt::utils::CStream &out,int *version) const	{
+template <>
+void CSerializer<CColorBar>::writeToStream(const CColorBar &o, mrpt::utils::CStream &out,int *version) {
 	if (version) *version=0;
 	else	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 		//version 0
 		out <<
-			uint32_t(m_colormap) <<
-			m_min_col << m_max_col <<
-			m_min_value << m_max_value <<
-			m_label_format <<
-			m_label_font_size << m_disable_depth_test;
+			uint32_t(o.m_colormap) <<
+			o.m_min_col << o.m_max_col <<
+			o.m_min_value << o.m_max_value <<
+			o.m_label_format <<
+			o.m_label_font_size << o.m_disable_depth_test;
 	}
 }
 
@@ -179,25 +184,28 @@ void CColorBar::writeToStream(mrpt::utils::CStream &out,int *version) const	{
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void CColorBar::readFromStream(mrpt::utils::CStream &in,int version)	{
+template <>
+void CSerializer<CColorBar>::readFromStream(CColorBar &o, mrpt::utils::CStream &in,int version) {
 	switch (version)	{
 		case 0:
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 
-			in.ReadAsAndCastTo<uint32_t, mrpt::utils::TColormap>(m_colormap);
+			in.ReadAsAndCastTo<uint32_t, mrpt::utils::TColormap>(o.m_colormap);
 			in >>
-				m_min_col >> m_max_col >>
-				m_min_value >> m_max_value >>
-				m_label_format >>
-				m_label_font_size >>
-				m_disable_depth_test;
+				o.m_min_col >> o.m_max_col >>
+				o.m_min_value >> o.m_max_value >>
+				o.m_label_format >>
+				o.m_label_font_size >>
+				o.m_disable_depth_test;
 			break;
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
 }
 
+}
+}
 
 void CColorBar::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const
 {

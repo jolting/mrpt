@@ -120,6 +120,10 @@ void  COpenGLScene::render() const
 	MRPT_END
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -144,7 +148,7 @@ template <> void CSerializer<COpenGLScene>::writeToStream(const COpenGLScene& o,
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  COpenGLScene::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<COpenGLScene>::readFromStream(mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -187,6 +191,8 @@ void  COpenGLScene::readFromStream(mrpt::utils::CStream &in,int version)
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+}
 }
 
 /*---------------------------------------------------------------

@@ -37,7 +37,7 @@ namespace mrpt
 		class OPENGL_IMPEXP CEllipsoidRangeBearing2D : public CGeneralizedEllipsoidTemplate<2>
 		{
 			typedef CGeneralizedEllipsoidTemplate<2> BASE;
-			DEFINE_SERIALIZABLE( CEllipsoidRangeBearing2D )
+			friend mrpt::utils::CSerializer<CEllipsoidRangeBearing2D>;
 		protected:
 			/** To be implemented by derived classes: maps, using some arbitrary space transformation, a list of points 
 			  *  defining an ellipsoid in parameter space into their corresponding points in 2D/3D space.

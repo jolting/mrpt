@@ -31,7 +31,7 @@ namespace mrpt
 		  */
 		class OPENGL_IMPEXP CDisk : public CRenderizableDisplayList
 		{
-			DEFINE_SERIALIZABLE( CDisk )
+			friend mrpt::utils::CSerializer<CDisk>;
 
 		protected:
 			float		m_radiusIn,m_radiusOut;

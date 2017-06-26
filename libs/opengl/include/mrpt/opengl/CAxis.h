@@ -29,9 +29,9 @@ namespace mrpt
 		  *  
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CAxis : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CAxis : public mrpt::utils::CSerializableCRTP<CAxis, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CAxis )
+			friend mrpt::utils::CSerializer<CAxis>;
 		protected:
 			float	m_xmin,m_ymin,m_zmin;
 			float	m_xmax,m_ymax,m_zmax;

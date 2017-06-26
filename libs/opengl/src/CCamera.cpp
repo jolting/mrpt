@@ -36,6 +36,10 @@ CCamera::CCamera()	:
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -47,10 +51,10 @@ template <> void CSerializer<CCamera>::writeToStream(const CCamera& o, mrpt::uti
 	else
 	{
 		// Save data:
-		out << m_pointingX << m_pointingY << m_pointingZ
-			<< m_distanceZoom
-			<< m_azimuthDeg << m_elevationDeg
-			<< m_projectiveModel << m_projectiveFOVdeg;
+		out << o.m_pointingX << o.m_pointingY << o.m_pointingZ
+			<< o.m_distanceZoom
+			<< o.m_azimuthDeg << o.m_elevationDeg
+			<< o.m_projectiveModel << o.m_projectiveFOVdeg;
 	}
 }
 
@@ -58,24 +62,25 @@ template <> void CSerializer<CCamera>::writeToStream(const CCamera& o, mrpt::uti
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CCamera::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CCamera>::readFromStream(CCamera &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 1:
 		{
 			// Load data:
-			in  >> m_pointingX >> m_pointingY >> m_pointingZ
-				>> m_distanceZoom
-				>> m_azimuthDeg >> m_elevationDeg
-                >> m_projectiveModel >> m_projectiveFOVdeg;
+			in  >> o.m_pointingX >> o.m_pointingY >> o.m_pointingZ
+				>> o.m_distanceZoom
+				>> o.m_azimuthDeg >> o.m_elevationDeg
+                >> o.m_projectiveModel >> o.m_projectiveFOVdeg;
 		}
 		break;
 	case 0:
 		{
-			in  >> m_pointingX >> m_pointingY >> m_pointingZ
-				>> m_distanceZoom
-				>> m_azimuthDeg >> m_elevationDeg;
+			in  >> o.m_pointingX >> o.m_pointingY >> o.m_pointingZ
+				>> o.m_distanceZoom
+				>> o.m_azimuthDeg >> o.m_elevationDeg;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
@@ -83,6 +88,8 @@ void  CCamera::readFromStream(mrpt::utils::CStream &in,int version)
 	};
 }
 
+}
+}
 
 /** In this class, returns a fixed box (max,max,max), (-max,-max,-max). */
 void CCamera::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const

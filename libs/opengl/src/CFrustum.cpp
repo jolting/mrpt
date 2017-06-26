@@ -132,21 +132,26 @@ CFrustum::CFrustum(float near_distance, float far_distance, float horz_FOV_degre
 }
 
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void CFrustum::writeToStream(mrpt::utils::CStream &out,int *version) const	{
+template <>
+void CSerializer<CFrustum>::writeToStream(const CFrustum &o, mrpt::utils::CStream &out,int *version)	{
 	if (version) *version=0;
 	else	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 		//version 0
-		out << m_min_distance << m_max_distance
-		    << m_fov_horz_left << m_fov_horz_right
-		    << m_fov_vert_down << m_fov_vert_up
-			<< m_draw_lines << m_draw_planes
-		    << m_lineWidth
-		    << m_planes_color.R << m_planes_color.G << m_planes_color.B << m_planes_color.A;
+		out << o.m_min_distance << o.m_max_distance
+		    << o.m_fov_horz_left << o.m_fov_horz_right
+		    << o.m_fov_vert_down << o.m_fov_vert_up
+			<< o.m_draw_lines << o.m_draw_planes
+		    << o.m_lineWidth
+		    << o.m_planes_color.R << o.m_planes_color.G << o.m_planes_color.B << o.m_planes_color.A;
 	}
 }
 
@@ -154,23 +159,25 @@ void CFrustum::writeToStream(mrpt::utils::CStream &out,int *version) const	{
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void CFrustum::readFromStream(mrpt::utils::CStream &in,int version)	{
+template <>
+void CSerializer<CFrustum>::readFromStream(CFrustum &o, mrpt::utils::CStream &in,int version)	{
 	switch (version)	{
 		case 0:
-			readFromStreamRender(in);
-			in  >> m_min_distance >> m_max_distance
-				>> m_fov_horz_left >> m_fov_horz_right
-				>> m_fov_vert_down >> m_fov_vert_up
-				>> m_draw_lines >> m_draw_planes
-				>> m_lineWidth
-				>> m_planes_color.R >> m_planes_color.G >> m_planes_color.B >> m_planes_color.A;
+			o.readFromStreamRender(in);
+			in  >> o.m_min_distance >> o.m_max_distance
+				>> o.m_fov_horz_left >> o.m_fov_horz_right
+				>> o.m_fov_vert_down >> o.m_fov_vert_up
+				>> o.m_draw_lines >> o.m_draw_planes
+				>> o.m_lineWidth
+				>> o.m_planes_color.R >> o.m_planes_color.G >> o.m_planes_color.B >> o.m_planes_color.A;
 			break;
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
 }
-
+}
+}
 
 bool CFrustum::traceRay(const mrpt::poses::CPose3D &o,double &dist) const
 {

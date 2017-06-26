@@ -29,9 +29,9 @@ namespace mrpt
 		  * \ingroup mrpt_opengl_grp
 		  *  
 		  */
-		class OPENGL_IMPEXP CArrow : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CArrow : public mrpt::utils::CSerializableCRTP<CArrow, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CArrow )
+			friend mrpt::utils::CSerializer<CArrow>;
 		protected:
 			mutable float	m_x0,m_y0,m_z0;
 			mutable float	m_x1,m_y1,m_z1;

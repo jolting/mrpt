@@ -195,21 +195,25 @@ void CBox::render_dl() const	{
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void CBox::writeToStream(mrpt::utils::CStream &out,int *version) const	{
+template <> void CSerializer<CBox>::writeToStream(const CBox &o, mrpt::utils::CStream &out,int *version) {
 	if (version) *version=1;
-	else	{
-		writeToStreamRender(out);
+	else {
+		o.writeToStreamRender(out);
 		//version 0
 		out <<
-			m_corner_min.x << m_corner_min.y << m_corner_min.z <<
-			m_corner_max.x << m_corner_max.y << m_corner_max.z <<
-			m_wireframe << m_lineWidth;
+			o.m_corner_min.x << o.m_corner_min.y << o.m_corner_min.z <<
+			o.m_corner_max.x << o.m_corner_max.y << o.m_corner_max.z <<
+			o.m_wireframe << o.m_lineWidth;
 		// Version 1:
-		out << m_draw_border << m_solidborder_color;
+		out << o.m_draw_border << o.m_solidborder_color;
 	}
 }
 
@@ -217,28 +221,30 @@ void CBox::writeToStream(mrpt::utils::CStream &out,int *version) const	{
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void CBox::readFromStream(mrpt::utils::CStream &in,int version)	{
+template <> void CSerializer<CBox>::readFromStream(CBox &o, mrpt::utils::CStream &in,int version)	{
 	switch (version)	{
 		case 0:
 		case 1:
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 			in >>
-			m_corner_min.x >> m_corner_min.y >> m_corner_min.z >>
-			m_corner_max.x >> m_corner_max.y >> m_corner_max.z >>
-			m_wireframe >> m_lineWidth;
+			o.m_corner_min.x >> o.m_corner_min.y >> o.m_corner_min.z >>
+			o.m_corner_max.x >> o.m_corner_max.y >> o.m_corner_max.z >>
+			o.m_wireframe >> o.m_lineWidth;
 			// Version 1:
 			if (version>=1)
-				in >> m_draw_border >> m_solidborder_color;
+				in >> o.m_draw_border >> o.m_solidborder_color;
 			else
 			{
-				m_draw_border = false;
+				o.m_draw_border = false;
 			}
 
 			break;
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 void CBox::setBoxCorners(const mrpt::math::TPoint3D &corner1, const mrpt::math::TPoint3D &corner2)

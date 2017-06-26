@@ -54,9 +54,9 @@ namespace mrpt
 		  *  \sa opengl::COpenGLScene
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP COctoMapVoxels : public CRenderizableDisplayList
+		class OPENGL_IMPEXP COctoMapVoxels : public mrpt::utils::CSerializableCRTP<COctoMapVoxels, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( COctoMapVoxels )
+			friend mrpt::utils::CSerializer<COctoMapVoxels>;
 		public:
 
 			/** The different coloring schemes, which modulate the generic mrpt::opengl::CRenderizable object color. Set with setVisualizationMode() */

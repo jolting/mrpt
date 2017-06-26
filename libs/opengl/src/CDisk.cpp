@@ -51,6 +51,10 @@ void   CDisk::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -62,9 +66,9 @@ template <> void CSerializer<CDisk>::writeToStream(const CDisk& o, mrpt::utils::
 		*version = 0;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_radiusIn << m_radiusOut;
-		out << m_nSlices << m_nLoops;
+		o.writeToStreamRender(out);
+		out << o.m_radiusIn << o.m_radiusOut;
+		out << o.m_nSlices << o.m_nLoops;
 	}
 }
 
@@ -72,22 +76,26 @@ template <> void CSerializer<CDisk>::writeToStream(const CDisk& o, mrpt::utils::
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CDisk::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void CSerializer<CDisk>::readFromStream(CDisk &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			readFromStreamRender(in);
-			in >> m_radiusIn >> m_radiusOut;
-			in >> m_nSlices;
-			in >> m_nLoops;
+			o.readFromStreamRender(in);
+			in >> o.m_radiusIn >> o.m_radiusOut;
+			in >> o.m_nSlices;
+			in >> o.m_nLoops;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+
+}
 }
 
 bool CDisk::traceRay(const mrpt::poses::CPose3D &o,double &dist) const	{

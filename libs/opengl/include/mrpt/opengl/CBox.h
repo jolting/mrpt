@@ -32,8 +32,8 @@ namespace opengl	{
 	  *  
 	  * \ingroup mrpt_opengl_grp
 	  */
-	class OPENGL_IMPEXP CBox :public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CBox)
+	class OPENGL_IMPEXP CBox :public mrpt::utils::CSerializableCRTP<CBox, CRenderizableDisplayList>	{
+		friend mrpt::utils::CSerializer<CBox>;
 
 	protected:
 		mrpt::math::TPoint3D  	m_corner_min,m_corner_max;		//!< Corners coordinates

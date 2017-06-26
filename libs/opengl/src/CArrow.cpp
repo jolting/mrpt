@@ -173,6 +173,10 @@ void   CArrow::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -183,11 +187,11 @@ template <> void CSerializer<CArrow>::writeToStream(const CArrow& o, mrpt::utils
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_x0 << m_y0 << m_z0;
-		out << m_x1 << m_y1 << m_z1;
-		out << m_headRatio << m_smallRadius << m_largeRadius;
-		out << m_arrow_roll << m_arrow_pitch << m_arrow_yaw;
+		o.writeToStreamRender(out);
+		out << o.m_x0 << o.m_y0 << o.m_z0;
+		out << o.m_x1 << o.m_y1 << o.m_z1;
+		out << o.m_headRatio << o.m_smallRadius << o.m_largeRadius;
+		out << o.m_arrow_roll << o.m_arrow_pitch << o.m_arrow_yaw;
 
 	}
 }
@@ -196,34 +200,37 @@ template <> void CSerializer<CArrow>::writeToStream(const CArrow& o, mrpt::utils
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CArrow::readFromStream(mrpt::utils::CStream &in,int version)
+template <>
+void  CSerializer<CArrow>::readFromStream(CArrow &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			readFromStreamRender(in);
-			in >> m_x0 >> m_y0 >> m_z0;
-			in >> m_x1 >> m_y1 >> m_z1;
-			in >> m_headRatio >> m_smallRadius >> m_largeRadius;
+			o.readFromStreamRender(in);
+			in >> o.m_x0 >> o.m_y0 >> o.m_z0;
+			in >> o.m_x1 >> o.m_y1 >> o.m_z1;
+			in >> o.m_headRatio >> o.m_smallRadius >> o.m_largeRadius;
 		}
         break;
 	case 1:
 		{
-			readFromStreamRender(in);
-			in >> m_x0 >> m_y0 >> m_z0;
-			in >> m_x1 >> m_y1 >> m_z1;
-			in >> m_headRatio >> m_smallRadius >> m_largeRadius;
-			in >> m_arrow_roll >> m_arrow_pitch >> m_arrow_yaw;
+			o.readFromStreamRender(in);
+			in >> o.m_x0 >> o.m_y0 >> o.m_z0;
+			in >> o.m_x1 >> o.m_y1 >> o.m_z1;
+			in >> o.m_headRatio >> o.m_smallRadius >> o.m_largeRadius;
+			in >> o.m_arrow_roll >> o.m_arrow_pitch >> o.m_arrow_yaw;
 		}
 		break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
 }
 
+}
+}
 
 void CArrow::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const
 {

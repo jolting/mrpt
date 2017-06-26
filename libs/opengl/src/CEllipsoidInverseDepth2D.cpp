@@ -25,7 +25,7 @@ IMPLEMENTS_SERIALIZABLE( CEllipsoidInverseDepth2D, CRenderizableDisplayList, mrp
 /*---------------------------------------------------------------
 							transformFromParameterSpace
   ---------------------------------------------------------------*/
-  void CEllipsoidInverseDepth2D::transformFromParameterSpace(
+void CEllipsoidInverseDepth2D::transformFromParameterSpace(
 	const std::vector<BASE::array_parameter_t> &in_pts,
 	std::vector<BASE::array_point_t> & out_pts) const
 {
@@ -46,7 +46,10 @@ IMPLEMENTS_SERIALIZABLE( CEllipsoidInverseDepth2D, CRenderizableDisplayList, mrp
 	MRPT_END
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -57,10 +60,10 @@ template <> void CSerializer<CEllipsoidInverseDepth2D>::writeToStream(const CEll
 		*version = 0;
 	else
 	{
-		writeToStreamRender(out);
-		BASE::thisclass_writeToStream(out);
+		o.writeToStreamRender(out);
+		o.thisclass_writeToStream(out);
 
-		out << m_underflowMaxRange;
+		out << o.m_underflowMaxRange;
 	}
 }
 
@@ -68,19 +71,21 @@ template <> void CSerializer<CEllipsoidInverseDepth2D>::writeToStream(const CEll
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CEllipsoidInverseDepth2D::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CEllipsoidInverseDepth2D>::readFromStream(CEllipsoidInverseDepth2D &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			readFromStreamRender(in);
-			BASE::thisclass_readFromStream(in);
+			o.readFromStreamRender(in);
+			o.thisclass_readFromStream(in);
 
-			in >> m_underflowMaxRange;
+			in >> o.m_underflowMaxRange;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }

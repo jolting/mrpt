@@ -42,9 +42,9 @@ namespace opengl	{
 	  *
 	  * \ingroup mrpt_opengl_grp
 	  */
-	class OPENGL_IMPEXP CFrustum :public CRenderizableDisplayList
+	class OPENGL_IMPEXP CFrustum :public mrpt::utils::CSerializableCRTP<CFrustum, CRenderizableDisplayList>
 	{
-		DEFINE_SERIALIZABLE(CFrustum)
+		friend mrpt::utils::CSerializer<CFrustum>;
 
 	protected:
 		float  m_min_distance, m_max_distance;    //!< Near and far planes

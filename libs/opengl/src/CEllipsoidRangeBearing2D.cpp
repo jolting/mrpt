@@ -43,7 +43,8 @@ IMPLEMENTS_SERIALIZABLE( CEllipsoidRangeBearing2D, CRenderizableDisplayList, mrp
 	MRPT_END
 }
 
-
+namespace mrpt {
+namespace utils {
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -54,8 +55,8 @@ template <> void CSerializer<CEllipsoidRangeBearing2D>::writeToStream(const CEll
 		*version = 0;
 	else
 	{
-		writeToStreamRender(out);
-		BASE::thisclass_writeToStream(out);
+		o.writeToStreamRender(out);
+		o.thisclass_writeToStream(out);
 	}
 }
 
@@ -63,17 +64,20 @@ template <> void CSerializer<CEllipsoidRangeBearing2D>::writeToStream(const CEll
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CEllipsoidRangeBearing2D::readFromStream(mrpt::utils::CStream &in,int version)
+template<>
+void  CSerializer<CEllipsoidRangeBearing2D>::readFromStream(CEllipsoidRangeBearing2D &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			readFromStreamRender(in);
-			BASE::thisclass_readFromStream(in);
+			o.readFromStreamRender(in);
+			o.thisclass_readFromStream(in);
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }

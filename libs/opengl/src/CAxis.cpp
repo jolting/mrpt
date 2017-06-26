@@ -182,6 +182,10 @@ void   CAxis::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -192,13 +196,13 @@ template <> void CSerializer<CAxis>::writeToStream(const CAxis& o, mrpt::utils::
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_xmin << m_ymin << m_zmin;
-		out << m_xmax << m_ymax << m_zmax;
-		out << m_frequency << m_lineWidth;
+		o.writeToStreamRender(out);
+		out << o.m_xmin << o.m_ymin << o.m_zmin;
+		out << o.m_xmax << o.m_ymax << o.m_zmax;
+		out << o.m_frequency << o.m_lineWidth;
 		// v1:
-		out << m_marks[0] << m_marks[1] << m_marks[2] << m_textScale;
-		for (int i=0;i<3;i++) for (int j=0;j<3;j++) out << m_textRot[i][j];
+		out << o.m_marks[0] << o.m_marks[1] << o.m_marks[2] << o.m_textScale;
+		for (int i=0;i<3;i++) for (int j=0;j<3;j++) out << o.m_textRot[i][j];
 	}
 }
 
@@ -206,34 +210,37 @@ template <> void CSerializer<CAxis>::writeToStream(const CAxis& o, mrpt::utils::
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CAxis::readFromStream(mrpt::utils::CStream &in,int version)
+template<>
+void CSerializer<CAxis>::readFromStream(CAxis &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 	case 1:
 		{
-			readFromStreamRender(in);
-			in >> m_xmin >> m_ymin >> m_zmin;
-			in >> m_xmax >> m_ymax >> m_zmax;
-			in >> m_frequency >> m_lineWidth;
+			o.readFromStreamRender(in);
+			in >> o.m_xmin >> o.m_ymin >> o.m_zmin;
+			in >> o.m_xmax >> o.m_ymax >> o.m_zmax;
+			in >> o.m_frequency >> o.m_lineWidth;
 			if (version>=1)
 			{
-				in >> m_marks[0] >> m_marks[1] >> m_marks[2] >> m_textScale;
-				for (int i=0;i<3;i++) for (int j=0;j<3;j++) in >> m_textRot[i][j];
+				in >> o.m_marks[0] >> o.m_marks[1] >> o.m_marks[2] >> o.m_textScale;
+				for (int i=0;i<3;i++) for (int j=0;j<3;j++) in >> o.m_textRot[i][j];
 			}
 			else {
 				bool v;
 				in >> v;
-				for (int i=0;i<3;i++) m_marks[i] = v;
-				m_textScale = 0.25f;
+				for (int i=0;i<3;i++) o.m_marks[i] = v;
+				o.m_textScale = 0.25f;
 			}
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+}
 }
 
 void CAxis::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const

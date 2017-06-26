@@ -157,6 +157,10 @@ void   CEllipsoid::render_dl() const
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -167,8 +171,8 @@ template <> void CSerializer<CEllipsoid>::writeToStream(const CEllipsoid& o, mrp
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_cov << m_drawSolid3D << m_quantiles << (uint32_t)m_2D_segments << (uint32_t)m_3D_segments << m_lineWidth;
+		o.writeToStreamRender(out);
+		out << o.m_cov << o.m_drawSolid3D << o.m_quantiles << (uint32_t)o.m_2D_segments << (uint32_t)o.m_3D_segments << o.m_lineWidth;
 	}
 }
 
@@ -176,7 +180,7 @@ template <> void CSerializer<CEllipsoid>::writeToStream(const CEllipsoid& o, mrp
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CEllipsoid::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CEllipsoid>::readFromStream(CEllipsoid &o,mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -184,32 +188,35 @@ void  CEllipsoid::readFromStream(mrpt::utils::CStream &in,int version)
 	case 1:
 		{
 			uint32_t	i;
-			readFromStreamRender(in);
+			o.readFromStreamRender(in);
 			if (version==0)
 			{
 				CMatrix c;
-				in >> c; m_cov = c.cast<double>();
+				in >> c; o.m_cov = c.cast<double>();
 			}
 			else
 			{
-				in >> m_cov;
+				in >> o.m_cov;
 			}
 
-			in >> m_drawSolid3D >> m_quantiles;
-			in >> i; m_2D_segments = i;
-			in >> i; m_3D_segments = i;
-			in >> m_lineWidth;
+			in >> o.m_drawSolid3D >> o.m_quantiles;
+			in >> i; o.m_2D_segments = i;
+			in >> i; o.m_3D_segments = i;
+			in >> o.m_lineWidth;
 
 			// Update cov. matrix cache:
-			m_prevComputedCov = m_cov;
-			setCovMatrix(m_cov);
+			o.m_prevComputedCov = o.m_cov;
+			o.setCovMatrix(o.m_cov);
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-	CRenderizableDisplayList::notifyChange();
+	o.notifyChange();
+}
+
+}
 }
 
 bool quickSolveEqn(double a,double b_2,double c,double &t)	{

@@ -84,6 +84,7 @@ namespace mrpt
 		class BASE_IMPEXP CSerializer
 		{
 		public:
+			static const TRuntimeClassId runtimeClassId;
 			static const char* getClassName();
 			static const mrpt::utils::TRuntimeClassId* getBaseClass();
 			static void writeToStream(const T& obj, mrpt::utils::CStream &out, int *getVersion);
@@ -97,13 +98,13 @@ namespace mrpt
                         /*! A typedef for the associated smart pointer */
 			using Ptr = std::shared_ptr<T>;
 			using ConstPtr = std::shared_ptr<const T>;
-			static const mrpt::utils::TRuntimeClassId runtimeClassId;
-		
-			static const mrpt::utils::TRuntimeClassId *classinfo;
-
+			static const mrpt::utils::TRuntimeClassId* classinfo()
+			{
+				return &CSerializer<T>::runtimeClassId;
+			}
 			const mrpt::utils::TRuntimeClassId* GetRuntimeClass() const override
 			{
-				return &runtimeClassId;
+				return &CSerializer<T>::runtimeClassId;
 			}
 		public:
 			void  writeToStream(mrpt::utils::CStream &out, int *getVersion) const override
@@ -115,18 +116,6 @@ namespace mrpt
 				CSerializer<T>::readFromStream(*static_cast<T*>(this), in, version);
 			}
 		};
-		
-		template <typename T, typename BASE>
-		const mrpt::utils::TRuntimeClassId CSerializableCRTPVirtual<T,BASE>::runtimeClassId
-			{
-				CSerializer<T>::getClassName(),
-				nullptr,
-				[](){return &BASE::runtimeClassId;}
-			};
-		template <typename T, typename BASE>
-		const mrpt::utils::TRuntimeClassId *CSerializableCRTPVirtual<T,BASE>::classinfo = 
-			&CSerializableCRTPVirtual<T,BASE>::runtimeClassId;
-
 		
 		template <typename T, typename BASE = CSerializable>
 		class BASE_IMPEXP CSerializableCRTP : public CSerializableCRTPVirtual<T, BASE>
