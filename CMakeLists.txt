@@ -510,9 +510,9 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR CMAKE_COMPILER_IS_GNUCXX)
 	ELSEIF()
 		# Remove unreferenced functions: function level linking
 		# Remove unreferenced functions: function level linking
-		#if(NOT APPLE)
-		#	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections")
-		#endif()
+		if(NOT APPLE)
+			SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections")
+		endif()
 	ENDIF()
 
 	# Whole program optimization
