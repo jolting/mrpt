@@ -71,7 +71,7 @@ mrpt::maps::CMetricMap* CHeightGridMap2D_MRF::internal_CreateFromMapDefinition(c
 }
 //  =========== End of Map definition Block =========
 
-IMPLEMENTS_SERIALIZABLE(CHeightGridMap2D_MRF, CRandomFieldGridMap2D,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CHeightGridMap2D_MRF>::getClassName() { return "CHeightGridMap2D_MRF";}
 
 // Constructor
 CHeightGridMap2D_MRF::CHeightGridMap2D_MRF(

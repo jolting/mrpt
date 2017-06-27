@@ -21,7 +21,7 @@ using namespace mrpt::poses;
 using namespace mrpt::obs;
 using namespace mrpt::utils::metaprogramming;
 
-IMPLEMENTS_SERIALIZABLE( CMultiMetricMap, CMetricMap, mrpt::maps )
+template <> const char * mrpt::utils::CSerializer<CMultiMetricMap>::getClassName() { return "CMultiMetricMap";}
 
 // ------------------------------------------------------------------------
 // A few words explaining how all this works:

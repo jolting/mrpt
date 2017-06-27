@@ -17,7 +17,7 @@ using namespace mrpt::poses;
 using namespace mrpt::hmtslam;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CRobotPosesGraph, CSerializable , mrpt::hmtslam)
+template <> const char * mrpt::utils::CSerializer<CRobotPosesGraph>::getClassName() { return "CRobotPosesGraph";}
 
 
 /*---------------------------------------------------------------

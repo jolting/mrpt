@@ -21,7 +21,7 @@ using namespace std;
 
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationGasSensors, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservationGasSensors>::getClassName() { return "CObservationGasSensors";}
 
 /** Constructor
  */

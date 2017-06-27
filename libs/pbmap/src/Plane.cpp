@@ -26,7 +26,7 @@ using namespace mrpt::pbmap;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(Plane, CSerializable, mrpt::pbmap)
+template <> const char * mrpt::utils::CSerializer<Plane>::getClassName() { return "Plane";}
 
 ///*---------------------------------------------------------------
 //						writeToStream

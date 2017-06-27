@@ -19,7 +19,7 @@ using namespace mrpt::opengl;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CText3D, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CText3D>::getClassName() { return "CText3D";}
 
 CText3D::Ptr CText3D::Create(
 	const std::string &str,

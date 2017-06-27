@@ -18,7 +18,7 @@ using namespace mrpt::slam;
 using namespace mrpt::utils;
 using namespace mrpt::hmtslam;
 
-IMPLEMENTS_SERIALIZABLE( CHierarchicalMHMap, CSerializable, mrpt::hmtslam )
+template <> const char * mrpt::utils::CSerializer<CHierarchicalMHMap>::getClassName() { return "CHierarchicalMHMap";}
 
 /*---------------------------------------------------------------
 						Constructor

@@ -17,7 +17,7 @@ using namespace std;
 using namespace mrpt::system;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(CPTG_DiffDrive_CS,CParameterizedTrajectoryGenerator,mrpt::nav)
+template <> const char * mrpt::utils::CSerializer<CPTG_DiffDrive_CS>::getClassName() { return "CPTG_DiffDrive_CS";}
 
 void CPTG_DiffDrive_CS::loadFromConfigFile(const mrpt::utils::CConfigFileBase &cfg,const std::string &sSection)
 {

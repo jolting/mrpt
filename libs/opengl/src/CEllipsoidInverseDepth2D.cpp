@@ -20,7 +20,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CEllipsoidInverseDepth2D, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CEllipsoidInverseDepth2D>::getClassName() { return "CEllipsoidInverseDepth2D";}
 
 /*---------------------------------------------------------------
 							transformFromParameterSpace

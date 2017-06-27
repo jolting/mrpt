@@ -38,8 +38,8 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CMultiMetricMapPDF, CSerializable, mrpt::maps)
-IMPLEMENTS_SERIALIZABLE(CRBPFParticleData, CSerializable, mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CMultiMetricMapPDF>::getClassName() { return "CMultiMetricMapPDF";}
+template <> const char * mrpt::utils::CSerializer<CRBPFParticleData>::getClassName() { return "CRBPFParticleData";}
 
 /*---------------------------------------------------------------
 				Constructor

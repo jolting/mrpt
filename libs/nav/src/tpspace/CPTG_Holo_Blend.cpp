@@ -20,7 +20,7 @@ using namespace mrpt::nav;
 using namespace mrpt::utils;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE(CPTG_Holo_Blend,CParameterizedTrajectoryGenerator,mrpt::nav)
+template <> const char * mrpt::utils::CSerializer<CPTG_Holo_Blend>::getClassName() { return "CPTG_Holo_Blend";}
 
 
 /*

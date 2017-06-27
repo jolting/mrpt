@@ -24,7 +24,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CEllipsoid, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CEllipsoid>::getClassName() { return "CEllipsoid";}
 
 /*---------------------------------------------------------------
 							render

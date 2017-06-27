@@ -33,7 +33,7 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservation3DRangeScan, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservation3DRangeScan>::getClassName() { return "CObservation3DRangeScan";}
 
 // Static LUT:
 CObservation3DRangeScan::TCached3DProjTables CObservation3DRangeScan::m_3dproj_lut;

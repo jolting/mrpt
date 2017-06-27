@@ -24,7 +24,7 @@ using namespace std;
 #include <mrpt/utils/metaprogramming.h>
 using namespace mrpt::utils::metaprogramming;
 
-IMPLEMENTS_SERIALIZABLE( CSensoryFrame, CSerializable, mrpt::obs )
+template <> const char * mrpt::utils::CSerializer<CSensoryFrame>::getClassName() { return "CSensoryFrame";}
 
 /*---------------------------------------------------------------
 						Default constructor

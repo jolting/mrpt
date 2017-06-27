@@ -25,7 +25,7 @@ using namespace mrpt::math;
 using namespace mrpt::poses;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFGrid, CPosePDF, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPosePDFGrid>::getClassName() { return "CPosePDFGrid";}
 
 /*---------------------------------------------------------------
 	Constructor

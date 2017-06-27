@@ -17,7 +17,7 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationRFID, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservationRFID>::getClassName() { return "CObservationRFID";}
 
 /** Constructor
  */

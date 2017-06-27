@@ -21,7 +21,7 @@ using namespace mrpt::poses;
 using namespace mrpt::random;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(CActionRobotMovement3D, CAction, mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CActionRobotMovement3D>::getClassName() { return "CActionRobotMovement3D";}
 
 /*---------------------------------------------------------------
 						Constructor

@@ -62,7 +62,7 @@ mrpt::maps::CMetricMap* CColouredPointsMap::internal_CreateFromMapDefinition(con
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(CColouredPointsMap, CPointsMap,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CColouredPointsMap>::getClassName() { return "CColouredPointsMap";}
 
 
 #if MRPT_HAS_PCL

@@ -45,7 +45,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( C3DSScene, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<C3DSScene>::getClassName() { return "C3DSScene";}
 
 
 #if MRPT_HAS_LIB3DS

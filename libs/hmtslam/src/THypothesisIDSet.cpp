@@ -13,7 +13,7 @@ using namespace mrpt::hmtslam;
 using namespace mrpt::utils;
 
 
-IMPLEMENTS_SERIALIZABLE(THypothesisIDSet, CSerializable, mrpt::hmtslam)
+template <> const char * mrpt::utils::CSerializer<THypothesisIDSet>::getClassName() { return "THypothesisIDSet";}
 
 
 /*---------------------------------------------------------------

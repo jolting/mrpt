@@ -18,7 +18,7 @@ using namespace mrpt::poses;
 using namespace std;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationSkeleton, CObservation, mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservationSkeleton>::getClassName() { return "CObservationSkeleton";}
 
 // Helpful macros for reading and writing joints to a stream
 #define WRITE_JOINT(_J) out << _J.x << _J.y << _J.z << _J.conf;

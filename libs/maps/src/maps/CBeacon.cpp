@@ -30,7 +30,7 @@ using namespace mrpt::poses;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CBeacon, CSerializable,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CBeacon>::getClassName() { return "CBeacon";}
 
 
 /*---------------------------------------------------------------

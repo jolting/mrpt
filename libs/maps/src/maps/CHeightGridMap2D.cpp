@@ -78,7 +78,7 @@ mrpt::maps::CMetricMap* CHeightGridMap2D::internal_CreateFromMapDefinition(const
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(CHeightGridMap2D, CMetricMap,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CHeightGridMap2D>::getClassName() { return "CHeightGridMap2D";}
 	
 bool mrpt::global_settings::HEIGHTGRIDMAP_EXPORT3D_AS_MESH = true;
 

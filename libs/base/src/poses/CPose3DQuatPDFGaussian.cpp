@@ -30,7 +30,7 @@ using namespace std;
 bool mrpt::global_settings::USE_SUT_EULER2QUAT_CONVERSION = false;
 
 
-IMPLEMENTS_SERIALIZABLE( CPose3DQuatPDFGaussian, CPose3DQuatPDF, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPose3DQuatPDFGaussian>::getClassName() { return "CPose3DQuatPDFGaussian";}
 
 /** Default constructor - set all values to zero. */
 CPose3DQuatPDFGaussian::CPose3DQuatPDFGaussian() :

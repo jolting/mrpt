@@ -39,7 +39,7 @@ using namespace mrpt::random;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPose3DQuatPDFGaussianInf, CPose3DQuatPDF, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPose3DQuatPDFGaussianInf>::getClassName() { return "CPose3DQuatPDFGaussianInf";}
 
 /** Default constructor - set all values to zero. */
 CPose3DQuatPDFGaussianInf::CPose3DQuatPDFGaussianInf() :

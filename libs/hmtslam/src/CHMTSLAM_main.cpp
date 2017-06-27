@@ -42,7 +42,7 @@ using namespace mrpt::opengl;
 using namespace std;
 
 
-IMPLEMENTS_SERIALIZABLE(CHMTSLAM, CSerializable,mrpt::hmtslam)
+template <> const char * mrpt::utils::CSerializer<CHMTSLAM>::getClassName() { return "CHMTSLAM";}
 
 
 // Initialization of static members:

@@ -32,7 +32,7 @@ using namespace mrpt::utils;
 using namespace mrpt;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CIncrementalMapPartitioner, CSerializable,mrpt::slam)
+template <> const char * mrpt::utils::CSerializer<CIncrementalMapPartitioner>::getClassName() { return "CIncrementalMapPartitioner";}
 
 /*---------------------------------------------------------------
 						Constructor

@@ -18,8 +18,8 @@ using namespace std;
 
 using namespace mrpt::nav;
 
-IMPLEMENTS_SERIALIZABLE( CLogFileRecord_VFF, CHolonomicLogFileRecord,mrpt::nav )
-IMPLEMENTS_SERIALIZABLE( CHolonomicVFF, CAbstractHolonomicReactiveMethod,mrpt::nav)
+template <> const char * mrpt::utils::CSerializer<CLogFileRecord_VFF>::getClassName() { return "CLogFileRecord_VFF";}
+template <> const char * mrpt::utils::CSerializer<CHolonomicVFF>::getClassName() { return "CHolonomicVFF";}
 
 /*---------------------------------------------------------------
 						initialize

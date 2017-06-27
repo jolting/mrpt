@@ -18,7 +18,7 @@
 
 using namespace mrpt::nav;
 
-IMPLEMENTS_SERIALIZABLE( CLogFileRecord, CSerializable,mrpt::nav )
+template <> const char * mrpt::utils::CSerializer<CLogFileRecord>::getClassName() { return "CLogFileRecord";}
 
 /*---------------------------------------------------------------
 					Constructor

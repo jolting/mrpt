@@ -20,7 +20,7 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CPropertiesValuesList, CSerializable, mrpt::utils)
+template <> const char * mrpt::utils::CSerializer<CPropertiesValuesList>::getClassName() { return "CPropertiesValuesList";}
 
 /*---------------------------------------------------------------
 						writeToStream

@@ -23,7 +23,7 @@ using namespace std;
 
 
 
-IMPLEMENTS_SERIALIZABLE( CDisk, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CDisk>::getClassName() { return "CDisk";}
 
 /*---------------------------------------------------------------
 							render

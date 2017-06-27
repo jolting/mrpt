@@ -24,7 +24,7 @@ using namespace mrpt::math;
 using namespace mrpt::random;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CActionRobotMovement2D, CAction, mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CActionRobotMovement2D>::getClassName() { return "CActionRobotMovement2D";}
 
 /*---------------------------------------------------------------
 						Constructor

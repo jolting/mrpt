@@ -40,7 +40,7 @@ using namespace std;
 #endif // MRPT_HAS_OPENGL_GLUT
 
 
-IMPLEMENTS_SERIALIZABLE( COpenGLScene, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<COpenGLScene>::getClassName() { return "COpenGLScene";}
 
 
 /*---------------------------------------------------------------

@@ -74,7 +74,7 @@ mrpt::maps::CMetricMap* CBeaconMap::internal_CreateFromMapDefinition(const mrpt:
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(CBeaconMap, CMetricMap,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CBeaconMap>::getClassName() { return "CBeaconMap";}
 
 /*---------------------------------------------------------------
 						Constructor

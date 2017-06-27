@@ -14,7 +14,7 @@
 using namespace mrpt::kinematics;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(CVehicleVelCmd_Holo, CVehicleVelCmd, mrpt::kinematics)
+template <> const char * mrpt::utils::CSerializer<CVehicleVelCmd_Holo>::getClassName() { return "CVehicleVelCmd_Holo";}
 
 CVehicleVelCmd_Holo::CVehicleVelCmd_Holo() :
 	vel(.0),

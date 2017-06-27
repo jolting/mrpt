@@ -23,7 +23,7 @@ using namespace mrpt::poses;
 using namespace mrpt::utils;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE(CRawlog, CSerializable,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CRawlog>::getClassName() { return "CRawlog";}
 
 // ctor
 CRawlog::CRawlog() : m_seqOfActObs(), m_commentTexts()

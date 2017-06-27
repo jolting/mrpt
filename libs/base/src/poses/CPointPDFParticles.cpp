@@ -22,8 +22,8 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE( CPointPDFParticles, CPointPDF, mrpt::poses )
-IMPLEMENTS_SERIALIZABLE( TSimple3DPoint, CSerializable, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPointPDFParticles>::getClassName() { return "CPointPDFParticles";}
+template <> const char * mrpt::utils::CSerializer<TSimple3DPoint>::getClassName() { return "TSimple3DPoint";}
 
 CPointPDFParticles::CPointPDFParticles(size_t numParticles)
 {

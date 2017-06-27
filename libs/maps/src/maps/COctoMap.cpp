@@ -63,7 +63,7 @@ mrpt::maps::CMetricMap* COctoMap::internal_CreateFromMapDefinition(const mrpt::m
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(COctoMap, CMetricMap,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<COctoMap>::getClassName() { return "COctoMap";}
 
 /*---------------------------------------------------------------
 						Constructor

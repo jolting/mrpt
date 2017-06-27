@@ -27,7 +27,7 @@ float  mrpt::global_settings::OCTREE_RENDER_MAX_DENSITY_POINTS_PER_SQPIXEL = 0.1
 size_t mrpt::global_settings::OCTREE_RENDER_MAX_POINTS_PER_NODE            = 1e6;
 
 
-IMPLEMENTS_SERIALIZABLE( CPointCloud, CRenderizable, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CPointCloud>::getClassName() { return "CPointCloud";}
 
 /*---------------------------------------------------------------
 							render

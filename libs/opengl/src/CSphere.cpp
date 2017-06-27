@@ -22,7 +22,7 @@ using namespace mrpt::math;
 using namespace std;
 
 
-IMPLEMENTS_SERIALIZABLE( CSphere, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CSphere>::getClassName() { return "CSphere";}
 
 CSphere::Ptr CSphere::Create(
 	float radius, int nDivsLongitude, int nDivsLatitude)

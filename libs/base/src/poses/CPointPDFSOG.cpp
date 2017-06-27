@@ -27,7 +27,7 @@ using namespace mrpt::random;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPointPDFSOG, CPosePDF, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPointPDFSOG>::getClassName() { return "CPointPDFSOG";}
 
 
 /*---------------------------------------------------------------

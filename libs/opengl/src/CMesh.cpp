@@ -24,7 +24,7 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CMesh, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CMesh>::getClassName() { return "CMesh";}
 
 CMesh::CMesh(bool enableTransparency, float xMin, float xMax, float yMin, float yMax) :
 	m_textureImage(0, 0),

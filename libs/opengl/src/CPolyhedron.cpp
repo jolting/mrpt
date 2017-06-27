@@ -27,7 +27,7 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CPolyhedron,CRenderizableDisplayList,mrpt::opengl)
+template <> const char * mrpt::utils::CSerializer<CPolyhedron>::getClassName() { return "CPolyhedron";}
 
 //Auxiliary data and code
 template<class T> class FCreatePolygonFromFace	{

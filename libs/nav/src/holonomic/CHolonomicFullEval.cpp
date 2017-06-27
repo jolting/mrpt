@@ -24,8 +24,8 @@ using namespace mrpt::math;
 using namespace mrpt::nav;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CLogFileRecord_FullEval, CHolonomicLogFileRecord,mrpt::nav )
-IMPLEMENTS_SERIALIZABLE( CHolonomicFullEval, CAbstractHolonomicReactiveMethod,mrpt::nav)
+template <> const char * mrpt::utils::CSerializer<CLogFileRecord_FullEval>::getClassName() { return "CLogFileRecord_FullEval";}
+template <> const char * mrpt::utils::CSerializer<CHolonomicFullEval>::getClassName() { return "CHolonomicFullEval";}
 
 const unsigned int INVALID_K = std::numeric_limits<unsigned int>::max();
 

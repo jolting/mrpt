@@ -24,7 +24,7 @@ using namespace mrpt::utils;
 using namespace mrpt::pbmap;
 
 
-IMPLEMENTS_SERIALIZABLE(PbMap, CSerializable, mrpt::pbmap)
+template <> const char * mrpt::utils::CSerializer<PbMap>::getClassName() { return "PbMap";}
 
 /*---------------------------------------------------------------
 	Constructor

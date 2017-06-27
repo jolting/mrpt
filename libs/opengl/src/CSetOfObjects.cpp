@@ -29,7 +29,7 @@ using namespace std;
 #include <mrpt/utils/metaprogramming.h>
 using namespace mrpt::utils::metaprogramming;
 
-IMPLEMENTS_SERIALIZABLE( CSetOfObjects, CRenderizable, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CSetOfObjects>::getClassName() { return "CSetOfObjects";}
 
 /*---------------------------------------------------------------
 							render

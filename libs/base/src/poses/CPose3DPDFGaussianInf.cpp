@@ -28,7 +28,7 @@ using namespace mrpt::system;
 using namespace std;
 
 
-IMPLEMENTS_SERIALIZABLE( CPose3DPDFGaussianInf, CPose3DPDF, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPose3DPDFGaussianInf>::getClassName() { return "CPose3DPDFGaussianInf";}
 
 
 /*---------------------------------------------------------------

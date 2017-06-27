@@ -21,7 +21,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( COctoMapVoxels, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<COctoMapVoxels>::getClassName() { return "COctoMapVoxels";}
 
 /** Ctor */
 COctoMapVoxels::COctoMapVoxels() :

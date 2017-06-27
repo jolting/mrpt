@@ -47,7 +47,7 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 using namespace mrpt::math;
 
-IMPLEMENTS_SERIALIZABLE(CAngularObservationMesh,CRenderizableDisplayList,mrpt::opengl)
+template <> const char * mrpt::utils::CSerializer<CAngularObservationMesh>::getClassName() { return "CAngularObservationMesh";}
 
 void CAngularObservationMesh::addTriangle(const TPoint3D &p1,const TPoint3D &p2,const TPoint3D &p3) const	{
 	const TPoint3D *arr[3]={&p1,&p2,&p3};

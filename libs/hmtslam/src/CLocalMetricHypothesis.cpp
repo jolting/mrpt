@@ -34,8 +34,8 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CLocalMetricHypothesis, CSerializable,mrpt::hmtslam)
-IMPLEMENTS_SERIALIZABLE(CLSLAMParticleData, CSerializable,mrpt::hmtslam)
+template <> const char * mrpt::utils::CSerializer<CLocalMetricHypothesis>::getClassName() { return "CLocalMetricHypothesis";}
+template <> const char * mrpt::utils::CSerializer<CLSLAMParticleData>::getClassName() { return "CLSLAMParticleData";}
 
 
 /*---------------------------------------------------------------

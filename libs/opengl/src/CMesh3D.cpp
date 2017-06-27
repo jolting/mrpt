@@ -22,7 +22,7 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CMesh3D, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CMesh3D>::getClassName() { return "CMesh3D";}
 
 CMesh3D::CMesh3D(bool enableTransparency, bool antiAliasing , bool enableShowEdges , bool enableShowFaces, bool enableShowVertices ) :
 	m_enableTransparency(enableTransparency),

@@ -21,7 +21,7 @@ using namespace mrpt::poses;
 
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservation6DFeatures, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservation6DFeatures>::getClassName() { return "CObservation6DFeatures";}
 
 /** Default constructor */
 CObservation6DFeatures::CObservation6DFeatures( ) :

@@ -19,7 +19,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CText, CRenderizable, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CText>::getClassName() { return "CText";}
 
 /*---------------------------------------------------------------
 							Constructor

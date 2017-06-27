@@ -68,7 +68,7 @@ mrpt::maps::CMetricMap* CColouredOctoMap::internal_CreateFromMapDefinition(const
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(CColouredOctoMap, CMetricMap,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CColouredOctoMap>::getClassName() { return "CColouredOctoMap";}
 
 /*---------------------------------------------------------------
 						Constructor

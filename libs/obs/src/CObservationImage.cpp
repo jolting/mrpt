@@ -23,7 +23,7 @@ using namespace mrpt::math;
 using namespace mrpt::poses;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationImage, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservationImage>::getClassName() { return "CObservationImage";}
 
 /** Constructor
  */

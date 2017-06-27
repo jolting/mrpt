@@ -80,7 +80,7 @@ mrpt::maps::CMetricMap* CGasConcentrationGridMap2D::internal_CreateFromMapDefini
 }
 //  =========== End of Map definition Block =========
 
-IMPLEMENTS_SERIALIZABLE(CGasConcentrationGridMap2D, CRandomFieldGridMap2D,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CGasConcentrationGridMap2D>::getClassName() { return "CGasConcentrationGridMap2D";}
 
 // Short-cut:
 #define LUT_TABLE (*(LUT.table))

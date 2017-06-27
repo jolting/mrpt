@@ -22,7 +22,7 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPose3DPDFSOG, CPose3DPDF, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPose3DPDFSOG>::getClassName() { return "CPose3DPDFSOG";}
 
 /*---------------------------------------------------------------
 	Constructor

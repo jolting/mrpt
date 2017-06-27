@@ -20,7 +20,7 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 
 
-IMPLEMENTS_SERIALIZABLE(CLandmark, CSerializable,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CLandmark>::getClassName() { return "CLandmark";}
 
 // Initialization:
 CLandmark::TLandmarkID	CLandmark::m_counterIDs= static_cast<CLandmark::TLandmarkID>(0);

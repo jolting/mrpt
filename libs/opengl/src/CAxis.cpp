@@ -22,7 +22,7 @@ using namespace mrpt::system;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CAxis, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CAxis>::getClassName() { return "CAxis";}
 
 CAxis::CAxis(
 	float xmin,float ymin, float zmin,

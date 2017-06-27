@@ -14,7 +14,7 @@
 using namespace mrpt::kinematics;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(CVehicleVelCmd_DiffDriven, CVehicleVelCmd, mrpt::kinematics)
+template <> const char * mrpt::utils::CSerializer<CVehicleVelCmd_DiffDriven>::getClassName() { return "CVehicleVelCmd_DiffDriven";}
 
 CVehicleVelCmd_DiffDriven::CVehicleVelCmd_DiffDriven() :
 	lin_vel(.0),

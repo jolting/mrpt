@@ -20,7 +20,7 @@ using namespace mrpt::math;
 using namespace std;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationStereoImagesFeatures, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservationStereoImagesFeatures>::getClassName() { return "CObservationStereoImagesFeatures";}
 
  CObservationStereoImagesFeatures::CObservationStereoImagesFeatures( ) :
 	cameraLeft(),

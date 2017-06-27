@@ -73,7 +73,7 @@ mrpt::maps::CMetricMap* CReflectivityGridMap2D::internal_CreateFromMapDefinition
 }
 //  =========== End of Map definition Block =========
 
-IMPLEMENTS_SERIALIZABLE(CReflectivityGridMap2D, CMetricMap,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CReflectivityGridMap2D>::getClassName() { return "CReflectivityGridMap2D";}
 
 
 // Lookup tables for log-odds

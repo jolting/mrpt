@@ -18,7 +18,7 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( TStereoCamera, CSerializable, mrpt::utils )
+template <> const char * mrpt::utils::CSerializer<TStereoCamera>::getClassName() { return "TStereoCamera";}
 
 TStereoCamera::TStereoCamera()
 {

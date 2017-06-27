@@ -119,7 +119,7 @@ mrpt::maps::CMetricMap* CLandmarksMap::internal_CreateFromMapDefinition(const mr
 //  =========== End of Map definition Block =========
 
 
-IMPLEMENTS_SERIALIZABLE(CLandmarksMap, CMetricMap,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CLandmarksMap>::getClassName() { return "CLandmarksMap";}
 
 /*---------------------------------------------------------------
 				Static variables initialization

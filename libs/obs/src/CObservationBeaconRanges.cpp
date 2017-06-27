@@ -20,7 +20,7 @@ using namespace mrpt::poses;
 
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationBeaconRanges, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservationBeaconRanges>::getClassName() { return "CObservationBeaconRanges";}
 
 /** Default constructor.
  */

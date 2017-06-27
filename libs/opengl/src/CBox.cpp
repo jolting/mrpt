@@ -21,7 +21,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CBox,CRenderizableDisplayList,mrpt::opengl)
+template <> const char * mrpt::utils::CSerializer<CBox>::getClassName() { return "CBox";}
 
 CBox::CBox() :
 	m_corner_min(-1,-1,-1),

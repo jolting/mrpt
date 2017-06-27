@@ -43,7 +43,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPlanarLaserScan, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CPlanarLaserScan>::getClassName() { return "CPlanarLaserScan";}
 
 
 /*---------------------------------------------------------------

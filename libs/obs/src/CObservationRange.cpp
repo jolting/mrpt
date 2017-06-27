@@ -18,7 +18,7 @@ using namespace mrpt::poses;
 
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationRange, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservationRange>::getClassName() { return "CObservationRange";}
 
 
 /** Default constructor.

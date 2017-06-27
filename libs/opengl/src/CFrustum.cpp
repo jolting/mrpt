@@ -20,7 +20,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CFrustum,CRenderizableDisplayList,mrpt::opengl)
+template <> const char * mrpt::utils::CSerializer<CFrustum>::getClassName() { return "CFrustum";}
 
 /*---------------------------------------------------------------
 							render

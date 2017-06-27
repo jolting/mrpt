@@ -23,7 +23,7 @@ using namespace mrpt::utils;
 #include <mrpt/utils/metaprogramming.h>
 using namespace mrpt::utils::metaprogramming;
 
-IMPLEMENTS_SERIALIZABLE(CActionCollection, CSerializable, mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CActionCollection>::getClassName() { return "CActionCollection";}
 
 
 /*---------------------------------------------------------------

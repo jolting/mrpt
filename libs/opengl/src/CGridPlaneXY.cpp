@@ -19,7 +19,7 @@ using namespace mrpt::opengl;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CGridPlaneXY, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CGridPlaneXY>::getClassName() { return "CGridPlaneXY";}
 
 CGridPlaneXY::Ptr CGridPlaneXY::Create(
 				float xMin,

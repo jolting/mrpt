@@ -47,7 +47,7 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 
 
-IMPLEMENTS_SERIALIZABLE(CPose3D, CSerializable ,mrpt::poses)
+template <> const char * mrpt::utils::CSerializer<CPose3D>::getClassName() { return "CPose3D";}
 
 /*---------------------------------------------------------------
 	Constructors

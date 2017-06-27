@@ -16,7 +16,7 @@ using namespace mrpt::slam;
 using namespace mrpt::hmtslam;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CHMHMapNode, CSerializable, mrpt::hmtslam )
+template <> const char * mrpt::utils::CSerializer<CHMHMapNode>::getClassName() { return "CHMHMapNode";}
 
 /*---------------------------------------------------------------
 						Default constructor

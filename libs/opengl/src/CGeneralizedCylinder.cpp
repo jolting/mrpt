@@ -24,7 +24,7 @@ using namespace mrpt::poses;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CGeneralizedCylinder,CRenderizableDisplayList,mrpt::opengl)
+template <> const char * mrpt::utils::CSerializer<CGeneralizedCylinder>::getClassName() { return "CGeneralizedCylinder";}
 
 void CGeneralizedCylinder::TQuadrilateral::calculateNormal()	{
 	double ax=points[1].x-points[0].x;

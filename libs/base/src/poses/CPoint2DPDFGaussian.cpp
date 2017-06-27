@@ -25,7 +25,7 @@ using namespace mrpt::math;
 using namespace mrpt::random;
 using namespace mrpt::system;
 
-IMPLEMENTS_SERIALIZABLE( CPoint2DPDFGaussian, CPoint2DPDF, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPoint2DPDFGaussian>::getClassName() { return "CPoint2DPDFGaussian";}
 
 
 /*---------------------------------------------------------------

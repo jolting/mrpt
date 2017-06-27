@@ -28,7 +28,7 @@ using namespace mrpt::system;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CFeature, CSerializable, mrpt::vision)
+template <> const char * mrpt::utils::CSerializer<CFeature>::getClassName() { return "CFeature";}
 
 // --------------------------------------------------
 //			loadFromConfigFile

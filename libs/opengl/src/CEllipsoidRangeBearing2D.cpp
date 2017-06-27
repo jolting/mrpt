@@ -18,7 +18,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CEllipsoidRangeBearing2D, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CEllipsoidRangeBearing2D>::getClassName() { return "CEllipsoidRangeBearing2D";}
 
 /*---------------------------------------------------------------
 							transformFromParameterSpace

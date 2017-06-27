@@ -17,8 +17,8 @@ using namespace mrpt::utils;
 using namespace mrpt::detectors;
 
 IMPLEMENTS_VIRTUAL_SERIALIZABLE(CDetectableObject, CSerializable, mrpt::detectors)
-IMPLEMENTS_SERIALIZABLE(CDetectable2D, CDetectableObject,mrpt::detectors)
-IMPLEMENTS_SERIALIZABLE(CDetectable3D, CDetectable2D,mrpt::detectors)
+template <> const char * mrpt::utils::CSerializer<CDetectable2D>::getClassName() { return "CDetectable2D";}
+template <> const char * mrpt::utils::CSerializer<CDetectable3D>::getClassName() { return "CDetectable3D";}
 
 
 void CDetectable2D::readFromStream(mrpt::utils::CStream &, int )

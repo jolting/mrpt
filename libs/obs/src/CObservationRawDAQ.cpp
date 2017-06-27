@@ -19,7 +19,7 @@ using namespace mrpt::poses;
 using namespace std;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationRawDAQ, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservationRawDAQ>::getClassName() { return "CObservationRawDAQ";}
 
 namespace mrpt{
 namespace utils{

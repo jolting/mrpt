@@ -27,7 +27,7 @@ using namespace mrpt::utils;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFParticles, CPosePDF, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPosePDFParticles>::getClassName() { return "CPosePDFParticles";}
 
 /*---------------------------------------------------------------
 	Constructor

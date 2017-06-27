@@ -20,7 +20,7 @@ using namespace mrpt::math;
 using namespace mrpt::utils;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE(CCylinder,CRenderizableDisplayList,mrpt::opengl)
+template <> const char * mrpt::utils::CSerializer<CCylinder>::getClassName() { return "CCylinder";}
 
 /*---------------------------------------------------------------
 							render

@@ -18,7 +18,7 @@ using namespace mrpt::poses;
 using namespace std;
 
 // This must be added to any CSerializable class implementation file.
-IMPLEMENTS_SERIALIZABLE(CObservationCANBusJ1939, CObservation,mrpt::obs)
+template <> const char * mrpt::utils::CSerializer<CObservationCANBusJ1939>::getClassName() { return "CObservationCANBusJ1939";}
 
 namespace mrpt
 {

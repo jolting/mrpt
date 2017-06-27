@@ -24,7 +24,7 @@ using namespace std;
 #include <mrpt/utils/metaprogramming.h>
 using namespace mrpt::utils::metaprogramming;
 
-IMPLEMENTS_SERIALIZABLE(CSimpleMap, CSerializable,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CSimpleMap>::getClassName() { return "CSimpleMap";}
 
 /*---------------------------------------------------------------
 						Constructor
