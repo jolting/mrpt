@@ -20,7 +20,7 @@ using namespace mrpt::opengl;
 using namespace mrpt::utils;
 using namespace mrpt::math;
 
-IMPLEMENTS_SERIALIZABLE( CSetOfTexturedTriangles, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<mrpt::opengl::CSetOfTexturedTriangles>::getClassName() { return "CSetOfTexturedTriangles";}
 
 /*---------------------------------------------------------------
 							~CTexturedPlane

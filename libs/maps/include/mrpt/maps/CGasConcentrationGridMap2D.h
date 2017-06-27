@@ -30,9 +30,9 @@ namespace maps
 	  * \sa mrpt::maps::CRandomFieldGridMap2D, mrpt::maps::CMetricMap, mrpt::utils::CDynamicGrid, The application icp-slam, mrpt::maps::CMultiMetricMap
 	  * \ingroup mrpt_maps_grp
 	  */
-	class MAPS_IMPEXP CGasConcentrationGridMap2D : public CRandomFieldGridMap2D
+	class MAPS_IMPEXP CGasConcentrationGridMap2D : public mrpt::utils::CSerializableCRTP<CGasConcentrationGridMap2D, CRandomFieldGridMap2D>
 	{
-		DEFINE_SERIALIZABLE( CGasConcentrationGridMap2D )
+		friend mrpt::utils::CSerializer<CGasConcentrationGridMap2D>;
 	public:
 
 		/** Constructor

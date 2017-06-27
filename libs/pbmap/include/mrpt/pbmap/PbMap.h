@@ -40,9 +40,9 @@ namespace pbmap {
    *
    * \ingroup mrpt_pbmap_grp
    */
-  class PBMAP_IMPEXP PbMap : public mrpt::utils::CSerializable
+  class PBMAP_IMPEXP PbMap : public mrpt::utils::CSerializableCRTP<PbMap>
   {
-    DEFINE_SERIALIZABLE( PbMap )
+    friend mrpt::utils::CSerializer<PbMap>;
 
    public:
   /*!Constructor.*/

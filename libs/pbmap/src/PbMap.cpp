@@ -37,27 +37,31 @@ PbMap::PbMap() :
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  PbMap::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template <> void CSerializer<PbMap>::writeToStream(const PbMap &o, mrpt::utils::CStream &out, int *out_Version)
 {
 //cout << "Write PbMap. Version " << *out_Version << endl;
 	if (out_Version){//cout << "There is version\n";
 		*out_Version = 0;}
 	else
 	{
-    // Write label
-    out << label;
+		// Write label
+		out << o.label;
 
 		// The data
-		uint32_t n = uint32_t( vPlanes.size() );
+		uint32_t n = uint32_t( o.vPlanes.size() );
 		out << n;
-//  cout << "Write " << n << " planes\n";
+		//  cout << "Write " << n << " planes\n";
 		for (uint32_t i=0; i < n; i++)
-			out << vPlanes[i];
+			out << o.vPlanes[i];
 	}
-//cout << "Exit Write PbMap. " << endl;
+		//cout << "Exit Write PbMap. " << endl;
 }
 
 /*---------------------------------------------------------------
@@ -72,17 +76,17 @@ template <> void CSerializer<PbMap>::readFromStream(PbMap& o, mrpt::utils::CStre
 //      cout << "Read planes\n";
 
         // Read label
-        in >> label;
+        in >> o.label;
 //      cout << "PbMap label " << label << endl;
 
         // Delete previous content:
-        vPlanes.clear();
+        o.vPlanes.clear();
 
         // The data
         // First, write the number of planes:
         uint32_t	n;
         in >> n;
-        vPlanes.resize(n);
+        o.vPlanes.resize(n);
           for (uint32_t i=0; i < n; i++)
           {
 //      cout << "plane\n";
@@ -90,13 +94,15 @@ template <> void CSerializer<PbMap>::readFromStream(PbMap& o, mrpt::utils::CStre
             Plane pl;
             pl.id = i;
             in >> pl;
-            vPlanes[i] = pl;
+            o.vPlanes[i] = pl;
           }
 //        cout << "Finish reading planes\n";
     } break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 void PbMap::savePbMap(string filePath)

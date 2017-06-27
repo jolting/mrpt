@@ -95,7 +95,7 @@ CGasConcentrationGridMap2D::CGasConcentrationGridMap2D(
 	float		y_min,
 	float		y_max,
 	float		resolution ) :
-		CRandomFieldGridMap2D(mapType, x_min,x_max,y_min,y_max,resolution ),
+		mrpt::utils::CSerializableCRTP<CGasConcentrationGridMap2D,CRandomFieldGridMap2D>(mapType, x_min,x_max,y_min,y_max,resolution ),
 		insertionOptions()
 {
 	// Override defaults:
@@ -264,65 +264,70 @@ double	 CGasConcentrationGridMap2D::internal_computeObservationLikelihood(
     THROW_EXCEPTION("Not implemented yet!");
 }
 
-/*---------------------------------------------------------------
-  Implements the writing to a CStream capability of CSerializable objects
- ---------------------------------------------------------------*/
-void  CGasConcentrationGridMap2D::writeToStream(mrpt::utils::CStream &out, int *version) const
-{
-	if (version)
-		*version = 5;
-	else
-	{
-		dyngridcommon_writeToStream(out);
-
-		// To assure compatibility: The size of each cell:
-		uint32_t n = static_cast<uint32_t>(sizeof( TRandomFieldCell ));
-		out << n;
-
-		// Save the map contents:
-		n = static_cast<uint32_t>(m_map.size());
-		out << n;
-
-		// Save the "m_map": This requires special handling for big endian systems:
-#if MRPT_IS_BIG_ENDIAN
-		for (uint32_t i=0;i<n;i++)
-		{
-			out << m_map[i].kf_mean << m_map[i].dm_mean << m_map[i].dmv_var_mean;
-		}
-#else
-		// Little endian: just write all at once:
-		out.WriteBuffer( &m_map[0], sizeof(m_map[0])*m_map.size() );  // TODO: Do this endianness safe!!
-#endif
-
-
-		// Version 1: Save the insertion options:
-		out << uint8_t(m_mapType)
-			<< m_cov
-			<< m_stackedCov;
-
-		out << insertionOptions.sigma
-			<< insertionOptions.cutoffRadius
-			<< insertionOptions.R_min
-			<< insertionOptions.R_max
-			<< insertionOptions.KF_covSigma
-			<< insertionOptions.KF_initialCellStd
-			<< insertionOptions.KF_observationModelNoise
-			<< insertionOptions.KF_defaultCellMeanValue
-			<< insertionOptions.KF_W_size;
-
-		// New in v3:
-		out << m_average_normreadings_mean << m_average_normreadings_var << uint64_t(m_average_normreadings_count);
-
-		out << genericMapParams; // v4
-	}
-}
-
 // Aux struct used below (must be at global scope for STL):
 struct TOldCellTypeInVersion1
 {
 	float	mean, std;
 	float	w,wr;
 };
+
+
+namespace mrpt
+{
+namespace utils
+{
+/*---------------------------------------------------------------
+  Implements the writing to a CStream capability of CSerializable objects
+ ---------------------------------------------------------------*/
+template <> void  CSerializer<CGasConcentrationGridMap2D>::writeToStream(const CGasConcentrationGridMap2D &o, mrpt::utils::CStream &out, int *version)
+{
+	if (version)
+		*version = 5;
+	else
+	{
+		o.dyngridcommon_writeToStream(out);
+
+		// To assure compatibility: The size of each cell:
+		uint32_t n = static_cast<uint32_t>(sizeof( TRandomFieldCell ));
+		out << n;
+
+		// Save the map contents:
+		n = static_cast<uint32_t>(o.m_map.size());
+		out << n;
+
+		// Save the "m_map": This requires special handling for big endian systems:
+#if MRPT_IS_BIG_ENDIAN
+		for (uint32_t i=0;i<n;i++)
+		{
+			out << o.m_map[i].kf_mean << o.m_map[i].do.m_mean << o.m_map[i].dmv_var_mean;
+		}
+#else
+		// Little endian: just write all at once:
+		out.WriteBuffer( &o.m_map[0], sizeof(o.m_map[0])*o.m_map.size() );  // TODO: Do this endianness safe!!
+#endif
+
+
+		// Version 1: Save the insertion options:
+		out << uint8_t(o.m_mapType)
+			<< o.m_cov
+			<< o.m_stackedCov;
+
+		out << o.insertionOptions.sigma
+			<< o.insertionOptions.cutoffRadius
+			<< o.insertionOptions.R_min
+			<< o.insertionOptions.R_max
+			<< o.insertionOptions.KF_covSigma
+			<< o.insertionOptions.KF_initialCellStd
+			<< o.insertionOptions.KF_observationModelNoise
+			<< o.insertionOptions.KF_defaultCellMeanValue
+			<< o.insertionOptions.KF_W_size;
+
+		// New in v3:
+		out << o.m_average_normreadings_mean << o.m_average_normreadings_var << uint64_t(o.m_average_normreadings_count);
+
+		out << o.genericMapParams; // v4
+	}
+}
 
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
@@ -338,7 +343,7 @@ template <> void CSerializer<CGasConcentrationGridMap2D>::readFromStream(CGasCon
 	case 4:
 	case 5:
 		{
-			dyngridcommon_readFromStream(in, version<5);
+			o.dyngridcommon_readFromStream(in, version<5);
 
 			// To assure compatibility: The size of each cell:
 			uint32_t	n;
@@ -353,11 +358,11 @@ template <> void CSerializer<CGasConcentrationGridMap2D>::readFromStream(CGasCon
 				in.ReadBuffer( &old_map[0], sizeof(old_map[0])*old_map.size() );
 
 				// Convert to newer format:
-				m_map.resize(n);
+				o.m_map.resize(n);
 				for (size_t k=0;k<n;k++)
 				{
-					m_map[k].kf_mean = (old_map[k].w!=0) ? old_map[k].wr : old_map[k].mean;
-					m_map[k].kf_std  = (old_map[k].w!=0) ? old_map[k].w  : old_map[k].std;
+					o.m_map[k].kf_mean = (old_map[k].w!=0) ? old_map[k].wr : old_map[k].mean;
+					o.m_map[k].kf_std  = (old_map[k].w!=0) ? old_map[k].w  : old_map[k].std;
 				}
 			}
 			else
@@ -365,15 +370,15 @@ template <> void CSerializer<CGasConcentrationGridMap2D>::readFromStream(CGasCon
 				ASSERT_EQUAL_( n , static_cast<uint32_t>( sizeof( TRandomFieldCell ) ));
 				// Load the map contents:
 				in >> n;
-				m_map.resize(n);
+				o.m_map.resize(n);
 
 				// Read the note in writeToStream()
 #if MRPT_IS_BIG_ENDIAN
 				for (uint32_t i=0;i<n;i++)
-					in >> m_map[i].kf_mean >> m_map[i].dm_mean >> m_map[i].dmv_var_mean;
+					in >> o.m_map[i].kf_mean >> o.m_map[i].do.m_mean >> o.m_map[i].dmv_var_mean;
 #else
 				// Little endian: just read all at once:
-				in.ReadBuffer( &m_map[0], sizeof(m_map[0])*m_map.size() );
+				in.ReadBuffer( &o.m_map[0], sizeof(o.m_map[0])*o.m_map.size() );
 #endif
 			}
 
@@ -382,39 +387,40 @@ template <> void CSerializer<CGasConcentrationGridMap2D>::readFromStream(CGasCon
 			{
 				uint8_t	i;
 				in  >> i;
-				m_mapType = TMapRepresentation(i);
+				o.m_mapType = CGasConcentrationGridMap2D::TMapRepresentation(i);
 
-				in	>> m_cov
-					>> m_stackedCov;
+				in	>> o.m_cov
+					>> o.m_stackedCov;
 
-				in  >> insertionOptions.sigma
-					>> insertionOptions.cutoffRadius
-					>> insertionOptions.R_min
-					>> insertionOptions.R_max
-					>> insertionOptions.KF_covSigma
-					>> insertionOptions.KF_initialCellStd
-					>> insertionOptions.KF_observationModelNoise
-					>> insertionOptions.KF_defaultCellMeanValue
-					>> insertionOptions.KF_W_size;
+				in  >> o.insertionOptions.sigma
+					>> o.insertionOptions.cutoffRadius
+					>> o.insertionOptions.R_min
+					>> o.insertionOptions.R_max
+					>> o.insertionOptions.KF_covSigma
+					>> o.insertionOptions.KF_initialCellStd
+					>> o.insertionOptions.KF_observationModelNoise
+					>> o.insertionOptions.KF_defaultCellMeanValue
+					>> o.insertionOptions.KF_W_size;
 			}
 
 			if (version>=3)
 			{
 				uint64_t N;
-				in >> m_average_normreadings_mean >> m_average_normreadings_var >> N;
-				m_average_normreadings_count = N;
+				in >> o.m_average_normreadings_mean >> o.m_average_normreadings_var >> N;
+				o.m_average_normreadings_count = N;
 			}
 
 			if (version>=4)
-				in >> genericMapParams;
+				in >> o.genericMapParams;
 
-			m_hasToRecoverMeanAndCov = true;
+			o.m_hasToRecoverMeanAndCov = true;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
+}
+}
 }
 
 /*---------------------------------------------------------------

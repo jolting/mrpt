@@ -83,6 +83,10 @@ void  CSensoryFrame::clear()
 	m_cachedMap.reset();
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
@@ -94,17 +98,17 @@ template <> void CSerializer<CSensoryFrame>::writeToStream(const CSensoryFrame& 
 	{
 		uint32_t		i,n;
 
-		n = static_cast<uint32_t>(m_observations.size());
+		n = static_cast<uint32_t>(o.m_observations.size());
 		out << n;
 		for (i=0;i<n;i++)
-			out << *m_observations[i];
+			out << *o.m_observations[i];
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CSensoryFrame::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CSensoryFrame>::readFromStream(CSensoryFrame &o, mrpt::utils::CStream &in,int version)
 {
 	MRPT_START
 
@@ -117,7 +121,7 @@ void  CSensoryFrame::readFromStream(mrpt::utils::CStream &in,int version)
 			uint32_t	i,n;
 			mrpt::system::TTimeStamp	tempTimeStamp= INVALID_TIMESTAMP;
 
-			clear();
+			o.clear();
 			if (version<2)		// ID was removed in version 2
 			{
 				uint32_t ID;
@@ -128,12 +132,12 @@ void  CSensoryFrame::readFromStream(mrpt::utils::CStream &in,int version)
 				in.ReadBufferFixEndianness( &tempTimeStamp, 1);
 
 			in >> n;
-			m_observations.resize(n);
-			for_each( m_observations.begin(), m_observations.end(), ObjectReadFromStream(&in) );
+			o.m_observations.resize(n);
+			for_each( o.m_observations.begin(), o.m_observations.end(), ObjectReadFromStream(&in) );
 
 			if (version==0)
 				for (i=0;i<n;i++)
-					m_observations[i]->timestamp = tempTimeStamp;
+					o.m_observations[i]->timestamp = tempTimeStamp;
 
 		} break;
 	default:
@@ -141,11 +145,12 @@ void  CSensoryFrame::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 
-	m_cachedMap.reset();
+	o.m_cachedMap.reset();
 
 	MRPT_END
 }
-
+}
+}
 
 /*---------------------------------------------------------------
 						operator +=

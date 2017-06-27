@@ -47,9 +47,9 @@ namespace mrpt
 		  * \sa CObservation
 	 	  * \ingroup mrpt_obs_grp
 		  */
-		class OBS_IMPEXP CSensoryFrame : public mrpt::utils::CSerializable
+		class OBS_IMPEXP CSensoryFrame : public mrpt::utils::CSerializableCRTP<CSensoryFrame>
 		{
-			DEFINE_SERIALIZABLE( CSensoryFrame )
+			friend mrpt::utils::CSerializer<CSensoryFrame>;
 
 		public:
 			 /** Default constructor

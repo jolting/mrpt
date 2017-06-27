@@ -40,9 +40,9 @@ namespace maps
 	  * \ingroup mrpt_maps_grp
 	 * \sa CMetricMap
 	 */
-	class MAPS_IMPEXP CBeaconMap : public mrpt::maps::CMetricMap
+	class MAPS_IMPEXP CBeaconMap : public mrpt::utils::CSerializableCRTP<CBeaconMap, mrpt::maps::CMetricMap>
 	{
-		DEFINE_SERIALIZABLE( CBeaconMap )
+		friend mrpt::utils::CSerializer<CBeaconMap>;
 
 	public:
 		typedef std::deque<CBeacon>					TSequenceBeacons;

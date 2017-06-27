@@ -24,7 +24,9 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CMeshFast, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<mrpt::opengl::CMeshFast>::getClassName() {
+	return "CMeshFast";
+}
 
 void CMeshFast::updatePoints() const	{
 	CRenderizableDisplayList::notifyChange();

@@ -50,7 +50,7 @@ namespace mrpt
 		 */
 		class OBS_IMPEXP CRawlog : public mrpt::utils::CSerializableCRTP<CRawlog>
 		{
-			DEFINE_SERIALIZABLE( CRawlog )
+			friend mrpt::utils::CSerializer<CRawlog>;
 
 		private:
 			typedef	std::vector<mrpt::utils::CSerializable::Ptr> TListObjects;

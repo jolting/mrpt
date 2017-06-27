@@ -80,7 +80,7 @@ CHeightGridMap2D_MRF::CHeightGridMap2D_MRF(
 	double y_min, double y_max, double resolution,
 	bool  run_first_map_estimation_now
 	) :
-	CRandomFieldGridMap2D(mapType, x_min,x_max,y_min,y_max,resolution ),
+	mrpt::utils::CSerializableCRTP<CHeightGridMap2D_MRF, CRandomFieldGridMap2D>(mapType, x_min,x_max,y_min,y_max,resolution ),
 	insertionOptions()
 {
 	m_rfgm_run_update_upon_clear = run_first_map_estimation_now;
@@ -147,10 +147,12 @@ double	 CHeightGridMap2D_MRF::internal_computeObservationLikelihood(
 	THROW_EXCEPTION("Not implemented yet!");
 }
 
+namespace mrpt {
+namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CHeightGridMap2D_MRF::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CHeightGridMap2D_MRF>::writeToStream(const CHeightGridMap2D_MRF &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
@@ -179,24 +181,26 @@ void  CHeightGridMap2D_MRF::writeToStream(mrpt::utils::CStream &out, int *versio
 
 
 		// Save the insertion options:
-		out << uint8_t(m_mapType)
-			<< m_cov
-			<< m_stackedCov;
+		out << uint8_t(o.m_mapType)
+			<< o.m_cov
+			<< o.m_stackedCov;
 
-		out << insertionOptions.sigma
-			<< insertionOptions.cutoffRadius
-			<< insertionOptions.R_min
-			<< insertionOptions.R_max
-			<< insertionOptions.KF_covSigma
-			<< insertionOptions.KF_initialCellStd
-			<< insertionOptions.KF_observationModelNoise
-			<< insertionOptions.KF_defaultCellMeanValue
-			<< insertionOptions.KF_W_size;
+		out << o.insertionOptions.sigma
+			<< o.insertionOptions.cutoffRadius
+			<< o.insertionOptions.R_min
+			<< o.insertionOptions.R_max
+			<< o.insertionOptions.KF_covSigma
+			<< o.insertionOptions.KF_initialCellStd
+			<< o.insertionOptions.KF_observationModelNoise
+			<< o.insertionOptions.KF_defaultCellMeanValue
+			<< o.insertionOptions.KF_W_size;
 
-		out << m_average_normreadings_mean << m_average_normreadings_var << uint64_t(m_average_normreadings_count);
+		out << o.m_average_normreadings_mean << o.m_average_normreadings_var << uint64_t(o.m_average_normreadings_count);
 
-		out << genericMapParams;
+		out << o.genericMapParams;
 	}
+}
+}
 }
 
 /*---------------------------------------------------------------

@@ -31,7 +31,7 @@ namespace maps
 	 */
 	class OBS_IMPEXP CSimpleMap : public mrpt::utils::CSerializableCRTP<CSimpleMap>
 	{
-		DEFINE_SERIALIZABLE( CSimpleMap )
+		friend mrpt::utils::CSerializer<CSimpleMap>;
 	public:
 		CSimpleMap(); //!< Default constructor (empty map)
 		CSimpleMap( const CSimpleMap &o ); //!< Copy constructor

@@ -155,35 +155,37 @@ double	 CHeightGridMap2D::internal_computeObservationLikelihood(
     THROW_EXCEPTION("Not implemented yet!");
 }
 
+namespace mrpt {
+namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CHeightGridMap2D::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CHeightGridMap2D>::writeToStream(const CHeightGridMap2D &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 3;
 	else
 	{
-		dyngridcommon_writeToStream(out);
+		o.dyngridcommon_writeToStream(out);
 
 		// To assure compatibility: The size of each cell:
 		uint32_t n = static_cast<uint32_t>(sizeof( THeightGridmapCell ));
 		out << n;
 
 		// Save the map contents:
-		n = static_cast<uint32_t>(m_map.size());
+		n = static_cast<uint32_t>(o.m_map.size());
 		out << n;
-		for (vector<THeightGridmapCell>::const_iterator it=m_map.begin();it!=m_map.end();++it)
+		for (vector<THeightGridmapCell>::const_iterator it=o.m_map.begin();it!=o.m_map.end();++it)
 			out << it->h << it->w; // This was removed in version 1: << it->history_Zs;
 
 		// Save the insertion options:
-		out << uint8_t(m_mapType);
+		out << uint8_t(o.m_mapType);
 
-		out << insertionOptions.filterByHeight
-			<< insertionOptions.z_min
-			<< insertionOptions.z_max;
+		out << o.insertionOptions.filterByHeight
+			<< o.insertionOptions.z_min
+			<< o.insertionOptions.z_max;
 
-		out << genericMapParams; // v2
+		out << o.genericMapParams; // v2
 	}
 }
 
@@ -199,7 +201,7 @@ template <> void CSerializer<CHeightGridMap2D>::readFromStream(CHeightGridMap2D&
 	case 2:
 	case 3:
 		{
-			dyngridcommon_readFromStream(in, version<3);
+			o.dyngridcommon_readFromStream(in, version<3);
 			// To ensure compatibility: The size of each cell:
 			uint32_t	n;
 			in >> n;
@@ -207,8 +209,8 @@ template <> void CSerializer<CHeightGridMap2D>::readFromStream(CHeightGridMap2D&
 
 			// Save the map contents:
 			in >> n;
-			m_map.resize(n);
-			for (vector<THeightGridmapCell>::iterator it=m_map.begin();it!=m_map.end();++it)
+			o.m_map.resize(n);
+			for (vector<THeightGridmapCell>::iterator it=o.m_map.begin();it!=o.m_map.end();++it)
 			{
 				in >> it->h >> it->w;
 				// Data member in version 0:
@@ -222,14 +224,14 @@ template <> void CSerializer<CHeightGridMap2D>::readFromStream(CHeightGridMap2D&
 			// Insertion options:
 			uint8_t	ty;
 			in  >> ty;
-			m_mapType = TMapRepresentation(ty);
+			o.m_mapType = TMapRepresentation(ty);
 
-			in  >> insertionOptions.filterByHeight
-				>> insertionOptions.z_min
-				>> insertionOptions.z_max;
+			in  >> o.insertionOptions.filterByHeight
+				>> o.insertionOptions.z_min
+				>> o.insertionOptions.z_max;
 
 			if (version>=2) 
-				in >> genericMapParams;
+				in >> o.genericMapParams;
 
 		} break;
 	default:
@@ -237,6 +239,8 @@ template <> void CSerializer<CHeightGridMap2D>::readFromStream(CHeightGridMap2D&
 
 	};
 
+}
+}
 }
 
 /*---------------------------------------------------------------

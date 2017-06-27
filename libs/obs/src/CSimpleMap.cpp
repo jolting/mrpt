@@ -256,6 +256,10 @@ void  CSimpleMap::insert(
 	insert( CPose3DPDF::Ptr( CPose3DPDF::createFrom2D( *in_posePDF ) ) ,in_SF);
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 					writeToStream
 	Implements the writing to a CStream capability of
@@ -268,10 +272,10 @@ template <> void CSerializer<CSimpleMap>::writeToStream(const CSimpleMap& o, mrp
 	else
 	{
 		uint32_t		i,n;
-		n = m_posesObsPairs.size();
+		n = o.m_posesObsPairs.size();
 		out << n;
 		for (i=0;i<n;i++)
-			out << *m_posesObsPairs[i].first << *m_posesObsPairs[i].second;
+			out << *o.m_posesObsPairs[i].first << *o.m_posesObsPairs[i].second;
 	}
 }
 
@@ -285,24 +289,24 @@ template <> void CSerializer<CSimpleMap>::readFromStream(CSimpleMap& o, mrpt::ut
 	case 1:
 		{
 			uint32_t	i,n;
-			clear();
+			o.clear();
 			in >> n;
-			m_posesObsPairs.resize(n);
+			o.m_posesObsPairs.resize(n);
 			for (i=0;i<n;i++)
-				in >> m_posesObsPairs[i].first >> m_posesObsPairs[i].second;
+				in >> o.m_posesObsPairs[i].first >> o.m_posesObsPairs[i].second;
 		} break;
 	case 0:
 		{
 			// There are 2D poses PDF instead of 3D: transform them:
 			uint32_t	i,n;
-			clear();
+			o.clear();
 			in >> n;
-			m_posesObsPairs.resize(n);
+			o.m_posesObsPairs.resize(n);
 			for (i=0;i<n;i++)
 			{
 				CPosePDF::Ptr aux2Dpose;
-				in >> aux2Dpose >> m_posesObsPairs[i].second;
-				m_posesObsPairs[i].first = CPose3DPDF::Ptr( CPose3DPDF::createFrom2D( *aux2Dpose ) );
+				in >> aux2Dpose >> o.m_posesObsPairs[i].second;
+				o.m_posesObsPairs[i].first = CPose3DPDF::Ptr( CPose3DPDF::createFrom2D( *aux2Dpose ) );
 			}
 		} break;
 	default:
@@ -310,7 +314,8 @@ template <> void CSerializer<CSimpleMap>::readFromStream(CSimpleMap& o, mrpt::ut
 
 	};
 }
-
+}
+}
 
 /*---------------------------------------------------------------
 					changeCoordinatesOrigin

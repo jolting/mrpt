@@ -55,7 +55,7 @@ namespace maps
 	 * \sa CMetricMap
 	 * \ingroup mrpt_vision_grp
 	 */
-	class VISION_IMPEXP CLandmarksMap : public mrpt::maps::CMetricMap
+	class VISION_IMPEXP CLandmarksMap : public mrpt::utils::CSerializableCRTP<CLandmarksMap, mrpt::maps::CMetricMap>
 	{
 		DEFINE_SERIALIZABLE( CLandmarksMap )
 

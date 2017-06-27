@@ -31,7 +31,7 @@ namespace mrpt
 		 * \sa CPointPDF, CPosePDF,
 		 * \ingroup poses_pdf_grp
 		 */
-		class BASE_IMPEXP  CPointPDFSOG : public CPointPDF
+		class BASE_IMPEXP  CPointPDFSOG : public mrpt::utils::CSerializableCRTP<CPointPDFSOG, CPointPDF>
 		{
 			friend mrpt::utils::CSerializer <CPointPDFSOG>;
 

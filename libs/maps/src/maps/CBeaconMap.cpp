@@ -110,24 +110,28 @@ void CBeaconMap::resize(const size_t N)
 	m_beacons.resize(N);
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CBeaconMap::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CBeaconMap>::writeToStream(const CBeaconMap &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
-		out << genericMapParams; // v1
+		out << o.genericMapParams; // v1
 
 		// First, write the number of landmarks:
-		const uint32_t n = m_beacons.size();
+		const uint32_t n = o.m_beacons.size();
 		out << n;
 		// Write all landmarks:
-		for (const_iterator	it=begin();it!=end();++it)
+		for (CBeaconMap::const_iterator it=o.begin();it!=o.end();++it)
 			out << (*it);
 
 	}
@@ -146,25 +150,26 @@ template <> void CSerializer<CBeaconMap>::readFromStream(CBeaconMap& o, mrpt::ut
 	case 1:
 		{
 			if (version>=1)
-				in >> genericMapParams; // v1
+				in >> o.genericMapParams; // v1
 
 			uint32_t	n,i;
 
 			// Delete previous content of map:
-			clear();
+			o.clear();
 
 			// Load from stream:
 			// Read all landmarks:
 			in >> n;
-			m_beacons.resize(n);
-			for (i=0;i<n;i++) in >> m_beacons[i];
+			o.m_beacons.resize(n);
+			for (i=0;i<n;i++) in >> o.m_beacons[i];
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
-
+}
+}
 
 /*---------------------------------------------------------------
 					computeObservationLikelihood

@@ -83,25 +83,29 @@ void 	CLandmark::setPose( const CPointPDFGaussian	&pose )
     pose_cov_23 = pose.cov(1,2);
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CLandmark::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CLandmark>::writeToStream(const CLandmark &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 4;
 	else
 	{
-		out << features
-			<< pose_mean
-			<< normal
-			<< pose_cov_11 << pose_cov_22 << pose_cov_33
-			<< pose_cov_12 << pose_cov_13 << pose_cov_23
-			<< ID
-			<< timestampLastSeen
-			<< seenTimesCount;
+		out << o.features
+			<< o.pose_mean
+			<< o.normal
+			<< o.pose_cov_11 << o.pose_cov_22 << o.pose_cov_33
+			<< o.pose_cov_12 << o.pose_cov_13 << o.pose_cov_23
+			<< o.ID
+			<< o.timestampLastSeen
+			<< o.seenTimesCount;
 	}
 }
 
@@ -122,16 +126,18 @@ template <> void CSerializer<CLandmark>::readFromStream(CLandmark& o, mrpt::util
 		break;
 	case 4:
 		{
-		in  >> features
-			>> pose_mean
-			>> normal
-			>> pose_cov_11 >> pose_cov_22 >> pose_cov_33
-			>> pose_cov_12 >> pose_cov_13 >> pose_cov_23
-			>> ID
-			>> timestampLastSeen
-			>> seenTimesCount;
+		in  >> o.features
+			>> o.pose_mean
+			>> o.normal
+			>> o.pose_cov_11 >> o.pose_cov_22 >> o.pose_cov_33
+			>> o.pose_cov_12 >> o.pose_cov_13 >> o.pose_cov_23
+			>> o.ID
+			>> o.timestampLastSeen
+			>> o.seenTimesCount;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }

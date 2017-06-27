@@ -35,7 +35,7 @@ namespace utils
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-template <> void  CSerializer<CObservationWindSensor>::writeToStream(CObservationWindSensor &o, mrpt::utils::CStream &out, int *version)
+template <> void  CSerializer<CObservationWindSensor>::writeToStream(const CObservationWindSensor &o, mrpt::utils::CStream &out, int *version)
 {
 	MRPT_UNUSED_PARAM(out);
 	if (version)

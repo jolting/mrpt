@@ -47,7 +47,7 @@ namespace poses
 	 * \ingroup poses_pdf_grp
 	 */
 	class BASE_IMPEXP CPointPDFParticles : 
-		public CPointPDF, 
+		public mrpt::utils::CSerializableCRTP<CPointPDFParticles, CPointPDF>, 
 		public mrpt::bayes::CParticleFilterData<TSimple3DPoint>,
 		public mrpt::bayes::CParticleFilterDataImpl<CPointPDFParticles,mrpt::bayes::CParticleFilterData<TSimple3DPoint>::CParticleList>
 	{

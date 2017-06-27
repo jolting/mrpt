@@ -52,11 +52,11 @@ namespace mrpt
 		  * \ingroup mrpt_maps_grp
 		  */
 		class MAPS_IMPEXP CHeightGridMap2D :
-			public mrpt::maps::CMetricMap,
+			public mrpt::utils::CSerializableCRTP<CHeightGridMap2D, mrpt::maps::CMetricMap>,
 			public utils::CDynamicGrid<THeightGridmapCell>,
 			public CHeightGridMap2D_Base
 		{
-			DEFINE_SERIALIZABLE( CHeightGridMap2D )
+			friend mrpt::utils::CSerializer<CHeightGridMap2D>;
 		public:
 
 			/** Calls the base CMetricMap::clear

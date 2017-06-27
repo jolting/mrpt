@@ -20,7 +20,9 @@ using namespace mrpt::math;
 using namespace mrpt::poses;
 using namespace mrpt::utils;
 
-IMPLEMENTS_SERIALIZABLE(COpenGLStandardObject,CRenderizableDisplayList,mrpt::opengl)
+template <> const char * mrpt::utils::CSerializer<mrpt::opengl::COpenGLStandardObject>::getClassName() {
+	return "COpenGLStandardObject";
+}
 
 #define COMPILE_TIME_ASSERT(N,expr)   \
 	char dummy_constraint##N[expr]

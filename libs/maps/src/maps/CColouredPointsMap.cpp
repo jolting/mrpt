@@ -149,36 +149,35 @@ void  CColouredPointsMap::copyFrom(const CPointsMap &obj)
 
 }
 
-
-
-
+namespace mrpt{
+namespace utils {
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CColouredPointsMap::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CColouredPointsMap>::writeToStream(const CColouredPointsMap &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 9;
 	else
 	{
-		uint32_t n = x.size();
+		uint32_t n = o.x.size();
 
 		// First, write the number of points:
 		out << n;
 
 		if (n>0)
 		{
-			out.WriteBufferFixEndianness(&x[0],n);
-			out.WriteBufferFixEndianness(&y[0],n);
-			out.WriteBufferFixEndianness(&z[0],n);
+			out.WriteBufferFixEndianness(&o.x[0],n);
+			out.WriteBufferFixEndianness(&o.y[0],n);
+			out.WriteBufferFixEndianness(&o.z[0],n);
 		}
-		out << m_color_R << m_color_G << m_color_B; // added in v4
+		out << o.m_color_R << o.m_color_G << o.m_color_B; // added in v4
 
-		out << genericMapParams; // v9
-		insertionOptions.writeToStream(out); // version 9?: insert options are saved with its own method
-		likelihoodOptions.writeToStream(out); // Added in version 5
+		out << o.genericMapParams; // v9
+		o.insertionOptions.writeToStream(out); // version 9?: insert options are saved with its own method
+		o.likelihoodOptions.writeToStream(out); // Added in version 5
 	}
 }
 
@@ -194,32 +193,32 @@ template <> void CSerializer<CColouredPointsMap>::readFromStream(CColouredPoints
 	case 8:
 	case 9:
 		{
-			mark_as_modified();
+			o.mark_as_modified();
 
 			// Read the number of points:
 			uint32_t n;
 			in >> n;
 
-			this->resize(n);
+			o.resize(n);
 
 			if (n>0)
 			{
-				in.ReadBufferFixEndianness(&x[0],n);
-				in.ReadBufferFixEndianness(&y[0],n);
-				in.ReadBufferFixEndianness(&z[0],n);
+				in.ReadBufferFixEndianness(&o.x[0],n);
+				in.ReadBufferFixEndianness(&o.y[0],n);
+				in.ReadBufferFixEndianness(&o.z[0],n);
 			}
-			in >> m_color_R >> m_color_G >> m_color_B;
+			in >> o.m_color_R >> o.m_color_G >> o.m_color_B;
 
 			if (version>=9)
-				in >> genericMapParams;
+				in >> o.genericMapParams;
 			else 
 			{
 				bool disableSaveAs3DObject;
 				in >> disableSaveAs3DObject;
-				genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
+				o.genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
 			}
-			insertionOptions.readFromStream(in);
-			likelihoodOptions.readFromStream(in);
+			o.insertionOptions.readFromStream(in);
+			o.likelihoodOptions.readFromStream(in);
 		} break;
 
 	case 0:
@@ -231,19 +230,19 @@ template <> void CSerializer<CColouredPointsMap>::readFromStream(CColouredPoints
 	case 6:
 	case 7:
 		{
-			mark_as_modified();
+			o.mark_as_modified();
 
 			// Read the number of points:
 			uint32_t n;
 			in >> n;
 
-			this->resize(n);
+			o.resize(n);
 
 			if (n>0)
 			{
-				in.ReadBufferFixEndianness(&x[0],n);
-				in.ReadBufferFixEndianness(&y[0],n);
-				in.ReadBufferFixEndianness(&z[0],n);
+				in.ReadBufferFixEndianness(&o.x[0],n);
+				in.ReadBufferFixEndianness(&o.y[0],n);
+				in.ReadBufferFixEndianness(&o.z[0],n);
 
 				// Version 1: weights are also stored:
 				// Version 4: Type becomes long int -> uint32_t for portability!!
@@ -274,12 +273,12 @@ template <> void CSerializer<CColouredPointsMap>::readFromStream(CColouredPoints
 			if (version>=2)
 			{
 				// version 2: options saved too
-				in 	>> insertionOptions.minDistBetweenLaserPoints
-					>> insertionOptions.addToExistingPointsMap
-					>> insertionOptions.also_interpolate
-					>> insertionOptions.disableDeletion
-					>> insertionOptions.fuseWithExisting
-					>> insertionOptions.isPlanarMap;
+				in 	>> o.insertionOptions.minDistBetweenLaserPoints
+					>> o.insertionOptions.addToExistingPointsMap
+					>> o.insertionOptions.also_interpolate
+					>> o.insertionOptions.disableDeletion
+					>> o.insertionOptions.fuseWithExisting
+					>> o.insertionOptions.isPlanarMap;
 
 				if (version<6)
 				{
@@ -287,22 +286,22 @@ template <> void CSerializer<CColouredPointsMap>::readFromStream(CColouredPoints
 					in >> old_matchStaticPointsOnly;
 				}
 
-				in >> insertionOptions.maxDistForInterpolatePoints;
+				in >> o.insertionOptions.maxDistForInterpolatePoints;
 				{
 					bool disableSaveAs3DObject;
 					in >> disableSaveAs3DObject;
-					genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
+					o.genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
 				}
 			}
 
 			if (version>=3)
 			{
-				in >> insertionOptions.horizontalTolerance;
+				in >> o.insertionOptions.horizontalTolerance;
 			}
 
 			if (version>=4)  // Color data
 			{
-				in >> m_color_R >> m_color_G >> m_color_B;
+				in >> o.m_color_R >> o.m_color_G >> o.m_color_B;
 				if (version>=7)
 				{
 					// Removed: in >> m_min_dist;
@@ -315,24 +314,25 @@ template <> void CSerializer<CColouredPointsMap>::readFromStream(CColouredPoints
 			}
 			else
 			{
-				m_color_R.assign(x.size(),1.0f);
-				m_color_G.assign(x.size(),1.0f);
-				m_color_B.assign(x.size(),1.0f);
-				//m_min_dist.assign(x.size(),2000.0f);
+				o.m_color_R.assign(o.x.size(),1.0f);
+				o.m_color_G.assign(o.x.size(),1.0f);
+				o.m_color_B.assign(o.x.size(),1.0f);
+				//o.m_min_dist.assign(x.size(),2000.0f);
 			}
 
 			if (version>=5) // version 5: added likelihoodOptions
-				likelihoodOptions.readFromStream(in);
+				o.likelihoodOptions.readFromStream(in);
 
 			if (version>=8) // version 8: added insertInvalidPoints
-				in >> insertionOptions.insertInvalidPoints;
+				in >> o.insertionOptions.insertInvalidPoints;
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
+}
+}
 }
 
 /*---------------------------------------------------------------

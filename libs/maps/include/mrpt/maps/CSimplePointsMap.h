@@ -29,9 +29,9 @@ namespace mrpt
 		 * \sa CMetricMap, CWeightedPointsMap, CPoint, mrpt::utils::CSerializable
 	  	 * \ingroup mrpt_maps_grp
 		 */
-		class MAPS_IMPEXP CSimplePointsMap : public CPointsMap
+		class MAPS_IMPEXP CSimplePointsMap : public mrpt::utils::CSerializableCRTP<CSimplePointsMap, CPointsMap>
 		{
-			DEFINE_SERIALIZABLE( CSimplePointsMap )
+			friend mrpt::utils::CSerializableCRTP<CSimplePointsMap>;
 
 		 public:
 			 CSimplePointsMap();          //!< Default constructor

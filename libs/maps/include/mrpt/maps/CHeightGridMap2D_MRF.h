@@ -30,9 +30,9 @@ namespace maps
 	  * \note New in MRPT 1.4.0
 	  * \ingroup mrpt_maps_grp
 	  */
-	class MAPS_IMPEXP CHeightGridMap2D_MRF : public CRandomFieldGridMap2D, public CHeightGridMap2D_Base
+	class MAPS_IMPEXP CHeightGridMap2D_MRF : public mrpt::utils::CSerializableCRTP<CHeightGridMap2D_MRF, CRandomFieldGridMap2D>, public CHeightGridMap2D_Base
 	{
-		DEFINE_SERIALIZABLE( CHeightGridMap2D_MRF )
+		friend mrpt::utils::CSerializer<CHeightGridMap2D_MRF>;
 	public:
 		/** Constructor */
 		CHeightGridMap2D_MRF(

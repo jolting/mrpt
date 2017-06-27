@@ -120,10 +120,14 @@ IMPLEMENTS_SERIALIZABLE(Plane, CSerializable, mrpt::pbmap)
 //  };
 //}
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
-void  Plane::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
+template <> void CSerializer<Plane>::writeToStream(const Plane &o, mrpt::utils::CStream &out, int *out_Version)
 {
 //cout << "Write plane. Version " << *out_Version << endl;
 	if (out_Version)
@@ -165,27 +169,27 @@ void  Plane::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
 		// The data
 //		out << static_cast<uint32_t>(numObservations);//out << uint32_t(numObservations);
 //		out << areaVoxels;
-		out << areaHull;
-		out << elongation;
-		out << curvature;
-    out << v3normal(0) << v3normal(1) << v3normal(2);
-    out << v3center(0) << v3center(1) << v3center(2);
-    out << v3PpalDir(0) << v3PpalDir(1) << v3PpalDir(2);
-    out << v3colorNrgb(0) << v3colorNrgb(1) << v3colorNrgb(2);
+		out << o.areaHull;
+		out << o.elongation;
+		out << o.curvature;
+    out << o.v3normal(0) << o.v3normal(1) << o.v3normal(2);
+    out << o.v3center(0) << o.v3center(1) << o.v3center(2);
+    out << o.v3PpalDir(0) << o.v3PpalDir(1) << o.v3PpalDir(2);
+    out << o.v3colorNrgb(0) << o.v3colorNrgb(1) << o.v3colorNrgb(2);
 ////    out << v3colorNrgbDev(0) << v3colorNrgbDev(1) << v3colorNrgbDev(2);
-    out << dominantIntensity;
-    out << bDominantColor;
+    out << o.dominantIntensity;
+    out << o.bDominantColor;
 
-    out << hist_H;
-//cout << "color " << hist_H.size() << endl;
-//    for (size_t i=0; i < 74; i++){//cout << hist_H[i] << " ";
+    out << o.hist_H;
+//cout << o."color " << o.hist_H.size() << o.endl;
+//    for (size_t i=0; i < 74; i++){//cout << o.hist_H[i] << o." ";
 //      out << hist_H[i];}
 
-    out << inliers;
+    out << o.inliers;
 
-    out << label;
-    out << label_object;
-    out << label_context;
+    out << o.label;
+    out << o.label_object;
+    out << o.label_context;
 
 //    out.WriteBufferFixEndianness<Eigen::Vector3f::Scalar>(&v3normal(0),3);
 //    out.WriteBufferFixEndianness<Eigen::Vector3f::Scalar>(&v3center(0),3);
@@ -199,12 +203,12 @@ void  Plane::writeToStream(mrpt::utils::CStream &out, int *out_Version) const
 //    for (std::map<unsigned,unsigned>::const_iterator it=neighborPlanes.begin(); it != neighborPlanes.end(); it++)
 //      out << static_cast<uint32_t>(it->first) << static_cast<uint32_t>(it->second);
 
-    out << (uint32_t)polygonContourPtr->size();
-    for (uint32_t i=0; i < polygonContourPtr->size(); i++)
-      out << polygonContourPtr->points[i].x << polygonContourPtr->points[i].y << polygonContourPtr->points[i].z;
+    out << (uint32_t)o.polygonContourPtr->size();
+    for (uint32_t i=0; i < o.polygonContourPtr->size(); i++)
+      out << o.polygonContourPtr->points[i].x << o.polygonContourPtr->points[i].y << o.polygonContourPtr->points[i].z;
 
-//    out << bFullExtent;
-//    out << bFromStructure;
+//    out << o.bFullExtent;
+//    out << o.bFromStructure;
 	}
 }
 
@@ -260,28 +264,28 @@ template <> void CSerializer<Plane>::readFromStream(Plane& o, mrpt::utils::CStre
 //			in >> n;
 //			numObservations = (unsigned)n;
 //			in >> areaVoxels;
-			in >> areaHull;
-			in >> elongation;
-			in >> curvature;
-			in >> v3normal(0) >> v3normal(1) >> v3normal(2);
-			in >> v3center(0) >> v3center(1) >> v3center(2);
-			in >> v3PpalDir(0) >> v3PpalDir(1) >> v3PpalDir(2);
-			d = -v3normal.dot(v3center);
-			in >> v3colorNrgb(0) >> v3colorNrgb(1) >> v3colorNrgb(2);
-////			in >> v3colorNrgbDev(0) >> v3colorNrgbDev(1) >> v3colorNrgbDev(2);
-      in >> dominantIntensity;
-      in >> bDominantColor;
+			in >> o.areaHull;
+			in >> o.elongation;
+			in >> o.curvature;
+			in >> o.v3normal(0) >> o.v3normal(1) >> o.v3normal(2);
+			in >> o.v3center(0) >> o.v3center(1) >> o.v3center(2);
+			in >> o.v3PpalDir(0) >> o.v3PpalDir(1) >> o.v3PpalDir(2);
+			o.d = -o.v3normal.dot(o.v3center);
+			in >> o.v3colorNrgb(0) >> o.v3colorNrgb(1) >> o.v3colorNrgb(2);
+////			in >> o.v3colorNrgbDev(0) >> o.v3colorNrgbDev(1) >> o.v3colorNrgbDev(2);
+      in >> o.dominantIntensity;
+      in >> o.bDominantColor;
 
-      in >> hist_H;
+      in >> o.hist_H;
 //      hist_H.resize(74);
 //      for (size_t i=0; i < 74; i++)
 //        in >> hist_H[i];
 
-      in >> inliers;
+      in >> o.inliers;
 
-      in >> label;
-      in >> label_object;
-      in >> label_context;
+      in >> o.label;
+      in >> o.label_object;
+      in >> o.label_context;
 ////cout << "Read Nrgb color \n";// << v3colorNrgb.transpose()
 ////
 ////cout << "Read color histogram\n";
@@ -302,17 +306,19 @@ template <> void CSerializer<Plane>::readFromStream(Plane& o, mrpt::utils::CStre
 
 			in >> n;
 //        cout << "neighbors " << n << endl;
-			polygonContourPtr->resize(n);
+			o.polygonContourPtr->resize(n);
       for (unsigned i=0; i < n; i++)
-        in >> polygonContourPtr->points[i].x >> polygonContourPtr->points[i].y >> polygonContourPtr->points[i].z;
+        in >> o.polygonContourPtr->points[i].x >> o.polygonContourPtr->points[i].y >> o.polygonContourPtr->points[i].z;
 
-//      in >> bFullExtent;
-//      in >> bFromStructure;
+//      in >> o.bFullExtent;
+//      in >> o.bFromStructure;
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
   };
+}
+}
 }
 
 /*!

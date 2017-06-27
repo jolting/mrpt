@@ -158,26 +158,30 @@ CSensoryFrame::Ptr  CRawlog::getAsObservations( size_t index ) const
 	MRPT_END
 }
 
-void  CRawlog::writeToStream(mrpt::utils::CStream &out, int *version) const
+namespace mrpt{
+namespace utils {
+
+template <> void  CSerializer<CRawlog>::writeToStream(const CRawlog &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
 		uint32_t	i,n;
-		n = static_cast<uint32_t>( m_seqOfActObs.size() );
+		n = static_cast<uint32_t>( o.m_seqOfActObs.size() );
 		out << n;
 		for (i=0;i<n;i++)
-			out << m_seqOfActObs[i];
+			out << o.m_seqOfActObs[i];
 
-		out << m_commentTexts;
+		out << o.m_commentTexts;
 	}
 }
+
 
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  CRawlog::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CRawlog>::readFromStream(CRawlog &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -186,19 +190,21 @@ void  CRawlog::readFromStream(mrpt::utils::CStream &in,int version)
 		{
 			uint32_t	i,n;
 
-			clear();
+			o.clear();
 
 			in >> n;
-			m_seqOfActObs.resize(n);
+			o.m_seqOfActObs.resize(n);
 			for (i=0;i<n;i++)
-				m_seqOfActObs[i] = CSerializable::Ptr( in.ReadObject() );
+				o.m_seqOfActObs[i] = CSerializable::Ptr( in.ReadObject() );
 
-			in >> m_commentTexts;
+			in >> o.m_commentTexts;
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 bool  CRawlog::loadFromRawLogFile( const std::string &fileName, bool non_obs_objects_are_legal )

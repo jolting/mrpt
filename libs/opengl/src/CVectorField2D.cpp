@@ -21,7 +21,10 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_SERIALIZABLE( CVectorField2D, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<mrpt::opengl::CVectorField2D>::getClassName()
+{
+	return "CVectorField2D";
+}
 
 /** Constructor */
 CVectorField2D::CVectorField2D()

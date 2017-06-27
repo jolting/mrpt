@@ -41,26 +41,29 @@ void TMapGenericParams::dumpToTextStream(mrpt::utils::CStream	&out) const
 	LOADABLEOPTS_DUMP_VAR(enableObservationInsertion   , bool);
 }
 
-void TMapGenericParams::writeToStream(mrpt::utils::CStream &out, int *version) const
+namespace mrpt {
+namespace utils {
+template <> void CSerializer<TMapGenericParams>::writeToStream(const TMapGenericParams &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << enableSaveAs3DObject << enableObservationLikelihood << enableObservationInsertion;
+		out << o.enableSaveAs3DObject << o.enableObservationLikelihood << o.enableObservationInsertion;
 	}
 }
 
-void TMapGenericParams::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<TMapGenericParams>::readFromStream(TMapGenericParams &o, mrpt::utils::CStream &in, int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			in >> enableSaveAs3DObject >> enableObservationLikelihood >> enableObservationInsertion;
+			in >> o.enableSaveAs3DObject >> o.enableObservationLikelihood >> o.enableObservationInsertion;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
-
+}
+}

@@ -166,24 +166,28 @@ size_t  CLandmarksMap::size() const
 	return landmarks.size();
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CLandmarksMap::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CLandmarksMap>::writeToStream(const CLandmarksMap &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		uint32_t n = landmarks.size();
+		uint32_t n = o.landmarks.size();
 
 		// First, write the number of landmarks:
 		out << n;
 
 		// Write all landmarks:
-		for (TSequenceLandmarks::const_iterator	it=landmarks.begin();it!=landmarks.end();++it)
+		for (TSequenceLandmarks::const_iterator	it=o.landmarks.begin();it!=o.landmarks.end();++it)
 			out << (*it);
 
 	}
@@ -205,19 +209,19 @@ template <> void CSerializer<CLandmarksMap>::readFromStream(CLandmarksMap& o, mr
 
 			// Delete previous content of map:
 			// -------------------------------------
-			landmarks.clear();
+			o.landmarks.clear();
 
 			// Load from stream:
 			// -------------------------------------
 			in >> n;
 
-			landmarks.clear(); // resize(n);
+			o.landmarks.clear(); // resize(n);
 
 			// Read all landmarks:
 			for (i=0;i<n;i++)
 			{
 				in >> lm;
-				landmarks.push_back(lm);
+				o.landmarks.push_back(lm);
 			}
 
 		} break;
@@ -226,6 +230,8 @@ template <> void CSerializer<CLandmarksMap>::readFromStream(CLandmarksMap& o, mr
 
 	};
 
+}
+}
 }
 
 /*---------------------------------------------------------------

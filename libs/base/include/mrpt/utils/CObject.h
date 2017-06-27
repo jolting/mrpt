@@ -113,7 +113,7 @@ namespace mrpt
 			/** Returns information about the class of an object in runtime. */
 			virtual const mrpt::utils::TRuntimeClassId* GetRuntimeClass() const
 			{
-				return &classinfo();
+				return nullptr;// &CSerializer<T>::GetClassInfo();
 			}
 
 			static const mrpt::utils::TRuntimeClassId &classinfo();
@@ -137,27 +137,9 @@ namespace mrpt
 
 		/** Just like DEFINE_MRPT_OBJECT but with DLL export/import linkage keywords. Note: The replication of macro arguments is to avoid errors with empty macro arguments */
 		#define DEFINE_MRPT_OBJECT_CUSTOM_LINKAGE(class_name, _STATIC_LINKAGE_, _VIRTUAL_LINKAGE_) \
-			/*! @name RTTI stuff  */ \
-			/*! @{  */ \
-		protected: \
-			_STATIC_LINKAGE_ const mrpt::utils::TRuntimeClassId* _GetBaseClass(); \
-			_STATIC_LINKAGE_ mrpt::utils::CLASSINIT _init_##class_name;\
-		public: \
-			/*! A typedef for the associated smart pointer */ \
-			using Ptr = std::shared_ptr<class_name>; \
-			using ConstPtr = std::shared_ptr<const class_name>; \
-			_STATIC_LINKAGE_ mrpt::utils::TRuntimeClassId  runtimeClassId; \
-			_STATIC_LINKAGE_ const mrpt::utils::TRuntimeClassId *classinfo; \
-			_VIRTUAL_LINKAGE_ const mrpt::utils::TRuntimeClassId* GetRuntimeClass() const override; \
-			_STATIC_LINKAGE_ mrpt::utils::CObject* CreateObject(); \
-			_VIRTUAL_LINKAGE_ mrpt::utils::CObject *clone() const override; \
-			/*! @} */ \
-		public: \
-			MRPT_MAKE_ALIGNED_OPERATOR_NEW \
 
 		/** This declaration must be inserted in all CObject classes definition, within the class declaration. */
 		#define DEFINE_MRPT_OBJECT(class_name) \
-			DEFINE_MRPT_OBJECT_CUSTOM_LINKAGE(class_name, static /*none*/, virtual /*none*/)
 
 		// This macro is a workaround to avoid possibly empty arguments to MACROS (when _LINKAGE_ evals to nothing...)
 		#define DEFINE_MRPT_OBJECT_POST_CUSTOM_BASE_LINKAGE(class_name, base_name, _LINKAGE_ ) DEFINE_MRPT_OBJECT_POST_CUSTOM_BASE_LINKAGE2(class_name, base_name, _LINKAGE_ class_name)
@@ -197,45 +179,16 @@ namespace mrpt
 		/** This must be inserted in all CObject classes implementation files
 		  */
 		#define IMPLEMENTS_MRPT_OBJECT(class_name, base,NameSpace) \
-			mrpt::utils::CObject* NameSpace::class_name::CreateObject() \
-				{ return static_cast<mrpt::utils::CObject*>( new NameSpace::class_name ); } \
-			const mrpt::utils::TRuntimeClassId* NameSpace::class_name::_GetBaseClass() \
-				{ return CLASS_ID(base); } \
-			mrpt::utils::TRuntimeClassId NameSpace::class_name::runtimeClassId = { \
-				#class_name, NameSpace::class_name::CreateObject, &class_name::_GetBaseClass }; \
-			const mrpt::utils::TRuntimeClassId *NameSpace::class_name::classinfo = & NameSpace::class_name::runtimeClassId; \
-			const mrpt::utils::TRuntimeClassId* NameSpace::class_name::GetRuntimeClass() const \
-			{ return CLASS_ID_NAMESPACE(class_name,NameSpace); } \
-			mrpt::utils::CLASSINIT NameSpace::class_name::_init_##class_name(CLASS_ID(base)); \
-			mrpt::utils::CObject * NameSpace::class_name::clone() const \
-			{ return static_cast<mrpt::utils::CObject*>( new NameSpace::class_name(*this) ); }
 
 
 		/** This declaration must be inserted in virtual CSerializable classes definition:
 		  */
 		#define DEFINE_VIRTUAL_MRPT_OBJECT(class_name) \
-		/*! @name RTTI stuff  */ \
-		/*! @{  */ \
-		protected: \
-			static const mrpt::utils::TRuntimeClassId* _GetBaseClass(); \
-		public: \
-			using Ptr = std::shared_ptr<class_name>; \
-			using ConstPtr = std::shared_ptr<const class_name>; \
-			static const mrpt::utils::TRuntimeClassId runtimeClassId; \
-			virtual const mrpt::utils::TRuntimeClassId* GetRuntimeClass() const override; \
-			friend class mrpt::utils::CStream; \
-		/*! @}  */ \
 
 		/** This must be inserted as implementation of some required members for
 		  *  virtual CSerializable classes:
 		  */
 		#define IMPLEMENTS_VIRTUAL_MRPT_OBJECT(class_name, base_class_name,NameSpace) \
-			const mrpt::utils::TRuntimeClassId* class_name::_GetBaseClass() \
-				{ return CLASS_ID(base_class_name); } \
-			const mrpt::utils::TRuntimeClassId class_name::runtimeClassId = { \
-				#class_name, nullptr, &class_name::_GetBaseClass }; \
-			const mrpt::utils::TRuntimeClassId* class_name::GetRuntimeClass() const \
-				{ return CLASS_ID(class_name); }
 
 		/** @}  */   // end of RTTI
 

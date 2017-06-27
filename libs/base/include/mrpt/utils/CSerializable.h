@@ -91,6 +91,8 @@ namespace mrpt
 		class BASE_IMPEXP CObjectCRTP : public BASE_T
 		{
                 public:
+			using BASE_T::BASE_T;
+			virtual ~CObjectCRTP(){}
 			using BASE = BASE_T;
                         /*! A typedef for the associated smart pointer */
 			using Ptr = std::shared_ptr<T>;
@@ -103,6 +105,10 @@ namespace mrpt
 			{
 				return &CSerializer<T>::runtimeClassId();
 			}
+			static mrpt::utils::CObject* CreateObject()
+			{
+				return nullptr;
+			}
 		};
 
 		class CSerializable;
@@ -111,7 +117,11 @@ namespace mrpt
 		class BASE_IMPEXP CSerializableCRTPVirtual : public CObjectCRTP<T, BASE_T>
 		{
 		public:
-
+			using CObjectCRTP<T, BASE_T>::CObjectCRTP;
+			virtual ~CSerializableCRTPVirtual() { }
+			//Pure Virtual here
+			virtual void  writeToStream(mrpt::utils::CStream &out, int *getVersion) const = 0;
+			virtual void  readFromStream(mrpt::utils::CStream &in, int version) = 0;
 		};
 
 		/** The virtual base class which provides a unified interface for all persistent objects in MRPT.
@@ -122,12 +132,12 @@ namespace mrpt
 		 */
 		class BASE_IMPEXP CSerializable : public CObjectCRTP<CSerializable>
 		{
-			// This must be added to any CObject derived class:
-			DEFINE_VIRTUAL_MRPT_OBJECT( CSerializable )
-
+		public: 
+			friend mrpt::utils::CStream;
+			using CObjectCRTP<CSerializable>::CObjectCRTP;
 			virtual ~CSerializable() { }
 
-			protected:
+		protected:
 			 /** Introduces a pure virtual method responsible for writing to a CStream.
 			  *  This can not be used directly be users, instead use "stream << object;"
 			  *   for writing it to a stream.
@@ -170,6 +180,8 @@ namespace mrpt
 		class BASE_IMPEXP CSerializableCRTP : public CSerializableCRTPVirtual<T, BASE_T>
 		{
 		public:
+			using CSerializableCRTPVirtual<T, BASE_T>::CSerializableCRTPVirtual;
+			virtual ~CSerializableCRTP() { }
 			void  writeToStream(mrpt::utils::CStream &out, int *getVersion) const override
 			{
 				CSerializer<T>::writeToStream(*static_cast<const T*>(this), out,getVersion);
@@ -242,43 +254,35 @@ namespace mrpt
 
 		/** Like DEFINE_SERIALIZABLE, but for template classes that need the DLL imp/exp keyword in Windows. */
 		#define DEFINE_SERIALIZABLE_CUSTOM_LINKAGE(class_name, _VOID_LINKAGE_, _STATIC_LINKAGE_, _VIRTUAL_LINKAGE_ ) \
-			DEFINE_MRPT_OBJECT_CUSTOM_LINKAGE(class_name, _STATIC_LINKAGE_, _VIRTUAL_LINKAGE_ ) \
-		protected: \
 
 		/** This declaration must be inserted in all CSerializable classes definition, within the class declaration. */
 		#define DEFINE_SERIALIZABLE(class_name) \
-			DEFINE_SERIALIZABLE_CUSTOM_LINKAGE(class_name, void /*no extra linkage keyword*/, static /*none*/,virtual /*none*/ ) \
 
 		/**  This declaration must be inserted in all CSerializable classes definition, before the class declaration.
 		  */
 
 		#define DEFINE_SERIALIZABLE_POST_CUSTOM_LINKAGE(class_name,_LINKAGE_) \
-			DEFINE_MRPT_OBJECT_POST_CUSTOM_BASE_LINKAGE2(class_name, mrpt::utils::CSerializable, _LINKAGE_ class_name) \
 
 		/**  This declaration must be inserted in all CSerializable classes definition, before the class declaration.
 		  */
 		#define DEFINE_SERIALIZABLE_PRE(class_name) \
 
 		#define DEFINE_SERIALIZABLE_POST(class_name) \
-			DEFINE_MRPT_OBJECT_POST_CUSTOM_BASE_LINKAGE2(class_name, mrpt::utils::CSerializable, BASE_IMPEXP class_name) \
 
 		/**  This declaration must be inserted in all CSerializable classes definition, before the class declaration.
 		  */
 
 		#define DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(class_name, base_name, _LINKAGE_ ) \
-			DEFINE_MRPT_OBJECT_POST_CUSTOM_BASE_LINKAGE2(class_name, base_name, _LINKAGE_ class_name) \
 
 		/**  This declaration must be inserted in all CSerializable classes definition, before the class declaration. */
 
 		#define DEFINE_SERIALIZABLE_POST_CUSTOM_BASE(class_name, base_name) \
-			DEFINE_MRPT_OBJECT_POST_CUSTOM_BASE_LINKAGE(class_name, base_name, BASE_IMPEXP ) \
 
 		/** This must be inserted in all CSerializable classes implementation files */
 		#define IMPLEMENTS_SERIALIZABLE(class_name, base,NameSpace) \
 
 		/** This declaration must be inserted in virtual CSerializable classes definition: */
 		#define DEFINE_VIRTUAL_SERIALIZABLE(class_name) \
-			DEFINE_VIRTUAL_MRPT_OBJECT(class_name) \
 
 		/** This must be inserted as implementation of some required members for
 		  *  virtual CSerializable classes:

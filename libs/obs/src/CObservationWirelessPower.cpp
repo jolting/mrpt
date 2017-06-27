@@ -27,10 +27,14 @@ CObservationWirelessPower::CObservationWirelessPower( ) :
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationWirelessPower::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationWirelessPower>::writeToStream(const CObservationWirelessPower &o, mrpt::utils::CStream &out, int *version)
 {
 	MRPT_UNUSED_PARAM(out);
 	if (version)
@@ -38,10 +42,10 @@ void  CObservationWirelessPower::writeToStream(mrpt::utils::CStream &out, int *v
 	else
 	{
 		// The data
-		out << power
-			<< sensorLabel
-			<< timestamp
-			<< sensorPoseOnRobot; // Added in v3
+		out << o.power
+			<< o.sensorLabel
+			<< o.timestamp
+			<< o.sensorPoseOnRobot; // Added in v3
 	}
 }
 
@@ -58,18 +62,18 @@ template <> void CSerializer<CObservationWirelessPower>::readFromStream(CObserva
 	case 2:
 	case 3:
 		{
-			in	>> power;
+			in	>> o.power;
 			if (version>=1)
-				in >> sensorLabel;
-			else sensorLabel="";
+				in >> o.sensorLabel;
+			else o.sensorLabel="";
 
 			if (version>=2)
-					in >> timestamp;
-			else 	timestamp = INVALID_TIMESTAMP;
+					in >> o.timestamp;
+			else 	o.timestamp = INVALID_TIMESTAMP;
 
 			if (version>=3)
-					in >> sensorPoseOnRobot;
-			else 	sensorPoseOnRobot = CPose3D();
+					in >> o.sensorPoseOnRobot;
+			else 	o.sensorPoseOnRobot = CPose3D();
 
 		} break;
 	default:
@@ -78,7 +82,8 @@ template <> void CSerializer<CObservationWirelessPower>::readFromStream(CObserva
 	};
 
 }
-
+}
+}
 
 
 void CObservationWirelessPower::getSensorPose( CPose3D &out_sensorPose ) const

@@ -31,7 +31,7 @@ namespace obs
 	class OBS_IMPEXP CAction : public mrpt::utils::CSerializableCRTPVirtual<CAction>
 	{
 		DEFINE_VIRTUAL_SERIALIZABLE( CAction )
-
+	public:
 		/** Default constructor
   		  */
 		CAction();

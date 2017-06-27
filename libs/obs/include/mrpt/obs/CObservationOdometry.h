@@ -28,9 +28,9 @@ namespace mrpt
 		 * \sa CObservation, CActionRobotMovement2D
 		 * \ingroup mrpt_obs_grp
 		 */
-		class OBS_IMPEXP CObservationOdometry : public CObservation
+		class OBS_IMPEXP CObservationOdometry : public mrpt::utils::CSerializableCRTP<CObservationOdometry, CObservation>
 		{
-			DEFINE_SERIALIZABLE( CObservationOdometry )
+			friend mrpt::utils::CSerializer<CObservationOdometry>;
 
 		 public:
 			CObservationOdometry(); //!< Default ctor

@@ -28,9 +28,9 @@ namespace mrpt
 		 * \sa CMetricMap, the example in "MRPT/samples/octomap_simple"
 	  	 * \ingroup mrpt_maps_grp
 		 */
-		class MAPS_IMPEXP CColouredOctoMap : public COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode>
+		class MAPS_IMPEXP CColouredOctoMap : public mrpt::utils::CSerializableCRTP<CColouredOctoMap, COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode> >
 		{
-			DEFINE_SERIALIZABLE( CColouredOctoMap )
+			friend mrpt::utils::CSerializer<CColouredOctoMap>;
 
 		 public:
 			 CColouredOctoMap(const double resolution=0.10);          //!< Default constructor

@@ -27,20 +27,24 @@ CObservationVisualLandmarks::CObservationVisualLandmarks( ) :
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationVisualLandmarks::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationVisualLandmarks>::writeToStream(const CObservationVisualLandmarks &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
-		out << refCameraPose
-			<< timestamp
+		out << o.refCameraPose
+			<< o.timestamp
 		// The landmarks:
-			<< landmarks
-			<< sensorLabel;
+			<< o.landmarks
+			<< o.sensorLabel;
 	}
 }
 
@@ -54,23 +58,25 @@ template <> void CSerializer<CObservationVisualLandmarks>::readFromStream(CObser
 	case 0:
 	case 1:
 		{
-			in 	>> refCameraPose
-				>> timestamp
+			in 	>> o.refCameraPose
+				>> o.timestamp
 
 			// The landmarks:
-				>> landmarks;
+				>> o.landmarks;
 
 			if (version>0)
-					in >> sensorLabel;
-			else	sensorLabel = "";
+					in >> o.sensorLabel;
+			else	o.sensorLabel = "";
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
 }
+}
+}
+
 
 /*---------------------------------------------------------------
  Inserts a pure virtual method for finding the likelihood between this

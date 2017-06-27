@@ -36,9 +36,9 @@ namespace maps
 	  * \sa CBeaconMap, CPointPDFSOG
 	  * \ingroup mrpt_maps_grp
 	  */
-	class MAPS_IMPEXP CBeacon : public mrpt::poses::CPointPDF
+	class MAPS_IMPEXP CBeacon : public mrpt::utils::CSerializableCRTP<CBeacon, mrpt::poses::CPointPDF>
 	{
-		DEFINE_SERIALIZABLE( CBeacon )
+		friend mrpt::utils::CSerializer<CBeacon>;
 
 	public:
 		/** The type for the IDs of landmarks.

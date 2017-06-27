@@ -316,6 +316,10 @@ void CFeature::dumpToConsole() const
     dumpToTextStream( myOut );
 }
 
+namespace mrpt
+{
+namespace utils
+{
 template <> void CSerializer<CFeature>::writeToStream(const CFeature& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
@@ -323,39 +327,39 @@ template <> void CSerializer<CFeature>::writeToStream(const CFeature& o, mrpt::u
 	else
 	{
 		// The coordinates:
-		out << x
-			<< y
-			<< ID
-			<< patch
-			<< patchSize
-			<< (uint32_t)type
-			<< (uint32_t)track_status
-			<< response
-			<< orientation
-			<< scale
-			<< user_flags
-			<< nTimesSeen
-			<< nTimesNotSeen
-			<< nTimesLastSeen
-			<< depth
-			<< initialDepth
-			<< p3D
-			<< multiScales
-			<< multiOrientations
-			<< multiHashCoeffs
-			<< descriptors.SIFT
-			<< descriptors.SURF
-			<< descriptors.SpinImg
-			<< descriptors.SpinImg_range_rows
-			<< descriptors.PolarImg
-			<< descriptors.LogPolarImg
-			<< descriptors.polarImgsNoRotation
-			<< descriptors.multiSIFTDescriptors
-			<< descriptors.ORB;
+		out << o.x
+			<< o.y
+			<< o.ID
+			<< o.patch
+			<< o.patchSize
+			<< (uint32_t)o.type
+			<< (uint32_t)o.track_status
+			<< o.response
+			<< o.orientation
+			<< o.scale
+			<< o.user_flags
+			<< o.nTimesSeen
+			<< o.nTimesNotSeen
+			<< o.nTimesLastSeen
+			<< o.depth
+			<< o.initialDepth
+			<< o.p3D
+			<< o.multiScales
+			<< o.multiOrientations
+			<< o.multiHashCoeffs
+			<< o.descriptors.SIFT
+			<< o.descriptors.SURF
+			<< o.descriptors.SpinImg
+			<< o.descriptors.SpinImg_range_rows
+			<< o.descriptors.PolarImg
+			<< o.descriptors.LogPolarImg
+			<< o.descriptors.polarImgsNoRotation
+			<< o.descriptors.multiSIFTDescriptors
+			<< o.descriptors.ORB;
 	}
 }
 
-void  CFeature::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CFeature>::readFromStream(CFeature &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -365,48 +369,50 @@ void  CFeature::readFromStream(mrpt::utils::CStream &in,int version)
 		{
 			// The coordinates:
 			uint32_t aux_type, aux_KLTS;
-			in  >> x
-				>> y
-				>> ID
-				>> patch
-				>> patchSize
+			in  >> o.x
+				>> o.y
+				>> o.ID
+				>> o.patch
+				>> o.patchSize
 				>> aux_type
 				>> aux_KLTS
-				>> response
-				>> orientation
-				>> scale
-				>> user_flags;
+				>> o.response
+				>> o.orientation
+				>> o.scale
+				>> o.user_flags;
 			if( version > 0 )
 			{
-				in  >> nTimesSeen
-					>> nTimesNotSeen
-					>> nTimesLastSeen
-					>> depth
-					>> initialDepth
-					>> p3D
-					>> multiScales
-					>> multiOrientations
-					>> multiHashCoeffs;
+				in  >> o.nTimesSeen
+					>> o.nTimesNotSeen
+					>> o.nTimesLastSeen
+					>> o.depth
+					>> o.initialDepth
+					>> o.p3D
+					>> o.multiScales
+					>> o.multiOrientations
+					>> o.multiHashCoeffs;
 			}
-			in  >> descriptors.SIFT
-				>> descriptors.SURF
-				>> descriptors.SpinImg
-				>> descriptors.SpinImg_range_rows
-				>> descriptors.PolarImg
-				>> descriptors.LogPolarImg
-				>> descriptors.polarImgsNoRotation;
+			in  >> o.descriptors.SIFT
+				>> o.descriptors.SURF
+				>> o.descriptors.SpinImg
+				>> o.descriptors.SpinImg_range_rows
+				>> o.descriptors.PolarImg
+				>> o.descriptors.LogPolarImg
+				>> o.descriptors.polarImgsNoRotation;
 			if( version > 0 )
-				in  >> descriptors.multiSIFTDescriptors;
+				in  >> o.descriptors.multiSIFTDescriptors;
 			if( version > 1 )
-				in 	>> descriptors.ORB;
+				in 	>> o.descriptors.ORB;
 
-			type		    = (TFeatureType)aux_type;
-			track_status	= (TFeatureTrackStatus)aux_KLTS;
+			o.type		    = (TFeatureType)aux_type;
+			o.track_status	= (TFeatureTrackStatus)aux_KLTS;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+}
 }
 
 /****************************************************

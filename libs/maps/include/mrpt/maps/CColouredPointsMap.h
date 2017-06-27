@@ -28,9 +28,9 @@ namespace mrpt
 		 * \sa mrpt::maps::CPointsMap, mrpt::maps::CMetricMap, mrpt::utils::CSerializable
   		 * \ingroup mrpt_maps_grp
 		 */
-		class MAPS_IMPEXP CColouredPointsMap : public CPointsMap
+		class MAPS_IMPEXP CColouredPointsMap : public mrpt::utils::CSerializableCRTP<CColouredPointsMap, CPointsMap>
 		{
-			DEFINE_SERIALIZABLE( CColouredPointsMap )
+			friend mrpt::utils::CSerializer<CColouredPointsMap>;
 
 		public:
 			 /** Destructor

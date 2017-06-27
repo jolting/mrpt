@@ -52,20 +52,24 @@ CBeacon::~CBeacon()
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CBeacon::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CBeacon>::writeToStream(const CBeacon &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		uint32_t	i = m_ID;
-		uint32_t	j = m_typePDF;
-		out << i << j << m_locationMC << m_locationGauss << m_locationSOG;
+		uint32_t	i = o.m_ID;
+		uint32_t	j = o.m_typePDF;
+		out << i << j << o.m_locationMC << o.m_locationGauss << o.m_locationSOG;
 	}
 }
 
@@ -81,15 +85,17 @@ template <> void CSerializer<CBeacon>::readFromStream(CBeacon& o, mrpt::utils::C
 	case 0:
 		{
 			uint32_t	i,j;
-			in >> i >> j >> m_locationMC >> m_locationGauss >> m_locationSOG;
-			m_ID = i;
-			m_typePDF = static_cast<TTypePDF>(j);
+			in >> i >> j >> o.m_locationMC >> o.m_locationGauss >> o.m_locationSOG;
+			o.m_ID = i;
+			o.m_typePDF = static_cast<CBeacon::TTypePDF>(j);
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 
+}
+}
 }
 
 /*---------------------------------------------------------------
