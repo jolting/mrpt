@@ -21,7 +21,7 @@ using namespace mrpt::math;
 using namespace std;
 
 template <> const char * mrpt::utils::CSerializer<CEllipsoidInverseDepth2D>::getClassName() { return "CEllipsoidInverseDepth2D";}
-
+template <> const char * mrpt::utils::CSerializer<CGeneralizedEllipsoidTemplate<2>>::getClassName() { return "CGeneralizedEllipsoidTemplate<2>";}
 /*---------------------------------------------------------------
 							transformFromParameterSpace
   ---------------------------------------------------------------*/

@@ -111,12 +111,10 @@ namespace maps
 	  * \ingroup mrpt_maps_grp
 	  */
 	class CRandomFieldGridMap2D :
-		public mrpt::maps::CMetricMap,
+		public mrpt::utils::CSerializableCRTPVirtual<CRandomFieldGridMap2D, mrpt::maps::CMetricMap>,
 		public mrpt::utils::CDynamicGrid<TRandomFieldCell>,
 		public mrpt::utils::COutputLogger
 	{
-		typedef utils::CDynamicGrid<TRandomFieldCell> BASE;
-
 		DEFINE_VIRTUAL_SERIALIZABLE( CRandomFieldGridMap2D )
 	public:
 

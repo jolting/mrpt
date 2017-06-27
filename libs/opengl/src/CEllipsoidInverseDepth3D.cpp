@@ -19,6 +19,7 @@ using namespace mrpt::math;
 using namespace std;
 
 template <> const char * mrpt::utils::CSerializer<CEllipsoidInverseDepth3D>::getClassName() { return "CEllipsoidInverseDepth3D";}
+template <> const char * mrpt::utils::CSerializer<CGeneralizedEllipsoidTemplate<3>>::getClassName() { return "CGeneralizedEllipsoidTemplate<3>";}
 
 /*---------------------------------------------------------------
 							transformFromParameterSpace

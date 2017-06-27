@@ -86,24 +86,28 @@ CColouredOctoMap::~CColouredOctoMap()
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
 				CSerializable objects
   ---------------------------------------------------------------*/
-void  CColouredOctoMap::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CColouredOctoMap>::writeToStream(const CColouredOctoMap &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
-		this->likelihoodOptions.writeToStream(out);
-		this->renderingOptions.writeToStream(out);  // Added in v1
-		out << genericMapParams; // v2
+		o.likelihoodOptions.writeToStream(out);
+		o.renderingOptions.writeToStream(out);  // Added in v1
+		out << o.genericMapParams; // v2
 
 		CMemoryChunk chunk;
 		const string	tmpFil = mrpt::system::getTempFileName();
-		const_cast<octomap::ColorOcTree*>(&m_octomap)->writeBinary(tmpFil);
+		const_cast<octomap::ColorOcTree*>(&o.m_octomap)->writeBinary(tmpFil);
 		chunk.loadBufferFromFile(tmpFil);
 		mrpt::system::deleteFile(tmpFil);
 		out << chunk;
@@ -124,11 +128,11 @@ template <> void CSerializer<CColouredOctoMap>::readFromStream(CColouredOctoMap&
 	case 1:
 	case 2:
 		{
-			this->likelihoodOptions.readFromStream(in);
-			if (version>=1) this->renderingOptions.readFromStream(in);
-			if (version>=2) in >> genericMapParams;
+			o.likelihoodOptions.readFromStream(in);
+			if (version>=1) o.renderingOptions.readFromStream(in);
+			if (version>=2) in >> o.genericMapParams;
 
-			this->clear();
+			o.clear();
 
 			CMemoryChunk chunk;
 			in >> chunk;
@@ -137,7 +141,7 @@ template <> void CSerializer<CColouredOctoMap>::readFromStream(CColouredOctoMap&
 			{
 				const string	tmpFil = mrpt::system::getTempFileName();
 				if (!chunk.saveBufferToFile( tmpFil ) ) THROW_EXCEPTION("Error saving temporary file");
-				m_octomap.readBinary(tmpFil);
+				o.m_octomap.readBinary(tmpFil);
 				mrpt::system::deleteFile( tmpFil );
 			}
 
@@ -146,6 +150,8 @@ template <> void CSerializer<CColouredOctoMap>::readFromStream(CColouredOctoMap&
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 
+}
+}
 }
 
 /*---------------------------------------------------------------

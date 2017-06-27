@@ -212,7 +212,7 @@ template <> void CSerializer<CHeightGridMap2D_MRF>::readFromStream(CHeightGridMa
 	{
 	case 0:
 		{
-			dyngridcommon_readFromStream(in);
+			o.dyngridcommon_readFromStream(in);
 
 			// To assure compatibility: The size of each cell:
 			uint32_t n;
@@ -221,45 +221,45 @@ template <> void CSerializer<CHeightGridMap2D_MRF>::readFromStream(CHeightGridMa
 			ASSERT_EQUAL_( n , static_cast<uint32_t>( sizeof( TRandomFieldCell ) ));
 			// Load the map contents:
 			in >> n;
-			m_map.resize(n);
+			o.m_map.resize(n);
 
 			// Read the note in writeToStream()
 #if MRPT_IS_BIG_ENDIAN
 			for (uint32_t i=0;i<n;i++)
-				in >> m_map[i].kf_mean >> m_map[i].dm_mean >> m_map[i].dmv_var_mean;
+				in >> o.m_map[i].kf_mean >> o.m_map[i].do.m_mean >> o.m_map[i].dmv_var_mean;
 #else
 			// Little endian: just read all at once:
-			in.ReadBuffer( &m_map[0], sizeof(m_map[0])*m_map.size() );
+			in.ReadBuffer( &o.m_map[0], sizeof(o.m_map[0])*o.m_map.size() );
 #endif
 
 			{
 				uint8_t	i;
 				in  >> i;
-				m_mapType = TMapRepresentation(i);
+				o.m_mapType = CHeightGridMap2D_MRF::TMapRepresentation(i);
 
-				in	>> m_cov
-					>> m_stackedCov;
+				in	>> o.m_cov
+					>> o.m_stackedCov;
 
-				in  >> insertionOptions.sigma
-					>> insertionOptions.cutoffRadius
-					>> insertionOptions.R_min
-					>> insertionOptions.R_max
-					>> insertionOptions.KF_covSigma
-					>> insertionOptions.KF_initialCellStd
-					>> insertionOptions.KF_observationModelNoise
-					>> insertionOptions.KF_defaultCellMeanValue
-					>> insertionOptions.KF_W_size;
+				in  >> o.insertionOptions.sigma
+					>> o.insertionOptions.cutoffRadius
+					>> o.insertionOptions.R_min
+					>> o.insertionOptions.R_max
+					>> o.insertionOptions.KF_covSigma
+					>> o.insertionOptions.KF_initialCellStd
+					>> o.insertionOptions.KF_observationModelNoise
+					>> o.insertionOptions.KF_defaultCellMeanValue
+					>> o.insertionOptions.KF_W_size;
 			}
 
 			{
 				uint64_t N;
-				in >> m_average_normreadings_mean >> m_average_normreadings_var >> N;
-				m_average_normreadings_count = N;
+				in >> o.m_average_normreadings_mean >> o.m_average_normreadings_var >> N;
+				O.m_average_normreadings_count = N;
 			}
 
-			in >> genericMapParams;
+			in >> o.genericMapParams;
 
-			m_hasToRecoverMeanAndCov = true;
+			O.m_hasToRecoverMeanAndCov = true;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
