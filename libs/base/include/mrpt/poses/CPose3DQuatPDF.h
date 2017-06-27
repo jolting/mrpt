@@ -38,7 +38,7 @@ namespace mrpt
 		 * \ingroup poses_pdf_grp
 		 */
 		class BASE_IMPEXP CPose3DQuatPDF :
-			public mrpt::utils::CSerializable,
+			public mrpt::utils::CSerializableCRTPVirtual<CPose3DQuatPDF>,
 			public mrpt::utils::CProbabilityDensityFunction<CPose3DQuat,7>
 		{
 			DEFINE_VIRTUAL_SERIALIZABLE( CPose3DQuatPDF )

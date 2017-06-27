@@ -19,9 +19,9 @@ namespace kinematics
 	 *
 	 * \ingroup mrpt_kinematics_grp
 	 */
-	class KINEMATICS_IMPEXP CVehicleVelCmd_DiffDriven : public CVehicleVelCmd
+	class KINEMATICS_IMPEXP CVehicleVelCmd_DiffDriven : public mrpt::utils::CSerializableCRTP<CVehicleVelCmd_DiffDriven, CVehicleVelCmd>
 	{
-		DEFINE_SERIALIZABLE(CVehicleVelCmd_DiffDriven)
+		friend mrpt::utils::CSerializer<CVehicleVelCmd_DiffDriven>;
 	public:
 		double lin_vel; //!< Linear velocity (m/s)
 		double ang_vel; //!< Angular velocity (rad/s)

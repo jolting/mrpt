@@ -57,7 +57,7 @@ namespace nav
 	 *  \ingroup nav_tpspace
 	 */
 	class NAV_IMPEXP CParameterizedTrajectoryGenerator : 
-		public mrpt::utils::CSerializable,
+		public mrpt::utils::CSerializableCRTPVirtual<CParameterizedTrajectoryGenerator>,
 		public mrpt::utils::CLoadableOptions
 	{
 		DEFINE_VIRTUAL_SERIALIZABLE(CParameterizedTrajectoryGenerator)

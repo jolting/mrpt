@@ -61,6 +61,10 @@ const mrpt::poses::CPose3D &CKinematicChain::getOriginPose() const
 	return m_origin;
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of CSerializable objects
   ---------------------------------------------------------------*/
@@ -70,30 +74,32 @@ template <> void CSerializer<CKinematicChain>::writeToStream(const CKinematicCha
 		*version = 1;
 	else
 	{
-		out << m_links << m_origin;
+		out << o.m_links << o.m_origin;
 	}
 }
 
 /*---------------------------------------------------------------
 	Implements the reading from a CStream capability of CSerializable objects
   ---------------------------------------------------------------*/
-void  CKinematicChain::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void  CSerializer<CKinematicChain>::readFromStream(CKinematicChain &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 	case 1:
 		{
-			in >> m_links;
+			in >> o.m_links;
 			if (version>=1)
 			{
-				in >> m_origin;
+				in >> o.m_origin;
 			}
-			else m_origin=mrpt::poses::CPose3D();
+			else o.m_origin=mrpt::poses::CPose3D();
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 /** Go thru all the links of the chain and compute the global pose of each link. The "ground" link pose "pose0" defaults to the origin of coordinates,

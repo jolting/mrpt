@@ -20,34 +20,38 @@ using namespace std;
 // This must be added to any CSerializable class implementation file.
 IMPLEMENTS_SERIALIZABLE(CObservationCANBusJ1939, CObservation,mrpt::obs)
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationCANBusJ1939::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationCANBusJ1939>::writeToStream(const CObservationCANBusJ1939 &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
-		uint32_t i,n = m_data.size();
-        out << m_pgn;
-        out << m_src_address;
-        out << m_priority;
-        out << m_pdu_format;
-        out << m_pdu_spec;
-        out << m_data_length;
+		uint32_t i,n = o.m_data.size();
+        out << o.m_pgn;
+        out << o.m_src_address;
+        out << o.m_priority;
+        out << o.m_pdu_format;
+        out << o.m_pdu_spec;
+        out << o.m_data_length;
 		out << n;
 
 		for(i=0;i<n;i++)
-			out << m_data[i];
+			out << o.m_data[i];
 
-		n = m_raw_frame.size();
+		n = o.m_raw_frame.size();
 		out << n;
 		for(i=0;i<n;i++)
-			out << uint8_t(m_raw_frame[i]);
+			out << uint8_t(o.m_raw_frame[i]);
 
-		out << sensorLabel
-		    << timestamp;
+		out << o.sensorLabel
+		    << o.timestamp;
 	}
 }
 
@@ -63,32 +67,32 @@ template <> void CSerializer<CObservationCANBusJ1939>::readFromStream(CObservati
 		{
 			uint32_t i,n;
 
-			m_data.clear();
-			m_raw_frame.clear();
+			o.m_data.clear();
+			o.m_raw_frame.clear();
 
-			in >> m_pgn;
-			in >> m_src_address;
-			in >> m_priority;
-			in >> m_pdu_format;
-			in >> m_pdu_spec;
-			in >> m_data_length;
+			in >> o.m_pgn;
+			in >> o.m_src_address;
+			in >> o.m_priority;
+			in >> o.m_pdu_format;
+			in >> o.m_pdu_spec;
+			in >> o.m_data_length;
 
 			in >> n;
-			m_data.resize(n);
+			o.m_data.resize(n);
 			for(i=0;i<n;++i)
-                in >> m_data[i];
+                in >> o.m_data[i];
 
             in >> n;
-            m_raw_frame.resize(n);
+            o.m_raw_frame.resize(n);
             uint8_t aux;
 			for(i=0;i<n;++i)
 			{
 			    in >> aux;
-			    m_raw_frame[i] = char(aux);
+			    o.m_raw_frame[i] = char(aux);
 			}
 
-			in >> sensorLabel;
-			in >> timestamp;
+			in >> o.sensorLabel;
+			in >> o.timestamp;
 
 		} break;
 	default:
@@ -96,6 +100,8 @@ template <> void CSerializer<CObservationCANBusJ1939>::readFromStream(CObservati
 
 	};
 
+}
+}
 }
 
 void CObservationCANBusJ1939::getDescriptionAsText(std::ostream &o) const

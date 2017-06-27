@@ -29,11 +29,11 @@ namespace mrpt
 		 * \ingroup poses_pdf_grp
 		 */
 		class BASE_IMPEXP CPosePDFParticles :
-			public CPosePDF,
+			public mrpt::utils::CSerializableCRTP<CPosePDFParticles, CPosePDF>,
 			public mrpt::bayes::CParticleFilterData<CPose2D>,
 			public mrpt::bayes::CParticleFilterDataImpl<CPosePDFParticles,mrpt::bayes::CParticleFilterData<CPose2D>::CParticleList>
 		{
-			DEFINE_SERIALIZABLE( CPosePDFParticles )
+			friend mrpt::utils::CSerializer<CPosePDFParticles>;
 
 		public:
 			void  clear(); //!< Free all the memory associated to m_particles, and set the number of parts = 0

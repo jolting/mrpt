@@ -55,7 +55,7 @@ namespace mrpt
 		 * \sa CHierarchicalMHMap
 		  * \ingroup mrpt_hmtslam_grp
 		 */
-		class HMTSLAM_IMPEXP CHMTSLAM : public mrpt::utils::COutputLogger, public mrpt::utils::CSerializable
+		class HMTSLAM_IMPEXP CHMTSLAM : public mrpt::utils::COutputLogger, public mrpt::utils::CSerializableCRTP<CHMTSLAM>
 		{
 			friend class CLocalMetricHypothesis;
 			friend class CLSLAM_RBPF_2DLASER;

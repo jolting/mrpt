@@ -49,7 +49,7 @@ namespace mrpt
 		  *
 		  *  \sa CFeatureList, TSimpleFeature, TSimpleFeatureList
 		  */
-		class VISION_IMPEXP CFeature : public mrpt::utils::CSerializable
+		class VISION_IMPEXP CFeature : public mrpt::utils::CSerializableCRTP<CFeature>
 		{
 			friend class CFeatureList;
 			friend class CMatchedFeatureList;

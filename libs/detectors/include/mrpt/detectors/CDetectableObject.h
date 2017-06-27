@@ -27,7 +27,7 @@ namespace mrpt
 		  * expandable to other source types (f.i. scanners).
 		  * \ingroup mrpt_detectors_grp
 		  */
-		class DETECTORS_IMPEXP CDetectableObject: public mrpt::utils::CSerializable
+		class DETECTORS_IMPEXP CDetectableObject: public mrpt::utils::CSerializableCRTPVirtual<CDetectableObject>;
 		{
 			DEFINE_VIRTUAL_SERIALIZABLE( CDetectableObject )
 

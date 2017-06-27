@@ -19,17 +19,21 @@ using namespace mrpt::poses;
 // This must be added to any CSerializable class implementation file.
 IMPLEMENTS_SERIALIZABLE(CObservationComment, CObservation,mrpt::obs)
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationComment::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationComment>::writeToStream(const CObservationComment &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << text
-		    << timestamp;
+		out << o.text
+		    << o.timestamp;
 	}
 }
 
@@ -41,12 +45,14 @@ template <> void CSerializer<CObservationComment>::readFromStream(CObservationCo
 	switch(version)
 	{
 	case 0:
-		in >> text
-		   >> timestamp;
+		in >> o.text
+		   >> o.timestamp;
 		break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 void CObservationComment::getDescriptionAsText(std::ostream &o) const

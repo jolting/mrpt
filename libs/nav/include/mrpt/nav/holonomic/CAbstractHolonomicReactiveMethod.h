@@ -30,7 +30,7 @@ namespace mrpt
 	 *  \sa CHolonomicVFF,CHolonomicND,CHolonomicFullEval, CReactiveNavigationSystem
 	 */
 	class NAV_IMPEXP CAbstractHolonomicReactiveMethod :
-		public mrpt::utils::CSerializable
+		public mrpt::utils::CSerializableCRTPVirtual<CRandomFieldGridMap3D>
 	{
 		DEFINE_VIRTUAL_SERIALIZABLE(CAbstractHolonomicReactiveMethod)
 	public:

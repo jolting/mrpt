@@ -36,7 +36,7 @@ namespace mrpt
 		 * \sa CSensoryFrame, CMetricMap
 	 	 * \ingroup mrpt_obs_grp
 		 */
-		class OBS_IMPEXP CObservation : public mrpt::utils::CSerializable
+		class OBS_IMPEXP CObservation : public mrpt::utils::CSerializableCRTPVirtual<CObservation>
 		{
 			DEFINE_VIRTUAL_SERIALIZABLE(CObservation)
 

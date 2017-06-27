@@ -30,7 +30,7 @@ namespace mrpt
 		  * \sa CLandmarksMap
 	 	  * \ingroup mrpt_vision_grp
 		  */
-		class VISION_IMPEXP CLandmark : public mrpt::utils::CSerializable
+		class VISION_IMPEXP CLandmark : public mrpt::utils::CSerializableCRTP<CLandmark>
 		{
 			DEFINE_SERIALIZABLE( CLandmark )
 

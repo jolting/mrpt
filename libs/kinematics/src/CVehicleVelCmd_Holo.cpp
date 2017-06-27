@@ -89,28 +89,34 @@ void CVehicleVelCmd_Holo::setToStop()
 {
 	vel = dir_local = ramp_time = rot_speed = .0;
 }
-void CVehicleVelCmd_Holo::readFromStream(mrpt::utils::CStream &in, int version)
+
+namespace mrpt
+{
+namespace utils
+{
+template <> void CSerializer<CVehicleVelCmd_Holo>::readFromStream(CVehicleVelCmd_Holo &o, mrpt::utils::CStream &in, int version)
 {
 	switch (version)
 	{
 	case 0:
-		in >> vel >> dir_local >> ramp_time >> rot_speed;
+		in >> o.vel >> o.dir_local >> o.ramp_time >> o.rot_speed;
 		break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
 
-void CVehicleVelCmd_Holo::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CVehicleVelCmd_Holo>::writeToStream(const CVehicleVelCmd_Holo &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 	{
 		*version = 0;
 		return;
 	}
-	out << vel << dir_local << ramp_time << rot_speed;
+	out << o.vel << o.dir_local << o.ramp_time << o.rot_speed;
 }
-
+}
+}
 
 void CVehicleVelCmd_Holo::cmdVel_scale(double vel_scale)
 {

@@ -33,7 +33,7 @@ namespace maps
 	/** Auxiliary class used in mrpt::maps::CMultiMetricMapPDF
 	 * \ingroup mrpt_slam_grp
 	  */
-	class SLAM_IMPEXP CRBPFParticleData : public mrpt::utils::CSerializable
+	class SLAM_IMPEXP CRBPFParticleData : public mrpt::utils::CSerializableCRTP<CRBPFParticleData>
 	{
 		DEFINE_SERIALIZABLE( CRBPFParticleData )
 	public:

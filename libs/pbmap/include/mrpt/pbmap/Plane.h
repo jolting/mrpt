@@ -43,7 +43,7 @@ namespace pbmap {
 	 *
 	 * \ingroup mrpt_pbmap_grp
 	 */
-  class PBMAP_IMPEXP Plane : public mrpt::utils::CSerializable
+  class PBMAP_IMPEXP Plane : public mrpt::utils::CSerializableCRTP<Plane>
   {
 	DEFINE_SERIALIZABLE( Plane )
 

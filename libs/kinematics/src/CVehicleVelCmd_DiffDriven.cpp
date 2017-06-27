@@ -72,26 +72,33 @@ void CVehicleVelCmd_DiffDriven::setToStop()
 	lin_vel = ang_vel = .0;
 }
 
-void CVehicleVelCmd_DiffDriven::readFromStream(mrpt::utils::CStream &in, int version)
+namespace mrpt
+{
+namespace utils
+{
+
+template <> void CSerializer<CVehicleVelCmd_DiffDriven>::readFromStream(CVehicleVelCmd_DiffDriven &o, mrpt::utils::CStream &in, int version)
 {
 	switch (version)
 	{
 	case 0:
-		in >> lin_vel >> ang_vel;
+		in >> o.lin_vel >> o.ang_vel;
 		break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
 
-void CVehicleVelCmd_DiffDriven::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CVehicleVelCmd_DiffDriven>::writeToStream(const CVehicleVelCmd_DiffDriven &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 	{
 		*version = 0;
 		return;
 	}
-	out << lin_vel << ang_vel;
+	out << o.lin_vel << o.ang_vel;
+}
+}
 }
 
 void CVehicleVelCmd_DiffDriven::cmdVel_scale(double vel_scale)

@@ -33,10 +33,14 @@ CObservationBeaconRanges::CObservationBeaconRanges( ) :
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationBeaconRanges::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservationBeaconRanges>::writeToStream(const CObservationBeaconRanges &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 3;
@@ -45,17 +49,17 @@ void  CObservationBeaconRanges::writeToStream(mrpt::utils::CStream &out, int *ve
 		uint32_t	i,n;
 
 		// The data
-		out << minSensorDistance << maxSensorDistance << stdError;
+		out << o.minSensorDistance << o.maxSensorDistance << o.stdError;
 
-		n = sensedData.size();
+		n = o.sensedData.size();
 		out << n;
 		for (i=0;i<n;i++)
-			out << sensedData[i].sensorLocationOnRobot << sensedData[i].sensedDistance << sensedData[i].beaconID;
+			out << o.sensedData[i].sensorLocationOnRobot << o.sensedData[i].sensedDistance << o.sensedData[i].beaconID;
 
-		out << auxEstimatePose;
+		out << o.auxEstimatePose;
 
-		out << sensorLabel
-			<< timestamp;
+		out << o.sensorLabel
+			<< o.timestamp;
 	}
 }
 
@@ -74,26 +78,26 @@ template <> void CSerializer<CObservationBeaconRanges>::readFromStream(CObservat
 			uint32_t		i,n,id;
 
 			// The data
-			in >> minSensorDistance >> maxSensorDistance >> stdError;
+			in >> o.minSensorDistance >> o.maxSensorDistance >> o.stdError;
 
 			in >> n;
-			sensedData.resize(n);
+			o.sensedData.resize(n);
 			for (i=0;i<n;i++)
 			{
-				in >> sensedData[i].sensorLocationOnRobot >> sensedData[i].sensedDistance;
-				in >> id; sensedData[i].beaconID = id;
+				in >> o.sensedData[i].sensorLocationOnRobot >> sensedData[i].sensedDistance;
+				in >> id; o.sensedData[i].beaconID = id;
 			}
 
 			if (version>=1)
-				in >> auxEstimatePose;
+				in >> o.auxEstimatePose;
 
 			if (version>=2)
-					in >> sensorLabel;
-			else 	sensorLabel="";
+					in >> o.sensorLabel;
+			else 	o.sensorLabel="";
 
 			if (version>=3)
-					in >> timestamp;
-			else 	timestamp = INVALID_TIMESTAMP;
+					in >> o.timestamp;
+			else 	o.timestamp = INVALID_TIMESTAMP;
 
 
 		} break;
@@ -102,6 +106,8 @@ template <> void CSerializer<CObservationBeaconRanges>::readFromStream(CObservat
 
 	};
 
+}
+}
 }
 
 /*---------------------------------------------------------------

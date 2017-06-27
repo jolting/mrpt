@@ -26,7 +26,7 @@ namespace mrpt
 		 * \sa CHierarchicalMHMap,CHMHMapNode
 		  * \ingroup mrpt_hmtslam_grp
 		 */
-		class HMTSLAM_IMPEXP CHMHMapArc : public mrpt::utils::CSerializable
+		class HMTSLAM_IMPEXP CHMHMapArc : public mrpt::utils::CSerializableCRTP<CHMHMapArc>
 		{
 			friend class CHierarchicalMHMap;
 			friend class CHMHMapNode;

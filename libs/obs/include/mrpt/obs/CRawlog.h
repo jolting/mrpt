@@ -48,7 +48,7 @@ namespace mrpt
 		 * \sa CSensoryFrame, CPose2D, <a href="http://www.mrpt.org/Rawlog_Format"> RawLog file format</a>.
 	 	 * \ingroup mrpt_obs_grp
 		 */
-		class OBS_IMPEXP CRawlog : public mrpt::utils::CSerializable
+		class OBS_IMPEXP CRawlog : public mrpt::utils::CSerializableCRTP<CRawlog>
 		{
 			DEFINE_SERIALIZABLE( CRawlog )
 

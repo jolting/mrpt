@@ -70,7 +70,7 @@ namespace maps
 	  */
 	class CRandomFieldGridMap3D :
 		public mrpt::utils::CDynamicGrid3D<TRandomFieldVoxel>,
-		public mrpt::utils::CSerializable,
+		public mrpt::utils::CSerializableCRTP<CRandomFieldGridMap3D>,
 		public mrpt::utils::COutputLogger
 	{
 		typedef utils::CDynamicGrid3D<TRandomFieldVoxel> BASE;

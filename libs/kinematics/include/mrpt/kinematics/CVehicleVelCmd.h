@@ -20,7 +20,7 @@ namespace mrpt
 
 		/** Virtual base for velocity commands of different kinematic models of planar mobile robot.
 		 * \ingroup mrpt_kinematics_grp */
-		class KINEMATICS_IMPEXP CVehicleVelCmd : public mrpt::utils::CSerializable
+		class KINEMATICS_IMPEXP CVehicleVelCmd : public mrpt::utils::CSerializableCRTPVirtual<CVehicleVelCmd>
 		{
 			DEFINE_VIRTUAL_SERIALIZABLE(CVehicleVelCmd)
 		public:

@@ -50,7 +50,7 @@ namespace mrpt
 	 	 * \ingroup mrpt_obs_grp
 		 */
 		class OBS_IMPEXP CMetricMap :
-			public mrpt::utils::CSerializable,
+			public mrpt::utils::CSerializableCRTPVirtual<CMetricMap>,
 			public mrpt::utils::CObservable
 		{
 			DEFINE_VIRTUAL_SERIALIZABLE( CMetricMap )

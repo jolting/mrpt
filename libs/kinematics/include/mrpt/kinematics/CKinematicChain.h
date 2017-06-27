@@ -50,9 +50,9 @@ namespace mrpt
 		  * \sa CPose3D
 		  * \ingroup kinematics_grp
 		  */
-		class KINEMATICS_IMPEXP CKinematicChain : public mrpt::utils::CSerializable
+		class KINEMATICS_IMPEXP CKinematicChain : public mrpt::utils::CSerializableCRTP<CKinematicChain>
 		{
-			DEFINE_SERIALIZABLE( CKinematicChain )
+			friend mrpt::utils::CSerializer<CKinematicChain>;
 
 		private:
 			mutable std::vector<mrpt::opengl::CRenderizable::Ptr>  m_last_gl_objects; //!< Smart pointers to the last objects for each link, as returned in getAs3DObject(), for usage within update3DObject()

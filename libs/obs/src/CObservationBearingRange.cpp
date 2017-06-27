@@ -41,10 +41,14 @@ CObservationBearingRange::CObservationBearingRange( ) :
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationBearingRange::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationBearingRange>::writeToStream(const CObservationBearingRange &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 3;
@@ -53,25 +57,25 @@ void  CObservationBearingRange::writeToStream(mrpt::utils::CStream &out, int *ve
 		uint32_t	i,n;
 
 		// The data
-		out << minSensorDistance
-		    << maxSensorDistance
-		    << fieldOfView_yaw
-			<< fieldOfView_pitch
-		    << sensorLocationOnRobot
-		    << timestamp;
+		out << o.minSensorDistance
+		    << o.maxSensorDistance
+		    << o.fieldOfView_yaw
+			<< o.fieldOfView_pitch
+		    << o.sensorLocationOnRobot
+		    << o.timestamp;
 
-		out << validCovariances;
-		if (!validCovariances)
-			out << sensor_std_range << sensor_std_yaw << sensor_std_pitch;
+		out << o.validCovariances;
+		if (!o.validCovariances)
+			out << o.sensor_std_range << o.sensor_std_yaw << o.sensor_std_pitch;
 
 		// Detect duplicate landmarks ID, which is an error!
 		std::set<int32_t>  lstIDs;
 
-		n = sensedData.size();
+		n = o.sensedData.size();
 		out << n;
 		for (i=0;i<n;i++)
 		{
-			int32_t  id = sensedData[i].landmarkID;
+			int32_t  id = o.sensedData[i].landmarkID;
 			if (id!=INVALID_LANDMARK_ID)
 			{
 				if (0!=lstIDs.count(id))
@@ -79,16 +83,16 @@ void  CObservationBearingRange::writeToStream(mrpt::utils::CStream &out, int *ve
 				lstIDs.insert(id);
 			}
 
-			out << sensedData[i].range
-			    << sensedData[i].yaw
-			    << sensedData[i].pitch
+			out << o.sensedData[i].range
+			    << o.sensedData[i].yaw
+			    << o.sensedData[i].pitch
 			    << id;
 
-			if (validCovariances)
-				out << sensedData[i].covariance;
+			if (o.validCovariances)
+				out << o.sensedData[i].covariance;
 		}
 
-		out << sensorLabel;
+		out << o.sensorLabel;
 	}
 }
 
@@ -107,54 +111,54 @@ template <> void CSerializer<CObservationBearingRange>::readFromStream(CObservat
 			uint32_t		i,n;
 
 			// The data
-			in >> minSensorDistance
-			   >> maxSensorDistance;
+			in >> o.minSensorDistance
+			   >> o.maxSensorDistance;
 
 			if (version>=3)
 			{
-				in >> fieldOfView_yaw
-				   >> fieldOfView_pitch;
+				in >> o.fieldOfView_yaw
+				   >> o.fieldOfView_pitch;
 			}
 			else
 			{
 				float fieldOfView;
 				in >> fieldOfView;
 
-				fieldOfView_yaw =
-				fieldOfView_pitch = fieldOfView;
+				o.fieldOfView_yaw =
+				o.fieldOfView_pitch = fieldOfView;
 			}
 
-			in >> sensorLocationOnRobot;
+			in >> o.sensorLocationOnRobot;
 
 			if (version>=2)
-					in >> timestamp;
-			else 	timestamp = INVALID_TIMESTAMP;
+					in >> o.timestamp;
+			else 	o.timestamp = INVALID_TIMESTAMP;
 
 			if (version>=3)
 			{
-				in >> validCovariances;
-				if (!validCovariances)
-					in >> sensor_std_range >> sensor_std_yaw >> sensor_std_pitch;
+				in >> o.validCovariances;
+				if (!o.validCovariances)
+					in >> o.sensor_std_range >> o.sensor_std_yaw >> o.sensor_std_pitch;
 			} else
-				validCovariances = false;
+				o.validCovariances = false;
 
 			in >> n;
-			sensedData.resize(n);
+			o.sensedData.resize(n);
 
 			// Detect duplicate landmarks ID, what is an error!
 			std::set<int32_t>  lstIDs;
 
 			for (i=0;i<n;i++)
 			{
-				in >> sensedData[i].range
-				   >> sensedData[i].yaw
-				   >> sensedData[i].pitch
-				   >> sensedData[i].landmarkID;
+				in >> o.sensedData[i].range
+				   >> o.sensedData[i].yaw
+				   >> o.sensedData[i].pitch
+				   >> o.sensedData[i].landmarkID;
 
-				if (version>=3 && validCovariances)
-					in >> sensedData[i].covariance;
+				if (version>=3 && o.validCovariances)
+					in >> o.sensedData[i].covariance;
 
-				int32_t  id = sensedData[i].landmarkID;
+				int32_t  id = o.sensedData[i].landmarkID;
 				if (id!=INVALID_LANDMARK_ID)
 				{
 					if (0!=lstIDs.count(id))
@@ -164,8 +168,8 @@ template <> void CSerializer<CObservationBearingRange>::readFromStream(CObservat
 			}
 
 			if (version>=1)
-					in >> sensorLabel;
-			else 	sensorLabel = "";
+					in >> o.sensorLabel;
+			else 	o.sensorLabel = "";
 
 		} break;
 	default:
@@ -173,6 +177,8 @@ template <> void CSerializer<CObservationBearingRange>::readFromStream(CObservat
 
 	};
 
+}
+}
 }
 
 /*---------------------------------------------------------------
