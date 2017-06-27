@@ -158,25 +158,25 @@ template <> void CSerializer<CHeightGridMap2D_MRF>::writeToStream(const CHeightG
 		*version = 0;
 	else
 	{
-		dyngridcommon_writeToStream(out);
+		o.dyngridcommon_writeToStream(out);
 
 		// To assure compatibility: The size of each cell:
 		uint32_t n = static_cast<uint32_t>(sizeof( TRandomFieldCell ));
 		out << n;
 
 		// Save the map contents:
-		n = static_cast<uint32_t>(m_map.size());
+		n = static_cast<uint32_t>(o.m_map.size());
 		out << n;
 
 		// Save the "m_map": This requires special handling for big endian systems:
 #if MRPT_IS_BIG_ENDIAN
 		for (uint32_t i=0;i<n;i++)
 		{
-			out << m_map[i].kf_mean << m_map[i].dm_mean << m_map[i].dmv_var_mean;
+			out << o.m_map[i].kf_mean << o.m_map[i].do.m_mean << o.m_map[i].dmv_var_mean;
 		}
 #else
 		// Little endian: just write all at once:
-		out.WriteBuffer( &m_map[0], sizeof(m_map[0])*m_map.size() );
+		out.WriteBuffer( &o.m_map[0], sizeof(o.m_map[0])*o.m_map.size() );
 #endif
 
 

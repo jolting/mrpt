@@ -56,9 +56,9 @@ namespace obs
 	 * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationGPS : public CObservation
+	class OBS_IMPEXP CObservationGPS : public mrpt::utils::CSerializableCRTP<CObservationGPS, CObservation>
 	{
-		DEFINE_SERIALIZABLE( CObservationGPS )
+		friend mrpt::utils::CSerializer<CObservationGPS>;
 
 	public:
 		typedef std::map<gnss::gnss_message_type_t, gnss::gnss_message_ptr> message_list_t;

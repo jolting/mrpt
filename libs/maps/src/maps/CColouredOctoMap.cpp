@@ -74,7 +74,7 @@ IMPLEMENTS_SERIALIZABLE(CColouredOctoMap, CMetricMap,mrpt::maps)
 						Constructor
   ---------------------------------------------------------------*/
 CColouredOctoMap::CColouredOctoMap(const double resolution) :
-	COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode>(resolution),
+	mrpt::utils::CSerializableCRTP<CColouredOctoMap, COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode>>(resolution),
 	m_colour_method(INTEGRATE)
 {
 }
