@@ -14,5 +14,5 @@
 
 using namespace mrpt::poses;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CPointPDF, CSerializable, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPointPDF>::getClassName() { return "CPointPDF";}
 

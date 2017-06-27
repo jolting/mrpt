@@ -27,7 +27,7 @@ using namespace mrpt;
 using namespace mrpt::opengl;
 using namespace mrpt::utils;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CRenderizable, CSerializable, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CRenderizable>::getClassName() { return "CRenderizable";}
 
 #define MAX_GL_TEXTURE_IDS       0x10000
 #define MAX_GL_TEXTURE_IDS_MASK  0x0FFFF

@@ -54,7 +54,7 @@ using namespace std;
 float mrpt::global_settings::POINTSMAPS_3DOBJECT_POINTSIZE = 3.0f;
 
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE(CPointsMap, CMetricMap,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CPointsMap>::getClassName() { return "CPointsMap";}
 
 
 float CPointsMap::COLOR_3DSCENE_R = 0;

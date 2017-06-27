@@ -21,7 +21,7 @@ using namespace mrpt::utils;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CTexturedObject, CRenderizableDisplayList, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CTexturedObject>::getClassName() { return "CTexturedObject";}
 
 // Whether to profile memory allocations:
 //#define TEXTUREOBJ_PROFILE_MEM_ALLOC

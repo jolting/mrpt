@@ -34,7 +34,7 @@ using namespace mrpt::poses;
 using namespace mrpt::system;
 using namespace std;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE(CRandomFieldGridMap2D, CMetricMap,mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CRandomFieldGridMap2D>::getClassName() { return "CRandomFieldGridMap2D";}
 
 /*---------------------------------------------------------------
 						Constructor

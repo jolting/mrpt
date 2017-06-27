@@ -13,5 +13,5 @@
 #include <mrpt/utils/CStream.h>
 using namespace mrpt::poses;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CPoint2DPDF, CSerializable, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPoint2DPDF>::getClassName() { return "CPoint2DPDF";}
 

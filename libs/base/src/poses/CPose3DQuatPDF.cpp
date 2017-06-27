@@ -18,7 +18,7 @@ using namespace mrpt::poses;
 using namespace mrpt::math;
 using namespace std;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CPose3DQuatPDF, CSerializable, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPose3DQuatPDF>::getClassName() { return "CPose3DQuatPDF";}
 
 /*---------------------------------------------------------------
 					copyFrom2D

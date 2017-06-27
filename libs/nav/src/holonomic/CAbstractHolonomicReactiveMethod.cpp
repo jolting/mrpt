@@ -16,7 +16,7 @@ using namespace mrpt;
 using namespace mrpt::utils;
 using namespace mrpt::nav;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE(CAbstractHolonomicReactiveMethod, CSerializable, mrpt::nav)
+template <> const char * mrpt::utils::CSerializer<CAbstractHolonomicReactiveMethod>::getClassName() { return "CAbstractHolonomicReactiveMethod";}
 
 
 CAbstractHolonomicReactiveMethod::CAbstractHolonomicReactiveMethod(const std::string &defaultCfgSectionName) :

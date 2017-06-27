@@ -16,7 +16,7 @@ using namespace mrpt;
 using namespace mrpt::utils;
 using namespace mrpt::detectors;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE(CDetectableObject, CSerializable, mrpt::detectors)
+template <> const char * mrpt::utils::CSerializer<CDetectableObject>::getClassName() { return "CDetectableObject";}
 template <> const char * mrpt::utils::CSerializer<CDetectable2D>::getClassName() { return "CDetectable2D";}
 template <> const char * mrpt::utils::CSerializer<CDetectable3D>::getClassName() { return "CDetectable3D";}
 

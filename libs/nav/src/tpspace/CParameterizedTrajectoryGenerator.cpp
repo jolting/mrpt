@@ -21,7 +21,7 @@ std::string CParameterizedTrajectoryGenerator::OUTPUT_DEBUG_PATH_PREFIX = "./rea
 PTG_collision_behavior_t CParameterizedTrajectoryGenerator::COLLISION_BEHAVIOR = mrpt::nav::COLL_BEH_BACK_AWAY;
 
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE(CParameterizedTrajectoryGenerator, CSerializable, mrpt::nav)
+template <> const char * mrpt::utils::CSerializer<CParameterizedTrajectoryGenerator>::getClassName() { return "CParameterizedTrajectoryGenerator";}
 
 CParameterizedTrajectoryGenerator::CParameterizedTrajectoryGenerator() :
 	refDistance(.0),

@@ -24,7 +24,7 @@ using namespace mrpt::utils;
 using namespace mrpt::poses;
 using namespace mrpt::math;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE(CMetricMap, CSerializable, mrpt::maps)
+template <> const char * mrpt::utils::CSerializer<CMetricMap>::getClassName() { return "CMetricMap";}
 
 CMetricMap::CMetricMap()
 {

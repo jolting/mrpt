@@ -22,7 +22,7 @@ using namespace mrpt;
 using namespace mrpt::opengl;
 using namespace mrpt::utils;
 
-IMPLEMENTS_VIRTUAL_SERIALIZABLE( CRenderizableDisplayList, CRenderizable, mrpt::opengl )
+template <> const char * mrpt::utils::CSerializer<CRenderizableDisplayList>::getClassName() { return "CRenderizableDisplayList";}
 
 // TAuxDLData: needed since it seems we must delete display lists from the same thread we create them....
 
