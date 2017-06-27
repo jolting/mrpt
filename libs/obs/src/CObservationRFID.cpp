@@ -25,10 +25,14 @@ CObservationRFID::CObservationRFID() : tag_readings()
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationRFID::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationRFID>::writeToStream(const CObservationRFID &o, mrpt::utils::CStream &out, int *version)
 {
 		//std::cout << "AP-1" << std::endl;
 	MRPT_UNUSED_PARAM(out);
@@ -37,17 +41,17 @@ void  CObservationRFID::writeToStream(mrpt::utils::CStream &out, int *version) c
 	else
 	{
 		// The data
-		const uint32_t Ntags = tag_readings.size();
+		const uint32_t Ntags = o.tag_readings.size();
 		out << Ntags;  // new in v4
 
         // (Fields are dumped in separate for loops for backward compatibility with old serialization versions)
-		for (uint32_t i=0;i<Ntags;i++) out << tag_readings[i].power;
-		for (uint32_t i=0;i<Ntags;i++) out << tag_readings[i].epc;
-		for (uint32_t i=0;i<Ntags;i++) out << tag_readings[i].antennaPort;
+		for (uint32_t i=0;i<Ntags;i++) out << o.tag_readings[i].power;
+		for (uint32_t i=0;i<Ntags;i++) out << o.tag_readings[i].epc;
+		for (uint32_t i=0;i<Ntags;i++) out << o.tag_readings[i].antennaPort;
 
-		out	<< sensorLabel;
-		out	<< timestamp;
-		out	<< sensorPoseOnRobot; // Added in v3
+		out	<< o.sensorLabel;
+		out	<< o.timestamp;
+		out	<< o.sensorPoseOnRobot; // Added in v3
 	}
 }
 
@@ -78,22 +82,22 @@ template <> void CSerializer<CObservationRFID>::readFromStream(CObservationRFID&
 			}
 
             // (Fields are read in separate for loops for backward compatibility with old serialization versions)
-			tag_readings.resize(Ntags);
-			for (uint32_t i=0;i<Ntags;i++) in >> tag_readings[i].power;
-			for (uint32_t i=0;i<Ntags;i++) in >> tag_readings[i].epc;
-			for (uint32_t i=0;i<Ntags;i++) in >> tag_readings[i].antennaPort;
+			o.tag_readings.resize(Ntags);
+			for (uint32_t i=0;i<Ntags;i++) in >> o.tag_readings[i].power;
+			for (uint32_t i=0;i<Ntags;i++) in >> o.tag_readings[i].epc;
+			for (uint32_t i=0;i<Ntags;i++) in >> o.tag_readings[i].antennaPort;
 
 			if (version>=1)
-				in >> sensorLabel;
-			else sensorLabel="";
+				in >> o.sensorLabel;
+			else o.sensorLabel="";
 
 			if (version>=2)
-					in >> timestamp;
-			else 	timestamp = INVALID_TIMESTAMP;
+					in >> o.timestamp;
+			else 	o.timestamp = INVALID_TIMESTAMP;
 
 			if (version>=3)
-					in >> sensorPoseOnRobot;
-			else 	sensorPoseOnRobot = CPose3D();
+					in >> o.sensorPoseOnRobot;
+			else 	o.sensorPoseOnRobot = CPose3D();
 
 		} break;
 	default:
@@ -101,7 +105,8 @@ template <> void CSerializer<CObservationRFID>::readFromStream(CObservationRFID&
 	};
 
 }
-
+}
+}
 
 void CObservationRFID::getSensorPose( CPose3D &out_sensorPose ) const
 {

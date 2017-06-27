@@ -58,30 +58,32 @@ CObservationStereoImages::~CObservationStereoImages(  )
 {
 }
 
+namespace mrpt{
+namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationStereoImages::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationStereoImages>::writeToStream(const CObservationStereoImages &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 6 ;
 	else
 	{
 		// The data
-		out << cameraPose << leftCamera << rightCamera
-			<< imageLeft;
+		out << o.cameraPose << o.leftCamera << o.rightCamera
+			<< o.imageLeft;
 
-		out << hasImageDisparity << hasImageRight;
+		out << o.hasImageDisparity << o.hasImageRight;
 
-		if (hasImageRight)
-			out << imageRight;
+		if (o.hasImageRight)
+			out << o.imageRight;
 
-		if (hasImageDisparity)
-			out << imageDisparity;
+		if (o.hasImageDisparity)
+			out << o.imageDisparity;
 
-		out << timestamp;
-		out << rightCameraPose;
-		out << sensorLabel;
+		out << o.timestamp;
+		out << o.rightCameraPose;
+		out << o.sensorLabel;
 
 	}
 }
@@ -95,20 +97,20 @@ template <> void CSerializer<CObservationStereoImages>::readFromStream(CObservat
 	{
 	case 6:
 		{
-			in >> cameraPose >> leftCamera >> rightCamera
-				>> imageLeft;
+			in >> o.cameraPose >> o.leftCamera >> o.rightCamera
+				>> o.imageLeft;
 
-			in >> hasImageDisparity >> hasImageRight;
+			in >> o.hasImageDisparity >> o.hasImageRight;
 
-			if (hasImageRight)
-				in >> imageRight;
+			if (o.hasImageRight)
+				in >> o.imageRight;
 
-			if (hasImageDisparity)
-				in >> imageDisparity;
+			if (o.hasImageDisparity)
+				in >> o.imageDisparity;
 
-			in >> timestamp;
-			in >> rightCameraPose;
-			in >> sensorLabel;
+			in >> o.timestamp;
+			in >> o.rightCameraPose;
+			in >> o.sensorLabel;
 		}
 		break;
 
@@ -120,62 +122,64 @@ template <> void CSerializer<CObservationStereoImages>::readFromStream(CObservat
 	case 5:
 		{
 			// This, for backwards compatibility before version 6:
-			hasImageRight = true;
-			hasImageDisparity = false;
+			o.hasImageRight = true;
+			o.hasImageDisparity = false;
 
 
 			if( version < 5 )
 			{
 				CPose3D aux;
 				in >> aux;
-				cameraPose = CPose3DQuat( aux );
+				o.cameraPose = CPose3DQuat( aux );
 			}
 
 			if( version >= 5 )
 			{
-				in >> cameraPose >> leftCamera >> rightCamera;
+				in >> o.cameraPose >> o.leftCamera >> o.rightCamera;
 			}
 			else
 			{
 				CMatrix intParams;
 				in >> intParams;																// Get the intrinsic params
-				leftCamera.intrinsicParams = CMatrixDouble33(intParams);				// Set them to both cameras
-				rightCamera.intrinsicParams = CMatrixDouble33(intParams);				// ... distortion parameters are set to zero
+				o.leftCamera.intrinsicParams = CMatrixDouble33(intParams);				// Set them to both cameras
+				o.rightCamera.intrinsicParams = CMatrixDouble33(intParams);				// ... distortion parameters are set to zero
 			}
 
-			in >> imageLeft >> imageRight;														// For all the versions
+			in >> o.imageLeft >> o.imageRight;														// For all the versions
 
-			if(version >= 1) in >> timestamp; else timestamp = INVALID_TIMESTAMP;				// For version 1 to 5
+			if(version >= 1) in >> o.timestamp; else o.timestamp = INVALID_TIMESTAMP;				// For version 1 to 5
 			if(version >= 2)
 			{
 				if(version < 5)
 				{
 					CPose3D aux;
 					in >> aux;
-					rightCameraPose = CPose3DQuat( aux );
+					o.rightCameraPose = CPose3DQuat( aux );
 			}
 			else
-					in >> rightCameraPose;
+					in >> o.rightCameraPose;
 			}
 			else
-				rightCameraPose = CPose3DQuat( 0.10f, 0, 0, mrpt::math::CQuaternionDouble(1,0,0,0)  );	// For version 1 to 5
+				o.rightCameraPose = CPose3DQuat( 0.10f, 0, 0, mrpt::math::CQuaternionDouble(1,0,0,0)  );	// For version 1 to 5
 
 			if(version >= 3 && version < 5)														// For versions 3 & 4
 			{
 				double foc;
 				in >> foc;																		// Get the focal length in meters
-				leftCamera.focalLengthMeters = rightCamera.focalLengthMeters = foc;				// ... and set it to both cameras
+				o.leftCamera.focalLengthMeters = o.rightCamera.focalLengthMeters = foc;				// ... and set it to both cameras
 			}
 			else
 				if( version < 3 )
-					leftCamera.focalLengthMeters = rightCamera.focalLengthMeters = 0.002;		// For version 0, 1 & 2 (from version 5, this parameter is included in the TCamera objects)
+					o.leftCamera.focalLengthMeters = o.rightCamera.focalLengthMeters = 0.002;		// For version 0, 1 & 2 (from version 5, this parameter is included in the TCamera objects)
 
-			if(version >= 4) in >> sensorLabel; else sensorLabel = "";							// For version 1 to 5
+			if(version >= 4) in >> o.sensorLabel; else o.sensorLabel = "";							// For version 1 to 5
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 /*---------------------------------------------------------------

@@ -34,9 +34,8 @@ namespace mrpt
 		  *
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CEllipsoidRangeBearing2D : public CGeneralizedEllipsoidTemplate<2>
+		class OPENGL_IMPEXP CEllipsoidRangeBearing2D : public mrpt::utils::CSerializableCRTP<CEllipsoidRangeBearing2D, CGeneralizedEllipsoidTemplate<2>>
 		{
-			typedef CGeneralizedEllipsoidTemplate<2> BASE;
 			friend mrpt::utils::CSerializer<CEllipsoidRangeBearing2D>;
 		protected:
 			/** To be implemented by derived classes: maps, using some arbitrary space transformation, a list of points 

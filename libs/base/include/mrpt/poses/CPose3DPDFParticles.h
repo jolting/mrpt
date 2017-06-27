@@ -29,7 +29,7 @@ namespace mrpt
 		 * \ingroup poses_pdf_grp
 		 */
 		class BASE_IMPEXP CPose3DPDFParticles :
-			public CPose3DPDF,
+			public mrpt::utils::CSerializableCRTP<CPose3DPDFParticles, CPose3DPDF>,
 			public mrpt::bayes::CParticleFilterData<CPose3D>,
 			public mrpt::bayes::CParticleFilterDataImpl<CPose3DPDFParticles,mrpt::bayes::CParticleFilterData<CPose3D>::CParticleList>
 		{

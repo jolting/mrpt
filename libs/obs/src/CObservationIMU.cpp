@@ -20,23 +20,27 @@ using namespace mrpt::poses;
 // This must be added to any CSerializable class implementation file.
 IMPLEMENTS_SERIALIZABLE(CObservationIMU, CObservation,mrpt::obs)
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationIMU::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationIMU>::writeToStream(const CObservationIMU &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 3;  // v1->v2 was only done to fix a bug in the ordering of YAW/PITCH/ROLL rates.
 	else
 	{
-		out << sensorPose
-		    << dataIsPresent
-		    << timestamp;
+		out << o.sensorPose
+		    << o.dataIsPresent
+		    << o.timestamp;
 
-		out << rawMeasurements;
+		out << o.rawMeasurements;
 		// Version 3: Added 6 new raw measurements (IMU_MAG_X=15 to IMU_TEMPERATURE=20)
 
-		out << sensorLabel;
+		out << o.sensorLabel;
 	}
 }
 
@@ -51,54 +55,56 @@ template <> void CSerializer<CObservationIMU>::readFromStream(CObservationIMU& o
 	case 1:
 	case 2:
 	case 3:
-		in >> sensorPose;
-		in >> dataIsPresent;
+		in >> o.sensorPose;
+		in >> o.dataIsPresent;
 
-		in >> timestamp;
+		in >> o.timestamp;
 
 		// In version 0 it was a vector of floats:
 		if (version<1)
 		{
 			mrpt::math::CVectorFloat	tmp;
 			in >> tmp;
-			rawMeasurements.resize(tmp.size());
-			for (size_t i=0;i<rawMeasurements.size();i++)
-				rawMeasurements[i] = tmp[i];
+			o.rawMeasurements.resize(tmp.size());
+			for (size_t i=0;i<o.rawMeasurements.size();i++)
+				o.rawMeasurements[i] = tmp[i];
 		}
 		else
 		{
-			in >> rawMeasurements;
+			in >> o.rawMeasurements;
 		}
 
 		if (version<2)
 		{
 			// A bug in the grabbing from XSens IMU's made /ROLL rates to be stored in the wrong order:
-			std::swap(rawMeasurements[IMU_YAW_VEL],rawMeasurements[IMU_ROLL_VEL]);
+			std::swap(o.rawMeasurements[IMU_YAW_VEL],o.rawMeasurements[IMU_ROLL_VEL]);
 		}
 		else
 		{
 			// v2: nothing to do, data is already in the right order.
 		}
 
-		in >> sensorLabel;
+		in >> o.sensorLabel;
 
 		// Fill new entries with default values:
-		if (dataIsPresent.size()<COUNT_IMU_DATA_FIELDS)
+		if (o.dataIsPresent.size()<COUNT_IMU_DATA_FIELDS)
 		{
-			const size_t nOld = dataIsPresent.size();
-			ASSERT_(rawMeasurements.size()==dataIsPresent.size());
+			const size_t nOld = o.dataIsPresent.size();
+			ASSERT_(o.rawMeasurements.size()==o.dataIsPresent.size());
 
-			dataIsPresent.resize(COUNT_IMU_DATA_FIELDS);
-			rawMeasurements.resize(COUNT_IMU_DATA_FIELDS);
+			o.dataIsPresent.resize(COUNT_IMU_DATA_FIELDS);
+			o.rawMeasurements.resize(COUNT_IMU_DATA_FIELDS);
 			for (size_t i=nOld;i<COUNT_IMU_DATA_FIELDS;i++) {
-				dataIsPresent[i]=false;
-				rawMeasurements[i]=0;
+				o.dataIsPresent[i]=false;
+				o.rawMeasurements[i]=0;
 			}
 		}
 		break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 void CObservationIMU::getDescriptionAsText(std::ostream &o) const

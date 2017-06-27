@@ -37,9 +37,8 @@ namespace mrpt
 		  *
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CEllipsoidInverseDepth2D : public CGeneralizedEllipsoidTemplate<2>
+		class OPENGL_IMPEXP CEllipsoidInverseDepth2D : public mrpt::utils::CSerializableCRTP<CEllipsoidInverseDepth2D, CGeneralizedEllipsoidTemplate<2>>
 		{
-			typedef CGeneralizedEllipsoidTemplate<2> BASE;
 			friend mrpt::utils::CSerializer<CEllipsoidInverseDepth2D>;
 
 		public:

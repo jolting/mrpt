@@ -70,27 +70,29 @@ void  CObservationStereoImagesFeatures::saveFeaturesToTextFile( const std::strin
 	file.close();
 }
 
+namespace mrpt {
+namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationStereoImagesFeatures::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservationStereoImagesFeatures>::writeToStream(const CObservationStereoImagesFeatures &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0 ;
 	else
 	{
 		// The data
-		out << cameraLeft;
-		out << cameraRight;
-		out << rightCameraPose << cameraPoseOnRobot;
-		out << (uint32_t)theFeatures.size();	// Write the number of items within the feature list
-		for( unsigned int i = 0; i < theFeatures.size(); ++i )
+		out << o.cameraLeft;
+		out << o.cameraRight;
+		out << o.rightCameraPose << o.cameraPoseOnRobot;
+		out << (uint32_t)o.theFeatures.size();	// Write the number of items within the feature list
+		for( unsigned int i = 0; i < o.theFeatures.size(); ++i )
 		{
-			out << theFeatures[i].pixels.first.x << theFeatures[i].pixels.first.y;
-			out << theFeatures[i].pixels.second.x << theFeatures[i].pixels.second.y;
-			out << (uint32_t)theFeatures[i].ID;
+			out << o.theFeatures[i].pixels.first.x << o.theFeatures[i].pixels.first.y;
+			out << o.theFeatures[i].pixels.second.x << o.theFeatures[i].pixels.second.y;
+			out << (uint32_t)o.theFeatures[i].ID;
 		}
-		out << sensorLabel << timestamp;
+		out << o.sensorLabel << o.timestamp;
 	}
 }
 
@@ -104,23 +106,25 @@ template <> void CSerializer<CObservationStereoImagesFeatures>::readFromStream(C
 	case 0:
 		{
 			uint32_t nL, nR;
-			in >> cameraLeft;
-			in >> cameraRight;
-			in >> rightCameraPose >> cameraPoseOnRobot;
+			in >> o.cameraLeft;
+			in >> o.cameraRight;
+			in >> o.rightCameraPose >> o.cameraPoseOnRobot;
 			in >> nL;
-			theFeatures.resize( nL );
-			for( unsigned int i = 0; i < theFeatures.size(); ++i )
+			o.theFeatures.resize( nL );
+			for( unsigned int i = 0; i < o.theFeatures.size(); ++i )
 			{
-				in >> theFeatures[i].pixels.first.x >> theFeatures[i].pixels.first.y;
-				in >> theFeatures[i].pixels.second.x >> theFeatures[i].pixels.second.y;
+				in >> o.theFeatures[i].pixels.first.x >> o.theFeatures[i].pixels.first.y;
+				in >> o.theFeatures[i].pixels.second.x >> o.theFeatures[i].pixels.second.y;
 				in >> nR;
-				theFeatures[i].ID = (unsigned int)nR;
+				o.theFeatures[i].ID = (unsigned int)nR;
 			}
-			in >> sensorLabel >> timestamp;
+			in >> o.sensorLabel >> o.timestamp;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 void CObservationStereoImagesFeatures::getDescriptionAsText(std::ostream &o) const

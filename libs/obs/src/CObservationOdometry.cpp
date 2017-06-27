@@ -31,11 +31,14 @@ IMPLEMENTS_SERIALIZABLE(CObservationOdometry, CObservation, mrpt::obs)
 {
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationOdometry::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationOdometry>::writeToStream(const CObservationOdometry &o, mrpt::utils::CStream &out, int *version)
 {
 	MRPT_UNUSED_PARAM(out);
 	if (version)
@@ -43,17 +46,17 @@ void  CObservationOdometry::writeToStream(mrpt::utils::CStream &out, int *versio
 	else
 	{
 		// The data
-		out << odometry
-			<< sensorLabel
-			<< timestamp
+		out << o.odometry
+			<< o.sensorLabel
+			<< o.timestamp
 			// Added in V1:
-			<< hasEncodersInfo;
-		if (hasEncodersInfo)
-			out << encoderLeftTicks << encoderRightTicks;
+			<< o.hasEncodersInfo;
+		if (o.hasEncodersInfo)
+			out << o.encoderLeftTicks << o.encoderRightTicks;
 
-		out << hasVelocities; 
-		if (hasVelocities)
-			out << velocityLocal;
+		out << o.hasVelocities; 
+		if (o.hasVelocities)
+			out << o.velocityLocal;
 	}
 }
 
@@ -69,35 +72,35 @@ template <> void CSerializer<CObservationOdometry>::readFromStream(CObservationO
 	case 1:
 	case 2:
 		{
-			in	>> odometry
-			    >> sensorLabel
-			    >> timestamp;
+			in	>> o.odometry
+			    >> o.sensorLabel
+			    >> o.timestamp;
 
 			if (version>=1)
 			{
-				in >> hasEncodersInfo;
-				if (hasEncodersInfo || version < 2)
-					in >> encoderLeftTicks >> encoderRightTicks;
+				in >> o.hasEncodersInfo;
+				if (o.hasEncodersInfo || version < 2)
+					in >> o.encoderLeftTicks >> o.encoderRightTicks;
 				
-				in >> hasVelocities;
+				in >> o.hasVelocities;
 				if (version < 2) {
 					float vx, w;
 					in >> vx >> w;
-					velocityLocal.vx = vx;
-					velocityLocal.vy = .0;
-					velocityLocal.omega = w;
+					o.velocityLocal.vx = vx;
+					o.velocityLocal.vy = .0;
+					o.velocityLocal.omega = w;
 				}
 				else
 				{// v2
-					if (hasVelocities)
-						in >> velocityLocal;
+					if (o.hasVelocities)
+						in >> o.velocityLocal;
 				}
 			}
 			else
 			{  
-				hasEncodersInfo = false;
-				encoderLeftTicks = encoderRightTicks = 0;
-				hasVelocities = false;
+				o.hasEncodersInfo = false;
+				o.encoderLeftTicks = o.encoderRightTicks = 0;
+				o.hasVelocities = false;
 			}
 
 		} break;
@@ -105,6 +108,8 @@ template <> void CSerializer<CObservationOdometry>::readFromStream(CObservationO
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+}
 }
 
 void CObservationOdometry::getDescriptionAsText(std::ostream &o) const

@@ -28,19 +28,22 @@ CObservationRobotPose::CObservationRobotPose( )
 {
 }
 
-
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationRobotPose::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationRobotPose>::writeToStream(const CObservationRobotPose &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << pose;
-		out << sensorLabel
-			<< timestamp;
+		out << o.pose;
+		out << o.sensorLabel
+			<< o.timestamp;
 	}
 }
 
@@ -53,14 +56,16 @@ template <> void CSerializer<CObservationRobotPose>::readFromStream(CObservation
 	{
 	case 0:
 		{
-			in >> pose;
-			in >> sensorLabel
-			   >> timestamp;
+			in >> o.pose;
+			in >> o.sensorLabel
+			   >> o.timestamp;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 
+}
+}
 }
 
 void CObservationRobotPose::getSensorPose( CPose3D &out_sensorPose ) const

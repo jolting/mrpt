@@ -12,6 +12,7 @@
 #include <mrpt/utils/CObject.h>
 #include <mrpt/utils/TTypeName.h>
 #include <mrpt/utils/types_simple.h>
+#include <mrpt/utils/CSerializer.h>
 
 #if MRPT_HAS_MATLAB
 typedef struct mxArray_tag mxArray; //!< Forward declaration for mxArray (avoid #including as much as possible to speed up compiling)
@@ -29,6 +30,89 @@ namespace mrpt
 	namespace utils
 	{
 
+		//Base Case
+		template <typename T>
+		const TRuntimeClassId & getRunTimeInfo(typename std::enable_if<std::is_same<T,CObject>::value>::type * = 0)
+		{
+			static TRuntimeClassId id{
+				"CObject",
+				nullptr,
+				nullptr
+			};
+			return id;
+		}
+
+		template <typename T>
+		const TRuntimeClassId & getRunTimeInfo(typename std::enable_if<!std::is_abstract<T>::value>::type * = 0,
+			typename std::enable_if<!std::is_same<T,CObject>::value>::type * = 0)
+		{
+			static TRuntimeClassId id{
+				CSerializer<T>::getClassName(),
+				&T::CreateObject,
+				[](){ return &CSerializer<typename T::BASE>::runtimeClassId();}
+			};
+			return id;
+		}
+
+		template <typename T>
+		const TRuntimeClassId & getRunTimeInfo(typename std::enable_if<std::is_abstract<T>::value>::type * = 0,
+			typename std::enable_if<!std::is_same<T,CObject>::value>::type * = 0)
+		{
+			static TRuntimeClassId id{
+				CSerializer<T>::getClassName(),
+				nullptr,
+				[](){ return &CSerializer<typename T::BASE>::runtimeClassId();}
+			};
+			return id;
+		}
+
+
+		template <typename T> const TRuntimeClassId & CSerializer<T>::runtimeClassId()
+		{
+			return getRunTimeInfo<T>();
+		}
+
+		template <typename T>
+		constexpr const mrpt::utils::TRuntimeClassId* CLASS_ID_impl()
+		{
+			return &CSerializer<T>::runtimeClassId();
+		}
+
+		template <typename T>
+		struct IS_CLASS_impl
+		{
+			template <typename PTR>
+			static bool check(const PTR p){
+				return p->GetRuntimeClass()==CLASS_ID_impl<T>();
+			}
+		};
+
+		template <typename T, typename BASE_T = CObject>
+		class BASE_IMPEXP CObjectCRTP : public BASE_T
+		{
+                public:
+			using BASE = BASE_T;
+                        /*! A typedef for the associated smart pointer */
+			using Ptr = std::shared_ptr<T>;
+			using ConstPtr = std::shared_ptr<const T>;
+			static const mrpt::utils::TRuntimeClassId* classinfo()
+			{
+				return &CSerializer<T>::runtimeClassId();
+			}
+			const mrpt::utils::TRuntimeClassId* GetRuntimeClass() const override
+			{
+				return &CSerializer<T>::runtimeClassId();
+			}
+		};
+
+		class CSerializable;
+
+		template <typename T, typename BASE_T = CSerializable>
+		class BASE_IMPEXP CSerializableCRTPVirtual : public CObjectCRTP<T, BASE_T>
+		{
+		public:
+
+		};
 
 		/** The virtual base class which provides a unified interface for all persistent objects in MRPT.
 		 *  Many important properties of this class are inherited from mrpt::utils::CObject. See that class for more details.
@@ -36,7 +120,7 @@ namespace mrpt
 		 * \sa CStream
 		 * \ingroup mrpt_base_grp
 		 */
-		class BASE_IMPEXP CSerializable : public mrpt::utils::CObject
+		class BASE_IMPEXP CSerializable : public CObjectCRTP<CSerializable>
 		{
 			// This must be added to any CObject derived class:
 			DEFINE_VIRTUAL_MRPT_OBJECT( CSerializable )
@@ -80,32 +164,11 @@ namespace mrpt
 #endif
 		}; // End of class def.
 
-		template <typename T>
-		class BASE_IMPEXP CSerializer
-		{
-		public:
-			static const TRuntimeClassId runtimeClassId;
-			static const char* getClassName();
-			static const mrpt::utils::TRuntimeClassId* getBaseClass();
-			static void writeToStream(const T& obj, mrpt::utils::CStream &out, int *getVersion);
-			static void readFromStream(T& obj, mrpt::utils::CStream &in, int version);
-		};
 
-		template <typename T, typename BASE = CSerializable>
-		class BASE_IMPEXP CSerializableCRTPVirtual : public BASE
+		
+		template <typename T, typename BASE_T = CSerializable>
+		class BASE_IMPEXP CSerializableCRTP : public CSerializableCRTPVirtual<T, BASE_T>
 		{
-                public:
-                        /*! A typedef for the associated smart pointer */
-			using Ptr = std::shared_ptr<T>;
-			using ConstPtr = std::shared_ptr<const T>;
-			static const mrpt::utils::TRuntimeClassId* classinfo()
-			{
-				return &CSerializer<T>::runtimeClassId;
-			}
-			const mrpt::utils::TRuntimeClassId* GetRuntimeClass() const override
-			{
-				return &CSerializer<T>::runtimeClassId;
-			}
 		public:
 			void  writeToStream(mrpt::utils::CStream &out, int *getVersion) const override
 			{
@@ -115,12 +178,6 @@ namespace mrpt
 			{
 				CSerializer<T>::readFromStream(*static_cast<T*>(this), in, version);
 			}
-		};
-		
-		template <typename T, typename BASE = CSerializable>
-		class BASE_IMPEXP CSerializableCRTP : public CSerializableCRTPVirtual<T, BASE>
-		{
-		public:
 			static mrpt::utils::CObject* CreateObject()
 			{
 				return static_cast<mrpt::utils::CObject*>( new T);

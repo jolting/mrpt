@@ -33,7 +33,7 @@ namespace poses
 	 * \sa CPose3D, CPose3DPDF, CPose3DPDFParticles
 	 * \ingroup poses_pdf_grp
 	 */
-	class BASE_IMPEXP CPose3DPDFGaussian : public CPose3DPDF
+	class BASE_IMPEXP CPose3DPDFGaussian : public mrpt::utils::CSerializableCRTP<CPose3DPDFGaussian, CPose3DPDF>
 	{
 		DEFINE_SERIALIZABLE( CPose3DPDFGaussian )
 

@@ -24,43 +24,45 @@ IMPLEMENTS_SERIALIZABLE(CObservationSkeleton, CObservation, mrpt::obs)
 #define WRITE_JOINT(_J) out << _J.x << _J.y << _J.z << _J.conf;
 #define READ_JOINT(_J) in >> _J.x >> _J.y >> _J.z >> _J.conf;
 
+namespace mrpt{
+namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationSkeleton::writeToStream(CStream &out, int *version) const
+template <> void CSerializer<CObservationSkeleton>::writeToStream(const CObservationSkeleton &o, CStream &out, int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
-		WRITE_JOINT(head)
-		WRITE_JOINT(neck)
-		WRITE_JOINT(torso)
+		WRITE_JOINT(o.head)
+		WRITE_JOINT(o.neck)
+		WRITE_JOINT(o.torso)
 		
-		WRITE_JOINT(left_shoulder)
-		WRITE_JOINT(left_elbow)
-		WRITE_JOINT(left_hand)
-		WRITE_JOINT(left_hip)
-		WRITE_JOINT(left_knee)
-		WRITE_JOINT(left_foot)
+		WRITE_JOINT(o.left_shoulder)
+		WRITE_JOINT(o.left_elbow)
+		WRITE_JOINT(o.left_hand)
+		WRITE_JOINT(o.left_hip)
+		WRITE_JOINT(o.left_knee)
+		WRITE_JOINT(o.left_foot)
 
-		WRITE_JOINT(right_shoulder)
-		WRITE_JOINT(right_elbow)
-		WRITE_JOINT(right_hand)
-		WRITE_JOINT(right_hip)
-		WRITE_JOINT(right_knee)
-		WRITE_JOINT(right_foot)
+		WRITE_JOINT(o.right_shoulder)
+		WRITE_JOINT(o.right_elbow)
+		WRITE_JOINT(o.right_hand)
+		WRITE_JOINT(o.right_hip)
+		WRITE_JOINT(o.right_knee)
+		WRITE_JOINT(o.right_foot)
 
-		out << sensorLabel
-		    << timestamp
-		    << sensorPose;
+		out << o.sensorLabel
+		    << o.timestamp
+		    << o.sensorPose;
 	}
 }
 
 /*---------------------------------------------------------------
   Implements the reading from a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationSkeleton::readFromStream(CStream &in, int version)
+template <> void CSerializer<CObservationSkeleton>::readFromStream(CObservationSkeleton &o, CStream &in, int version)
 {
 	switch(version)
 	{
@@ -68,34 +70,36 @@ void  CObservationSkeleton::readFromStream(CStream &in, int version)
 	case 1:
 	case 2:
 		{
-			READ_JOINT(head)
-			READ_JOINT(neck)
-			READ_JOINT(torso)
+			READ_JOINT(o.head)
+			READ_JOINT(o.neck)
+			READ_JOINT(o.torso)
 		
-			READ_JOINT(left_shoulder)
-			READ_JOINT(left_elbow)
-			READ_JOINT(left_hand)
-			READ_JOINT(left_hip)
-			READ_JOINT(left_knee)
-			READ_JOINT(left_foot)
+			READ_JOINT(o.left_shoulder)
+			READ_JOINT(o.left_elbow)
+			READ_JOINT(o.left_hand)
+			READ_JOINT(o.left_hip)
+			READ_JOINT(o.left_knee)
+			READ_JOINT(o.left_foot)
 
-			READ_JOINT(right_shoulder)
-			READ_JOINT(right_elbow)
-			READ_JOINT(right_hand)
-			READ_JOINT(right_hip)
-			READ_JOINT(right_knee)
-			READ_JOINT(right_foot)
+			READ_JOINT(o.right_shoulder)
+			READ_JOINT(o.right_elbow)
+			READ_JOINT(o.right_hand)
+			READ_JOINT(o.right_hip)
+			READ_JOINT(o.right_knee)
+			READ_JOINT(o.right_foot)
 
-			in >> sensorLabel;
-			in >> timestamp;
+			in >> o.sensorLabel;
+			in >> o.timestamp;
 			if (version >= 2){
-				in >> sensorPose;
+				in >> o.sensorPose;
 			}
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
+}
+}
 }
 
 void CObservationSkeleton::getDescriptionAsText(std::ostream &o) const

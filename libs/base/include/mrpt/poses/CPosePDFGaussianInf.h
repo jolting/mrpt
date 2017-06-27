@@ -31,7 +31,7 @@ namespace mrpt
 	 	 * \sa CPose2D, CPosePDF, CPosePDFParticles
 	 	 * \ingroup poses_pdf_grp
 	 	 */
-		class BASE_IMPEXP CPosePDFGaussianInf : public CPosePDF
+		class BASE_IMPEXP CPosePDFGaussianInf : public mrpt::utils::CSerializableCRTP<CPosePDFGaussianInf, CPosePDF>
 		{
 			// This must be added to any CSerializable derived class:
 			DEFINE_SERIALIZABLE( CPosePDFGaussianInf );

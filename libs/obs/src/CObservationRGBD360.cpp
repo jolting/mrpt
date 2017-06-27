@@ -55,42 +55,46 @@ CObservationRGBD360::~CObservationRGBD360()
 #endif
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationRGBD360::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationRGBD360>::writeToStream(const CObservationRGBD360 &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
 		// The data
-		out << maxRange << sensorPose;
+		out << o.maxRange << o.sensorPose;
 
-//		out << hasPoints3D;
-//		if (hasPoints3D)
+//		out << o.hasPoints3D;
+//		if (o.hasPoints3D)
 //		{
-//			uint32_t N = points3D_x.size();
+//			uint32_t N = o.points3D_x.size();
 //			out << N;
 //			if (N)
 //			{
-//				out.WriteBufferFixEndianness( &points3D_x[0], N );
-//				out.WriteBufferFixEndianness( &points3D_y[0], N );
-//				out.WriteBufferFixEndianness( &points3D_z[0], N );
+//				out.WriteBufferFixEndianness( &o.points3D_x[0], N );
+//				out.WriteBufferFixEndianness( &o.points3D_y[0], N );
+//				out.WriteBufferFixEndianness( &o.points3D_z[0], N );
 //			}
 //		}
 //
-		out << hasRangeImage; if (hasRangeImage) for (unsigned i=0; i < NUM_SENSORS; i++) out << rangeImages[i];
-		out << hasIntensityImage; if (hasIntensityImage) for (unsigned i=0; i < NUM_SENSORS; i++) out << intensityImages[i];
-//		out << hasConfidenceImage; if (hasConfidenceImage) out << confidenceImage;
-		for (unsigned i=0; i < NUM_SENSORS; i++) out << timestamps[i];
+		out << o.hasRangeImage; if (o.hasRangeImage) for (unsigned i=0; i < o.NUM_SENSORS; i++) out << o.rangeImages[i];
+		out << o.hasIntensityImage; if (o.hasIntensityImage) for (unsigned i=0; i < o.NUM_SENSORS; i++) out << o.intensityImages[i];
+//		out << o.hasConfidenceImage; if (o.hasConfidenceImage) out << o.confidenceImage;
+		for (unsigned i=0; i < o.NUM_SENSORS; i++) out << o.timestamps[i];
 //
-		out << stdError;
-		out << timestamp;
-		out << sensorLabel;
+		out << o.stdError;
+		out << o.timestamp;
+		out << o.sensorLabel;
 
-		out << m_points3D_external_stored << m_points3D_external_file;
-		out << m_rangeImage_external_stored << m_rangeImage_external_file;
+		out << o.m_points3D_external_stored << o.m_points3D_external_file;
+		out << o.m_rangeImage_external_stored << o.m_rangeImage_external_file;
 	}
 }
 
@@ -103,21 +107,21 @@ template <> void CSerializer<CObservationRGBD360>::readFromStream(CObservationRG
 	{
 	case 0:
 		{
-			in >> maxRange >> sensorPose;
+			in >> o.maxRange >> o.sensorPose;
 
-      in >> hasRangeImage;
-      if (hasRangeImage) for (unsigned i=0; i < NUM_SENSORS; i++)
+      in >> o.hasRangeImage;
+      if (o.hasRangeImage) for (unsigned i=0; i < o.NUM_SENSORS; i++)
       {
 #ifdef COBS3DRANGE_USE_MEMPOOL
         // We should call "rangeImage_setSize()" to exploit the mempool:
-        this->rangeImage_setSize(240,320,i);
+        o.rangeImage_setSize(240,320,i);
 #endif
-        in >> rangeImages[i];
+        in >> o.rangeImages[i];
       }
 
-      in >> hasIntensityImage;
-      if (hasIntensityImage) for (unsigned i=0; i < NUM_SENSORS; i++)
-        in >>intensityImages[i];
+      in >> o.hasIntensityImage;
+      if (o.hasIntensityImage) for (unsigned i=0; i < o.NUM_SENSORS; i++)
+        in >> o.intensityImages[i];
 
 //      in >> hasConfidenceImage;
 //      if (hasConfidenceImage)
@@ -125,13 +129,13 @@ template <> void CSerializer<CObservationRGBD360>::readFromStream(CObservationRG
 
 //      in >> cameraParams;
 
-      for (unsigned i=0; i < NUM_SENSORS; i++) in >> timestamps[i];
-      in >> stdError;
-      in >> timestamp;
-      in >> sensorLabel;
+      for (unsigned i=0; i < o.NUM_SENSORS; i++) in >> o.timestamps[i];
+      in >> o.stdError;
+      in >> o.timestamp;
+      in >> o.sensorLabel;
 
-      in >> m_points3D_external_stored >> m_points3D_external_file;
-      in >> m_rangeImage_external_stored >> m_rangeImage_external_file;
+      in >> o.m_points3D_external_stored >> o.m_points3D_external_file;
+      in >> o.m_rangeImage_external_stored >> o.m_rangeImage_external_file;
 
 		} break;
 	default:
@@ -139,6 +143,8 @@ template <> void CSerializer<CObservationRGBD360>::readFromStream(CObservationRG
 
 	};
 
+}
+}
 }
 
 // Similar to calling "rangeImage.setSize(H,W)" but this method provides memory pooling to speed-up the memory allocation.

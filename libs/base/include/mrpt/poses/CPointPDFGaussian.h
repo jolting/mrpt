@@ -22,7 +22,7 @@ namespace poses
 	 * \sa CPointPDF
 	 * \ingroup poses_pdf_grp
 	 */
-	class BASE_IMPEXP CPointPDFGaussian : public CPointPDF
+	class BASE_IMPEXP CPointPDFGaussian : public mrpt::utils::CSerializableCRTP<CPointPDFGaussian,CPointPDF>
 	{
 		DEFINE_SERIALIZABLE( CPointPDFGaussian )
 

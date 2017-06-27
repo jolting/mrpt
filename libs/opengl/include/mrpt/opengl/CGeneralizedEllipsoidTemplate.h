@@ -55,7 +55,7 @@ namespace mrpt
 		  * \ingroup mrpt_opengl_grp
 		  */
 		template <int DIM>
-		class CGeneralizedEllipsoidTemplate : public CRenderizableDisplayList
+		class CGeneralizedEllipsoidTemplate : public mrpt::utils::CSerializableCRTPVirtual<CGeneralizedEllipsoidTemplate<DIM>, CRenderizableDisplayList>
 		{
 		public:
 			typedef mrpt::math::CMatrixFixedNumeric<double,DIM,DIM> cov_matrix_t;   //!< The type of fixed-size covariance matrices for this representation
@@ -169,8 +169,8 @@ namespace mrpt
 							mrpt::utils::keep_max(m_bb_max[k], render_pts[i][k] );
 						}
 					// Convert to coordinates of my parent:
-					m_pose.composePoint(m_bb_min, m_bb_min);
-					m_pose.composePoint(m_bb_max, m_bb_max);
+					CRenderizable::m_pose.composePoint(m_bb_min, m_bb_min);
+					CRenderizable::m_pose.composePoint(m_bb_max, m_bb_max);
 
 					// 4) Render them:
 					mrpt::opengl::detail::renderGeneralizedEllipsoidTemplate<DIM>(render_pts,

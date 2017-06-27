@@ -284,10 +284,11 @@ namespace mrpt
 			virtual ~COpenGLViewport();  //!< Destructor: clears all objects.
 
 
-		protected:
 			/** Constructor, invoked from COpenGLScene only.
 			  */
 			COpenGLViewport( COpenGLScene *parent=nullptr, const std::string &name=std::string("") );
+
+		protected:
 
 			/** Initializes all textures in the scene (See opengl::CTexturedPlane::loadTextureInOpenGL)
 			  */

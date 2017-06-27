@@ -28,10 +28,14 @@ CObservationWindSensor::CObservationWindSensor( ) :
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationWindSensor::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservationWindSensor>::writeToStream(CObservationWindSensor &o, mrpt::utils::CStream &out, int *version)
 {
 	MRPT_UNUSED_PARAM(out);
 	if (version)
@@ -39,11 +43,11 @@ void  CObservationWindSensor::writeToStream(mrpt::utils::CStream &out, int *vers
 	else
 	{
 		// The data
-		out << speed
-			<< direction
-			<< sensorLabel
-			<< timestamp
-			<< sensorPoseOnRobot;
+		out << o.speed
+			<< o.direction
+			<< o.sensorLabel
+			<< o.timestamp
+			<< o.sensorPoseOnRobot;
 	}
 }
 
@@ -60,19 +64,19 @@ template <> void CSerializer<CObservationWindSensor>::readFromStream(CObservatio
 	case 2:
 	case 3:
 		{
-			in	>> speed
-				>> direction;
+			in	>> o.speed
+				>> o.direction;
 			if (version>=1)
-				in >> sensorLabel;
-			else sensorLabel="";
+				in >> o.sensorLabel;
+			else o.sensorLabel="";
 
 			if (version>=2)
-					in >> timestamp;
-			else 	timestamp = INVALID_TIMESTAMP;
+					in >> o.timestamp;
+			else 	o.timestamp = INVALID_TIMESTAMP;
 
 			if (version>=3)
-					in >> sensorPoseOnRobot;
-			else 	sensorPoseOnRobot = CPose3D();
+					in >> o.sensorPoseOnRobot;
+			else 	o.sensorPoseOnRobot = CPose3D();
 
 		} break;
 	default:
@@ -81,7 +85,8 @@ template <> void CSerializer<CObservationWindSensor>::readFromStream(CObservatio
 	};
 
 }
-
+}
+}
 
 
 void CObservationWindSensor::getSensorPose( CPose3D &out_sensorPose ) const

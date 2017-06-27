@@ -84,7 +84,7 @@ template <> void CSerializer<CObservationBeaconRanges>::readFromStream(CObservat
 			o.sensedData.resize(n);
 			for (i=0;i<n;i++)
 			{
-				in >> o.sensedData[i].sensorLocationOnRobot >> sensedData[i].sensedDistance;
+				in >> o.sensedData[i].sensorLocationOnRobot >> o.sensedData[i].sensedDistance;
 				in >> id; o.sensedData[i].beaconID = id;
 			}
 

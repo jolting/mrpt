@@ -19,7 +19,7 @@ namespace mrpt
 		*
 		* \ingroup mrpt_kinematics_grp
 		*/
-		class KINEMATICS_IMPEXP CVehicleVelCmd_Holo : public CVehicleVelCmd
+		class KINEMATICS_IMPEXP CVehicleVelCmd_Holo : public mrpt::utils::CSerializableCRTP<CVehicleVelCmd_Holo, CVehicleVelCmd>
 		{
 			DEFINE_SERIALIZABLE(CVehicleVelCmd_Holo)
 		public:

@@ -31,30 +31,34 @@ CObservationGasSensors::CObservationGasSensors( ) :
 
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationGasSensors::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationGasSensors>::writeToStream(const CObservationGasSensors &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 5;
 	else
 	{
-		uint32_t	i,n = m_readings.size();
+		uint32_t	i,n = o.m_readings.size();
 		out << n;
 
 		for (i=0;i<n;i++)
 		{
-			out << CPose3D(m_readings[i].eNosePoseOnTheRobot);
-			out << m_readings[i].readingsVoltage;
-			out << m_readings[i].sensorTypes;
-			out << m_readings[i].hasTemperature;
-			if (m_readings[i].hasTemperature)
-				out << m_readings[i].temperature;
+			out << CPose3D(o.m_readings[i].eNosePoseOnTheRobot);
+			out << o.m_readings[i].readingsVoltage;
+			out << o.m_readings[i].sensorTypes;
+			out << o.m_readings[i].hasTemperature;
+			if (o.m_readings[i].hasTemperature)
+				out << o.m_readings[i].temperature;
 		}
 
-		out << sensorLabel
-		    << timestamp;
+		out << o.sensorLabel
+		    << o.timestamp;
 
 	}
 }
@@ -75,36 +79,36 @@ template <> void CSerializer<CObservationGasSensors>::readFromStream(CObservatio
 		uint32_t	i,n;
 
 		in >> n;
-		m_readings.resize(n);
+		o.m_readings.resize(n);
 
 		CPose3D  aux;
 
 		for (i=0;i<n;i++)
 		{
 
-			in >> aux; m_readings[i].eNosePoseOnTheRobot = aux;
-			in >> m_readings[i].readingsVoltage;
-			in >> m_readings[i].sensorTypes;
+			in >> aux; o.m_readings[i].eNosePoseOnTheRobot = aux;
+			in >> o.m_readings[i].readingsVoltage;
+			in >> o.m_readings[i].sensorTypes;
 			if (version>=3)
 			{
-				in >> m_readings[i].hasTemperature;
-				if (m_readings[i].hasTemperature)
-					in >> m_readings[i].temperature;
+				in >> o.m_readings[i].hasTemperature;
+				if (o.m_readings[i].hasTemperature)
+					in >> o.m_readings[i].temperature;
 			}
 			else
 			{
-				m_readings[i].hasTemperature=false;
-				m_readings[i].temperature=0;
+				o.m_readings[i].hasTemperature=false;
+				o.m_readings[i].temperature=0;
 			}
 		}
 
 		if (version>=4)
-				in >> sensorLabel;
-		else	sensorLabel = "";
+				in >> o.sensorLabel;
+		else	o.sensorLabel = "";
 
 		if (version>=5)
-				in >> timestamp;
-		else 	timestamp = INVALID_TIMESTAMP;
+				in >> o.timestamp;
+		else 	o.timestamp = INVALID_TIMESTAMP;
 
 
 		}
@@ -112,9 +116,9 @@ template <> void CSerializer<CObservationGasSensors>::readFromStream(CObservatio
 	case 0:
 	case 1:
 		{
-			TObservationENose		eNose;
+			CObservationGasSensors::TObservationENose		eNose;
 
-			m_readings.clear();
+			o.m_readings.clear();
 
 			// There was a single set of 16 values from "Sancho" (DEC-2006)
 			CVectorFloat		readings;
@@ -133,7 +137,7 @@ template <> void CSerializer<CObservationGasSensors>::readFromStream(CObservatio
 
 			eNose.sensorTypes.clear();
 			eNose.sensorTypes.resize(4,0);
-			m_readings.push_back(eNose);
+			o.m_readings.push_back(eNose);
 
 			// (2)
 			eNose.eNosePoseOnTheRobot = CPose3D( 0.20f, 0.15f, 0.10f ); // (x,y,z) only
@@ -145,7 +149,7 @@ template <> void CSerializer<CObservationGasSensors>::readFromStream(CObservatio
 
 			eNose.sensorTypes.clear();
 			eNose.sensorTypes.resize(4,0);
-			m_readings.push_back(eNose);
+			o.m_readings.push_back(eNose);
 
 		} break;
 	default:
@@ -154,7 +158,8 @@ template <> void CSerializer<CObservationGasSensors>::readFromStream(CObservatio
 	};
 
 }
-
+}
+}
 
 /*---------------------------------------------------------------
                      getSensorPose

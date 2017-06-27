@@ -92,30 +92,34 @@ mrpt::system::TTimeStamp CObservationVelodyneScan::getOriginalReceivedTimeStamp(
 	return originalReceivedTimestamp;
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationVelodyneScan::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservationVelodyneScan>::writeToStream(const CObservationVelodyneScan &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 1;
 	else
 	{
-		out << timestamp << sensorLabel;
+		out << o.timestamp << o.sensorLabel;
 
-		out << minRange << maxRange << sensorPose;
+		out << o.minRange << o.maxRange << o.sensorPose;
 		{
-			uint32_t N = scan_packets.size();
+			uint32_t N = o.scan_packets.size();
 			out << N;
-			if (N) out.WriteBuffer(&scan_packets[0],sizeof(scan_packets[0])*N);
+			if (N) out.WriteBuffer(&o.scan_packets[0],sizeof(o.scan_packets[0])*N);
 		}
 		{
-			uint32_t N = calibration.laser_corrections.size();
+			uint32_t N = o.calibration.laser_corrections.size();
 			out << N;
-			if (N) out.WriteBuffer(&calibration.laser_corrections[0],sizeof(calibration.laser_corrections[0])*N);
+			if (N) out.WriteBuffer(&o.calibration.laser_corrections[0],sizeof(o.calibration.laser_corrections[0])*N);
 		}
-		out << point_cloud.x << point_cloud.y << point_cloud.z << point_cloud.intensity;
-		out << has_satellite_timestamp; // v1
+		out << o.point_cloud.x << o.point_cloud.y << o.point_cloud.z << o.point_cloud.intensity;
+		out << o.has_satellite_timestamp; // v1
 	}
 }
 
@@ -129,25 +133,25 @@ template <> void CSerializer<CObservationVelodyneScan>::readFromStream(CObservat
 	case 0:
 	case 1:
 		{
-			in >> timestamp >> sensorLabel;
+			in >> o.timestamp >> o.sensorLabel;
 
-			in >> minRange >> maxRange >> sensorPose;
+			in >> o.minRange >> o.maxRange >> o.sensorPose;
 			{
 				uint32_t N; 
 				in >> N;
-				scan_packets.resize(N);
-				if (N) in.ReadBuffer(&scan_packets[0],sizeof(scan_packets[0])*N);
+				o.scan_packets.resize(N);
+				if (N) in.ReadBuffer(&o.scan_packets[0],sizeof(o.scan_packets[0])*N);
 			}
 			{
 				uint32_t N; 
 				in >> N;
-				calibration.laser_corrections.resize(N);
-				if (N) in.ReadBuffer(&calibration.laser_corrections[0],sizeof(calibration.laser_corrections[0])*N);
+				o.calibration.laser_corrections.resize(N);
+				if (N) in.ReadBuffer(&o.calibration.laser_corrections[0],sizeof(o.calibration.laser_corrections[0])*N);
 			}
-			in >> point_cloud.x >> point_cloud.y >> point_cloud.z >> point_cloud.intensity;
+			in >> o.point_cloud.x >> o.point_cloud.y >> o.point_cloud.z >> o.point_cloud.intensity;
 			if (version>=1)
-				in >> has_satellite_timestamp;
-			else has_satellite_timestamp = (this->timestamp!=this->originalReceivedTimestamp);
+				in >> o.has_satellite_timestamp;
+			else o.has_satellite_timestamp = (o.timestamp!=o.originalReceivedTimestamp);
 
 		} break;
 	default:
@@ -155,6 +159,8 @@ template <> void CSerializer<CObservationVelodyneScan>::readFromStream(CObservat
 	};
 
 	//m_cachedMap.clear();
+}
+}
 }
 
 void CObservationVelodyneScan::getDescriptionAsText(std::ostream &o) const

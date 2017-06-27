@@ -21,19 +21,22 @@ using namespace std;
 // This must be added to any CSerializable class implementation file.
 IMPLEMENTS_SERIALIZABLE(CObservationRawDAQ, CObservation,mrpt::obs)
 
+namespace mrpt{
+namespace utils{
+
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationRawDAQ::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationRawDAQ>::writeToStream(const CObservationRawDAQ &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << sensorLabel << timestamp << sample_rate
-			<< AIN_8bits << AIN_16bits << AIN_32bits << AIN_float << AIN_double
-			<< AIN_channel_count << AIN_interleaved
-			<< AOUT_8bits << AOUT_16bits << AOUT_float << AOUT_double << DIN << DOUT << CNTRIN_32bits << CNTRIN_double;
+		out << o.sensorLabel << o.timestamp << o.sample_rate
+			<< o.AIN_8bits << o.AIN_16bits << o.AIN_32bits << o.AIN_float << o.AIN_double
+			<< o.AIN_channel_count << o.AIN_interleaved
+			<< o.AOUT_8bits << o.AOUT_16bits << o.AOUT_float << o.AOUT_double << o.DIN << o.DOUT << o.CNTRIN_32bits << o.CNTRIN_double;
 	}
 }
 
@@ -46,16 +49,18 @@ template <> void CSerializer<CObservationRawDAQ>::readFromStream(CObservationRaw
 	{
 	case 0:
 		{
-			in  >> sensorLabel >> timestamp >> sample_rate
-				>> AIN_8bits >> AIN_16bits >> AIN_32bits >> AIN_float >> AIN_double
-				>> AIN_channel_count >> AIN_interleaved
-				>> AOUT_8bits >> AOUT_16bits >> AOUT_float >> AOUT_double >> DIN >> DOUT >> CNTRIN_32bits >> CNTRIN_double;
+			in  >> o.sensorLabel >> o.timestamp >> o.sample_rate
+				>> o.AIN_8bits >> o.AIN_16bits >> o.AIN_32bits >> o.AIN_float >> o.AIN_double
+				>> o.AIN_channel_count >> o.AIN_interleaved
+				>> o.AOUT_8bits >> o.AOUT_16bits >> o.AOUT_float >> o.AOUT_double >> o.DIN >> o.DOUT >> o.CNTRIN_32bits >> o.CNTRIN_double;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 
+}
+}
 }
 
 void CObservationRawDAQ::getDescriptionAsText(std::ostream &o) const

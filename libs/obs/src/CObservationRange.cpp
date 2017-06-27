@@ -31,10 +31,14 @@ CObservationRange::CObservationRange( ) :
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationRange::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationRange>::writeToStream(const CObservationRange &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 3;
@@ -43,15 +47,15 @@ void  CObservationRange::writeToStream(mrpt::utils::CStream &out, int *version) 
 		uint32_t		i,n;
 
 		// The data
-		out << minSensorDistance << maxSensorDistance << sensorConeApperture;
+		out << o.minSensorDistance << o.maxSensorDistance << o.sensorConeApperture;
 
-		n = sensedData.size();
+		n = o.sensedData.size();
 		out << n;
 		for (i=0;i<n;i++)
-			out << sensedData[i].sensorID << CPose3D(sensedData[i].sensorPose) << sensedData[i].sensedDistance;
+			out << o.sensedData[i].sensorID << CPose3D(o.sensedData[i].sensorPose) << o.sensedData[i].sensedDistance;
 
-		out << sensorLabel
-			<< timestamp;
+		out << o.sensorLabel
+			<< o.timestamp;
 	}
 }
 
@@ -70,34 +74,36 @@ template <> void CSerializer<CObservationRange>::readFromStream(CObservationRang
 			uint32_t		i,n;
 
 			// The data
-			in >> minSensorDistance >> maxSensorDistance >> sensorConeApperture;
+			in >> o.minSensorDistance >> o.maxSensorDistance >> o.sensorConeApperture;
 
 			in >> n;
-			sensedData.resize(n);
+			o.sensedData.resize(n);
 			CPose3D aux;
 			for (i=0;i<n;i++)
 			{
 				if (version>=3)
-						in >> sensedData[i].sensorID;
-				else 	sensedData[i].sensorID = i;
+						in >> o.sensedData[i].sensorID;
+				else 	o.sensedData[i].sensorID = i;
 
-				in >> aux >> sensedData[i].sensedDistance;
-				sensedData[i].sensorPose = aux;
+				in >> aux >> o.sensedData[i].sensedDistance;
+				o.sensedData[i].sensorPose = aux;
 			}
 
 			if (version>=1)
-				in >> sensorLabel;
-			else sensorLabel = "";
+				in >> o.sensorLabel;
+			else o.sensorLabel = "";
 
 			if (version>=2)
-					in >> timestamp;
-			else 	timestamp = INVALID_TIMESTAMP;
+					in >> o.timestamp;
+			else 	o.timestamp = INVALID_TIMESTAMP;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 
+}
+}
 }
 
 /*---------------------------------------------------------------

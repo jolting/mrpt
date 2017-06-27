@@ -33,19 +33,23 @@ CObservationImage::CObservationImage( void *iplImage  ) :
 {
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationImage::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservationImage>::writeToStream(const CObservationImage &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 4;
 	else
 	{
 		// The data
-		out << cameraPose << cameraParams << image
-		    << timestamp
-		    << sensorLabel;
+		out << o.cameraPose << o.cameraParams << o.image
+		    << o.timestamp
+		    << o.sensorLabel;
 	}
 }
 
@@ -62,11 +66,11 @@ template <> void CSerializer<CObservationImage>::readFromStream(CObservationImag
 	case 3:
 	case 4:
 		{
-			in >> cameraPose;
+			in >> o.cameraPose;
 
 			if (version>=4)
 			{
-				in >> cameraParams;
+				in >> o.cameraParams;
 			}
 			else
 			{
@@ -76,36 +80,37 @@ template <> void CSerializer<CObservationImage>::readFromStream(CObservationImag
 				if (size(distortionParams,1)==1 && size(distortionParams,2)==5)
 				{
 					const CMatrixDouble15 p = distortionParams.cast<double>();
-					cameraParams.setDistortionParamsVector(p);
+					o.cameraParams.setDistortionParamsVector(p);
 				}
-				else 	cameraParams.dist.assign(0);
+				else 	o.cameraParams.dist.assign(0);
 
-				cameraParams.intrinsicParams = intrinsicParams.block(0,0,3,3).cast<double>();
+				o.cameraParams.intrinsicParams = intrinsicParams.block(0,0,3,3).cast<double>();
 			}
 
-			in >> image;
+			in >> o.image;
 
 			if (version>=1)
-				in >> timestamp;
+				in >> o.timestamp;
 
 			if (version>=2)
 			{
 				if (version<4)
-					in >> cameraParams.focalLengthMeters ;
+					in >> o.cameraParams.focalLengthMeters ;
 			}
 			else
-				cameraParams.focalLengthMeters = 0.002;
+				o.cameraParams.focalLengthMeters = 0.002;
 
 			if (version>=3)
-					in >> sensorLabel;
-			else	sensorLabel = "";
+					in >> o.sensorLabel;
+			else	o.sensorLabel = "";
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
+}
+}
 }
 
 /*---------------------------------------------------------------

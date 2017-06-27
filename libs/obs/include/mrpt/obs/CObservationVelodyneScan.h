@@ -52,7 +52,7 @@ namespace obs
 	  * \sa CObservation, CPointsMap, CVelodyneScanner
 	  * \ingroup mrpt_obs_grp
 	  */
-	class OBS_IMPEXP CObservationVelodyneScan : public CObservation
+	class OBS_IMPEXP CObservationVelodyneScan : public mrpt::utils::CSerializableCRTP<CObservationVelodyneScan, CObservation>
 	{
 		DEFINE_SERIALIZABLE( CObservationVelodyneScan )
 

@@ -46,21 +46,25 @@ void CObservationGPS::swap(CObservationGPS &o)
 	messages.swap( o.messages );
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationGPS::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CObservationGPS>::writeToStream(const CObservationGPS &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 11;
 	else
 	{
-		out << timestamp << originalReceivedTimestamp << sensorLabel << sensorPose;
-		out << has_satellite_timestamp; // v11
+		out << o.timestamp << o.originalReceivedTimestamp << o.sensorLabel << o.sensorPose;
+		out << o.has_satellite_timestamp; // v11
 
-		const uint32_t nMsgs = messages.size();
+		const uint32_t nMsgs = o.messages.size();
 		out << nMsgs;
-		for (message_list_t::const_iterator it=messages.begin();it!=messages.end();++it)
+		for (CObservationGPS::message_list_t::const_iterator it=o.messages.begin();it!=o.messages.end();++it)
 			it->second->writeToStream(out);
 	}
 }
@@ -70,23 +74,23 @@ void  CObservationGPS::writeToStream(mrpt::utils::CStream &out, int *version) co
  ---------------------------------------------------------------*/
 template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o, mrpt::utils::CStream &in, int version)
 {
-	this->clear();
+	o.clear();
 
 	switch(version)
 	{
 	case 10:
 	case 11:
 		{
-			in >> timestamp >> originalReceivedTimestamp >> sensorLabel >>sensorPose;
+			in >> o.timestamp >> o.originalReceivedTimestamp >> o.sensorLabel >> o.sensorPose;
 			if (version>=11)
-				in >> has_satellite_timestamp; // v11
-			else has_satellite_timestamp = (this->timestamp!=this->originalReceivedTimestamp);
+				in >> o.has_satellite_timestamp; // v11
+			else o.has_satellite_timestamp = (o.timestamp!=o.originalReceivedTimestamp);
 
 			uint32_t nMsgs;
 			in >> nMsgs;
 			for (unsigned i=0;i<nMsgs;i++) {
 				gnss::gnss_message * msg = gnss::gnss_message::readAndBuildFromStream(in);
-				messages[msg->message_type] = gnss::gnss_message_ptr(msg);
+				o.messages[msg->message_type] = gnss::gnss_message_ptr(msg);
 			}
 		};
 		break;
@@ -99,7 +103,7 @@ template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o
 			if (has_GGA_datum_) {
 				gnss::Message_NMEA_GGA * datum = new gnss::Message_NMEA_GGA();
 				in.ReadBuffer( &datum->fields, sizeof(datum->fields) );
-				messages[gnss::NMEA_GGA] = gnss::gnss_message_ptr(datum);
+				o.messages[gnss::NMEA_GGA] = gnss::gnss_message_ptr(datum);
 			}
 
 			bool has_RMC_datum_;
@@ -107,7 +111,7 @@ template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o
 			if (has_RMC_datum_) {
 				gnss::Message_NMEA_RMC * datum = new gnss::Message_NMEA_RMC();
 				in.ReadBuffer( &datum->fields, sizeof(datum->fields) );
-				messages[gnss::NMEA_RMC] = gnss::gnss_message_ptr(datum);
+				o.messages[gnss::NMEA_RMC] = gnss::gnss_message_ptr(datum);
 			}
 		} break;
 	case 1:
@@ -121,8 +125,8 @@ template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o
 	case 9:
 		{
 			if (version>=3)
-					in >> timestamp;
-			else 	timestamp = INVALID_TIMESTAMP;
+					in >> o.timestamp;
+			else 	o.timestamp = INVALID_TIMESTAMP;
 
 			bool has_GGA_datum_;
 			in >> has_GGA_datum_;
@@ -145,7 +149,7 @@ template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o
 				}
 
 				in  >> GGA_datum.satellitesUsed >> GGA_datum.thereis_HDOP >> GGA_datum.HDOP;
-				this->setMsg(datum);
+				o.setMsg(datum);
 			}
 
 			bool has_RMC_datum_;
@@ -158,14 +162,14 @@ template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o
 				in  >> RMC_datum.UTCTime.hour >> RMC_datum.UTCTime.minute >> RMC_datum.UTCTime.sec
 					>> RMC_datum.validity_char >> RMC_datum.latitude_degrees >> RMC_datum.longitude_degrees
 					>> RMC_datum.speed_knots >> RMC_datum.direction_degrees;
-				this->setMsg(datum);
+				o.setMsg(datum);
 			}
 			if (version>1)
-					in >> sensorLabel;
-			else 	sensorLabel = "";
+					in >> o.sensorLabel;
+			else 	o.sensorLabel = "";
 			if (version>=4)
-					in >> sensorPose;
-			else	sensorPose.setFromValues(0,0,0,0,0,0);
+					in >> o.sensorPose;
+			else	o.sensorPose.setFromValues(0,0,0,0,0,0);
 			if (version>=5)
 			{
 				bool has_PZS_datum_;
@@ -173,7 +177,7 @@ template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o
 				if (has_PZS_datum_)
 				{
 					gnss::Message_TOPCON_PZS * datum = new gnss::Message_TOPCON_PZS();
-					messages[gnss::TOPCON_PZS] = gnss::gnss_message_ptr(datum);
+					o.messages[gnss::TOPCON_PZS] = gnss::gnss_message_ptr(datum);
 					gnss::Message_TOPCON_PZS & PZS_datum = *datum;
 
 					in >>
@@ -201,7 +205,7 @@ template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o
 			// Added in V7:
 			if (version>=7) {
 				gnss::Message_TOPCON_SATS * datum = new gnss::Message_TOPCON_SATS();
-				messages[gnss::TOPCON_SATS] = gnss::gnss_message_ptr(datum);
+				o.messages[gnss::TOPCON_SATS] = gnss::gnss_message_ptr(datum);
 				gnss::Message_TOPCON_SATS & SATS_datum = *datum;
 				bool has_SATS_datum_;
 				in >> has_SATS_datum_;
@@ -215,8 +219,10 @@ template <> void CSerializer<CObservationGPS>::readFromStream(CObservationGPS& o
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 
-	if (originalReceivedTimestamp==INVALID_TIMESTAMP)
-		originalReceivedTimestamp = timestamp;
+	if (o.originalReceivedTimestamp==INVALID_TIMESTAMP)
+		o.originalReceivedTimestamp = o.timestamp;
+}
+}
 }
 
 /*---------------------------------------------------------------

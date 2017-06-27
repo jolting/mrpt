@@ -11,6 +11,7 @@
 
 #include <cstdint>
 #include <string>
+#include <mrpt/utils/CSerializer.h>
 
 namespace mrpt
 {
@@ -47,7 +48,7 @@ namespace mrpt
 		struct TTypeName
 		{
 			static std::string get() {
-				return std::string( T::classinfo()->className );
+				return std::string( mrpt::utils::CSerializer<T>::getClassName() );
 			}
 		};
 

@@ -33,18 +33,20 @@ CObservationReflectivity::~CObservationReflectivity()
 {
 }
 
+namespace mrpt {
+namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CObservationReflectivity::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CObservationReflectivity>::writeToStream(const CObservationReflectivity & o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << reflectivityLevel << sensorPose;
-		out << sensorLabel
-			<< timestamp;
+		out << o.reflectivityLevel << o.sensorPose;
+		out << o.sensorLabel
+			<< o.timestamp;
 	}
 }
 
@@ -57,13 +59,15 @@ template <> void CSerializer<CObservationReflectivity>::readFromStream(CObservat
 	{
 	case 0:
 		{
-			in >> reflectivityLevel >> sensorPose;
-			in >> sensorLabel
-			   >> timestamp;
+			in >> o.reflectivityLevel >> o.sensorPose;
+			in >> o.sensorLabel
+			   >> o.timestamp;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
+}
+}
 }
 
 void CObservationReflectivity::getDescriptionAsText(std::ostream &o) const

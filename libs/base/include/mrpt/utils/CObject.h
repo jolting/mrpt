@@ -64,11 +64,6 @@ namespace mrpt
 		  */
 		const TRuntimeClassId BASE_IMPEXP * findRegisteredClass(const std::string &className);
 
-		template <typename T>
-		constexpr const mrpt::utils::TRuntimeClassId* CLASS_ID_impl()
-		{
-			return &T::runtimeClassId;
-		}
 
 		/** Access to runtime class ID for a defined class name.
 		 */
@@ -77,14 +72,6 @@ namespace mrpt
 		#define CLASS_ID_TEMPLATE(class_name,T) mrpt::utils::CLASS_ID_impl<T>()
 		#define CLASS_ID_NAMESPACE(class_name,namespaceName) mrpt::utils::CLASS_ID_impl<namespaceName::class_name>()
 
-		template <typename T>
-		struct IS_CLASS_impl
-		{
-			template <typename PTR>
-			static bool check(const PTR p){
-				return p->GetRuntimeClass()==CLASS_ID_impl<T>();
-			}
-		};
 
 		/** Evaluates to true if the given pointer to an object (derived from mrpt::utils::CSerializable) is of the given class. */
 		#define IS_CLASS(ptrObj, class_name) mrpt::utils::IS_CLASS_impl<class_name>::check(ptrObj)
@@ -126,8 +113,10 @@ namespace mrpt
 			/** Returns information about the class of an object in runtime. */
 			virtual const mrpt::utils::TRuntimeClassId* GetRuntimeClass() const
 			{
-				return CLASS_ID(CObject);
+				return &classinfo();
 			}
+
+			static const mrpt::utils::TRuntimeClassId &classinfo();
 
 			/** Returns a copy of the object, indepently of its class, as a smart pointer (the newly created object will exist as long as any copy of this smart pointer). */
 			inline mrpt::utils::CObject::Ptr duplicateGetSmartPtr() const;
