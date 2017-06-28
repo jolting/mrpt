@@ -58,7 +58,7 @@ namespace maps
 	 * \ingroup mrpt_maps_grp
 	 **/
 	class MAPS_IMPEXP COccupancyGridMap2D :
-		public CMetricMap,
+		public mrpt::utils::CSerializableCRTP<COccupancyGridMap2D, CMetricMap>,
 		// Inherit from the corresponding specialization of CLogOddsGridMap2D<>:
 #ifdef	OCCUPANCY_GRIDMAP_CELL_SIZE_8BITS
 		public CLogOddsGridMap2D<int8_t>
@@ -66,7 +66,7 @@ namespace maps
 		public CLogOddsGridMap2D<int16_t>
 #endif
 	{
-		DEFINE_SERIALIZABLE( COccupancyGridMap2D )
+		friend mrpt::utils::CSerializer<COccupancyGridMap2D>;
 	public:
 
 	/** The type of the map cells: */

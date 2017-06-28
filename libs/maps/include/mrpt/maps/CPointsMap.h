@@ -55,7 +55,7 @@ namespace maps
 	  * \ingroup mrpt_maps_grp
 	 */
 	class MAPS_IMPEXP CPointsMap :
-		public CMetricMap,
+		public mrpt::utils::CSerializableCRTPVirtual<CPointsMap, CMetricMap>,
 		public mrpt::math::KDTreeCapable<CPointsMap>,
 		public mrpt::utils::PLY_Importer,
 		public mrpt::utils::PLY_Exporter

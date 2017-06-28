@@ -115,6 +115,7 @@ namespace maps
 		public mrpt::utils::CDynamicGrid<TRandomFieldCell>,
 		public mrpt::utils::COutputLogger
 	{
+		typedef utils::CDynamicGrid<TRandomFieldCell> DBASE;
 		DEFINE_VIRTUAL_SERIALIZABLE( CRandomFieldGridMap2D )
 	public:
 

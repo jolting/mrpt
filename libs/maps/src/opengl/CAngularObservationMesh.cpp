@@ -243,16 +243,20 @@ void CAngularObservationMesh::generatePointCloud(CPointsMap *out_map) const {
 	std::for_each(scanSet.begin(),scanSet.end(),CAngularObservationMesh_fnctr(out_map));
 }
 
+namespace mrpt
+{
+namespace utils
+{
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void CAngularObservationMesh::writeToStream(mrpt::utils::CStream &out,int *version) const	{
+template <> void CSerializer<CAngularObservationMesh>::writeToStream(const CAngularObservationMesh &o, mrpt::utils::CStream &out,int *version) {
 	if (version) *version=0;
 	else	{
-		writeToStreamRender(out);
+		o.writeToStreamRender(out);
 		//Version 0:
-		out<<pitchBounds<<scanSet<<mWireframe<<mEnableTransparency;
+		out<<o.pitchBounds<<o.scanSet<<o.mWireframe<<o.mEnableTransparency;
 	}
 }
 
@@ -260,16 +264,18 @@ void CAngularObservationMesh::writeToStream(mrpt::utils::CStream &out,int *versi
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void CAngularObservationMesh::readFromStream(mrpt::utils::CStream &in,int version)	{
+template <> void CSerializer<CAngularObservationMesh>::readFromStream(CAngularObservationMesh &o, mrpt::utils::CStream &in,int version)	{
 	switch (version)	{
 		case 0:
-			readFromStreamRender(in);
-			in>>pitchBounds>>scanSet>>mWireframe>>mEnableTransparency;
+			o.readFromStreamRender(in);
+			in >> o.pitchBounds >> o.scanSet >> o.mWireframe >> o.mEnableTransparency;
 			break;
 		default:
 			MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
-	meshUpToDate=false;
+	o.meshUpToDate=false;
+}
+}
 }
 
 void CAngularObservationMesh::TDoubleRange::values(std::vector<double> &vals) const	{

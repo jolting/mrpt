@@ -30,9 +30,7 @@ namespace mrpt { namespace slam {
 		public mrpt::utils::COutputLogger,
 		public mrpt::utils::CSerializableCRTP<CIncrementalMapPartitioner>
 	{
-		// This must be added to any CSerializable derived class:
-		DEFINE_SERIALIZABLE(CIncrementalMapPartitioner)
-
+		friend mrpt::utils::CSerializer<CIncrementalMapPartitioner>;
 	public:
 		CIncrementalMapPartitioner(); //!< ctor
 		virtual ~CIncrementalMapPartitioner(); //!< dtor

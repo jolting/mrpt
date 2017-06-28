@@ -33,6 +33,7 @@ namespace mrpt
 		 */
 		class HMTSLAM_IMPEXP CHierarchicalMapMHPartition : public mrpt::utils::COutputLogger
 		{
+			friend mrpt::utils::CSerializer<CHMHMapArc>;
 		protected:
 			/** The internal list of nodes and arcs in the whole hierarchical model.
 			  *  The objects must be deleted only in the CHierarchicalMap class, not in partitions only objects.

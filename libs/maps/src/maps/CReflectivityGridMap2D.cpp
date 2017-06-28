@@ -213,27 +213,28 @@ double	 CReflectivityGridMap2D::internal_computeObservationLikelihood(
 	MRPT_END
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CReflectivityGridMap2D::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void  CSerializer<CReflectivityGridMap2D>::writeToStream(const CReflectivityGridMap2D &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
-		dyngridcommon_writeToStream(out);
+		o.dyngridcommon_writeToStream(out);
 
 		// Map cells:
-		const uint32_t n = static_cast<uint32_t>(m_map.size());
+		const uint32_t n = static_cast<uint32_t>(o.m_map.size());
 		out << n;
 		if (n)
-			out.WriteBuffer(&m_map[0],n);
+			out.WriteBuffer(&o.m_map[0],n);
 
 		// Save the insertion options:
 		// out << insertionOptions.maxOccupancyUpdateCertainty;
 
-		out << genericMapParams; // v1
+		out << o.genericMapParams; // v1
 	}
 }
 
@@ -248,28 +249,28 @@ template <> void CSerializer<CReflectivityGridMap2D>::readFromStream(CReflectivi
 	case 1:
 	case 2:
 		{
-			dyngridcommon_readFromStream(in, version<2);
+			o.dyngridcommon_readFromStream(in, version<2);
 
 			// Map cells:
 			uint32_t n;
 			in >> n;
-			m_map.resize(n);
+			o.m_map.resize(n);
 			if (n)
-				in.ReadBuffer(&m_map[0],n);
+				in.ReadBuffer(&o.m_map[0],n);
 
 			// Load the insertion options:
 			// in >> insertionOptions.maxOccupancyUpdateCertainty;
 
 			if (version>=1) 
-				in >> genericMapParams;
+				in >> o.genericMapParams;
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
 }
+}}
 
 /*---------------------------------------------------------------
 					TInsertionOptions

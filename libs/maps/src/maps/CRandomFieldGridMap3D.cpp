@@ -337,45 +337,49 @@ bool CRandomFieldGridMap3D::insertIndividualReading(
 	MRPT_END;
 }
 
-void CRandomFieldGridMap3D::writeToStream(mrpt::utils::CStream &out, int *version) const
+namespace mrpt
+{
+namespace utils
+{
+template <> void CSerializer<CRandomFieldGridMap3D>::writeToStream(const CRandomFieldGridMap3D &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		dyngridcommon_writeToStream(out);
+		o.dyngridcommon_writeToStream(out);
 
 		// To assure compatibility: The size of each cell:
 		uint32_t n = static_cast<uint32_t>(sizeof(TRandomFieldVoxel));
 		out << n;
 
 		// Save the map contents:
-		n = static_cast<uint32_t>(m_map.size());
+		n = static_cast<uint32_t>(o.m_map.size());
 		out << n;
 
 		// Save the "m_map": This requires special handling for big endian systems:
 #if MRPT_IS_BIG_ENDIAN
 		for (uint32_t i = 0; i<n; i++)
 		{
-			out << m_map[i].mean_value << m_map[i].stddev_value;
+			out << o.m_map[i].mean_value << o.m_map[i].stddev_value;
 		}
 #else
 		// Little endian: just write all at once:
-		out.WriteBuffer(&m_map[0], sizeof(m_map[0])*m_map.size());
+		out.WriteBuffer(&o.m_map[0], sizeof(o.m_map[0])*o.m_map.size());
 #endif
 
-		out << insertionOptions.GMRF_lambdaPrior
-			<< insertionOptions.GMRF_skip_variance;
+		out << o.insertionOptions.GMRF_lambdaPrior
+			<< o.insertionOptions.GMRF_skip_variance;
 	}
 }
 
-void CRandomFieldGridMap3D::readFromStream(mrpt::utils::CStream &in, int version)
+template <> void CSerializer<CRandomFieldGridMap3D>::readFromStream(CRandomFieldGridMap3D &o, mrpt::utils::CStream &in, int version)
 {
 	switch (version)
 	{
 	case 0:
 	{
-		dyngridcommon_readFromStream(in);
+		o.dyngridcommon_readFromStream(in);
 
 		// To assure compatibility: The size of each cell:
 		uint32_t n;
@@ -384,24 +388,26 @@ void CRandomFieldGridMap3D::readFromStream(mrpt::utils::CStream &in, int version
 		ASSERT_EQUAL_(n, static_cast<uint32_t>(sizeof(TRandomFieldVoxel)));
 		// Load the map contents:
 		in >> n;
-		m_map.resize(n);
+		o.m_map.resize(n);
 
 		// Read the note in writeToStream()
 #if MRPT_IS_BIG_ENDIAN
 		for (uint32_t i = 0; i<n; i++)
-			in >> m_map[i].mean_value >> m_map[i].stddev_value;
+			in >> o.m_map[i].mean_value >> o.m_map[i].stddev_value;
 #else
 		// Little endian: just read all at once:
-		in.ReadBuffer(&m_map[0], sizeof(m_map[0])*m_map.size());
+		in.ReadBuffer(&o.m_map[0], sizeof(o.m_map[0])*o.m_map.size());
 #endif
-		in >> insertionOptions.GMRF_lambdaPrior
-		   >> insertionOptions.GMRF_skip_variance;
+		in >> o.insertionOptions.GMRF_lambdaPrior
+		   >> o.insertionOptions.GMRF_skip_variance;
 
 	} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version);
 	};
 
+}
+}
 }
 
 void CRandomFieldGridMap3D::getAsVtkStructuredGrid(vtkStructuredGrid* output, const std::string &label_mean, const std::string &label_stddev ) const

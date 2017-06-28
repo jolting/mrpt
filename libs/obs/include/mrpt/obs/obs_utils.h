@@ -41,7 +41,7 @@ namespace mrpt { namespace obs { namespace utils {
 		obs_t obs_out;
 
 		// CObservation
-		const mrpt::utils::TRuntimeClassId*	class_ID = OBSERVATION_T::classinfo;
+		const mrpt::utils::TRuntimeClassId*	class_ID = OBSERVATION_T::classinfo();
 		if (observation &&
 				observation->GetRuntimeClass()->derivedFrom(class_ID)) {
 			cobs_ptr = 

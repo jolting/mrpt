@@ -15,21 +15,21 @@ using namespace mrpt::utils;
 
 template <> const char * mrpt::utils::CSerializer<THypothesisIDSet>::getClassName() { return "THypothesisIDSet";}
 
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  THypothesisIDSet::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<THypothesisIDSet>::writeToStream(const THypothesisIDSet &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		uint32_t	N = (uint32_t) size();
+		uint32_t	N = (uint32_t) o.size();
 		out << N;
-		for (const_iterator it=begin();it!=end();++it)
+		for (THypothesisIDSet::const_iterator it=o.begin();it!=o.end();++it)
 			out << *it;
 	}
 }
@@ -48,12 +48,12 @@ template <> void CSerializer<THypothesisIDSet>::readFromStream(THypothesisIDSet&
 			uint32_t	i,N;
 			in >> N;
 
-			clear();
+			o.clear();
 			for (i=0;i<N;i++)
 			{
 				THypothesisID tmp;
 				in >> tmp;
-				insert(tmp);
+				o.insert(tmp);
 			}
 
 		} break;
@@ -63,3 +63,4 @@ template <> void CSerializer<THypothesisIDSet>::readFromStream(THypothesisIDSet&
 	};
 
 }
+}}

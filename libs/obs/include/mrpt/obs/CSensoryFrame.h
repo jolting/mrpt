@@ -176,7 +176,7 @@ namespace mrpt
 			 {
 				MRPT_START
 				size_t  foundCount = 0;
-				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo;
+				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo();
 				for (const_iterator it = begin();it!=end();++it)
 					if ( (*it)->GetRuntimeClass()->derivedFrom( class_ID ) )
 						if (foundCount++ == ith)

@@ -25,9 +25,9 @@ namespace obs
 	 * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationGasSensors : public CObservation
+	class OBS_IMPEXP CObservationGasSensors : public mrpt::utils::CSerializableCRTP<CObservationGasSensors, CObservation>
 	{
-		DEFINE_SERIALIZABLE( CObservationGasSensors )
+		friend mrpt::utils::CSerializer<CObservationGasSensors>;
 
 	 public:
 		/** Constructor.

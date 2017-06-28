@@ -877,29 +877,29 @@ void  CLocalMetricHypothesis::dumpAsText(utils::CStringList &st) const
 	}
 }
 
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  CLocalMetricHypothesis::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CLocalMetricHypothesis>::readFromStream(CLocalMetricHypothesis &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			in  >> m_ID >> m_currentRobotPose
-				>> m_neighbors
-				>> m_nodeIDmemberships
-				>> m_SFs
-				>> m_posesPendingAddPartitioner
-				>> m_areasPendingTBI
-				>> m_log_w
-				>> m_log_w_metric_history
-				>> m_robotPosesGraph.partitioner
-				>> m_robotPosesGraph.idx2pose;
+			in  >> o.m_ID >> o.m_currentRobotPose
+				>> o.m_neighbors
+				>> o.m_nodeIDmemberships
+				>> o.m_SFs
+				>> o.m_posesPendingAddPartitioner
+				>> o.m_areasPendingTBI
+				>> o.m_log_w
+				>> o.m_log_w_metric_history
+				>> o.m_robotPosesGraph.partitioner
+				>> o.m_robotPosesGraph.idx2pose;
 
 			// particles:
-			readParticlesFromStream(in);
+			o.readParticlesFromStream(in);
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
@@ -911,25 +911,25 @@ void  CLocalMetricHypothesis::readFromStream(mrpt::utils::CStream &in,int versio
 	Implements the writing to a CStream capability of
 	  CSerializable objects
   ---------------------------------------------------------------*/
-void  CLocalMetricHypothesis::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CLocalMetricHypothesis>::writeToStream(const CLocalMetricHypothesis &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << m_ID << m_currentRobotPose
-			<< m_neighbors
-			<< m_nodeIDmemberships
-			<< m_SFs
-			<< m_posesPendingAddPartitioner
-			<< m_areasPendingTBI
-			<< m_log_w
-			<< m_log_w_metric_history
-			<< m_robotPosesGraph.partitioner
-			<< m_robotPosesGraph.idx2pose;
+		out << o.m_ID << o.m_currentRobotPose
+			<< o.m_neighbors
+			<< o.m_nodeIDmemberships
+			<< o.m_SFs
+			<< o.m_posesPendingAddPartitioner
+			<< o.m_areasPendingTBI
+			<< o.m_log_w
+			<< o.m_log_w_metric_history
+			<< o.m_robotPosesGraph.partitioner
+			<< o.m_robotPosesGraph.idx2pose;
 
         // particles:
-        writeParticlesToStream(out);
+        o.writeParticlesToStream(out);
 
 	}
 }
@@ -937,13 +937,13 @@ void  CLocalMetricHypothesis::writeToStream(mrpt::utils::CStream &out, int *vers
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  CLSLAMParticleData::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CLSLAMParticleData>::readFromStream(CLSLAMParticleData &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-            in >> metricMaps >> robotPoses;
+            in >> o.metricMaps >> o.robotPoses;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
@@ -955,12 +955,13 @@ void  CLSLAMParticleData::readFromStream(mrpt::utils::CStream &in,int version)
 	Implements the writing to a CStream capability of
 	  CSerializable objects
   ---------------------------------------------------------------*/
-void  CLSLAMParticleData::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CLSLAMParticleData>::writeToStream(const CLSLAMParticleData &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << metricMaps << robotPoses;
+		out << o.metricMaps << o.robotPoses;
     }
 }
+}}

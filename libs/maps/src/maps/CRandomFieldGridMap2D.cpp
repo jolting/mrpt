@@ -2040,10 +2040,10 @@ void  CRandomFieldGridMap2D::recoverMeanAndCov() const
   ---------------------------------------------------------------*/
 void CRandomFieldGridMap2D::getMeanAndCov( CVectorDouble &out_means, CMatrixDouble &out_cov) const
 {
-	const size_t N = BASE::m_map.size();
+	const size_t N = DBASE::m_map.size();
 	out_means.resize(N);
 	for (size_t i=0;i<N;++i)
-		out_means[i] = BASE::m_map[i].kf_mean;
+		out_means[i] = DBASE::m_map[i].kf_mean;
 
 	recoverMeanAndCov();
 	out_cov = m_cov;
@@ -2056,13 +2056,13 @@ void CRandomFieldGridMap2D::getMeanAndCov( CVectorDouble &out_means, CMatrixDoub
   ---------------------------------------------------------------*/
 void CRandomFieldGridMap2D::getMeanAndSTD( CVectorDouble &out_means, CVectorDouble &out_STD) const
 {
-	const size_t N = BASE::m_map.size();
+	const size_t N = DBASE::m_map.size();
 	out_means.resize(N);
 	out_STD.resize(N);
 
 	for (size_t i=0;i<N;++i)
 	{
-		out_means[i] = BASE::m_map[i].kf_mean;
+		out_means[i] = DBASE::m_map[i].kf_mean;
 		out_STD[i] = sqrt(m_stackedCov(i,0));
 	}
 }
@@ -2074,7 +2074,7 @@ void CRandomFieldGridMap2D::getMeanAndSTD( CVectorDouble &out_means, CVectorDoub
 void CRandomFieldGridMap2D::setMeanAndSTD( CVectorDouble &in_means, CVectorDouble &in_std)
 {
 	//Assure dimmensions match
-	const size_t N = BASE::m_map.size();
+	const size_t N = DBASE::m_map.size();
 	ASSERT_( N == size_t(in_means.size()) );
 	ASSERT_( N == size_t(in_std.size()) );
 

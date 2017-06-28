@@ -61,6 +61,7 @@ CHMHMapNode::~CHMHMapNode()
 		(*it)->onNodeDestruction(this);
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -72,10 +73,10 @@ template <> void CSerializer<CHMHMapNode>::writeToStream(const CHMHMapNode& o, m
 	else
 	{
 		// Data:
-		out << m_ID << m_label;
-		out << m_nodeType.getType();
-		out << m_annotations;
-		out << m_hypotheses;
+		out << o.m_ID << o.m_label;
+		out << o.m_nodeType.getType();
+		out << o.m_annotations;
+		out << o.m_hypotheses;
 	}
 
 }
@@ -84,7 +85,7 @@ template <> void CSerializer<CHMHMapNode>::writeToStream(const CHMHMapNode& o, m
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CHMHMapNode::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CHMHMapNode>::readFromStream(CHMHMapNode &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -92,9 +93,9 @@ void  CHMHMapNode::readFromStream(mrpt::utils::CStream &in,int version)
 		{
 			std::string		type;
 			// Data:
-			in >> m_ID >> m_label >> type >> m_annotations >> m_hypotheses;
+			in >> o.m_ID >> o.m_label >> type >> o.m_annotations >> o.m_hypotheses;
 
-			m_nodeType.setType(type);
+			o.m_nodeType.setType(type);
 
 			// It's not necessary since at ::Create this is already done (but...check!)
 			//if (m_parent.get())
@@ -105,8 +106,8 @@ void  CHMHMapNode::readFromStream(mrpt::utils::CStream &in,int version)
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
 }
+}}
 
 /*---------------------------------------------------------------
 					onArcDestruction

@@ -153,33 +153,34 @@ void  CWeightedPointsMap::addFrom_classSpecific(const CPointsMap &anotherMap, co
 	}
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CWeightedPointsMap::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CWeightedPointsMap>::writeToStream(const CWeightedPointsMap &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
-		uint32_t n = x.size();
+		uint32_t n = o.x.size();
 
 		// First, write the number of points:
 		out << n;
 
 		if (n>0)
 		{
-			out.WriteBufferFixEndianness(&x[0],n);
-			out.WriteBufferFixEndianness(&y[0],n);
-			out.WriteBufferFixEndianness(&z[0],n);
-			out.WriteBufferFixEndianness(&pointWeight[0],n);
+			out.WriteBufferFixEndianness(&o.x[0],n);
+			out.WriteBufferFixEndianness(&o.y[0],n);
+			out.WriteBufferFixEndianness(&o.z[0],n);
+			out.WriteBufferFixEndianness(&o.pointWeight[0],n);
 		}
 
-		out << genericMapParams; // v2
-		insertionOptions.writeToStream(out); // version 9: insert options are saved with its own method
-		likelihoodOptions.writeToStream(out); // Added in version 5
+		out << o.genericMapParams; // v2
+		o.insertionOptions.writeToStream(out); // version 9: insert options are saved with its own method
+		o.likelihoodOptions.writeToStream(out); // Added in version 5
 	}
 }
 
@@ -196,54 +197,54 @@ template <> void CSerializer<CWeightedPointsMap>::readFromStream(CWeightedPoints
 	case 1:
 	case 2:
 		{
-			mark_as_modified();
+			o.mark_as_modified();
 
 			// Read the number of points:
 			uint32_t n;
 			in >> n;
 
-			this->resize(n);
+			o.resize(n);
 
 			if (n>0)
 			{
-				in.ReadBufferFixEndianness(&x[0],n);
-				in.ReadBufferFixEndianness(&y[0],n);
-				in.ReadBufferFixEndianness(&z[0],n);
-				in.ReadBufferFixEndianness(&pointWeight[0],n);
+				in.ReadBufferFixEndianness(&o.x[0],n);
+				in.ReadBufferFixEndianness(&o.y[0],n);
+				in.ReadBufferFixEndianness(&o.z[0],n);
+				in.ReadBufferFixEndianness(&o.pointWeight[0],n);
 			}
 
 			if (version>=1)
 			{
 				if (version>=2)
-					in >> genericMapParams;
+					in >> o.genericMapParams;
 				else 
 				{
 					bool disableSaveAs3DObject;
 					in >> disableSaveAs3DObject;
-					genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
+					o.genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
 				}
 
-				insertionOptions.readFromStream(in); // version 9: insert options are saved with its own method
+				o.insertionOptions.readFromStream(in); // version 9: insert options are saved with its own method
 			}
 			else
 			{
-				insertionOptions = TInsertionOptions();
-				in 	>> insertionOptions.minDistBetweenLaserPoints
-					>> insertionOptions.addToExistingPointsMap
-					>> insertionOptions.also_interpolate
-					>> insertionOptions.disableDeletion
-					>> insertionOptions.fuseWithExisting
-					>> insertionOptions.isPlanarMap
-					>> insertionOptions.maxDistForInterpolatePoints;
+				o.insertionOptions = CWeightedPointsMap::TInsertionOptions();
+				in 	>> o.insertionOptions.minDistBetweenLaserPoints
+					>> o.insertionOptions.addToExistingPointsMap
+					>> o.insertionOptions.also_interpolate
+					>> o.insertionOptions.disableDeletion
+					>> o.insertionOptions.fuseWithExisting
+					>> o.insertionOptions.isPlanarMap
+					>> o.insertionOptions.maxDistForInterpolatePoints;
 				{
 					bool disableSaveAs3DObject;
 					in >> disableSaveAs3DObject;
-					genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
+					o.genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
 				}
-				in >> insertionOptions.horizontalTolerance;
+				in >> o.insertionOptions.horizontalTolerance;
 			}
 
-			likelihoodOptions.readFromStream(in); // Added in version 5
+			o.likelihoodOptions.readFromStream(in); // Added in version 5
 
 		} break;
 	default:
@@ -252,6 +253,7 @@ template <> void CSerializer<CWeightedPointsMap>::readFromStream(CWeightedPoints
 	};
 
 }
+}}
 
 /*---------------------------------------------------------------
 					Clear

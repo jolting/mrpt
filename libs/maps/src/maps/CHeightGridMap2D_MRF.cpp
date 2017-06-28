@@ -254,12 +254,12 @@ template <> void CSerializer<CHeightGridMap2D_MRF>::readFromStream(CHeightGridMa
 			{
 				uint64_t N;
 				in >> o.m_average_normreadings_mean >> o.m_average_normreadings_var >> N;
-				O.m_average_normreadings_count = N;
+				o.m_average_normreadings_count = N;
 			}
 
 			in >> o.genericMapParams;
 
-			O.m_hasToRecoverMeanAndCov = true;
+			o.m_hasToRecoverMeanAndCov = true;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)

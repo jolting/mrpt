@@ -673,21 +673,22 @@ void CIncrementalMapPartitioner::getAs3DScene(
 
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  CIncrementalMapPartitioner::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CIncrementalMapPartitioner>::readFromStream(CIncrementalMapPartitioner &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-		in  >> m_individualFrames
-			>> m_individualMaps
-			>> m_A
-			>> m_last_partition
-			>> m_last_last_partition_are_new_ones
-			>> m_modified_nodes;
+		in  >> o.m_individualFrames
+			>> o.m_individualMaps
+			>> o.m_A
+			>> o.m_last_partition
+			>> o.m_last_last_partition_are_new_ones
+			>> o.m_modified_nodes;
 
 		} break;
 	default:
@@ -700,21 +701,21 @@ void  CIncrementalMapPartitioner::readFromStream(mrpt::utils::CStream &in,int ve
 	Implements the writing to a CStream capability of
 	  CSerializable objects
   ---------------------------------------------------------------*/
-void  CIncrementalMapPartitioner::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CIncrementalMapPartitioner>::writeToStream(const CIncrementalMapPartitioner &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << m_individualFrames
-			<< m_individualMaps
-			<< m_A
-			<< m_last_partition
-			<< m_last_last_partition_are_new_ones
-			<< m_modified_nodes;
+		out << o.m_individualFrames
+			<< o.m_individualMaps
+			<< o.m_A
+			<< o.m_last_partition
+			<< o.m_last_last_partition_are_new_ones
+			<< o.m_modified_nodes;
 	}
 }
-
+}}
 /*---------------------------------------------------------------
 					addMapFrame
   ---------------------------------------------------------------*/

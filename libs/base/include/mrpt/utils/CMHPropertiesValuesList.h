@@ -81,7 +81,7 @@ namespace mrpt
 							return typename T::Ptr();
 					else	THROW_EXCEPTION("Null pointer")
 				}
-				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo;
+				const mrpt::utils::TRuntimeClassId*	class_ID = T::classinfo();
 				ASSERT_( class_ID == obj->GetRuntimeClass() );
 				return std::dynamic_pointer_cast<T>( obj );
 				MRPT_END

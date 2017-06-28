@@ -27,7 +27,7 @@ namespace mrpt
 		  * expandable to other source types (f.i. scanners).
 		  * \ingroup mrpt_detectors_grp
 		  */
-		class DETECTORS_IMPEXP CDetectableObject: public mrpt::utils::CSerializableCRTPVirtual<CDetectableObject>;
+		class DETECTORS_IMPEXP CDetectableObject : public mrpt::utils::CSerializableCRTPVirtual<CDetectableObject>
 		{
 			DEFINE_VIRTUAL_SERIALIZABLE( CDetectableObject )
 
@@ -44,9 +44,9 @@ namespace mrpt
 
 
 
-		class DETECTORS_IMPEXP CDetectable2D: public CDetectableObject
+		class DETECTORS_IMPEXP CDetectable2D: public mrpt::utils::CSerializableCRTP<CDetectable2D, CDetectableObject>
 		{
-			DEFINE_SERIALIZABLE( CDetectable2D )
+			friend mrpt::utils::CSerializer<CDetectable2D>;
 
 		public:
 

@@ -159,6 +159,7 @@ void   CPlanarLaserScan::render_dl() const
 #endif
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
    Implements the writing to a CStream capability of
      CSerializable objects
@@ -170,14 +171,14 @@ template <> void CSerializer<CPlanarLaserScan>::writeToStream(const CPlanarLaser
 		*version = 1;
 	else
 	{
-		writeToStreamRender(out);
-		out << m_scan;
-		out << m_line_width
-			<< m_line_R << m_line_G << m_line_B << m_line_A
-			<< m_points_width
-			<< m_points_R << m_points_G << m_points_B << m_points_A
-			<< m_plane_R << m_plane_G << m_plane_B << m_plane_A
-			<< m_enable_points << m_enable_line << m_enable_surface; // new in v1
+		o.writeToStreamRender(out);
+		out << o.m_scan;
+		out << o.m_line_width
+			<< o.m_line_R << o.m_line_G << o.m_line_B << o.m_line_A
+			<< o.m_points_width
+			<< o.m_points_R << o.m_points_G << o.m_points_B << o.m_points_A
+			<< o.m_plane_R << o.m_plane_G << o.m_plane_B << o.m_plane_A
+			<< o.m_enable_points << o.m_enable_line << o.m_enable_surface; // new in v1
 	}
 }
 
@@ -185,28 +186,28 @@ template <> void CSerializer<CPlanarLaserScan>::writeToStream(const CPlanarLaser
 	Implements the reading from a CStream capability of
 		CSerializable objects
   ---------------------------------------------------------------*/
-void  CPlanarLaserScan::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CPlanarLaserScan>::readFromStream(CPlanarLaserScan &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 	case 1:
 		{
-			readFromStreamRender(in);
-			in >> m_scan;
-			in >> m_line_width
-				>> m_line_R >> m_line_G >> m_line_B >> m_line_A
-				>> m_points_width
-				>> m_points_R >> m_points_G >> m_points_B >> m_points_A
-				>> m_plane_R >> m_plane_G >> m_plane_B >> m_plane_A;
+			o.readFromStreamRender(in);
+			in >> o.m_scan;
+			in >> o.m_line_width
+				>> o.m_line_R >> o.m_line_G >> o.m_line_B >> o.m_line_A
+				>> o.m_points_width
+				>> o.m_points_R >> o.m_points_G >> o.m_points_B >> o.m_points_A
+				>> o.m_plane_R >> o.m_plane_G >> o.m_plane_B >> o.m_plane_A;
 
             if (version>=1)
             {
-                in >> m_enable_points >> m_enable_line >> m_enable_surface; // new in v1
+                in >> o.m_enable_points >> o.m_enable_line >> o.m_enable_surface; // new in v1
             }
             else
             {
-                m_enable_points = m_enable_line = m_enable_surface = true;
+                o.m_enable_points = o.m_enable_line = o.m_enable_surface = true;
             }
 		} break;
 	default:
@@ -214,7 +215,7 @@ void  CPlanarLaserScan::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 }
-
+}}
 
 void CPlanarLaserScan::getBoundingBox(mrpt::math::TPoint3D &bb_min, mrpt::math::TPoint3D &bb_max) const
 {

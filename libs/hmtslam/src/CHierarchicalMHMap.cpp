@@ -59,6 +59,7 @@ void  CHierarchicalMHMap::clear()
 	m_arcs.clear();
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
@@ -73,15 +74,15 @@ template <> void CSerializer<CHierarchicalMHMap>::writeToStream(const CHierarchi
 		TArcList::const_iterator  it2;
 
 		// Nodes:
-		n = static_cast<uint32_t>(nodeCount());
+		n = static_cast<uint32_t>(o.nodeCount());
 		out << n;
-		for (it=m_nodes.begin();it!=m_nodes.end();it++)
+		for (it=o.m_nodes.begin();it!=o.m_nodes.end();it++)
 			out << *it->second;
 
 		// Arcs:
-		n = static_cast<uint32_t>(arcCount());
+		n = static_cast<uint32_t>(o.arcCount());
 		out << n;
-		for (it2=m_arcs.begin();it2!=m_arcs.end();it2++)
+		for (it2=o.m_arcs.begin();it2!=o.m_arcs.end();it2++)
 			out << *(*it2);
 	}
 }
@@ -98,13 +99,13 @@ template <> void CSerializer<CHierarchicalMHMap>::readFromStream(CHierarchicalMH
 			uint32_t	i,n;
 
 			// Clear previous contents:
-			clear();
+			o.clear();
 
 			// Nodes:
 			in >> n;
 			for (i=0;i<n;i++)
             {
-				CHMHMapNode::Ptr node = std::make_shared<CHMHMapNode>(this); // This insert the node in my internal list via the callback method
+				CHMHMapNode::Ptr node = std::make_shared<CHMHMapNode>(&o); // This insert the node in my internal list via the callback method
             	in >> *node;
             }
 
@@ -114,7 +115,7 @@ template <> void CSerializer<CHierarchicalMHMap>::readFromStream(CHierarchicalMH
             {
 				 // This insert the node in my internal list via the callback method
 				CHMHMapNode::Ptr p1, p2;
-				CHMHMapArc::Ptr arc = std::make_shared<CHMHMapArc>( p1, p2, THypothesisIDSet() ,this);
+				CHMHMapArc::Ptr arc = std::make_shared<CHMHMapArc>( p1, p2, THypothesisIDSet(), &o);
             	in >> *arc;
             }
 
@@ -123,7 +124,8 @@ template <> void CSerializer<CHierarchicalMHMap>::readFromStream(CHierarchicalMH
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
+}
+}
 }
 
 /*---------------------------------------------------------------

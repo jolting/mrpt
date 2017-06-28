@@ -37,7 +37,7 @@ namespace mrpt
 		  * \ingroup mrpt_opengl_grp
 		  * \note Class introduced in MRPT 1.2.2
 		  */
-		class OPENGL_IMPEXP CAssimpModel : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CAssimpModel : public mrpt::utils::CSerializableCRTP<CAssimpModel, CRenderizableDisplayList>
 		{
 			friend mrpt::utils::CSerializer<CAssimpModel>;
 

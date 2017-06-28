@@ -38,7 +38,7 @@ namespace mrpt
 		  */
 		class HMTSLAM_IMPEXP CLSLAMParticleData : public mrpt::utils::CSerializableCRTP<CLSLAMParticleData>
 		{
-			DEFINE_SERIALIZABLE( CLSLAMParticleData )
+			friend mrpt::utils::CSerializer<CLSLAMParticleData>;
 
 		public:
 			CLSLAMParticleData( const mrpt::maps::TSetOfMetricMapInitializers *mapsInitializers = nullptr ) :
@@ -60,11 +60,11 @@ namespace mrpt
 		class HMTSLAM_IMPEXP CLocalMetricHypothesis :
 			public mrpt::bayes::CParticleFilterData<CLSLAMParticleData>,
 			public mrpt::bayes::CParticleFilterDataImpl<CLocalMetricHypothesis,mrpt::bayes::CParticleFilterData<CLSLAMParticleData>::CParticleList>,
-			public mrpt::utils::CSerializable
+			public mrpt::utils::CSerializableCRTP<CLocalMetricHypothesis>
 		{
 			friend class HMTSLAM_IMPEXP CLSLAM_RBPF_2DLASER;
 
-			DEFINE_SERIALIZABLE( CLocalMetricHypothesis )
+			friend mrpt::utils::CSerializer<CLocalMetricHypothesis>;
 
 		public:
 			/** Constructor (Default param only used from STL classes)

@@ -35,7 +35,7 @@ namespace maps
 	  */
 	class SLAM_IMPEXP CRBPFParticleData : public mrpt::utils::CSerializableCRTP<CRBPFParticleData>
 	{
-		DEFINE_SERIALIZABLE( CRBPFParticleData )
+		friend mrpt::utils::CSerializer<CRBPFParticleData>;
 	public:
 		CRBPFParticleData( const TSetOfMetricMapInitializers *mapsInitializers = nullptr ) :
 		  mapTillNow( mapsInitializers ),
@@ -57,14 +57,14 @@ namespace maps
 	 * \ingroup metric_slam_grp
 	 */
 	class SLAM_IMPEXP CMultiMetricMapPDF :
-		public mrpt::utils::CSerializable,
+		public mrpt::utils::CSerializableCRTP<CMultiMetricMapPDF>,
 		public mrpt::bayes::CParticleFilterData<CRBPFParticleData>,
 		public mrpt::bayes::CParticleFilterDataImpl<CMultiMetricMapPDF,mrpt::bayes::CParticleFilterData<CRBPFParticleData>::CParticleList>,
 		public mrpt::slam::PF_implementation<CRBPFParticleData,CMultiMetricMapPDF>
 	{
 		friend class mrpt::slam::CMetricMapBuilderRBPF;
 
-		DEFINE_SERIALIZABLE( CMultiMetricMapPDF )
+		friend mrpt::utils::CSerializer<CMultiMetricMapPDF>;
 
 	protected:
 		// PF algorithm implementations:

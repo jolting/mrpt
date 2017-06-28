@@ -39,7 +39,8 @@ namespace mrpt
 			friend class HMTSLAM_IMPEXP CHierarchicalMHMapPartition;
 			friend class HMTSLAM_IMPEXP CHMHMapArc;
 
-			DEFINE_SERIALIZABLE( CHMHMapNode )
+			friend mrpt::utils::CSerializer<CHMHMapArc>;
+			friend mrpt::utils::CSerializer<CHMHMapNode>;
 
 		public:
 			/** The type of the IDs of nodes.

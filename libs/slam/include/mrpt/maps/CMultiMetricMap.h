@@ -119,9 +119,9 @@ namespace maps
 	 * \note This class belongs to [mrpt-slam] instead of [mrpt-maps] due to the dependency on map classes in mrpt-vision.
 	 * \sa CMetricMap  \ingroup mrpt_slam_grp 
 	 */
-	class SLAM_IMPEXP CMultiMetricMap : public mrpt::maps::CMetricMap
+	class SLAM_IMPEXP CMultiMetricMap : public mrpt::utils::CSerializableCRTP<CMultiMetricMap, mrpt::maps::CMetricMap>
 	{
-		DEFINE_SERIALIZABLE( CMultiMetricMap )
+		friend mrpt::utils::CSerializer<CMultiMetricMap>;
 	protected:
 		void deleteAllMaps(); //!< Deletes all maps and clears the internal lists of maps (with clear_unique(), so user copies remain alive)
 		void internal_clear() override; //!< Clear all elements of the map.

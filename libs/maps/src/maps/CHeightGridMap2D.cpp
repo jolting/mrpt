@@ -224,7 +224,7 @@ template <> void CSerializer<CHeightGridMap2D>::readFromStream(CHeightGridMap2D&
 			// Insertion options:
 			uint8_t	ty;
 			in  >> ty;
-			o.m_mapType = TMapRepresentation(ty);
+			o.m_mapType = CHeightGridMap2D::TMapRepresentation(ty);
 
 			in  >> o.insertionOptions.filterByHeight
 				>> o.insertionOptions.z_min

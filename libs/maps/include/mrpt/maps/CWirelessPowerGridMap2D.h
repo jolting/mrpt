@@ -30,9 +30,9 @@ namespace maps
 	  * \sa mrpt::maps::CRandomFieldGridMap2D, mrpt::maps::CMetricMap, mrpt::utils::CDynamicGrid, The application icp-slam, mrpt::maps::CMultiMetricMap
 	  * \ingroup mrpt_maps_grp
 	  */
-	class MAPS_IMPEXP CWirelessPowerGridMap2D : public CRandomFieldGridMap2D
+	class MAPS_IMPEXP CWirelessPowerGridMap2D : public mrpt::utils::CSerializableCRTP<CWirelessPowerGridMap2D, CRandomFieldGridMap2D>
 	{
-		DEFINE_SERIALIZABLE( CWirelessPowerGridMap2D )
+		friend mrpt::utils::CSerializer<CWirelessPowerGridMap2D>;
 	public:
 		/** Constructor */
 		CWirelessPowerGridMap2D(TMapRepresentation mapType = mrKernelDM, double x_min = -2, double x_max = 2, double y_min = -2, double y_max = 2, double resolution = 0.1);

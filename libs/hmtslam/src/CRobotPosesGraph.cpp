@@ -23,16 +23,17 @@ template <> const char * mrpt::utils::CSerializer<CRobotPosesGraph>::getClassNam
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
+namespace mrpt { namespace utils {
 template <> void CSerializer<CRobotPosesGraph>::writeToStream(const CRobotPosesGraph& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		uint32_t   N = static_cast<uint32_t>(size());
+		uint32_t   N = static_cast<uint32_t>(o.size());
 		out << N;
 
-		for (std::map<TPoseID,TPoseInfo>::const_iterator it=begin();it!=end();++it)
+		for (std::map<TPoseID,TPoseInfo>::const_iterator it=o.begin();it!=o.end();++it)
 		{
 			out << it->first
 			    << it->second.sf
@@ -44,7 +45,7 @@ template <> void CSerializer<CRobotPosesGraph>::writeToStream(const CRobotPosesG
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
-void  CRobotPosesGraph::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CRobotPosesGraph>::readFromStream(CRobotPosesGraph &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -52,14 +53,14 @@ void  CRobotPosesGraph::readFromStream(mrpt::utils::CStream &in,int version)
 		{
 			uint32_t   i,N;
 			in >> N;
-			clear();
+			o.clear();
 
 			for (i=0;i<N;i++)
 			{
 				TPoseID  poseid;
 				in >> poseid;
 
-				TPoseInfo  &info = (*this)[poseid];
+				TPoseInfo  &info = o[poseid];
 
 				in >> info.sf
 				   >> info.pdf;
@@ -71,6 +72,7 @@ void  CRobotPosesGraph::readFromStream(mrpt::utils::CStream &in,int version)
 
 	};
 }
+}}
 
 /*---------------------------------------------------------------
 					insertIntoMetricMap

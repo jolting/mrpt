@@ -36,8 +36,8 @@ namespace opengl	{
 	  *
 	  * \ingroup mrpt_maps_grp
 	  */
-	class MAPS_IMPEXP CAngularObservationMesh:public CRenderizableDisplayList	{
-		DEFINE_SERIALIZABLE(CAngularObservationMesh)
+	class MAPS_IMPEXP CAngularObservationMesh : public mrpt::utils::CSerializableCRTP<CAngularObservationMesh, CRenderizableDisplayList> {
+		friend mrpt::utils::CSerializer<CAngularObservationMesh>;
 	public:
 		/**
 		  * Range specification type, with several uses.

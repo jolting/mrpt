@@ -20,22 +20,24 @@ template <> const char * mrpt::utils::CSerializer<CDetectableObject>::getClassNa
 template <> const char * mrpt::utils::CSerializer<CDetectable2D>::getClassName() { return "CDetectable2D";}
 template <> const char * mrpt::utils::CSerializer<CDetectable3D>::getClassName() { return "CDetectable3D";}
 
-
-void CDetectable2D::readFromStream(mrpt::utils::CStream &, int )
+namespace mrpt { namespace utils {
+template <> void CSerializer<CDetectable2D>::readFromStream(CDetectable2D &o, mrpt::utils::CStream &, int )
 {
 }
 
-void CDetectable2D::writeToStream(mrpt::utils::CStream &, int *) const
+template <> void CSerializer<CDetectable2D>::writeToStream(const CDetectable2D &o, mrpt::utils::CStream &, int *)
 {
 }
 
-void CDetectable3D::readFromStream(mrpt::utils::CStream &, int )
+template <> void CSerializer<CDetectable3D>::readFromStream(CDetectable3D &o, mrpt::utils::CStream &, int )
 {
 }
 
-void CDetectable3D::writeToStream(mrpt::utils::CStream &, int *) const
+template <> void CSerializer<CDetectable3D>::writeToStream(const CDetectable3D &o, mrpt::utils::CStream &, int *)
 {
 }
+
+}}
 
 CDetectable3D::CDetectable3D( const CDetectable2D::Ptr &object2d )
 	: CDetectable2D( object2d.get() ), m_z(0)

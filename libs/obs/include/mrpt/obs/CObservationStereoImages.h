@@ -37,9 +37,9 @@ namespace obs
 	  * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	  */
-	class OBS_IMPEXP CObservationStereoImages : public CObservation
+	class OBS_IMPEXP CObservationStereoImages : public mrpt::utils::CSerializableCRTP<CObservationStereoImages, CObservation>
 	{
-		DEFINE_SERIALIZABLE( CObservationStereoImages )
+		friend mrpt::utils::CSerializer<CObservationStereoImages>;
 		// This must be added for declaration of MEX-related functions
 		DECLARE_MEX_CONVERSION
 

@@ -29,7 +29,7 @@ namespace mrpt
 		  *  
 		  * \ingroup mrpt_opengl_grp
 		  */
-		class OPENGL_IMPEXP CDisk : public CRenderizableDisplayList
+		class OPENGL_IMPEXP CDisk : public mrpt::utils::CSerializableCRTP<CDisk, CRenderizableDisplayList>
 		{
 			friend mrpt::utils::CSerializer<CDisk>;
 

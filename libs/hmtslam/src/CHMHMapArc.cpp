@@ -90,6 +90,7 @@ void  CHMHMapArc::onNodeDestruction(CHMHMapNode *node)
 }
 
 
+namespace mrpt { namespace utils  {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
@@ -99,7 +100,7 @@ template <> void CSerializer<CHMHMapArc>::writeToStream(const CHMHMapArc& o, mrp
 		*version = 0;
 	else
 	{
-		out << m_nodeFrom << m_nodeTo << m_arcType.getType() << m_annotations << m_hypotheses;
+		out << o.m_nodeFrom << o.m_nodeTo << o.m_arcType.getType() << o.m_annotations << o.m_hypotheses;
 	}
 
 }
@@ -115,15 +116,15 @@ template <> void CSerializer<CHMHMapArc>::readFromStream(CHMHMapArc& o, mrpt::ut
 		{
 			std::string		type;
 
-			in >> m_nodeFrom >> m_nodeTo >> type >> m_annotations >> m_hypotheses;
+			in >> o.m_nodeFrom >> o.m_nodeTo >> type >> o.m_annotations >> o.m_hypotheses;
 
-			m_arcType.setType(type);
+			o.m_arcType.setType(type);
 
 			// Find my smart pointer in the HMT map: we MUST have only 1 smrt. pointer pointing to the same object!!			
 			CHMHMapArc::Ptr myPtr;
-			for (TArcList::const_iterator it = m_parent->m_arcs.begin();it != m_parent->m_arcs.end();++it)
+			for (TArcList::const_iterator it = o.m_parent->m_arcs.begin();it != o.m_parent->m_arcs.end();++it)
 			{
-				if (it->get()==this)
+				if (it->get()==&o)
 				{
 					myPtr = *it;
 					break;
@@ -136,9 +137,9 @@ template <> void CSerializer<CHMHMapArc>::readFromStream(CHMHMapArc& o, mrpt::ut
 			//m_parent->onArcAddition(this);  
 
 			// To the nodes:
-			if ((node = m_parent->getNodeByID(m_nodeFrom)))
+			if ((node = o.m_parent->getNodeByID(o.m_nodeFrom)))
 				node->onArcAddition(myPtr);
-			if ((node = m_parent->getNodeByID(m_nodeTo)))
+			if ((node = o.m_parent->getNodeByID(o.m_nodeTo)))
 				node->onArcAddition(myPtr);
 
 		} break;
@@ -146,8 +147,8 @@ template <> void CSerializer<CHMHMapArc>::readFromStream(CHMHMapArc& o, mrpt::ut
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
 }
+}}
 
 /*---------------------------------------------------------------
 						TArcList::debugDump

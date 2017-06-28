@@ -32,7 +32,7 @@ namespace mrpt
 			friend class CHMHMapArc;
 			friend class CHMHMapNode;
 
-			DEFINE_SERIALIZABLE( CHierarchicalMHMap )
+			friend mrpt::utils::CSerializer<CHierarchicalMHMap>;
 		protected:
 			/** Event handler to be called just after a node has being created: it will be added to the internal list.
 			  */

@@ -31,7 +31,7 @@ namespace mrpt
 		 */
 		class MAPS_IMPEXP CSimplePointsMap : public mrpt::utils::CSerializableCRTP<CSimplePointsMap, CPointsMap>
 		{
-			friend mrpt::utils::CSerializableCRTP<CSimplePointsMap>;
+			friend mrpt::utils::CSerializer<CSimplePointsMap>;
 
 		 public:
 			 CSimplePointsMap();          //!< Default constructor

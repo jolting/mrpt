@@ -69,7 +69,7 @@ template <> const char * mrpt::utils::CSerializer<COctoMap>::getClassName() { re
 						Constructor
   ---------------------------------------------------------------*/
 COctoMap::COctoMap(const double resolution) :
-	COctoMapBase<octomap::OcTree,octomap::OcTreeNode>(resolution)
+	mrpt::utils::CSerializableCRTP<COctoMap, COctoMapBase<octomap::OcTree,octomap::OcTreeNode>>(resolution)
 {
 }
 
@@ -80,25 +80,25 @@ COctoMap::~COctoMap()
 {
 }
 
-
+namespace mrpt{ namespace utils {
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  COctoMap::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<COctoMap>::writeToStream(const COctoMap &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 2;
 	else
 	{
-		this->likelihoodOptions.writeToStream(out);
-		this->renderingOptions.writeToStream(out);  // Added in v1
-		out << genericMapParams; // v2
+		o.likelihoodOptions.writeToStream(out);
+		o.renderingOptions.writeToStream(out);  // Added in v1
+		out << o.genericMapParams; // v2
 
 		CMemoryChunk chunk;
 		const string	tmpFil = mrpt::system::getTempFileName();
-		const_cast<octomap::OcTree*>(&m_octomap)->writeBinary(tmpFil);
+		const_cast<octomap::OcTree*>(&o.m_octomap)->writeBinary(tmpFil);
 		chunk.loadBufferFromFile(tmpFil);
 		mrpt::system::deleteFile(tmpFil);
 
@@ -119,11 +119,11 @@ template <> void CSerializer<COctoMap>::readFromStream(COctoMap& o, mrpt::utils:
 	case 1:
 	case 2:
 		{
-			this->likelihoodOptions.readFromStream(in);
-			if (version>=1) this->renderingOptions.readFromStream(in);
-			if (version>=2) in >> genericMapParams;
+			o.likelihoodOptions.readFromStream(in);
+			if (version>=1) o.renderingOptions.readFromStream(in);
+			if (version>=2) in >> o.genericMapParams;
 
-			this->clear();
+			o.clear();
 
 			CMemoryChunk chunk;
 			in >> chunk;
@@ -132,7 +132,7 @@ template <> void CSerializer<COctoMap>::readFromStream(COctoMap& o, mrpt::utils:
 			{
 				const string	tmpFil = mrpt::system::getTempFileName();
 				if (!chunk.saveBufferToFile( tmpFil ) ) THROW_EXCEPTION("Error saving temporary file");
-				m_octomap.readBinary(tmpFil);
+				o.m_octomap.readBinary(tmpFil);
 				mrpt::system::deleteFile( tmpFil );
 			}
 
@@ -142,6 +142,7 @@ template <> void CSerializer<COctoMap>::readFromStream(COctoMap& o, mrpt::utils:
 	};
 
 }
+}}
 
 
 bool COctoMap::internal_insertObservation(const mrpt::obs::CObservation *obs,const CPose3D *robotPose)

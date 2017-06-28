@@ -147,6 +147,7 @@ template <> void CSerializer<CRBPFParticleData>::writeToStream(const CRBPFPartic
 	THROW_EXCEPTION("Shouldn't arrive here")
 }
 
+namespace mrpt {namespace utils {
 /*---------------------------------------------------------------
 						readFromStream
   ---------------------------------------------------------------*/
@@ -168,19 +169,20 @@ template <> void CSerializer<CMultiMetricMapPDF>::writeToStream(const CMultiMetr
 		uint32_t	i,n,j,m;
 
 		// The data
-		n = static_cast<uint32_t>(m_particles.size());
+		n = static_cast<uint32_t>(o.m_particles.size());
 		out << n;
 		for (i=0;i<n;i++)
 		{
-			out << m_particles[i].log_w << m_particles[i].d->mapTillNow;
-			m = static_cast<uint32_t>(m_particles[i].d->robotPath.size());
+			out << o.m_particles[i].log_w << o.m_particles[i].d->mapTillNow;
+			m = static_cast<uint32_t>(o.m_particles[i].d->robotPath.size());
 			out << m;
 			for (j=0;j<m;j++)
-				out << m_particles[i].d->robotPath[j];
+				out << o.m_particles[i].d->robotPath[j];
 		}
-		out << SFs << SF2robotPath;
+		out << o.SFs << o.SF2robotPath;
 	}
 }
+}}
 
 /*---------------------------------------------------------------
 						readFromStream
@@ -195,31 +197,31 @@ template <> void CSerializer<CMultiMetricMapPDF>::readFromStream(CMultiMetricMap
 
 			// Delete current contents:
 			// --------------------------
-			clearParticles();
-			SFs.clear();
-			SF2robotPath.clear();
+			o.clearParticles();
+			o.SFs.clear();
+			o.SF2robotPath.clear();
 
-			averageMapIsUpdated = false;
+			o.averageMapIsUpdated = false;
 
 			// Load the new data:
 			// --------------------
 			in >> n;
 
-			m_particles.resize(n);
+			o.m_particles.resize(n);
 			for (i=0;i<n;i++)
 			{
-				m_particles[i].d.reset(new CRBPFParticleData());
+				o.m_particles[i].d.reset(new CRBPFParticleData());
 
 				// Load
-				in >> m_particles[i].log_w >> m_particles[i].d->mapTillNow;
+				in >> o.m_particles[i].log_w >> o.m_particles[i].d->mapTillNow;
 
 				in >> m;
-				m_particles[i].d->robotPath.resize(m);
+				o.m_particles[i].d->robotPath.resize(m);
 				for (j=0;j<m;j++)
-					in >> m_particles[i].d->robotPath[j];
+					in >> o.m_particles[i].d->robotPath[j];
 			}
 
-			in >> SFs >> SF2robotPath;
+			in >> o.SFs >> o.SF2robotPath;
 
 		} break;
 	default:

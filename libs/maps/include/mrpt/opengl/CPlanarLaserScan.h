@@ -48,9 +48,9 @@ namespace mrpt
 		  *  \sa mrpt::opengl::CPointCloud, opengl::COpenGLScene
 	  	  * \ingroup mrpt_maps_grp
 		  */
-		class MAPS_IMPEXP CPlanarLaserScan : public CRenderizableDisplayList
+		class MAPS_IMPEXP CPlanarLaserScan : public mrpt::utils::CSerializableCRTP<CPlanarLaserScan, CRenderizableDisplayList>
 		{
-			DEFINE_SERIALIZABLE( CPlanarLaserScan )
+			friend mrpt::utils::CSerializer<CPlanarLaserScan>;
 		protected:
 			mrpt::obs::CObservation2DRangeScan	m_scan;
 			mutable mrpt::maps::CSimplePointsMap		m_cache_points;

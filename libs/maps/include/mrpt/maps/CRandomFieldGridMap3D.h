@@ -69,10 +69,12 @@ namespace maps
 	  * \note [New in MRPT 1.5.0]
 	  */
 	class CRandomFieldGridMap3D :
-		public mrpt::utils::CSerializableCRTP<CRandomFieldGridMap3D, mrpt::utils::CDynamicGrid3D<TRandomFieldVoxel>>,
+		public mrpt::utils::CDynamicGrid3D<TRandomFieldVoxel>,
+		public mrpt::utils::CSerializableCRTP<CRandomFieldGridMap3D>, 
 		public mrpt::utils::COutputLogger
 	{
-		friend mrpt::utils::CSerializer<CRandomFieldGridMap3D>
+		typedef utils::CDynamicGrid3D<TRandomFieldVoxel> DBASE;
+		friend mrpt::utils::CSerializer<CRandomFieldGridMap3D>;
 	public:
 		static bool ENABLE_GMRF_PROFILER; //!< [default:false] Enables a profiler to show a performance report at application end.
 

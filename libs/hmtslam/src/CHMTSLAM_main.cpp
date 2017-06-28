@@ -612,10 +612,12 @@ bool CHMTSLAM::loadState( CStream &in )
 	}
 }
 
+namespace mrpt {
+namespace utils {
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  CHMTSLAM::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CHMTSLAM>::readFromStream(CHMTSLAM &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -628,18 +630,18 @@ void  CHMTSLAM::readFromStream(mrpt::utils::CStream &in,int version)
 			//std::lock_guard<std::mutex> LMHs( & m_LMHs_cs );
 			//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.lock();
 
-			std::lock_guard<std::mutex> lock_map( m_map_cs );
+			std::lock_guard<std::mutex> lock_map( o.m_map_cs );
 
 			// Data:
-			in  >> m_nextAreaLabel
-				>> m_nextPoseID
-				>> m_nextHypID;
+			in  >> o.m_nextAreaLabel
+				>> o.m_nextPoseID
+				>> o.m_nextHypID;
 
 			// The HMT-MAP:
-			in >> m_map;
+			in >> o.m_map;
 
 			// The LMHs:
-			in >> m_LMHs;
+			in >> o.m_LMHs;
 
 			// Save options??? Better allow changing them...
 
@@ -657,7 +659,7 @@ void  CHMTSLAM::readFromStream(mrpt::utils::CStream &in,int version)
 	Implements the writing to a CStream capability of
 	  CSerializable objects
   ---------------------------------------------------------------*/
-void  CHMTSLAM::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CHMTSLAM>::writeToStream(const CHMTSLAM &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 0;
@@ -670,18 +672,18 @@ void  CHMTSLAM::writeToStream(mrpt::utils::CStream &out, int *version) const
 		//std::lock_guard<std::mutex> LMHs( & m_LMHs_cs );
 		//for (it=m_LMHs.begin();it!=m_LMHs.end();it++) it->second.m_lock.lock();
 
-		std::lock_guard<std::mutex> lock_map( m_map_cs );
+		std::lock_guard<std::mutex> lock_map( o.m_map_cs );
 
 		// Data:
-		out << m_nextAreaLabel
-			<< m_nextPoseID
-			<< m_nextHypID;
+		out << o.m_nextAreaLabel
+			<< o.m_nextPoseID
+			<< o.m_nextHypID;
 
 		// The HMT-MAP:
-		out << m_map;
+		out << o.m_map;
 
 		// The LMHs:
-		out << m_LMHs;
+		out << o.m_LMHs;
 
 		// Save options??? Better allow changing them...
 
@@ -691,5 +693,4 @@ void  CHMTSLAM::writeToStream(mrpt::utils::CStream &out, int *version) const
 
 	}
 }
-
-
+}}

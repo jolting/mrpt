@@ -269,21 +269,22 @@ void  CMultiMetricMap::deleteAllMaps()
 	m_ID = 0;
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
   Implements the writing to a CStream capability of CSerializable objects
  ---------------------------------------------------------------*/
-void  CMultiMetricMap::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CMultiMetricMap>::writeToStream(const CMultiMetricMap &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 11;
 	else
 	{
 		// Version 11: simply the list of maps:
-		out << static_cast<uint32_t>(m_ID);
+		out << static_cast<uint32_t>(o.m_ID);
 
-		const uint32_t n = static_cast<uint32_t>(maps.size());
+		const uint32_t n = static_cast<uint32_t>(o.maps.size());
 		for (uint32_t i=0;i<n;i++)
-			out << *maps[i];
+			out << *o.maps[i];
 	}
 }
 
@@ -299,14 +300,14 @@ template <> void CSerializer<CMultiMetricMap>::readFromStream(CMultiMetricMap& o
 			// ID: 
 			{
 				uint32_t	ID;
-				in >> ID; m_ID = ID;
+				in >> ID; o.m_ID = ID;
 			}
 
 			// List of maps:
 			uint32_t  n;
 			in >> n;
-			this->maps.resize(n);
-			for_each( maps.begin(), maps.end(), ObjectReadFromStreamToPtrs<mrpt::maps::CMetricMap::Ptr>(&in) );
+			o.maps.resize(n);
+			for_each( o.maps.begin(), o.maps.end(), ObjectReadFromStreamToPtrs<mrpt::maps::CMetricMap::Ptr>(&in) );
 
 		} break;
 	default:
@@ -314,6 +315,7 @@ template <> void CSerializer<CMultiMetricMap>::readFromStream(CMultiMetricMap& o
 
 	};
 }
+}}
 
 // Read docs in base class
 double	 CMultiMetricMap::internal_computeObservationLikelihood(

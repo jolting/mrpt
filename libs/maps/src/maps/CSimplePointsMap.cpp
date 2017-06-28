@@ -112,33 +112,33 @@ void  CSimplePointsMap::copyFrom(const CPointsMap &obj)
 	CPointsMap::base_copyFrom(obj);  // This also does a ::resize(N) of all data fields.
 }
 
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 					writeToStream
    Implements the writing to a CStream capability of
      CSerializable objects
   ---------------------------------------------------------------*/
-void  CSimplePointsMap::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CSimplePointsMap>::writeToStream(const CSimplePointsMap &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 		*version = 9;
 	else
 	{
-		uint32_t n = x.size();
+		uint32_t n = o.x.size();
 
 		// First, write the number of points:
 		out << n;
 
 		if (n>0)
 		{
-			out.WriteBufferFixEndianness(&x[0],n);
-			out.WriteBufferFixEndianness(&y[0],n);
-			out.WriteBufferFixEndianness(&z[0],n);
+			out.WriteBufferFixEndianness(&o.x[0],n);
+			out.WriteBufferFixEndianness(&o.y[0],n);
+			out.WriteBufferFixEndianness(&o.z[0],n);
 		}
-		out << genericMapParams;  // v9
+		out << o.genericMapParams;  // v9
 
-		insertionOptions.writeToStream(out); // version 9: insert options are saved with its own method:
-		likelihoodOptions.writeToStream(out); // Added in version 5:
+		o.insertionOptions.writeToStream(out); // version 9: insert options are saved with its own method:
+		o.likelihoodOptions.writeToStream(out); // Added in version 5:
 	}
 }
 
@@ -154,31 +154,31 @@ template <> void CSerializer<CSimplePointsMap>::readFromStream(CSimplePointsMap&
 	case 8:
 	case 9:
 		{
-			mark_as_modified();
+			o.mark_as_modified();
 
 			// Read the number of points:
 			uint32_t n;
 			in >> n;
 
-			this->resize(n);
+			o.resize(n);
 
 			if (n>0)
 			{
-				in.ReadBufferFixEndianness(&x[0],n);
-				in.ReadBufferFixEndianness(&y[0],n);
-				in.ReadBufferFixEndianness(&z[0],n);
+				in.ReadBufferFixEndianness(&o.x[0],n);
+				in.ReadBufferFixEndianness(&o.y[0],n);
+				in.ReadBufferFixEndianness(&o.z[0],n);
 			}
 			if (version>=9)
-				in >> genericMapParams;
+				in >> o.genericMapParams;
 			else 
 			{
 				bool disableSaveAs3DObject;
 				in >> disableSaveAs3DObject;
-				genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
+				o.genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
 			}
 
-			insertionOptions.readFromStream(in);
-			likelihoodOptions.readFromStream(in);
+			o.insertionOptions.readFromStream(in);
+			o.likelihoodOptions.readFromStream(in);
 		} break;
 
 	case 0:
@@ -190,19 +190,19 @@ template <> void CSerializer<CSimplePointsMap>::readFromStream(CSimplePointsMap&
 	case 6:
 	case 7:
 		{
-			mark_as_modified();
+			o.mark_as_modified();
 
 			// Read the number of points:
 			uint32_t n;
 			in >> n;
 
-			this->resize(n);
+			o.resize(n);
 
 			if (n>0)
 			{
-				in.ReadBufferFixEndianness(&x[0],n);
-				in.ReadBufferFixEndianness(&y[0],n);
-				in.ReadBufferFixEndianness(&z[0],n);
+				in.ReadBufferFixEndianness(&o.x[0],n);
+				in.ReadBufferFixEndianness(&o.y[0],n);
+				in.ReadBufferFixEndianness(&o.z[0],n);
 
 				// Version 1: weights are also stored:
 				// Version 4: Type becomes long int -> uint32_t for portability!!
@@ -233,12 +233,12 @@ template <> void CSerializer<CSimplePointsMap>::readFromStream(CSimplePointsMap&
 			if (version>=2)
 			{
 				// version 2: options saved too
-				in 	>> insertionOptions.minDistBetweenLaserPoints
-					>> insertionOptions.addToExistingPointsMap
-					>> insertionOptions.also_interpolate
-					>> insertionOptions.disableDeletion
-					>> insertionOptions.fuseWithExisting
-					>> insertionOptions.isPlanarMap;
+				in 	>> o.insertionOptions.minDistBetweenLaserPoints
+					>> o.insertionOptions.addToExistingPointsMap
+					>> o.insertionOptions.also_interpolate
+					>> o.insertionOptions.disableDeletion
+					>> o.insertionOptions.fuseWithExisting
+					>> o.insertionOptions.isPlanarMap;
 
 				if (version<6)
 				{
@@ -246,33 +246,33 @@ template <> void CSerializer<CSimplePointsMap>::readFromStream(CSimplePointsMap&
 					in >> old_matchStaticPointsOnly;
 				}
 
-				in >> insertionOptions.maxDistForInterpolatePoints;
+				in >> o.insertionOptions.maxDistForInterpolatePoints;
 
 				{
 					bool disableSaveAs3DObject;
 					in >> disableSaveAs3DObject;
-					genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
+					o.genericMapParams.enableSaveAs3DObject = !disableSaveAs3DObject;
 				}
 			}
 
 			if (version>=3)
 			{
-				in >> insertionOptions.horizontalTolerance;
+				in >> o.insertionOptions.horizontalTolerance;
 			}
 
 			if (version>=5) // version 5: added likelihoodOptions
-				likelihoodOptions.readFromStream(in);
+				o.likelihoodOptions.readFromStream(in);
 
 			if (version>=8) // version 8: added insertInvalidPoints
-				in >> insertionOptions.insertInvalidPoints;
+				in >> o.insertionOptions.insertInvalidPoints;
 
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
 }
+}}
 
 /*---------------------------------------------------------------
 					Clear

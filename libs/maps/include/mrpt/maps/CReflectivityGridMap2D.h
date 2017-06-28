@@ -38,11 +38,11 @@ namespace mrpt
 	  	  * \ingroup mrpt_maps_grp
 		  */
 		class MAPS_IMPEXP CReflectivityGridMap2D :
-			public CMetricMap,
+			public mrpt::utils::CSerializableCRTP<CReflectivityGridMap2D, CMetricMap>,
 			public utils::CDynamicGrid<int8_t>,
 			public CLogOddsGridMap2D<int8_t>
 		{
-			DEFINE_SERIALIZABLE( CReflectivityGridMap2D )
+			friend mrpt::utils::CSerializer<CReflectivityGridMap2D>;
 
 		protected:
 			static CLogOddsGridMapLUT<cell_t>  m_logodd_lut; //!< Lookup tables for log-odds
