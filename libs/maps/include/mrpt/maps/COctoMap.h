@@ -31,7 +31,7 @@ namespace mrpt
 		 * \sa CMetricMap, the example in "MRPT/samples/octomap_simple"
 	  	 * \ingroup mrpt_maps_grp
 		 */
-		class MAPS_IMPEXP COctoMap : public mrpt::utils::CSerializableCRTP<COctoMap, COctoMapBase<octomap::OcTree,octomap::OcTreeNode>>
+		class MAPS_IMPEXP COctoMap : public mrpt::utils::CSerializableCRTP<COctoMap, COctoMapBase<octomap::OcTree,octomap::OcTreeNode>, CMetricMap>
 		{
 			friend mrpt::utils::CSerializer<COctoMap>;
 

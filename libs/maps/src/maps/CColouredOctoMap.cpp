@@ -74,7 +74,7 @@ template <> const char * mrpt::utils::CSerializer<CColouredOctoMap>::getClassNam
 						Constructor
   ---------------------------------------------------------------*/
 CColouredOctoMap::CColouredOctoMap(const double resolution) :
-	mrpt::utils::CSerializableCRTP<CColouredOctoMap, COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode>>(resolution),
+	mrpt::utils::CSerializableCRTP<CColouredOctoMap, COctoMapBase<octomap::ColorOcTree,octomap::ColorOcTreeNode>, CMetricMap>(resolution),
 	m_colour_method(INTEGRATE)
 {
 }

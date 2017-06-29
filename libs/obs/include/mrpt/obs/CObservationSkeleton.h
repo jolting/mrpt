@@ -26,9 +26,9 @@ namespace obs
 	 * \note Class introduced in MRPT 1.3.1
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationSkeleton : public CObservation
+	class OBS_IMPEXP CObservationSkeleton : public mrpt::utils::CSerializableCRTP<CObservationSkeleton, CObservation>
 	{
-		DEFINE_SERIALIZABLE( CObservationSkeleton )
+		friend mrpt::utils::CSerializer<CObservationSkeleton>;
 
 	 public:
 		/** Constructor.

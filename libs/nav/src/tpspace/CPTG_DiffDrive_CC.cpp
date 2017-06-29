@@ -41,7 +41,7 @@ void CPTG_DiffDrive_CC::saveToConfigFile(mrpt::utils::CConfigFileBase &cfg,const
 namespace mrpt { namespace utils {
 template <> void CSerializer<CPTG_DiffDrive_CC>::readFromStream(CPTG_DiffDrive_CC &o, mrpt::utils::CStream &in, int version)
 {
-	CPTG_DiffDrive_CollisionGridBased::internal_readFromStream(in);
+	o.internal_readFromStream(in);
 
 	switch (version)
 	{
@@ -53,8 +53,7 @@ template <> void CSerializer<CPTG_DiffDrive_CC>::readFromStream(CPTG_DiffDrive_C
 	};
 }
 
-template mrpt { namespace utils {
-template <> void CSerializer<CPTG_DiffDrive_C>C::writeToStream(const CPTG_DiffDrive_CC&o, mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CPTG_DiffDrive_CC>::writeToStream(const CPTG_DiffDrive_CC&o, mrpt::utils::CStream &out, int *version)
 {
 	if (version) 
 	{

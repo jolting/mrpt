@@ -26,7 +26,7 @@ namespace obs
 	 * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationRawDAQ : public CObservation
+	class OBS_IMPEXP CObservationRawDAQ : public mrpt::utils::CSerializableCRTP<CObservationRawDAQ, CObservation>
 	{
 		DEFINE_SERIALIZABLE( CObservationRawDAQ )
 	 public:

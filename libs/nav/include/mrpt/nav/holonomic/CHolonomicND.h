@@ -47,9 +47,9 @@ namespace mrpt
 	 *
 	 *  \sa CAbstractHolonomicReactiveMethod,CReactiveNavigationSystem
 	 */
-	class NAV_IMPEXP CHolonomicND : public CAbstractHolonomicReactiveMethod
+	class NAV_IMPEXP CHolonomicND : public mrpt::utils::CSerializableCRTP<CHolonomicND, CAbstractHolonomicReactiveMethod>
 	{
-		DEFINE_SERIALIZABLE( CHolonomicND )
+		friend mrpt::utils::CSerializer<CHolonomicND>;
 	public:
 		 /**  Initialize the parameters of the navigator, from some configuration file, or default values if set to nullptr */
 		CHolonomicND( const mrpt::utils::CConfigFileBase *INI_FILE = nullptr );
@@ -151,7 +151,7 @@ namespace mrpt
 	 *    CHolonomicND navigation.
 	 * \sa CHolonomicND, CHolonomicLogFileRecord
 	 */
-	class CLogFileRecord_ND : public CHolonomicLogFileRecord
+	class CLogFileRecord_ND : public mrpt::utils::CSerializableCRTP<CLogFileRecord_ND, CHolonomicLogFileRecord>
 	{
 		DEFINE_SERIALIZABLE( CLogFileRecord_ND )
 

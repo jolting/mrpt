@@ -24,9 +24,9 @@ namespace obs
 	 * \sa CObservation, mrpt::hwdrivers::CImpinjRFID for a software sensor capable of reading this kind of observations.
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationRFID : public CObservation
+	class OBS_IMPEXP CObservationRFID : public mrpt::utils::CSerializableCRTP<CObservationRFID, CObservation>
 	{
-		DEFINE_SERIALIZABLE( CObservationRFID )
+		friend mrpt::utils::CSerializer<CObservationRFID>;
 
 	 public:
 		/** Constructor */

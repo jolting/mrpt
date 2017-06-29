@@ -39,21 +39,22 @@ void CPTG_DiffDrive_CS::saveToConfigFile(mrpt::utils::CConfigFileBase &cfg,const
 	MRPT_END
 }
 
-void CPTG_DiffDrive_CS::readFromStream(mrpt::utils::CStream &in, int version)
+namespace mrpt { namespace utils {
+template <> void CSerializer<CPTG_DiffDrive_CS>::readFromStream(CPTG_DiffDrive_CS &o, mrpt::utils::CStream &in, int version)
 {
-	CPTG_DiffDrive_CollisionGridBased::internal_readFromStream(in);
+	o.internal_readFromStream(in);
 
 	switch (version)
 	{
 	case 0:
-		in >> K;
+		in >> o.K;
 		break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
 
-void CPTG_DiffDrive_CS::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CPTG_DiffDrive_CS>::writeToStream(const CPTG_DiffDrive_CS &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version) 
 	{
@@ -61,9 +62,11 @@ void CPTG_DiffDrive_CS::writeToStream(mrpt::utils::CStream &out, int *version) c
 		return;
 	}
 
-	CPTG_DiffDrive_CollisionGridBased::internal_writeToStream(out);
-	out << K;
+	o.internal_writeToStream(out);
+	out << o.K;
 }
+}}
+
 std::string CPTG_DiffDrive_CS::getDescription() const
 {
 	char str[100];

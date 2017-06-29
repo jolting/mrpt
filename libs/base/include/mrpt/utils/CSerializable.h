@@ -87,13 +87,13 @@ namespace mrpt
 			}
 		};
 
-		template <typename T, typename BASE_T = CObject>
+		template <typename T, typename BASE_T = CObject, typename REG_BASE_T = BASE_T>
 		class BASE_IMPEXP CObjectCRTP : public BASE_T
 		{
                 public:
 			using BASE_T::BASE_T;
 			virtual ~CObjectCRTP(){}
-			using BASE = BASE_T;
+			using BASE = REG_BASE_T;
                         /*! A typedef for the associated smart pointer */
 			using Ptr = std::shared_ptr<T>;
 			using ConstPtr = std::shared_ptr<const T>;
@@ -113,11 +113,11 @@ namespace mrpt
 
 		class CSerializable;
 
-		template <typename T, typename BASE_T = CSerializable>
-		class BASE_IMPEXP CSerializableCRTPVirtual : public CObjectCRTP<T, BASE_T>
+		template <typename T, typename BASE_T = CSerializable, typename REG_BASE_T = BASE_T>
+		class BASE_IMPEXP CSerializableCRTPVirtual : public CObjectCRTP<T, BASE_T, REG_BASE_T>
 		{
 		public:
-			using CObjectCRTP<T, BASE_T>::CObjectCRTP;
+			using CObjectCRTP<T, BASE_T, REG_BASE_T>::CObjectCRTP;
 			virtual ~CSerializableCRTPVirtual() { }
 			//Pure Virtual here
 			virtual void  writeToStream(mrpt::utils::CStream &out, int *getVersion) const = 0;
@@ -176,11 +176,11 @@ namespace mrpt
 
 
 		
-		template <typename T, typename BASE_T = CSerializable>
-		class BASE_IMPEXP CSerializableCRTP : public CSerializableCRTPVirtual<T, BASE_T>
+		template <typename T, typename BASE_T = CSerializable, typename REG_BASE_T = BASE_T>
+		class BASE_IMPEXP CSerializableCRTP : public CSerializableCRTPVirtual<T, BASE_T, REG_BASE_T>
 		{
 		public:
-			using CSerializableCRTPVirtual<T, BASE_T>::CSerializableCRTPVirtual;
+			using CSerializableCRTPVirtual<T, BASE_T, REG_BASE_T>::CSerializableCRTPVirtual;
 			virtual ~CSerializableCRTP() { }
 			void  writeToStream(mrpt::utils::CStream &out, int *getVersion) const override
 			{

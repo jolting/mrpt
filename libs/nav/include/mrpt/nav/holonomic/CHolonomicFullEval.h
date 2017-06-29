@@ -44,9 +44,9 @@ namespace mrpt
 	 *
 	 *  \sa CAbstractHolonomicReactiveMethod,CReactiveNavigationSystem
 	 */
-	class NAV_IMPEXP CHolonomicFullEval : public CAbstractHolonomicReactiveMethod
+	class NAV_IMPEXP CHolonomicFullEval : public mrpt::utils::CSerializableCRTP<CHolonomicFullEval, CAbstractHolonomicReactiveMethod>
 	{
-		DEFINE_SERIALIZABLE( CHolonomicFullEval )
+		friend mrpt::utils::CSerializer<CHolonomicFullEval>;
 	public:
 		/**  Initialize the parameters of the navigator, from some configuration file, or default values if set to nullptr */
 		CHolonomicFullEval( const mrpt::utils::CConfigFileBase *INI_FILE = nullptr );
@@ -107,9 +107,9 @@ namespace mrpt
 	/** A class for storing extra information about the execution of CHolonomicFullEval navigation.
 	 * \sa CHolonomicFullEval, CHolonomicLogFileRecord
 	 */
-	class CLogFileRecord_FullEval : public CHolonomicLogFileRecord
+	class CLogFileRecord_FullEval : public mrpt::utils::CSerializableCRTP<CLogFileRecord_FullEval, CHolonomicLogFileRecord>
 	{
-		DEFINE_SERIALIZABLE( CLogFileRecord_FullEval )
+		friend mrpt::utils::CSerializer<CLogFileRecord_FullEval>;
 	public:
 		CLogFileRecord_FullEval();
 

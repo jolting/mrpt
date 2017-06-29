@@ -28,7 +28,7 @@ template <> const char * mrpt::utils::CSerializer<CHolonomicND>::getClassName() 
 *    configuration file, or default values if filename is set to NULL.
 */
 CHolonomicND::CHolonomicND(const mrpt::utils::CConfigFileBase *INI_FILE ) :
-	CAbstractHolonomicReactiveMethod("CHolonomicND"),
+	mrpt::utils::CSerializableCRTP<CHolonomicND, CAbstractHolonomicReactiveMethod>("CHolonomicND"),
 	m_last_selected_sector ( std::numeric_limits<unsigned int>::max() )
 {
 	if (INI_FILE!=nullptr)
@@ -594,6 +594,7 @@ unsigned int CHolonomicND::direction2sector(const double a, const unsigned int N
 	else return static_cast<unsigned int>(idx);
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 					writeToStream
 	Implements the writing to a CStream capability of
@@ -605,15 +606,15 @@ template <> void CSerializer<CLogFileRecord_ND>::writeToStream(const CLogFileRec
 		*version = 1;
 	else
 	{
-		out << gaps_ini << gaps_end << gaps_eval;
-		out << selectedSector << evaluation << riskEvaluation << (uint32_t) situation;
+		out << o.gaps_ini << o.gaps_end << o.gaps_eval;
+		out << o.selectedSector << o.evaluation << o.riskEvaluation << (uint32_t) o.situation;
 	}
 }
 
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  CLogFileRecord_ND::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CLogFileRecord_ND>::readFromStream(CLogFileRecord_ND &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -622,31 +623,32 @@ void  CLogFileRecord_ND::readFromStream(mrpt::utils::CStream &in,int version)
 			int32_t	n;
 
 			in >> n;
-			gaps_ini.resize(n);
-			gaps_end.resize(n);
-			in.ReadBuffer( &(*gaps_ini.begin()), sizeof(gaps_ini[0]) * n );
-			in.ReadBuffer( &(*gaps_end.begin()), sizeof(gaps_end[0]) * n );
+			o.gaps_ini.resize(n);
+			o.gaps_end.resize(n);
+			in.ReadBuffer( &(*o.gaps_ini.begin()), sizeof(o.gaps_ini[0]) * n );
+			in.ReadBuffer( &(*o.gaps_end.begin()), sizeof(o.gaps_end[0]) * n );
 
 			in >> n;
-			gaps_eval.resize(n);
-			in.ReadBuffer( &(*gaps_eval.begin()), sizeof(gaps_eval[0]) * n );
+			o.gaps_eval.resize(n);
+			in.ReadBuffer( &(*o.gaps_eval.begin()), sizeof(o.gaps_eval[0]) * n );
 
-			in >> selectedSector >> evaluation >> riskEvaluation >> n;
+			in >> o.selectedSector >> o.evaluation >> o.riskEvaluation >> n;
 
-			situation = (CHolonomicND::TSituations) n;
+			o.situation = (CHolonomicND::TSituations) n;
 		} break;
 	case 1:
 		{
 			uint32_t    n;
-			in >> gaps_ini >> gaps_end >> gaps_eval;
-			in >> selectedSector >> evaluation >> riskEvaluation >> n;
-			situation  = (CHolonomicND::TSituations) n;
+			in >> o.gaps_ini >> o.gaps_end >> o.gaps_eval;
+			in >> o.selectedSector >> o.evaluation >> o.riskEvaluation >> n;
+			o.situation  = (CHolonomicND::TSituations) n;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
 }
+}}
 
 /*---------------------------------------------------------------
 						TOptions
@@ -703,6 +705,7 @@ void CHolonomicND::TOptions::saveToConfigFile(mrpt::utils::CConfigFileBase &c , 
 	MRPT_END
 }
 
+namespace mrpt { namespace utils {
 template <> void CSerializer<CHolonomicND>::writeToStream(const CHolonomicND& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
@@ -710,28 +713,28 @@ template <> void CSerializer<CHolonomicND>::writeToStream(const CHolonomicND& o,
 	else
 	{
 		// Params:
-		out << options.factorWeights << options.MAX_SECTOR_DIST_FOR_D2_PERCENT << 
-			options.RISK_EVALUATION_DISTANCE << options.RISK_EVALUATION_SECTORS_PERCENT <<
-			options.TARGET_SLOW_APPROACHING_DISTANCE << options.TOO_CLOSE_OBSTACLE << options.WIDE_GAP_SIZE_PERCENT;
+		out << o.options.factorWeights << o.options.MAX_SECTOR_DIST_FOR_D2_PERCENT <<
+			o.options.RISK_EVALUATION_DISTANCE << o.options.RISK_EVALUATION_SECTORS_PERCENT <<
+			o.options.TARGET_SLOW_APPROACHING_DISTANCE << o.options.TOO_CLOSE_OBSTACLE << o.options.WIDE_GAP_SIZE_PERCENT;
 		// State:
-		out << m_last_selected_sector;
+		out << o.m_last_selected_sector;
 	}
 }
-void  CHolonomicND::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CHolonomicND>::readFromStream(CHolonomicND &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
 		// Params:
-		in >> options.factorWeights >> options.MAX_SECTOR_DIST_FOR_D2_PERCENT >> 
-			options.RISK_EVALUATION_DISTANCE >> options.RISK_EVALUATION_SECTORS_PERCENT >>
-			options.TARGET_SLOW_APPROACHING_DISTANCE >> options.TOO_CLOSE_OBSTACLE >> options.WIDE_GAP_SIZE_PERCENT;
+		in >> o.options.factorWeights >> o.options.MAX_SECTOR_DIST_FOR_D2_PERCENT >>
+			o.options.RISK_EVALUATION_DISTANCE >> o.options.RISK_EVALUATION_SECTORS_PERCENT >>
+			o.options.TARGET_SLOW_APPROACHING_DISTANCE >> o.options.TOO_CLOSE_OBSTACLE >> o.options.WIDE_GAP_SIZE_PERCENT;
 		// State:
-		in >> m_last_selected_sector;
+		in >> o.m_last_selected_sector;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
-
+}}

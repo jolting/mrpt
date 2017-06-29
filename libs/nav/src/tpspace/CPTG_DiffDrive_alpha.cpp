@@ -44,22 +44,22 @@ std::string CPTG_DiffDrive_alpha::getDescription() const
 	return std::string(str);
 }
 
-
-void CPTG_DiffDrive_alpha::readFromStream(mrpt::utils::CStream &in, int version)
+namespace mrpt { namespace utils {
+template <> void CSerializer<CPTG_DiffDrive_alpha>::readFromStream(CPTG_DiffDrive_alpha &o, mrpt::utils::CStream &in, int version)
 {
-	CPTG_DiffDrive_CollisionGridBased::internal_readFromStream(in);
+	o.internal_readFromStream(in);
 
 	switch (version)
 	{
 	case 0:
-		in  >> cte_a0v >> cte_a0w;
+		in  >> o.cte_a0v >> o.cte_a0w;
 		break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
 
-void CPTG_DiffDrive_alpha::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CPTG_DiffDrive_alpha>::writeToStream(const CPTG_DiffDrive_alpha &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version) 
 	{
@@ -67,9 +67,11 @@ void CPTG_DiffDrive_alpha::writeToStream(mrpt::utils::CStream &out, int *version
 		return;
 	}
 
-	CPTG_DiffDrive_CollisionGridBased::internal_writeToStream(out);
-	out << cte_a0v << cte_a0w;
+	o.internal_writeToStream(out);
+	out << o.cte_a0v << o.cte_a0w;
 }
+}}
+
 /*---------------------------------------------------------------
 						ptgDiffDriveSteeringFunction
   ---------------------------------------------------------------*/

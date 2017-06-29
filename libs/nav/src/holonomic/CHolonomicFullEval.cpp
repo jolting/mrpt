@@ -31,7 +31,7 @@ const unsigned int INVALID_K = std::numeric_limits<unsigned int>::max();
 
 
 CHolonomicFullEval::CHolonomicFullEval(const mrpt::utils::CConfigFileBase *INI_FILE ) :
-	CAbstractHolonomicReactiveMethod("CHolonomicFullEval"),
+	mrpt::utils::CSerializableCRTP<CHolonomicFullEval, CAbstractHolonomicReactiveMethod>("CHolonomicFullEval"),
 	m_last_selected_sector ( std::numeric_limits<unsigned int>::max() )
 {
 	if (INI_FILE!=nullptr)
@@ -513,20 +513,21 @@ CLogFileRecord_FullEval::CLogFileRecord_FullEval() :
 {
 }
 
+namespace mrpt { namespace utils {
 template <> void CSerializer<CLogFileRecord_FullEval>::writeToStream(const CLogFileRecord_FullEval& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 3;
 	else
 	{
-		out << CHolonomicLogFileRecord::dirs_eval << dirs_scores << selectedSector << evaluation << selectedTarget /*v3*/;
+		out << o.dirs_eval << o.dirs_scores << o.selectedSector << o.evaluation << o.selectedTarget /*v3*/;
 	}
 }
 
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  CLogFileRecord_FullEval::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CLogFileRecord_FullEval>::readFromStream(CLogFileRecord_FullEval &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -537,28 +538,29 @@ void  CLogFileRecord_FullEval::readFromStream(mrpt::utils::CStream &in,int versi
 		{
 		if (version >= 2)
 		{
-			in >> CHolonomicLogFileRecord::dirs_eval;
+			in >> o.dirs_eval;
 		}
 		else
 		{
-			CHolonomicLogFileRecord::dirs_eval.resize(2);
-			in >> CHolonomicLogFileRecord::dirs_eval[0];
+			o.dirs_eval.resize(2);
+			in >> o.dirs_eval[0];
 			if (version >= 1) {
-				in >> CHolonomicLogFileRecord::dirs_eval[1];
+				in >> o.dirs_eval[1];
 			}
 		}
-		in >> dirs_scores >> selectedSector >> evaluation;
+		in >> o.dirs_scores >> o.selectedSector >> o.evaluation;
 		if (version >= 3) {
-			in >> selectedTarget;
+			in >> o.selectedTarget;
 		}
 		else {
-			selectedTarget = 0;
+			o.selectedTarget = 0;
 		}
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
+}}
 
 /*---------------------------------------------------------------
 						TOptions
@@ -650,6 +652,7 @@ void CHolonomicFullEval::TOptions::saveToConfigFile(mrpt::utils::CConfigFileBase
 	MRPT_END;
 }
 
+namespace mrpt { namespace utils {
 template <> void CSerializer<CHolonomicFullEval>::writeToStream(const CHolonomicFullEval& o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
@@ -657,18 +660,19 @@ template <> void CSerializer<CHolonomicFullEval>::writeToStream(const CHolonomic
 	else
 	{
 		// Params:
-		out << options.factorWeights << options.HYSTERESIS_SECTOR_COUNT <<
-			options.PHASE_FACTORS << // v3
-			options.TARGET_SLOW_APPROACHING_DISTANCE << options.TOO_CLOSE_OBSTACLE << options.PHASE_THRESHOLDS // v3
-			<< options.OBSTACLE_SLOW_DOWN_DISTANCE // v1
-			<< options.factorNormalizeOrNot // v2
-			<< options.clearance_threshold_ratio << options.gap_width_ratio_threshold // v4:
+		out << o.options.factorWeights << o.options.HYSTERESIS_SECTOR_COUNT <<
+			o.options.PHASE_FACTORS << // v3
+			o.options.TARGET_SLOW_APPROACHING_DISTANCE << o.options.TOO_CLOSE_OBSTACLE << o.options.PHASE_THRESHOLDS // v3
+			<< o.options.OBSTACLE_SLOW_DOWN_DISTANCE // v1
+			<< o.options.factorNormalizeOrNot // v2
+			<< o.options.clearance_threshold_ratio << o.options.gap_width_ratio_threshold // v4:
 			;
 		// State:
-		out << m_last_selected_sector;
+		out << o.m_last_selected_sector;
 	}
 }
-void  CHolonomicFullEval::readFromStream(mrpt::utils::CStream &in,int version)
+
+template <> void CSerializer<CHolonomicFullEval>::readFromStream(CHolonomicFullEval &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -679,42 +683,43 @@ void  CHolonomicFullEval::readFromStream(mrpt::utils::CStream &in,int version)
 	case 4:
 		{
 		// Params:
-		in >> options.factorWeights >> options.HYSTERESIS_SECTOR_COUNT;
+		in >> o.options.factorWeights >> o.options.HYSTERESIS_SECTOR_COUNT;
 
 		if (version>=3) {
-			in >> options.PHASE_FACTORS;
+			in >> o.options.PHASE_FACTORS;
 		}
 		else {
-			options.PHASE_THRESHOLDS.resize(2);
-			in >> options.PHASE_FACTORS[0] >> options.PHASE_FACTORS[1];
+			o.options.PHASE_THRESHOLDS.resize(2);
+			in >> o.options.PHASE_FACTORS[0] >> o.options.PHASE_FACTORS[1];
 		}
-		in >> options.TARGET_SLOW_APPROACHING_DISTANCE >> options.TOO_CLOSE_OBSTACLE;
+		in >> o.options.TARGET_SLOW_APPROACHING_DISTANCE >> o.options.TOO_CLOSE_OBSTACLE;
 
 		if (version >= 3) {
-			in >> options.PHASE_THRESHOLDS;
+			in >> o.options.PHASE_THRESHOLDS;
 		}
 		else
 		{
-			options.PHASE_THRESHOLDS.resize(1);
-			in >> options.PHASE_THRESHOLDS[0];
+			o.options.PHASE_THRESHOLDS.resize(1);
+			in >> o.options.PHASE_THRESHOLDS[0];
 		}
 
 		if (version >= 1)
-			in >> options.OBSTACLE_SLOW_DOWN_DISTANCE;
+			in >> o.options.OBSTACLE_SLOW_DOWN_DISTANCE;
 		if (version >= 2)
-			in >> options.factorNormalizeOrNot;
+			in >> o.options.factorNormalizeOrNot;
 
 		if (version >= 4) {
-			in >> options.clearance_threshold_ratio >> options.gap_width_ratio_threshold;
+			in >> o.options.clearance_threshold_ratio >> o.options.gap_width_ratio_threshold;
 		}
 
 		// State:
-		in >> m_last_selected_sector;
+		in >> o.m_last_selected_sector;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
+}}
 
 void CHolonomicFullEval::postProcessDirectionEvaluations(std::vector<double> &dir_evals, const NavInput & ni, unsigned int trg_idx)
 {

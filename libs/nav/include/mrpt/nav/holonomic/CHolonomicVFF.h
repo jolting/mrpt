@@ -26,9 +26,9 @@ namespace mrpt
 	 *    CHolonomicVFF navigation.
 	 * \sa CHolonomicVFF, CHolonomicLogFileRecord
 	 */
-	class NAV_IMPEXP CLogFileRecord_VFF : public CHolonomicLogFileRecord
+	class NAV_IMPEXP CLogFileRecord_VFF : public mrpt::utils::CSerializableCRTP<CLogFileRecord_VFF, CHolonomicLogFileRecord>
 	{
-		DEFINE_SERIALIZABLE( CLogFileRecord_VFF )
+		friend mrpt::utils::CSerializer<CLogFileRecord_VFF>;
 	 public:
 
 	};
@@ -48,9 +48,9 @@ namespace mrpt
 	 *
 	 *  \sa CAbstractHolonomicReactiveMethod,CReactiveNavigationSystem
 	 */
-	class NAV_IMPEXP CHolonomicVFF : public CAbstractHolonomicReactiveMethod
+	class NAV_IMPEXP CHolonomicVFF : public mrpt::utils::CSerializableCRTP<CHolonomicVFF, CAbstractHolonomicReactiveMethod>
 	{
-		DEFINE_SERIALIZABLE( CHolonomicVFF )
+		friend mrpt::utils::CSerializer<CHolonomicVFF>;
 	public:
 		/**  Initialize the parameters of the navigator, from some configuration file, or default values if set to NULL. */
 		CHolonomicVFF(const mrpt::utils::CConfigFileBase *INI_FILE=nullptr);

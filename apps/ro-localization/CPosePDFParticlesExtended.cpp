@@ -301,7 +301,7 @@ void CPosePDFParticlesExtended::getCovarianceAndMean(CMatrixDouble33 &cov,CPose2
 	}
 }
 
-
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
   ---------------------------------------------------------------*/
@@ -311,13 +311,13 @@ template <> void CSerializer<CPosePDFParticlesExtended>::writeToStream(const CPo
 		*version = 0;
 	else
 	{
-		CParticleList::const_iterator	it;
+		CPosePDFParticlesExtended::CParticleList::const_iterator	it;
 		uint32_t						n;
 
 		// The data
-		n = uint32_t( m_particles.size() );
+		n = uint32_t( o.m_particles.size() );
 		out << n;
-		for (it=m_particles.begin();it!=m_particles.end();it++)
+		for (it=o.m_particles.begin();it!=o.m_particles.end();it++)
 			out << it->log_w << it->d->pose << it->d->state;
 	}
 }
@@ -331,22 +331,23 @@ template <> void CSerializer<CPosePDFParticlesExtended>::readFromStream(CPosePDF
 	{
 	case 0:
 		{
-			CParticleList::iterator	it;
+			CPosePDFParticlesExtended::CParticleList::iterator	it;
 			uint32_t	n;
 
 			// Delete previous content:
-			m_particles.clear();
+			o.m_particles.clear();
 
 			// The data
 			in >> n;
-			m_particles.resize(n);
-			for (it=m_particles.begin();it!=m_particles.end();it++)
+			o.m_particles.resize(n);
+			for (it=o.m_particles.begin();it!=o.m_particles.end();it++)
 				in >> it->log_w >> it->d->pose >> it->d->state;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
+}}
 
 /*---------------------------------------------------------------
 			prediction_and_update_pfStandardProposal

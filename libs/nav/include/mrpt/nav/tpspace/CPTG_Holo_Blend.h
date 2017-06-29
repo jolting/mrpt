@@ -24,9 +24,9 @@ namespace mrpt
 	 * \note [New in MRPT 1.5.0]
 	 *  \ingroup nav_tpspace
 	 */
-	class NAV_IMPEXP CPTG_Holo_Blend : public CPTG_RobotShape_Circular
+	class NAV_IMPEXP CPTG_Holo_Blend : public mrpt::utils::CSerializableCRTP<CPTG_Holo_Blend, CPTG_RobotShape_Circular>
 	{
-		DEFINE_SERIALIZABLE(CPTG_Holo_Blend)
+		friend mrpt::utils::CSerializer<CPTG_Holo_Blend>;
 	public:
 		CPTG_Holo_Blend();
 		CPTG_Holo_Blend(const mrpt::utils::CConfigFileBase &cfg,const std::string &sSection);

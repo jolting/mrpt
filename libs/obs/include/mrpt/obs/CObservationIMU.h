@@ -70,7 +70,7 @@ namespace obs
 	 * \sa CObservation
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationIMU : public CObservation
+	class OBS_IMPEXP CObservationIMU : public mrpt::utils::CSerializableCRTP<CObservationIMU, CObservation>
 	{
 		DEFINE_SERIALIZABLE( CObservationIMU )
 

@@ -43,6 +43,7 @@ CLogFileRecord::CLogFileRecord() :
 	WS_Obstacles.clear();
 }
 
+namespace mrpt { namespace utils {
 /*---------------------------------------------------------------
 						writeToStream
  ---------------------------------------------------------------*/
@@ -55,86 +56,86 @@ template <> void CSerializer<CLogFileRecord>::writeToStream(const CLogFileRecord
 		uint32_t	i,n;
 
 		// Version 0 ---------
-		n = infoPerPTG.size();
+		n = o.infoPerPTG.size();
 		out << n;
 		for (i=0;i<n;i++)
 		{
-			out << infoPerPTG[i].PTG_desc.c_str();
+			out << o.infoPerPTG[i].PTG_desc.c_str();
 
-			uint32_t m = infoPerPTG[i].TP_Obstacles.size();
+			uint32_t m = o.infoPerPTG[i].TP_Obstacles.size();
 			out << m;
-			if (m) out.WriteBuffer((const void*)&(*infoPerPTG[i].TP_Obstacles.begin()), m * sizeof(infoPerPTG[i].TP_Obstacles[0]));
+			if (m) out.WriteBuffer((const void*)&(*o.infoPerPTG[i].TP_Obstacles.begin()), m * sizeof(o.infoPerPTG[i].TP_Obstacles[0]));
 
-			out << infoPerPTG[i].TP_Targets;  // v8: CPoint2D -> TPoint2D. v26: vector
-			out << infoPerPTG[i].TP_Robot; // v17
-			out << infoPerPTG[i].timeForTPObsTransformation << infoPerPTG[i].timeForHolonomicMethod; // made double in v12
-			out << infoPerPTG[i].desiredDirection << infoPerPTG[i].desiredSpeed << infoPerPTG[i].evaluation; // made double in v12
-			// removed in v23: out << evaluation_org << evaluation_priority; // added in v21
-			out << infoPerPTG[i].HLFR;
+			out << o.infoPerPTG[i].TP_Targets;  // v8: CPoint2D -> TPoint2D. v26: vector
+			out << o.infoPerPTG[i].TP_Robot; // v17
+			out << o.infoPerPTG[i].timeForTPObsTransformation << o.infoPerPTG[i].timeForHolonomicMethod; // made double in v12
+			out << o.infoPerPTG[i].desiredDirection << o.infoPerPTG[i].desiredSpeed << o.infoPerPTG[i].evaluation; // made double in v12
+			// removed in v23: out << o.evaluation_org << o.evaluation_priority; // added in v21
+			out << o.infoPerPTG[i].HLFR;
 
 			// Version 9: Removed security distances. Added optional field with PTG info.
-			const bool there_is_ptg_data = infoPerPTG[i].ptg ? true : false;
+			const bool there_is_ptg_data = o.infoPerPTG[i].ptg ? true : false;
 			out << there_is_ptg_data;
 			if (there_is_ptg_data)
-				out << infoPerPTG[i].ptg;
+				out << o.infoPerPTG[i].ptg;
 
-			// Was: out << infoPerPTG[i].clearance.raw_clearances; // v19
-			infoPerPTG[i].clearance.writeToStream(out); // v25
+			// Was: out << o.infoPerPTG[i].clearance.raw_clearances; // v19
+			o.infoPerPTG[i].clearance.writeToStream(out); // v25
 		}
-		out << nSelectedPTG << WS_Obstacles;
-		out << WS_Obstacles_original; // v20
+		out << o.nSelectedPTG << o.WS_Obstacles;
+		out << o.WS_Obstacles_original; // v20
 		
-		// Removed v24: out << robotOdometryPose;
-		out << robotPoseLocalization << robotPoseOdometry; // v24
+		// Removed v24: out << o.robotOdometryPose;
+		out << o.robotPoseLocalization << o.robotPoseOdometry; // v24
 
-		out << WS_targets_relative; //v8, v26: vector
+		out << o.WS_targets_relative; //v8, v26: vector
 		// v16:
-		out << ptg_index_NOP << ptg_last_k_NOP; 
-		out << rel_cur_pose_wrt_last_vel_cmd_NOP << rel_pose_PTG_origin_wrt_sense_NOP; // v24: CPose2D->TPose2D
+		out << o.ptg_index_NOP << o.ptg_last_k_NOP; 
+		out << o.rel_cur_pose_wrt_last_vel_cmd_NOP << o.rel_pose_PTG_origin_wrt_sense_NOP; // v24: CPose2D->TPose2D
 		
 		// Removed: v24. out << ptg_last_curRobotVelLocal; // v17
-		ptg_last_navDynState.writeToStream(out); // v24
+		o.ptg_last_navDynState.writeToStream(out); // v24
 
-		if (ptg_index_NOP<0)
-			out << cmd_vel /*v10*/ << cmd_vel_original; // v15
+		if (o.ptg_index_NOP<0)
+			out << o.cmd_vel /*v10*/ << o.cmd_vel_original; // v15
 
 		// Previous values: REMOVED IN VERSION #6
-		n = robotShape_x.size();
+		n = o.robotShape_x.size();
 		out << n;
 		if (n) {
-			out.WriteBuffer((const void*)&(*robotShape_x.begin()), n*sizeof(robotShape_x[0]));
-			out.WriteBuffer((const void*)&(*robotShape_y.begin()), n*sizeof(robotShape_y[0]));
+			out.WriteBuffer((const void*)&(*o.robotShape_x.begin()), n*sizeof(o.robotShape_x[0]));
+			out.WriteBuffer((const void*)&(*o.robotShape_y.begin()), n*sizeof(o.robotShape_y[0]));
 		}
 
 		// Version 1 ---------
-		out << cur_vel<< cur_vel_local; /*v10*/
-		//out << estimatedExecutionPeriod; // removed v13
+		out << o.cur_vel<< o.cur_vel_local; /*v10*/
+		//out << o.estimatedExecutionPeriod; // removed v13
 
 		// Version 3 ----------
-		for (i=0;i<infoPerPTG.size();i++) {
-			out << infoPerPTG[i].evalFactors; // v22: this is now a TParameters
+		for (i=0;i<o.infoPerPTG.size();i++) {
+			out << o.infoPerPTG[i].evalFactors; // v22: this is now a TParameters
 		}
 
-		out << nPTGs; // v4
-		// out << timestamp; // removed v13
-		out << robotShape_radius; // v11
-		//out << cmd_vel_filterings; // added v12: Removed in v15
+		out << o.nPTGs; // v4
+		// out << o.timestamp; // removed v13
+		out << o.robotShape_radius; // v11
+		//out << o.cmd_vel_filterings; // added v12: Removed in v15
 
-		out << values << timestamps; // v13
+		out << o.values << o.timestamps; // v13
 
-		out << relPoseSense << relPoseVelCmd; // v14, v24 changed CPose2D->TPose2D
+		out << o.relPoseSense << o.relPoseVelCmd; // v14, v24 changed CPose2D->TPose2D
 
 		// v15: cmd_vel converted from std::vector<double> into CSerializable
-		out << additional_debug_msgs; // v18
+		out << o.additional_debug_msgs; // v18
 
-		navDynState.writeToStream(out); // v24
+		o.navDynState.writeToStream(out); // v24
 	}
 }
 
 /*---------------------------------------------------------------
 						readFromStream
  ---------------------------------------------------------------*/
-void  CLogFileRecord::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CLogFileRecord>::readFromStream(CLogFileRecord &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
@@ -169,69 +170,69 @@ void  CLogFileRecord::readFromStream(mrpt::utils::CStream &in,int version)
 			// Version 0 --------------
 			uint32_t  i,n;
 
-			infoPerPTG.clear();
+			o.infoPerPTG.clear();
 
 			in >> n;
-			infoPerPTG.resize(n);
+			o.infoPerPTG.resize(n);
 			for (i=0;i<n;i++)
 			{
-				auto &ipp = infoPerPTG[i];
+				auto &ipp = o.infoPerPTG[i];
 				char str[256];
 				in >> str;
-				ipp.PTG_desc = std::string(str);
+				o.ipp.PTG_desc = std::string(str);
 
 				int32_t m;
 				in >> m;
-				ipp.TP_Obstacles.resize(m);
-				if (m) in.ReadBufferFixEndianness( &(*ipp.TP_Obstacles.begin()), m );
+				o.ipp.TP_Obstacles.resize(m);
+				if (m) in.ReadBufferFixEndianness( &(*o.ipp.TP_Obstacles.begin()), m );
 
-				ipp.TP_Targets.clear();
+				o.ipp.TP_Targets.clear();
 				if (version >= 8)
 				{
 					if (version >= 26) {
-						in >> ipp.TP_Targets;
+						in >> o.ipp.TP_Targets;
 					}
 					else {
 						mrpt::math::TPoint2D trg;
 						in >> trg;
-						ipp.TP_Targets.push_back(trg);
+						o.ipp.TP_Targets.push_back(trg);
 					}
 				}
 				else
 				{
 					mrpt::poses::CPoint2D pos;
 					in >> pos;
-					ipp.TP_Targets.push_back(mrpt::math::TPoint2D(pos));
+					o.ipp.TP_Targets.push_back(mrpt::math::TPoint2D(pos));
 				}
 				if (version >= 17)
-					in >> ipp.TP_Robot;
-				else ipp.TP_Robot = mrpt::math::TPoint2D(0, 0);
+					in >> o.ipp.TP_Robot;
+				else o.ipp.TP_Robot = mrpt::math::TPoint2D(0, 0);
 
 				if (version>=12) {
-					in >> ipp.timeForTPObsTransformation >> ipp.timeForHolonomicMethod;
-					in >> ipp.desiredDirection >> ipp.desiredSpeed >> ipp.evaluation;
+					in >> o.ipp.timeForTPObsTransformation >> ipp.timeForHolonomicMethod;
+					in >> o.ipp.desiredDirection >> ipp.desiredSpeed >> ipp.evaluation;
 				} else {
-					in.ReadAsAndCastTo<float,double>(ipp.timeForTPObsTransformation);
-					in.ReadAsAndCastTo<float,double>(ipp.timeForHolonomicMethod);
-					in.ReadAsAndCastTo<float,double>(ipp.desiredDirection);
-					in.ReadAsAndCastTo<float,double>(ipp.desiredSpeed);
-					in.ReadAsAndCastTo<float,double>(ipp.evaluation);
+					in.ReadAsAndCastTo<float,double>(o.ipp.timeForTPObsTransformation);
+					in.ReadAsAndCastTo<float,double>(o.ipp.timeForHolonomicMethod);
+					in.ReadAsAndCastTo<float,double>(o.ipp.desiredDirection);
+					in.ReadAsAndCastTo<float,double>(o.ipp.desiredSpeed);
+					in.ReadAsAndCastTo<float,double>(o.ipp.evaluation);
 				}
 				if (version >= 21 && version <23) {
 					double evaluation_org, evaluation_priority;
 					in >> evaluation_org >> evaluation_priority;
 				}
 
-				in >> ipp.HLFR;
+				in >> o.ipp.HLFR;
 
 				if (version>=9) // Extra PTG info
 				{
-					ipp.ptg.reset();
+					o.ipp.ptg.reset();
 
 					bool there_is_ptg_data;
 					in >> there_is_ptg_data;
 					if (there_is_ptg_data)
-						ipp.ptg = std::dynamic_pointer_cast<CParameterizedTrajectoryGenerator>( in.ReadObject() );
+						o.ipp.ptg = std::dynamic_pointer_cast<CParameterizedTrajectoryGenerator>( in.ReadObject() );
 				}
 
 				if (version >= 19)
@@ -239,16 +240,16 @@ void  CLogFileRecord::readFromStream(mrpt::utils::CStream &in,int version)
 					if (version < 25) {
 						std::vector<std::map<double,double> > raw_clearances;
 						in >> raw_clearances;
-						ipp.clearance.resize(raw_clearances.size(), raw_clearances.size());
+						o.ipp.clearance.resize(raw_clearances.size(), raw_clearances.size());
 						for (size_t i = 0; i < raw_clearances.size(); i++)
-							ipp.clearance.get_path_clearance_decimated(i) = raw_clearances[i];
+							o.ipp.clearance.get_path_clearance_decimated(i) = raw_clearances[i];
 					}
 					else {
-						ipp.clearance.readFromStream(in);
+						o.ipp.clearance.readFromStream(in);
 					}
 				}
 				else {
-					ipp.clearance.clear();
+					o.ipp.clearance.clear();
 				}
 			}
 
@@ -507,5 +508,5 @@ void  CLogFileRecord::readFromStream(mrpt::utils::CStream &in,int version)
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 
 	};
-
 }
+}}

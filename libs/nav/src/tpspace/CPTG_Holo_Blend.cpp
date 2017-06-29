@@ -226,10 +226,10 @@ std::string CPTG_Holo_Blend::getDescription() const
 	return mrpt::format("PTG_Holo_Blend_Tramp=%.03f_Vmax=%.03f_Wmax=%.03f",T_ramp_max,V_MAX,W_MAX);
 }
 
-
-void CPTG_Holo_Blend::readFromStream(mrpt::utils::CStream &in, int version)
+namespace mrpt { namespace utils {
+template <> void CSerializer<CPTG_Holo_Blend>::readFromStream(CPTG_Holo_Blend &o, mrpt::utils::CStream &in, int version)
 {
-	CParameterizedTrajectoryGenerator::internal_readFromStream(in);
+	o.internal_readFromStream(in);
 
 	switch (version)
 	{
@@ -239,16 +239,16 @@ void CPTG_Holo_Blend::readFromStream(mrpt::utils::CStream &in, int version)
 	case 3:
 	case 4:
 		if (version>=1) {
-			CPTG_RobotShape_Circular::internal_shape_loadFromStream(in);
+			o.internal_shape_loadFromStream(in);
 		}
 
-		in >> T_ramp_max >> V_MAX >> W_MAX >> turningRadiusReference;
+		in >> o.T_ramp_max >> o.V_MAX >> o.W_MAX >> o.turningRadiusReference;
 		if (version==2) {
 			double dummy_maxAllowedDirAngle; // removed in v3
 			in >> dummy_maxAllowedDirAngle;
 		}
 		if (version >= 4) {
-			in >> expr_V >> expr_W >> expr_T_ramp;
+			in >> o.expr_V >> o.expr_W >> o.expr_T_ramp;
 		}
 		break;
 	default:
@@ -256,7 +256,7 @@ void CPTG_Holo_Blend::readFromStream(mrpt::utils::CStream &in, int version)
 	};
 }
 
-void CPTG_Holo_Blend::writeToStream(mrpt::utils::CStream &out, int *version) const
+template <> void CSerializer<CPTG_Holo_Blend>::writeToStream(const CPTG_Holo_Blend &o, mrpt::utils::CStream &out, int *version)
 {
 	if (version)
 	{
@@ -264,12 +264,13 @@ void CPTG_Holo_Blend::writeToStream(mrpt::utils::CStream &out, int *version) con
 		return;
 	}
 
-	CParameterizedTrajectoryGenerator::internal_writeToStream(out);
-	CPTG_RobotShape_Circular::internal_shape_saveToStream(out);
+	o.internal_writeToStream(out);
+	o.internal_shape_saveToStream(out);
 
-	out << T_ramp_max << V_MAX << W_MAX << turningRadiusReference;
-	out << expr_V << expr_W << expr_T_ramp;
+	out << o.T_ramp_max << o.V_MAX << o.W_MAX << o.turningRadiusReference;
+	out << o.expr_V << o.expr_W << o.expr_T_ramp;
 }
+}}
 
 bool CPTG_Holo_Blend::inverseMap_WS2TP(double x, double y, int &out_k, double &out_d, double tolerance_dist) const
 {

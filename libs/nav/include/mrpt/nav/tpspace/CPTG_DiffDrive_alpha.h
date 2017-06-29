@@ -32,9 +32,9 @@ namespace mrpt
 	 * \note [Before MRPT 1.5.0 this was named CPTG2]
 	 *  \ingroup nav_tpspace
 	 */
-	class NAV_IMPEXP  CPTG_DiffDrive_alpha : public CPTG_DiffDrive_CollisionGridBased
+	class NAV_IMPEXP  CPTG_DiffDrive_alpha : public mrpt::utils::CSerializableCRTP<CPTG_DiffDrive_alpha, CPTG_DiffDrive_CollisionGridBased>
 	{
-		DEFINE_SERIALIZABLE(CPTG_DiffDrive_alpha)
+		friend mrpt::utils::CSerializer<CPTG_DiffDrive_alpha>;
 	 public:
 		CPTG_DiffDrive_alpha() : cte_a0v(0),cte_a0w(0) { }
 		CPTG_DiffDrive_alpha(const mrpt::utils::CConfigFileBase &cfg,const std::string &sSection) {

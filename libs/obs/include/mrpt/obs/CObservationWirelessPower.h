@@ -25,7 +25,7 @@ namespace obs
 	 * \sa CObservation, mrpt::hwdrivers::CWirelessPower for a software sensor capable of reading this kind of observations.
 	 * \ingroup mrpt_obs_grp
 	 */
-	class OBS_IMPEXP CObservationWirelessPower : public CObservation
+	class OBS_IMPEXP CObservationWirelessPower : public mrpt::utils::CSerializableCRTP<CObservationWirelessPower, CObservation>
 	{
 		DEFINE_SERIALIZABLE( CObservationWirelessPower )
 

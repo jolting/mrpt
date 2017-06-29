@@ -98,28 +98,29 @@ void CHolonomicVFF::navigate(const NavInput & ni, NavOutput &no)
 	}
 }
 
-template <> void CSerializer<CHolonomicVFF>::writeToStream(const CHolonomicVFF& o, mrpt::utils::CStream &out,int *version)
+namespace mrpt { namespace utils {
+template <> void CSerializer<CHolonomicVFF>::writeToStream(const CHolonomicVFF &o, mrpt::utils::CStream &out,int *version)
 {
 	if (version)
 		*version = 0;
 	else
 	{
-		out << options.TARGET_ATTRACTIVE_FORCE << options.TARGET_SLOW_APPROACHING_DISTANCE;
+		out << o.options.TARGET_ATTRACTIVE_FORCE << o.options.TARGET_SLOW_APPROACHING_DISTANCE;
 	}
 }
-void  CHolonomicVFF::readFromStream(mrpt::utils::CStream &in,int version)
+
+template <> void CSerializer<CHolonomicVFF>::readFromStream(CHolonomicVFF &o, mrpt::utils::CStream &in,int version)
 {
 	switch(version)
 	{
 	case 0:
 		{
-			in >> options.TARGET_ATTRACTIVE_FORCE >> options.TARGET_SLOW_APPROACHING_DISTANCE;
+			in >> o.options.TARGET_ATTRACTIVE_FORCE >> o.options.TARGET_SLOW_APPROACHING_DISTANCE;
 		} break;
 	default:
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
-
 
 /*---------------------------------------------------------------
 					writeToStream
@@ -139,8 +140,9 @@ template <> void CSerializer<CLogFileRecord_VFF>::writeToStream(const CLogFileRe
 /*---------------------------------------------------------------
 					readFromStream
   ---------------------------------------------------------------*/
-void  CLogFileRecord_VFF::readFromStream(mrpt::utils::CStream &in,int version)
+template <> void CSerializer<CLogFileRecord_VFF>::readFromStream(CLogFileRecord_VFF &o, mrpt::utils::CStream &in,int version)
 {
+	MRPT_UNUSED_PARAM(o);
 	MRPT_UNUSED_PARAM(in);
 	switch(version)
 	{
@@ -151,6 +153,7 @@ void  CLogFileRecord_VFF::readFromStream(mrpt::utils::CStream &in,int version)
 		MRPT_THROW_UNKNOWN_SERIALIZATION_VERSION(version)
 	};
 }
+}}
 
 /*---------------------------------------------------------------
 						TOptions

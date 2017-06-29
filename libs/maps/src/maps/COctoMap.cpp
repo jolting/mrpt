@@ -69,7 +69,7 @@ template <> const char * mrpt::utils::CSerializer<COctoMap>::getClassName() { re
 						Constructor
   ---------------------------------------------------------------*/
 COctoMap::COctoMap(const double resolution) :
-	mrpt::utils::CSerializableCRTP<COctoMap, COctoMapBase<octomap::OcTree,octomap::OcTreeNode>>(resolution)
+	mrpt::utils::CSerializableCRTP<COctoMap, COctoMapBase<octomap::OcTree,octomap::OcTreeNode>, CMetricMap>(resolution)
 {
 }
 

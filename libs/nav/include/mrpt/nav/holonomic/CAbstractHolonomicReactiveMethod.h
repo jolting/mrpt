@@ -15,6 +15,7 @@
 #include <mrpt/utils/CSerializable.h>
 #include <mrpt/nav/tpspace/CParameterizedTrajectoryGenerator.h>
 #include <mrpt/nav/holonomic/ClearanceDiagram.h>
+#include <mrpt/maps/CRandomFieldGridMap3D.h>
 
 #include "CHolonomicLogFileRecord.h"
 
@@ -30,7 +31,7 @@ namespace mrpt
 	 *  \sa CHolonomicVFF,CHolonomicND,CHolonomicFullEval, CReactiveNavigationSystem
 	 */
 	class NAV_IMPEXP CAbstractHolonomicReactiveMethod :
-		public mrpt::utils::CSerializableCRTPVirtual<CRandomFieldGridMap3D>
+		public mrpt::utils::CSerializableCRTPVirtual<CAbstractHolonomicReactiveMethod, mrpt::maps::CRandomFieldGridMap3D>
 	{
 		DEFINE_VIRTUAL_SERIALIZABLE(CAbstractHolonomicReactiveMethod)
 	public:

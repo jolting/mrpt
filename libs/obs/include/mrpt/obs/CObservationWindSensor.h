@@ -30,7 +30,7 @@ namespace obs
 	 */
 	class OBS_IMPEXP CObservationWindSensor : public mrpt::utils::CSerializableCRTP<CObservationWindSensor, CObservation>
 	{
-		mrpt::utils::CSerializer<CObservationWindSensor>;
+		//mrpt::utils::CSerializer<CObservationWindSensor>;
 
 	 public:
 		/** Constructor */
