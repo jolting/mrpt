@@ -36,7 +36,7 @@ using namespace std;
 
 double	likelihood_acumulation=0;
 
-IMPLEMENTS_SERIALIZABLE( CPosePDFParticlesExtended, CPosePDF, mrpt::poses )
+template <> const char * mrpt::utils::CSerializer<CPosePDFParticlesExtended>::getClassName() { return "CPosePDFParticlesExtended";}
 
 /*---------------------------------------------------------------
 	Constructor

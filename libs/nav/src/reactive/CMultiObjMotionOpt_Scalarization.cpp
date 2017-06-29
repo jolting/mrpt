@@ -14,10 +14,10 @@
 using namespace mrpt::nav;
 using namespace mrpt::utils;
 
-IMPLEMENTS_MRPT_OBJECT(CMultiObjMotionOpt_Scalarization, CMultiObjectiveMotionOptimizerBase, mrpt::nav)
+template <> const char * mrpt::utils::CSerializer<CMultiObjMotionOpt_Scalarization>::getClassName() { return "CMultiObjMotionOpt_Scalarization";}
 
 CMultiObjMotionOpt_Scalarization::CMultiObjMotionOpt_Scalarization() :
-	CMultiObjectiveMotionOptimizerBase(parameters)
+	mrpt::utils::CObjectCRTP<CMultiObjMotionOpt_Scalarization, CMultiObjectiveMotionOptimizerBase>(parameters)
 {
 }
 

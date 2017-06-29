@@ -25,7 +25,7 @@ template <> const char * mrpt::utils::CSerializer<CHolonomicVFF>::getClassName()
 						initialize
   ---------------------------------------------------------------*/
 CHolonomicVFF::CHolonomicVFF(const mrpt::utils::CConfigFileBase *INI_FILE) :
-	CAbstractHolonomicReactiveMethod("CHolonomicVFF")
+	mrpt::utils::CSerializableCRTP<CHolonomicVFF, CAbstractHolonomicReactiveMethod>("CHolonomicVFF")
 {
 	if (INI_FILE!=nullptr)
 		initialize( *INI_FILE );

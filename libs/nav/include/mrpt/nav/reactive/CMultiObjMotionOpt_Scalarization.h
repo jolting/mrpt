@@ -23,7 +23,7 @@ namespace mrpt
 			  * \sa CReactiveNavigationSystem, CReactiveNavigationSystem3D
 			  * \ingroup nav_reactive
 			  */
-		class NAV_IMPEXP CMultiObjMotionOpt_Scalarization: public mrpt::nav::CMultiObjectiveMotionOptimizerBase
+		class NAV_IMPEXP CMultiObjMotionOpt_Scalarization: public mrpt::utils::CObjectCRTP<CMultiObjMotionOpt_Scalarization, mrpt::nav::CMultiObjectiveMotionOptimizerBase>
 		{
 			DEFINE_MRPT_OBJECT(CMultiObjMotionOpt_Scalarization)
 

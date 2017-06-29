@@ -24,7 +24,7 @@ namespace mrpt
 	 * \note [Before MRPT 1.5.0 this was named CPTG3]
 	 *  \ingroup nav_tpspace
 	 */
-	class NAV_IMPEXP  CPTG_DiffDrive_CCS : public mrpt::utils::CSerializableCRTP<CPTG_DiffDrive_CCS, CPTG_DiffDrive_CollisionGridBased>
+	class NAV_IMPEXP  CPTG_DiffDrive_CCS : public mrpt::utils::CSerializableCRTP<CPTG_DiffDrive_CCS, CPTG_DiffDrive_CollisionGridBased, CParameterizedTrajectoryGenerator>
 	{
 		friend mrpt::utils::CSerializer<CPTG_DiffDrive_CCS>;
 	 public:

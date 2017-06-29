@@ -43,11 +43,11 @@ namespace mrpt
 		 * \sa CPose2D, CPosePDF, CPoseGaussianPDF
 		 */
 		class CPosePDFParticlesExtended :
-			public CPosePDF,
+			public mrpt::utils::CSerializableCRTP<CPosePDFParticlesExtended, CPosePDF>,
 			public mrpt::bayes::CParticleFilterData<TExtendedCPose2D>,
 			public mrpt::bayes::CParticleFilterDataImpl<CPosePDFParticlesExtended,mrpt::bayes::CParticleFilterData<TExtendedCPose2D>::CParticleList>
 		{
-			DEFINE_SERIALIZABLE( CPosePDFParticlesExtended )
+			friend mrpt::utils::CSerializer<CPosePDFParticlesExtended>;
 
 		public:
 

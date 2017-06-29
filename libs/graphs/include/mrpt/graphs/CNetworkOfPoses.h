@@ -102,7 +102,7 @@ namespace mrpt
 		public:
 			/** @name Typedef's
 			    @{ */
-			typedef mrpt::graphs::CDirectedGraph<CPOSE,EDGE_ANNOTATIONS> BASE;	//!< The base class "CDirectedGraph<CPOSE,EDGE_ANNOTATIONS>" */
+			typedef mrpt::graphs::CDirectedGraph<CPOSE,EDGE_ANNOTATIONS> DBASE;	//!< The base class "CDirectedGraph<CPOSE,EDGE_ANNOTATIONS>" */
 			typedef CNetworkOfPoses<CPOSE,MAPS_IMPLEMENTATION,NODE_ANNOTATIONS,EDGE_ANNOTATIONS> self_t; //!< My own type
 
 			typedef CPOSE              constraint_t;        //!< The type of PDF poses in the contraints (edges) (=CPOSE template argument)
@@ -267,8 +267,8 @@ namespace mrpt
 			 */
 			double getGlobalSquareError(bool ignoreCovariances = true) const {
 				double sqErr=0;
-				const typename BASE::edges_map_t::const_iterator last_it=BASE::edges.end();
-				for (typename BASE::edges_map_t::const_iterator itEdge=BASE::edges.begin();itEdge!=last_it;++itEdge)
+				const typename DBASE::edges_map_t::const_iterator last_it=DBASE::edges.end();
+				for (typename DBASE::edges_map_t::const_iterator itEdge=DBASE::edges.begin();itEdge!=last_it;++itEdge)
 					sqErr+=detail::graph_ops<self_t>::graph_edge_sqerror(this,itEdge,ignoreCovariances);
 				return sqErr;
 			}
@@ -381,13 +381,13 @@ namespace mrpt
 				// find all edges (in the initial graph), that exist in the given set
 				// of nodes; add them to the given graph
 				sub_graph->clearEdges();
-				for (typename BASE::const_iterator it = BASE::edges.begin();
-						it != BASE::edges.end();
+				for (typename DBASE::const_iterator it = DBASE::edges.begin();
+						it != DBASE::edges.end();
 						++it) {
 
 					const TNodeID& from = it->first.first;
 					const TNodeID& to = it->first.second;
-					const typename BASE::edge_t& curr_edge = it->second;
+					const typename DBASE::edge_t& curr_edge = it->second;
 
 					// if both nodes exist in the given set, add the corresponding edge
 					if (sub_graph->nodes.find(from) != sub_graph->nodes.end() &&
@@ -716,7 +716,7 @@ namespace mrpt
 			 * \exception std::exception On global poses not in \a nodes
 			 */
 			inline double getEdgeSquareError(
-					const typename BASE::edges_map_t::const_iterator &itEdge,
+					const typename DBASE::edges_map_t::const_iterator &itEdge,
 					bool ignoreCovariances = true) const {
 
 				return detail::graph_ops<self_t>::graph_edge_sqerror(
@@ -735,14 +735,14 @@ namespace mrpt
 			 */
 			double getEdgeSquareError(const mrpt::utils::TNodeID from_id, const mrpt::utils::TNodeID to_id, bool ignoreCovariances = true) const
 			{
-				const typename BASE::edges_map_t::const_iterator itEdge = BASE::edges.find(std::make_pair(from_id,to_id));
-				ASSERTMSG_(itEdge!=BASE::edges.end(),format("Request for edge %u->%u that doesn't exist in graph.",static_cast<unsigned int>(from_id),static_cast<unsigned int>(to_id)));
+				const typename DBASE::edges_map_t::const_iterator itEdge = DBASE::edges.find(std::make_pair(from_id,to_id));
+				ASSERTMSG_(itEdge!=DBASE::edges.end(),format("Request for edge %u->%u that doesn't exist in graph.",static_cast<unsigned int>(from_id),static_cast<unsigned int>(to_id)));
 				return getEdgeSquareError(itEdge,ignoreCovariances);
 			}
 
 			/** Empty all edges, nodes and set root to ID 0. */
 			inline void clear() {
-				BASE::edges.clear();
+				DBASE::edges.clear();
 				nodes.clear();
 				root = 0;
 				edges_store_inverse_poses = false;
@@ -810,7 +810,7 @@ namespace mrpt
 
 				typename self_t::global_pose_t& p_from = graph->nodes.at(from);
 				typename self_t::global_pose_t& p_to = graph->nodes.at(to);
-				const typename BASE::edge_t& virt_edge(p_to - p_from);
+				const typename DBASE::edge_t& virt_edge(p_to - p_from);
 
 				graph->insertEdge(from, to, virt_edge);
 			}
@@ -865,6 +865,7 @@ namespace mrpt
 	// Specialization of TTypeName must occur in the same namespace:
 	namespace utils
 	{
+		/*
 		// Extensions to mrpt::utils::TTypeName for matrices:
 		template<
 			class CPOSE,
@@ -872,24 +873,37 @@ namespace mrpt
 			class NODE_ANNOTATIONS,
 			class EDGE_ANNOTATIONS
 			>
+
 		struct TTypeName <mrpt::graphs::CNetworkOfPoses<CPOSE,MAPS_IMPLEMENTATION,NODE_ANNOTATIONS,EDGE_ANNOTATIONS> >
 		{
 			static std::string get()
 			{
-				return std::string("mrpt::graphs::CNetworkOfPoses<")
-					+TTypeName<CPOSE>::get() + std::string(",")
-					+TTypeName<MAPS_IMPLEMENTATION>::get() + std::string(",")
-					+TTypeName<NODE_ANNOTATIONS>::get() + std::string(",")
-					+TTypeName<EDGE_ANNOTATIONS>::get()
-					+std::string(">");
 			}
 		};
-
+		*/
 		MRPT_DECLARE_TTYPENAME(mrpt::utils::map_traits_stdmap)
 		MRPT_DECLARE_TTYPENAME(mrpt::utils::map_traits_map_as_vector)
 
+		template<
+			class CPOSE,
+			class MAPS_IMPLEMENTATION,
+			class NODE_ANNOTATIONS,
+			class EDGE_ANNOTATIONS
+			>
+		class CSerializer<mrpt::graphs::CNetworkOfPoses<CPOSE,MAPS_IMPLEMENTATION,NODE_ANNOTATIONS,EDGE_ANNOTATIONS>>
+		{
+			public:
+			static const char * getClassName() { 
+				static std::string name (std::string("mrpt::graphs::CNetworkOfPoses<")
+					+ CSerializer<CPOSE>::getClassName() + std::string(",")
+					+ CSerializer<MAPS_IMPLEMENTATION>::getClassName() + std::string(",")
+					+ CSerializer<NODE_ANNOTATIONS>::getClassName() + std::string(",")
+					+ CSerializer<EDGE_ANNOTATIONS>::getClassName()
+					+ std::string(">"));
+				return name.c_str();
+			}
+		};
 	}
-
 } // End of namespace
 
 
