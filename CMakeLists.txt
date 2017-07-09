@@ -18,16 +18,13 @@ PROJECT(MRPT)
 #        Setup CMake
 # -------------------------
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
-set (CMAKE_CXX_STANDARD 14)  # Require C++11 (C++14?)
+set (CMAKE_CXX_STANDARD 14)  # Require C++14
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS 1) # Allow empty endif() and such (since CMake 2.4)
 if(COMMAND cmake_policy)
 	cmake_policy(SET CMP0003 NEW) # We don't want to mix relative and absolute paths in linker lib lists.
 	cmake_policy(SET CMP0005 NEW) # Escape definitions (-D) strings
 	if(POLICY CMP0053)
 		cmake_policy(SET CMP0053 OLD) # Simplify variable reference and escape sequence evaluation.
-	endif()
-	if(POLICY CMP0026)
-		cmake_policy(SET CMP0026 OLD) # Allow using the LOCATION target property.
 	endif()
 	if(POLICY CMP0037)
 		cmake_policy(SET CMP0037 OLD)  # Allow defining target "test"
@@ -49,6 +46,8 @@ ENDIF()
 include(cmakemodules/script_version_number.cmake REQUIRED)	#  Loads MRPT version number
 
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmakemodules") # Directory for CMake scripts
+
+SET(ALLOW_GPL OFF CACHE BOOL "Allows MRPT to link to GPL code. This effectively makes some MRPT binaries GPL licensed. Use this at your own risk.")
 
 # The root directory for all MRPT libraries/modules:
 SET(MRPT_LIBS_ROOT "${CMAKE_SOURCE_DIR}/libs" CACHE INTERNAL "")  # This emulates global vars
@@ -450,13 +449,6 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
  		#SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic")
 	ENDIF()
 
-	# Enable C++11 features in GCC 4.7+
-	IF (NOT CMAKE_MRPT_GCC_VERSION LESS 47)
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-	ELSEIF(NOT CMAKE_MRPT_GCC_VERSION LESS 46)
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-	ENDIF ()
-
 	# Parallel stdlibc++?
 	IF(MRPT_ENABLE_LIBSTD_PARALLEL_MODE)
 		SET(EXTRA_CPP_FLAGS "${EXTRA_CPP_FLAGS} -D_GLIBCXX_PARALLEL -fopenmp")
@@ -486,8 +478,8 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
 	# Use "modern" C99 ! ;-)
  	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 
-	# Use modern C++11
- 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+	# Use modern C++14
+ 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 	IF(NOT APPLE) # any reason for not using it in all platforms?
 	# Use the libstdc++ lib vs. libc++, to avoid some build errors in MacOS
@@ -652,6 +644,8 @@ IF (NOT MSVC AND NOT CMAKE_VERSION VERSION_LESS "2.8.12")
 	include(cmakemodules/cotire.cmake REQUIRED) # COmpiler TIme REducer helper for PCH
 	set_directory_properties(PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE) # Disable unity targets
 ENDIF()
+
+add_custom_target(all_mrpt_libs ALL) # all_mrpt_libs: target to build all mrpt-* modules
 
 # ----------------------------------------------------------------------------
 #      					PROCESS SUBDIRECTORIES:

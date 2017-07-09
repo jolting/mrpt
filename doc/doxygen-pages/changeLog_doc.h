@@ -32,7 +32,7 @@
 
 <hr>
 <a name="1.5.0">
-<h2>Version 1.5.0: (Under development)  </h2></a>
+<h2>Version 1.5.0: Released 10-JUN-2017</h2></a>
 	- Changes in apps:
 		- New app [PTG-configurator](http://www.mrpt.org/list-of-mrpt-apps/application-ptg-configurator/)
 		- [ReactiveNavigationDemo](http://www.mrpt.org/list-of-mrpt-apps/application-reactivenavigationdemo/) has been totally rebuilt as a 3D visualizer capable of testing different navigation algorithms and robot kinematics.
@@ -82,6 +82,7 @@
 			- mrpt::utils::CConfigFile and mrpt::utils::CConfigFileMemory now can parse config files with end-of-line backslash to split long strings into several lines.
 			- New class mrpt::poses::FrameTransformer
 			- mrpt::poses classes now have all their constructors from mrpt::math types marked as explicit, to avoid potential ambiguities and unnoticed conversions.
+			- [Sophus](https://github.com/strasdat/Sophus/) is now used internally for some Lie Algebra methods, and also exposed to the user as `#include <mrpt/otherlibs/sophus/so3.hpp>`, etc. as part of mrpt-base
 		- \ref mrpt_bayes_grp
 			- [API change] `verbose` is no longer a field of mrpt::bayes::CParticleFilter::TParticleFilterOptions. Use the setVerbosityLevel() method of the CParticleFilter class itself.
 			- [API change] mrpt::bayes::CProbabilityParticle (which affects all PF-based classes in MRPT) has been greatly simplified via usage of the new mrpt::utils::copy_ptr<> pointee-copy-semantics smart pointer.
