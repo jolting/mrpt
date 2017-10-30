@@ -17,7 +17,7 @@ PROJECT(MRPT)
 # -------------------------
 #        Setup CMake
 # -------------------------
-CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
 set (CMAKE_CXX_STANDARD 14)  # Require C++14
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS 1) # Allow empty endif() and such (since CMake 2.4)
 if(COMMAND cmake_policy)
@@ -255,6 +255,8 @@ include(cmakemodules/script_yamlcpp.cmake REQUIRED)     # Check for YAMLCPP libr
 include(cmakemodules/script_pcap.cmake REQUIRED)        # Check for the libpcap library
 #include(cmakemodules/script_ros1.cmake REQUIRED)       # Check for ROS
 include(cmakemodules/script_vtk.cmake REQUIRED)         # Check for VTK
+include(cmakemodules/script_boost_beast.cmake REQUIRED)     # Support for boost beast
+
 
 # ---------------------------------------------------------------------------
 #			OPTIONS
