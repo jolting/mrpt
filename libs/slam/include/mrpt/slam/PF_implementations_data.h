@@ -41,20 +41,17 @@ class PF_implementation : public mrpt::utils::COutputLogger
 {
    public:
 	PF_implementation()
-		: mrpt::utils::COutputLogger("PF_implementation"),
-		  m_accumRobotMovement2DIsValid(false),
-		  m_accumRobotMovement3DIsValid(false)
+		: mrpt::utils::COutputLogger("PF_implementation")
 	{
 	}
 
-   protected:
 	/** \name Data members and methods used by generic PF implementations
 		@{ */
 
 	mrpt::obs::CActionRobotMovement2D m_accumRobotMovement2D;
-	bool m_accumRobotMovement2DIsValid;
+	bool m_accumRobotMovement2DIsValid = false;
 	mrpt::poses::CPose3DPDFGaussian m_accumRobotMovement3D;
-	bool m_accumRobotMovement3DIsValid;
+	bool m_accumRobotMovement3DIsValid = false;
 
 	/** Used in al PF implementations. \sa
 	 * PF_SLAM_implementation_gatherActionsCheckBothActObs */
@@ -282,41 +279,6 @@ class PF_implementation : public mrpt::utils::COutputLogger
 		const mrpt::poses::CPose3D& x) const = 0;
 
 	/** @} */
-
-	/** Auxiliary method called by PF implementations: return true if we have
-	 * both action & observation,
-	  *   otherwise, return false AND accumulate the odometry so when we have an
-	 * observation we didn't lose a thing.
-	  *   On return=true, the "m_movementDrawer" member is loaded and ready to
-	 * draw samples of the increment of pose since last step.
-	  *  This method is smart enough to accumulate CActionRobotMovement2D or
-	 * CActionRobotMovement3D, whatever comes in.
-	  */
-	template <class BINTYPE>  // Template arg. actually not used, just to allow
-	// giving the definition in another file later on
-	bool PF_SLAM_implementation_gatherActionsCheckBothActObs(
-		const mrpt::obs::CActionCollection* actions,
-		const mrpt::obs::CSensoryFrame* sf);
-
-   private:
-	/** The shared implementation body of two PF methods: APF and Optimal-APF,
-	 * depending on USE_OPTIMAL_SAMPLING */
-	template <class BINTYPE>
-	void PF_SLAM_implementation_pfAuxiliaryPFStandardAndOptimal(
-		const mrpt::obs::CActionCollection* actions,
-		const mrpt::obs::CSensoryFrame* sf,
-		const mrpt::bayes::CParticleFilter::TParticleFilterOptions& PF_options,
-		const TKLDParams& KLD_options, const bool USE_OPTIMAL_SAMPLING);
-
-	template <class BINTYPE>
-	void PF_SLAM_aux_perform_one_rejection_sampling_step(
-		const bool USE_OPTIMAL_SAMPLING, const bool doResample,
-		const double maxMeanLik,
-		size_t k,  // The particle from the old set "m_particles[]"
-		const mrpt::obs::CSensoryFrame* sf,
-		const mrpt::bayes::CParticleFilter::TParticleFilterOptions& PF_options,
-		mrpt::poses::CPose3D& out_newPose, double& out_newParticleLogWeight);
-
 };  // end PF_implementation
 }
 }
