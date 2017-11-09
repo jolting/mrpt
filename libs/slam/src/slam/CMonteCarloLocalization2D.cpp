@@ -72,7 +72,7 @@ void KLF_loadBinFromParticle(
 // Passing a "this" pointer at this moment is not a problem since it will be NOT
 // access until the object is fully initialized
 CMonteCarloLocalization2D::CMonteCarloLocalization2D(size_t M)
-	: CPosePDFParticles(M)
+	: m_poseParticles(M)
 {
 	this->setLoggerName("CMonteCarloLocalization2D");
 }
@@ -84,11 +84,11 @@ CMonteCarloLocalization2D::~CMonteCarloLocalization2D() {}
 TPose3D CMonteCarloLocalization2D::getLastPose(
 	const size_t i, bool& is_valid_pose) const
 {
-	if (i >= m_particles.size())
+	if (i >= m_poseParticles.m_particles.size())
 		THROW_EXCEPTION("Particle index out of bounds!");
 	is_valid_pose = true;
-	ASSERTDEB_(m_particles[i].d);
-	return TPose3D(TPose2D(*m_particles[i].d));
+	ASSERTDEB_(m_poseParticles.m_particles[i].d);
+	return TPose3D(TPose2D(*m_poseParticles.m_particles[i].d));
 }
 
 /*---------------------------------------------------------------
@@ -107,11 +107,12 @@ void CMonteCarloLocalization2D::prediction_and_update_pfStandardProposal(
 	{  // A map MUST be supplied!
 		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
 		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_particles.size())
+			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
 	}
 
-	PF_SLAM_implementation_pfStandardProposal<mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params);
+	StandardProposal<mrpt::poses::CPose2D, CMonteCarloLocalization2D>::PF_SLAM_implementation<
+		mrpt::slam::detail::TPoseBin2D>(
+		actions, sf, PF_options, options.KLD_params, *this);
 
 	MRPT_END
 }
@@ -132,12 +133,12 @@ void CMonteCarloLocalization2D::prediction_and_update_pfAuxiliaryPFStandard(
 	{  // A map MUST be supplied!
 		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
 		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_particles.size())
+			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
 	}
 
-	PF_SLAM_implementation_pfAuxiliaryPFStandard<
+	AuxiliaryPFStandard<mrpt::poses::CPose2D, CMonteCarloLocalization2D>::PF_SLAM_implementation<
 		mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params);
+		actions, sf, PF_options, options.KLD_params, *this);
 
 	MRPT_END
 }
@@ -158,11 +159,12 @@ void CMonteCarloLocalization2D::prediction_and_update_pfAuxiliaryPFOptimal(
 	{  // A map MUST be supplied!
 		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
 		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_particles.size())
+			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
 	}
 
-	PF_SLAM_implementation_pfAuxiliaryPFOptimal<mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params);
+	AuxiliaryPFOptimal<mrpt::poses::CPose2D, CMonteCarloLocalization2D>::PF_SLAM_implementation<
+		mrpt::slam::detail::TPoseBin2D>(
+		actions, sf, PF_options, options.KLD_params, *this);
 
 	MRPT_END
 }
@@ -283,25 +285,25 @@ void CMonteCarloLocalization2D::resetUniformFreeSpace(
 
 	if (particlesCount > 0)
 	{
-		clear();
-		m_particles.resize(particlesCount);
+		m_poseParticles.clear();
+		m_poseParticles.m_particles.resize(particlesCount);
 		for (int i = 0; i < particlesCount; i++)
-			m_particles[i].d.reset(new CPose2D());
+			m_poseParticles.m_particles[i].d.reset(new CPose2D());
 	}
 
-	const size_t M = m_particles.size();
+	const size_t M = m_poseParticles.m_particles.size();
 
 	// Generate pose m_particles:
 	for (size_t i = 0; i < M; i++)
 	{
 		int idx = round(randomGenerator.drawUniform(0.0, nFreeCells - 1.001));
 
-		m_particles[i].d->x(
+		m_poseParticles.m_particles[i].d->x(
 			freeCells_x[idx] + randomGenerator.drawUniform(-gridRes, gridRes));
-		m_particles[i].d->y(
+		m_poseParticles.m_particles[i].d->y(
 			freeCells_y[idx] + randomGenerator.drawUniform(-gridRes, gridRes));
-		m_particles[i].d->phi(randomGenerator.drawUniform(phi_min, phi_max));
-		m_particles[i].log_w = 0;
+		m_poseParticles.m_particles[i].d->phi(randomGenerator.drawUniform(phi_min, phi_max));
+		m_poseParticles.m_particles[i].log_w = 0;
 	}
 
 	MRPT_END

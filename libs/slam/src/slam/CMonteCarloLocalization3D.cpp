@@ -78,7 +78,7 @@ using namespace mrpt::slam;
 // Passing a "this" pointer at this moment is not a problem since it will be NOT
 // access until the object is fully initialized
 CMonteCarloLocalization3D::CMonteCarloLocalization3D(size_t M)
-	: CPose3DPDFParticles(M)
+	: m_poseParticles(M)
 {
 	this->setLoggerName("CMonteCarloLocalization3D");
 }
@@ -90,11 +90,11 @@ CMonteCarloLocalization3D::~CMonteCarloLocalization3D() {}
 TPose3D CMonteCarloLocalization3D::getLastPose(
 	const size_t i, bool& is_valid_pose) const
 {
-	if (i >= m_particles.size())
+	if (i >= m_poseParticles.m_particles.size())
 		THROW_EXCEPTION("Particle index out of bounds!");
 	is_valid_pose = true;
-	ASSERTDEB_(m_particles[i].d != NULL);
-	return TPose3D(*m_particles[i].d);
+	ASSERTDEB_(m_poseParticles.m_particles[i].d != NULL);
+	return TPose3D(*m_poseParticles.m_particles[i].d);
 }
 
 /*---------------------------------------------------------------
@@ -113,11 +113,12 @@ void CMonteCarloLocalization3D::prediction_and_update_pfStandardProposal(
 	{  // A map MUST be supplied!
 		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
 		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_particles.size())
+			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
 	}
 
-	PF_SLAM_implementation_pfStandardProposal<mrpt::slam::detail::TPoseBin3D>(
-		actions, sf, PF_options, options.KLD_params);
+	StandardProposal<mrpt::poses::CPose3D, CMonteCarloLocalization3D>::PF_SLAM_implementation<
+		mrpt::slam::detail::TPoseBin3D>(
+		actions, sf, PF_options, options.KLD_params, *this);
 
 	MRPT_END
 }
@@ -138,12 +139,12 @@ void CMonteCarloLocalization3D::prediction_and_update_pfAuxiliaryPFStandard(
 	{  // A map MUST be supplied!
 		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
 		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_particles.size())
+			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
 	}
 
-	PF_SLAM_implementation_pfAuxiliaryPFStandard<
+	AuxiliaryPFStandard<mrpt::poses::CPose3D, CMonteCarloLocalization3D>::PF_SLAM_implementation<
 		mrpt::slam::detail::TPoseBin3D>(
-		actions, sf, PF_options, options.KLD_params);
+		actions, sf, PF_options, options.KLD_params, *this);
 
 	MRPT_END
 }
@@ -164,11 +165,11 @@ void CMonteCarloLocalization3D::prediction_and_update_pfAuxiliaryPFOptimal(
 	{  // A map MUST be supplied!
 		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
 		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_particles.size())
+			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
 	}
 
-	PF_SLAM_implementation_pfAuxiliaryPFOptimal<mrpt::slam::detail::TPoseBin3D>(
-		actions, sf, PF_options, options.KLD_params);
+	AuxiliaryPFOptimal<mrpt::poses::CPose3D, CMonteCarloLocalization3D>::PF_SLAM_implementation<mrpt::slam::detail::TPoseBin3D>(
+		actions, sf, PF_options, options.KLD_params, *this);
 
 	MRPT_END
 }

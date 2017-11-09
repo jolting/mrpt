@@ -31,11 +31,15 @@ namespace slam
  * CParticleFilterCapable
  * \ingroup mrpt_slam_grp
  */
-class SLAM_IMPEXP CMonteCarloLocalization3D
-	: public mrpt::poses::CPose3DPDFParticles,
-	  public PF_implementation<mrpt::poses::CPose3D, CMonteCarloLocalization3D>
+class SLAM_IMPEXP CMonteCarloLocalization3D :
+	  public PF_implementation<mrpt::poses::CPose3D, mrpt::poses::CPose3DPDFParticles>
 {
-   public:
+public:
+	using CParticleDataContent = mrpt::poses::CPose3DPDFParticles::CParticleDataContent;
+	using CParticleList = mrpt::poses::CPose3DPDFParticles::CParticleList;
+
+	mrpt::poses::CPose3DPDFParticles m_poseParticles;
+
 	/** MCL parameters */
 	TMonteCarloLocalizationParams options;
 

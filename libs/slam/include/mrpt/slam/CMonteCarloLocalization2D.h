@@ -37,11 +37,16 @@ namespace slam
  * CParticleFilterCapable
  * \ingroup mrpt_slam_grp
  */
-class SLAM_IMPEXP CMonteCarloLocalization2D
-	: public mrpt::poses::CPosePDFParticles,
-	  public PF_implementation<mrpt::poses::CPose2D, CMonteCarloLocalization2D>
+class SLAM_IMPEXP CMonteCarloLocalization2D :
+//		public mrpt::bayes::CParticleFilterCapable,
+	  public PF_implementation<mrpt::poses::CPose2D, mrpt::poses::CPosePDFParticles>
 {
-   public:
+public:
+	using CParticleDataContent = mrpt::poses::CPosePDFParticles::CParticleDataContent;
+	using CParticleList = mrpt::poses::CPosePDFParticles::CParticleList;
+
+	mrpt::poses::CPosePDFParticles m_poseParticles;
+
 	/** MCL parameters */
 	TMonteCarloLocalizationParams options;
 
@@ -95,7 +100,7 @@ class SLAM_IMPEXP CMonteCarloLocalization2D
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
 		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		override;
+		;
 
 	/** Update the m_particles, predicting the posterior of robot pose and map
 	 * after a movement command.
@@ -113,7 +118,7 @@ class SLAM_IMPEXP CMonteCarloLocalization2D
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
 		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		override;
+		;
 
 	/** Update the m_particles, predicting the posterior of robot pose and map
 	 * after a movement command.
@@ -131,7 +136,7 @@ class SLAM_IMPEXP CMonteCarloLocalization2D
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
 		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		override;
+		;
 
 	// protected:
 	/** \name Virtual methods that the PF_implementations assume exist.

@@ -12,6 +12,8 @@
 #include <mrpt/utils/utils_defs.h>
 #include <mrpt/bayes/CParticleFilter.h>
 
+#include <functional>
+
 namespace mrpt
 {
 namespace bayes
@@ -55,10 +57,10 @@ class BASE_IMPEXP CParticleFilterCapable
 	 * flexibility.
 	  * \sa prepareFastDrawSample
 	  */
-	typedef double (*TParticleProbabilityEvaluator)(
+	using TParticleProbabilityEvaluator = std::function<double(
 		const bayes::CParticleFilter::TParticleFilterOptions& PF_options,
 		const CParticleFilterCapable* obj, size_t index, const void* action,
-		const void* observation);
+		const void* observation)>;
 
 	/** The default evaluator function, which simply returns the particle
 	 * weight.
@@ -156,17 +158,6 @@ class BASE_IMPEXP CParticleFilterCapable
 	 */
 	virtual size_t particlesCount() const = 0;
 
-	/** Performs the prediction stage of the Particle Filter.
-	 *  This method simply selects the appropiate protected method according to
-	 * the particle filter algorithm to run.
-	 * \sa
-	 * prediction_and_update_pfStandardProposal,prediction_and_update_pfAuxiliaryPFStandard,prediction_and_update_pfOptimalProposal,prediction_and_update_pfAuxiliaryPFOptimal
-	 */
-	void prediction_and_update(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
-
 	/**  Performs the substitution for internal use of resample in particle
 	 * filter algorithm, don't call it directly.
 	 *  \param indx The indices of current m_particles to be saved as the new
@@ -227,42 +218,6 @@ class BASE_IMPEXP CParticleFilterCapable
 		std::vector<double>& out_linWeights);
 
    protected:
-	/** Performs the particle filter prediction/update stages for the algorithm
-	 * "pfStandardProposal" (if not implemented in heritated class, it will
-	 * raise a 'non-implemented' exception).
-	 * \sa prediction_and_update
-	 */
-	virtual void prediction_and_update_pfStandardProposal(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
-	/** Performs the particle filter prediction/update stages for the algorithm
-	 * "pfAuxiliaryPFStandard" (if not implemented in heritated class, it will
-	 * raise a 'non-implemented' exception).
-	 * \sa prediction_and_update
-	 */
-	virtual void prediction_and_update_pfAuxiliaryPFStandard(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
-	/** Performs the particle filter prediction/update stages for the algorithm
-	 * "pfOptimalProposal" (if not implemented in heritated class, it will raise
-	 * a 'non-implemented' exception).
-	 * \sa prediction_and_update
-	 */
-	virtual void prediction_and_update_pfOptimalProposal(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
-	/** Performs the particle filter prediction/update stages for the algorithm
-	 * "pfAuxiliaryPFOptimal" (if not implemented in heritated class, it will
-	 * raise a 'non-implemented' exception).
-	 * \sa prediction_and_update
-	 */
-	virtual void prediction_and_update_pfAuxiliaryPFOptimal(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
 
 	/** Auxiliary vectors, see CParticleFilterCapable::prepareFastDrawSample for
 	 * more information

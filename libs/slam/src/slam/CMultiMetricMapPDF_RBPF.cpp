@@ -151,8 +151,9 @@ void CMultiMetricMapPDF::prediction_and_update_pfAuxiliaryPFOptimal(
 {
 	MRPT_START
 
-	PF_SLAM_implementation_pfAuxiliaryPFOptimal<mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params);
+	AuxiliaryPFOptimal<CRBPFParticleData, CMultiMetricMapPDF>::PF_SLAM_implementation<
+		mrpt::slam::detail::TPoseBin2D>(
+		actions, sf, PF_options, options.KLD_params, *this);
 
 	MRPT_END
 }
@@ -167,9 +168,9 @@ void CMultiMetricMapPDF::prediction_and_update_pfAuxiliaryPFStandard(
 {
 	MRPT_START
 
-	PF_SLAM_implementation_pfAuxiliaryPFStandard<
+	AuxiliaryPFStandard<CRBPFParticleData, CMultiMetricMapPDF>::PF_SLAM_implementation<
 		mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params);
+		actions, sf, PF_options, options.KLD_params, *this);
 
 	MRPT_END
 }
@@ -200,7 +201,7 @@ void CMultiMetricMapPDF::prediction_and_update_pfOptimalProposal(
 	//						PREDICTION STAGE
 	// ----------------------------------------------------------------------
 	CVectorDouble rndSamples;
-	size_t M = m_particles.size();
+	size_t M = m_poseParticles.m_particles.size();
 	bool updateStageAlreadyDone = false;
 	CPose3D initialPose, incrPose, finalPose;
 
@@ -254,15 +255,15 @@ void CMultiMetricMapPDF::prediction_and_update_pfOptimalProposal(
 	//  input "action"
 	// --------------------------------------------------------------------------------------
 	printf(" 1) Prediction...");
-	M = m_particles.size();
+	M = m_poseParticles.m_particles.size();
 
-	// To be computed as an average from all m_particles:
+	// To be computed as an average from all m_poseParticles.m_particles:
 	size_t particleWithHighestW = 0;
 	for (size_t i = 0; i < M; i++)
-		if (getW(i) > getW(particleWithHighestW)) particleWithHighestW = i;
+		if (m_poseParticles.getW(i) > m_poseParticles.getW(particleWithHighestW)) particleWithHighestW = i;
 
 	//   The paths MUST already contain the starting location for each particle:
-	ASSERT_(!m_particles[0].d->robotPath.empty())
+	ASSERT_(!m_poseParticles.m_particles[0].d->robotPath.empty())
 
 	// Build the local map of points for ICP:
 	CSimplePointsMap localMapPoints;
@@ -272,7 +273,7 @@ void CMultiMetricMapPDF::prediction_and_update_pfOptimalProposal(
 
 	// Update particle poses:
 	size_t i;
-	for (i = 0, partIt = m_particles.begin(); partIt != m_particles.end();
+	for (i = 0, partIt = m_poseParticles.m_particles.begin(); partIt != m_poseParticles.m_particles.end();
 		 partIt++, i++)
 	{
 		double extra_log_lik = 0;  // Used for the optimal_PF with ICP
@@ -311,7 +312,7 @@ void CMultiMetricMapPDF::prediction_and_update_pfOptimalProposal(
 
 					localMapPoints.insertionOptions.minDistBetweenLaserPoints =
 						0.02f;  // 3.0f *
-					// m_particles[0].d->mapTillNow.m_gridMaps[0]->getResolution();;
+					// m_poseParticles.m_particles[0].d->mapTillNow.m_gridMaps[0]->getResolution();;
 					localMapPoints.insertionOptions.isPlanarMap = true;
 					sf->insertObservationsInto(&localMapPoints);
 				}
@@ -330,7 +331,7 @@ void CMultiMetricMapPDF::prediction_and_update_pfOptimalProposal(
 
 					localMapPoints.insertionOptions.minDistBetweenLaserPoints =
 						0.02f;  // 3.0f *
-					// m_particles[0].d->mapTillNow.m_gridMaps[0]->getResolution();;
+					// m_poseParticles.m_particles[0].d->mapTillNow.m_gridMaps[0]->getResolution();;
 					localMapPoints.insertionOptions.isPlanarMap = true;
 					sf->insertObservationsInto(&localMapPoints);
 				}
@@ -984,8 +985,9 @@ void CMultiMetricMapPDF::prediction_and_update_pfStandardProposal(
 {
 	MRPT_START
 
-	PF_SLAM_implementation_pfStandardProposal<mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params);
+	StandardProposal<CRBPFParticleData, CMultiMetricMapPDF>::
+		PF_SLAM_implementation<mrpt::slam::detail::TPoseBin2D>(
+		actions, sf, PF_options, options.KLD_params, *this);
 
 	// Average map will need to be updated after this:
 	averageMapIsUpdated = false;
@@ -1030,7 +1032,7 @@ double CMultiMetricMapPDF::PF_SLAM_computeObservationLikelihoodForParticle(
 {
 	MRPT_UNUSED_PARAM(PF_options);
 	CMultiMetricMap* map = const_cast<CMultiMetricMap*>(
-		&m_particles[particleIndexForMap].d->mapTillNow);
+		&m_poseParticles.m_particles[particleIndexForMap].d->mapTillNow);
 	double ret = 0;
 	for (CSensoryFrame::const_iterator it = observation.begin();
 		 it != observation.end(); ++it)

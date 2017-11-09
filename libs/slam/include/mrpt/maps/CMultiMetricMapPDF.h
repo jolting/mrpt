@@ -51,6 +51,15 @@ class SLAM_IMPEXP CRBPFParticleData : public mrpt::utils::CSerializable
 DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(
 	CRBPFParticleData, mrpt::utils::CSerializable, SLAM_IMPEXP)
 
+class CMultiMetricMapPDFParticles:
+	public mrpt::bayes::CParticleFilterData<CRBPFParticleData>,
+	public mrpt::bayes::CParticleFilterDataImpl<
+		mrpt::bayes::CParticleFilterData<CRBPFParticleData>,
+		mrpt::bayes::CParticleFilterData<CRBPFParticleData>::CParticleList
+		>
+{
+};
+
 /** Declares a class that represents a Rao-Blackwellized set of particles for
  * solving the SLAM problem (This class is the base of RBPF-SLAM applications).
  *   This class is used internally by the map building algorithm in
@@ -61,13 +70,15 @@ DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(
  */
 class SLAM_IMPEXP CMultiMetricMapPDF
 	: public mrpt::utils::CSerializable,
-	  public mrpt::bayes::CParticleFilterData<CRBPFParticleData>,
-	  public mrpt::bayes::CParticleFilterDataImpl<
-		  CMultiMetricMapPDF,
-		  mrpt::bayes::CParticleFilterData<CRBPFParticleData>::CParticleList>,
-	  public mrpt::slam::PF_implementation<CRBPFParticleData,
-										   CMultiMetricMapPDF>
+	  public mrpt::slam::PF_implementation<CRBPFParticleData, CMultiMetricMapPDFParticles>
 {
+public:
+	using ParticleData = CMultiMetricMapPDFParticles;
+	using CParticleList = ParticleData::CParticleList;
+	using CParticleDataContent =  ParticleData::CParticleDataContent;
+	ParticleData m_poseParticles;
+private:
+
 	friend class mrpt::slam::CMetricMapBuilderRBPF;
 
 	DEFINE_SERIALIZABLE(CMultiMetricMapPDF)
@@ -77,23 +88,22 @@ class SLAM_IMPEXP CMultiMetricMapPDF
 	void prediction_and_update_pfStandardProposal(
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		override;
+		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+
 	void prediction_and_update_pfOptimalProposal(
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		override;
+		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+
 	void prediction_and_update_pfAuxiliaryPFOptimal(
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		override;
+		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+
 	void prediction_and_update_pfAuxiliaryPFStandard(
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		override;
+		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
 
    private:
 	/** Internal buffer for the averaged map. */

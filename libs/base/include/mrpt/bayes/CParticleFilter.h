@@ -207,8 +207,9 @@ class BASE_IMPEXP CParticleFilter : public mrpt::utils::COutputLogger
 	 *
 	 * \sa CParticleFilterCapable, executeOn
 	 */
+	template <typename PARTICLEFILTERCAPABLE>
 	void executeOn(
-		CParticleFilterCapable& obj, const mrpt::obs::CActionCollection* action,
+		PARTICLEFILTERCAPABLE& obj, const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
 		TParticleFilterStats* stats = nullptr);
 
@@ -218,6 +219,63 @@ class BASE_IMPEXP CParticleFilter : public mrpt::utils::COutputLogger
 	CParticleFilter::TParticleFilterOptions m_options;
 
 };  // End of class def.
+
+template <typename PARTICLEFILTERCAPABLE>
+void CParticleFilter::executeOn(
+	PARTICLEFILTERCAPABLE& obj, const mrpt::obs::CActionCollection* action,
+	const mrpt::obs::CSensoryFrame* observation, TParticleFilterStats* stats)
+{
+	MRPT_START
+
+	// 1,2) Prediction & Update stages:
+	// ---------------------------------------------------
+	obj.prediction_and_update(action, observation, m_options);
+
+	// 3) Normalize weights:
+	// ---------------------------------------------------
+	obj.normalizeWeights();
+
+	// Save weights statistics?
+	// ---------------------------------------------------
+	if (stats)
+	{
+		const size_t M = obj.particlesCount();
+
+		// ESS:
+		stats->ESS_beforeResample = obj.ESS();
+
+		// Variance:
+		if (M > 1)
+		{
+			double weightsMean = 0, var = 0;
+			for (size_t i = 0; i < M; i++) weightsMean += exp(obj.getW(i));
+			weightsMean /= M;
+			for (size_t i = 0; i < M; i++)
+				var += square(exp(obj.getW(i)) - weightsMean);
+
+			var /= (M - 1);
+			stats->weightsVariance_beforeResample = var;
+		}
+	}
+
+	// 4) Particles resampling stage
+	// ---------------------------------------------------
+	if (!m_options.adaptiveSampleSize &&
+		(m_options.PF_algorithm == CParticleFilter::pfStandardProposal ||
+		 m_options.PF_algorithm == CParticleFilter::pfOptimalProposal))
+	{
+		if (obj.ESS() < m_options.BETA)
+		{
+			MRPT_LOG_DEBUG(
+				mrpt::format(
+					"Resampling particles (ESS was %.02f)\n", obj.ESS()));
+			obj.performResampling(m_options);  // Resample
+		}
+	}
+
+	MRPT_END
+}
+
 
 }  // end namespace
 // Specializations MUST occur at the same namespace:
@@ -252,6 +310,7 @@ struct TEnumTypeFiller<
 		m_map.insert(CParticleFilter::prSystematic, "prSystematic");
 	}
 };
+
 }
 }  // end namespace
 #endif
