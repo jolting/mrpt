@@ -139,44 +139,13 @@ struct TAuxRangeMeasInfo
 	}
 };
 
-/*----------------------------------------------------------------------------------
-			prediction_and_update_pfAuxiliaryPFOptimal
-
-  See paper reference in "PF_SLAM_implementation_pfAuxiliaryPFOptimal"
- ----------------------------------------------------------------------------------*/
-void CMultiMetricMapPDF::prediction_and_update_pfAuxiliaryPFOptimal(
-	const mrpt::obs::CActionCollection* actions,
-	const mrpt::obs::CSensoryFrame* sf,
-	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
+namespace mrpt
 {
-	MRPT_START
-
-	AuxiliaryPFOptimal<CRBPFParticleData, CMultiMetricMapPDF>::PF_SLAM_implementation<
-		mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params, *this);
-
-	MRPT_END
-}
-
-/*----------------------------------------------------------------------------------
-			PF_SLAM_implementation_pfAuxiliaryPFStandard
- ----------------------------------------------------------------------------------*/
-void CMultiMetricMapPDF::prediction_and_update_pfAuxiliaryPFStandard(
-	const mrpt::obs::CActionCollection* actions,
-	const mrpt::obs::CSensoryFrame* sf,
-	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
+namespace maps
 {
-	MRPT_START
-
-	AuxiliaryPFStandard<CRBPFParticleData, CMultiMetricMapPDF>::PF_SLAM_implementation<
-		mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params, *this);
-
-	MRPT_END
-}
 
 /*----------------------------------------------------------------------------------
-			prediction_and_update_pfOptimalProposal
+			prediction_and_update<OptimalProposal>
 
 For grid-maps:
 ==============
@@ -190,7 +159,8 @@ For beacon maps:
   (JLBC: Method under development)
 
  ----------------------------------------------------------------------------------*/
-void CMultiMetricMapPDF::prediction_and_update_pfOptimalProposal(
+template <>
+void CMultiMetricMapPDF::prediction_and_update<mrpt::slam::OptimalProposal>(
 	const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
 	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
@@ -978,21 +948,25 @@ void CMultiMetricMapPDF::prediction_and_update_pfOptimalProposal(
 /*---------------------------------------------------------------
 			prediction_and_update_pfStandardProposal
  ---------------------------------------------------------------*/
-void CMultiMetricMapPDF::prediction_and_update_pfStandardProposal(
+template <>
+void CMultiMetricMapPDF::prediction_and_update<mrpt::slam::StandardProposal>(
 	const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
 	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
 {
 	MRPT_START
 
-	StandardProposal<CRBPFParticleData, CMultiMetricMapPDF>::
-		PF_SLAM_implementation<mrpt::slam::detail::TPoseBin2D>(
+	StandardProposal::PF_SLAM_implementation<CRBPFParticleData, CMultiMetricMapPDF,
+		mrpt::slam::detail::TPoseBin2D>(
 		actions, sf, PF_options, options.KLD_params, *this);
 
 	// Average map will need to be updated after this:
 	averageMapIsUpdated = false;
 
 	MRPT_END
+}
+
+}
 }
 
 // Specialization for my kind of particles:

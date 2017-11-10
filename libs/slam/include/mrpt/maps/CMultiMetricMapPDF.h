@@ -24,6 +24,8 @@
 
 #include <mrpt/slam/link_pragmas.h>
 
+#include <mrpt/slam/PF_aux_structs.h>
+
 namespace mrpt
 {
 namespace slam
@@ -83,27 +85,22 @@ private:
 
 	DEFINE_SERIALIZABLE(CMultiMetricMapPDF)
 
-   protected:
+   public:
 	// PF algorithm implementations:
-	void prediction_and_update_pfStandardProposal(
-		const mrpt::obs::CActionCollection* action,
+	template <class PF_ALGORITHM>
+	void prediction_and_update(
+		const mrpt::obs::CActionCollection* actions,
 		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
+		{
+			MRPT_START
 
-	void prediction_and_update_pfOptimalProposal(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+			PF_ALGORITHM::template PF_SLAM_implementation<CRBPFParticleData, CMultiMetricMapPDF,
+				mrpt::slam::detail::TPoseBin2D>(
+				actions, observation, PF_options, options.KLD_params, *this);
 
-	void prediction_and_update_pfAuxiliaryPFOptimal(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
-
-	void prediction_and_update_pfAuxiliaryPFStandard(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+			MRPT_END
+		}
 
    private:
 	/** Internal buffer for the averaged map. */

@@ -14,6 +14,8 @@
 #include <mrpt/utils/CEnhancedMetaFile.h>
 #include <mrpt/obs/CActionRobotMovement3D.h>
 #include <mrpt/math/utils.h>
+#include <mrpt/bayes/CParticleFilter_impl.h>
+#include <mrpt/slam/PF_implementations.h>
 
 using namespace mrpt;
 using namespace mrpt::slam;

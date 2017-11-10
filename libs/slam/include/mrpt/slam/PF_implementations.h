@@ -44,11 +44,10 @@ namespace slam
  * - BINTYPE: TPoseBin or whatever to discretize the sample space for
  * KLD-sampling.
  */
-template <class PARTICLE_TYPE, class MYSELF>
 class StandardProposal
 {
 public:
-template <class BINTYPE>
+template <class PARTICLE_TYPE, class MYSELF, class BINTYPE>
 static void PF_SLAM_implementation(
 		const mrpt::obs::CActionCollection* actions,
 		const mrpt::obs::CSensoryFrame* sf,
@@ -250,7 +249,7 @@ public:
 template <class BINTYPE, class MYSELF>
 static double evaluate(
 		const mrpt::bayes::CParticleFilter::TParticleFilterOptions& PF_options,
-		const CParticleFilterCapable* obj, unsigned long index,
+		const mrpt::bayes::CParticleFilterCapable* obj, unsigned long index,
 		const void* action, const void* observation, const MYSELF& me)
 {
 	MRPT_UNUSED_PARAM(action);
@@ -325,7 +324,7 @@ public:
 template <class BINTYPE, class MYSELF>
 static double evaluate(
 		const mrpt::bayes::CParticleFilter::TParticleFilterOptions& PF_options,
-		const CParticleFilterCapable* obj, unsigned long index,
+		const mrpt::bayes::CParticleFilterCapable* obj, unsigned long index,
 		const void* action, const void* observation, const MYSELF& me)
 {
 	MRPT_START
@@ -419,12 +418,12 @@ static double evaluate(
 // USE_OPTIMAL_SAMPLING:
 //   true -> PF_SLAM_implementation_pfAuxiliaryPFOptimal
 //  false -> PF_SLAM_implementation_pfAuxiliaryPFStandard
-template <class PARTICLE_TYPE, class MYSELF, bool USE_OPTIMAL_SAMPLING,
-	class EVALUATOR = std::conditional_t<USE_OPTIMAL_SAMPLING,AuxPFOptimalEvaluator,AuxPFStandardEvaluator> >
+template <bool USE_OPTIMAL_SAMPLING>
 class AuxiliaryPFStandardAndOptimal
 {
 public:
-template <class BINTYPE>
+template <class PARTICLE_TYPE, class MYSELF, class BINTYPE,
+		class EVALUATOR = std::conditional_t<USE_OPTIMAL_SAMPLING,AuxPFOptimalEvaluator,AuxPFStandardEvaluator> >
 static void PF_SLAM_implementation(
 	const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
@@ -468,7 +467,7 @@ static void PF_SLAM_implementation(
 
 	mrpt::bayes::CParticleFilterCapable::TParticleProbabilityEvaluator func =
 		[&me] (const bayes::CParticleFilter::TParticleFilterOptions& PF_options,
-         const CParticleFilterCapable* obj, size_t index, const void* action,
+         const mrpt::bayes::CParticleFilterCapable* obj, size_t index, const void* action,
          const void* observation) -> double
 		{
 			return EVALUATOR::template evaluate<BINTYPE, MYSELF>(PF_options, obj, index, action, observation,me);
@@ -833,7 +832,7 @@ static void PF_SLAM_implementation(
  * CActionRobotMovement3D, whatever comes in.
  *   \ingroup mrpt_slam_grp
  */
-template <class BINTYPE>
+template <class MYSELF, class BINTYPE>
 static bool PF_SLAM_implementation_gatherActionsCheckBothActObs(
 		const mrpt::obs::CActionCollection* actions,
 		const mrpt::obs::CSensoryFrame* sf, MYSELF &me)
@@ -922,7 +921,7 @@ static bool PF_SLAM_implementation_gatherActionsCheckBothActObs(
 /* ------------------------------------------------------------------------
 					PF_SLAM_aux_perform_one_rejection_sampling_step
    ------------------------------------------------------------------------ */
-template <class BINTYPE>
+template <class MYSELF, class BINTYPE>
 static void PF_SLAM_aux_perform_one_rejection_sampling_step(const bool doResample,
 		const double maxMeanLik,
 		size_t k,  // The particle from the old set "m_particles[]"
@@ -1089,8 +1088,7 @@ static void PF_SLAM_aux_perform_one_rejection_sampling_step(const bool doResampl
  * doi:10.2307/2670179.
  *
  */
-template <class PARTICLE_TYPE, class MYSELF>
-using AuxiliaryPFStandard = AuxiliaryPFStandardAndOptimal<PARTICLE_TYPE, MYSELF, false>;
+using AuxiliaryPFStandard = AuxiliaryPFStandardAndOptimal<false>;
 
 /** A generic implementation of the PF method
  * "prediction_and_update_pfAuxiliaryPFOptimal" (optimal sampling with rejection
@@ -1109,8 +1107,10 @@ using AuxiliaryPFStandard = AuxiliaryPFStandardAndOptimal<PARTICLE_TYPE, MYSELF,
  *     Robot Localization," in Proc. IEEE International Conference on Robotics
  *     and Automation (ICRA'08), 2008, pp. 461466.
  */
-template <class PARTICLE_TYPE, class MYSELF>
-using AuxiliaryPFOptimal = AuxiliaryPFStandardAndOptimal<PARTICLE_TYPE,MYSELF,true>;
+using AuxiliaryPFOptimal = AuxiliaryPFStandardAndOptimal<true>;
+
+// Used in RBPF
+class OptimalProposal {};
 
 }  // end namespace
 }  // end namespace

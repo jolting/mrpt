@@ -205,7 +205,7 @@ class PF_implementation : public mrpt::utils::COutputLogger
 
 	/** @} */
 };  // end PF_implementation
-}
-}
 
+}
+}
 #endif

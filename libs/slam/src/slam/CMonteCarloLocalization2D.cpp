@@ -96,7 +96,8 @@ TPose3D CMonteCarloLocalization2D::getLastPose(
 			prediction_and_update_pfStandardProposal
 
  ---------------------------------------------------------------*/
-void CMonteCarloLocalization2D::prediction_and_update_pfStandardProposal(
+template <typename T>
+void CMonteCarloLocalization2D::prediction_and_update(
 	const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
 	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
@@ -110,59 +111,7 @@ void CMonteCarloLocalization2D::prediction_and_update_pfStandardProposal(
 			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
 	}
 
-	StandardProposal<mrpt::poses::CPose2D, CMonteCarloLocalization2D>::PF_SLAM_implementation<
-		mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params, *this);
-
-	MRPT_END
-}
-
-/*---------------------------------------------------------------
-
-			prediction_and_update_pfAuxiliaryPFStandard
-
- ---------------------------------------------------------------*/
-void CMonteCarloLocalization2D::prediction_and_update_pfAuxiliaryPFStandard(
-	const mrpt::obs::CActionCollection* actions,
-	const mrpt::obs::CSensoryFrame* sf,
-	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-{
-	MRPT_START
-
-	if (sf)
-	{  // A map MUST be supplied!
-		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
-		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
-	}
-
-	AuxiliaryPFStandard<mrpt::poses::CPose2D, CMonteCarloLocalization2D>::PF_SLAM_implementation<
-		mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params, *this);
-
-	MRPT_END
-}
-
-/*---------------------------------------------------------------
-
-			prediction_and_update_pfAuxiliaryPFOptimal
-
- ---------------------------------------------------------------*/
-void CMonteCarloLocalization2D::prediction_and_update_pfAuxiliaryPFOptimal(
-	const mrpt::obs::CActionCollection* actions,
-	const mrpt::obs::CSensoryFrame* sf,
-	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-{
-	MRPT_START
-
-	if (sf)
-	{  // A map MUST be supplied!
-		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
-		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
-	}
-
-	AuxiliaryPFOptimal<mrpt::poses::CPose2D, CMonteCarloLocalization2D>::PF_SLAM_implementation<
+	T:: template PF_SLAM_implementation<mrpt::poses::CPose2D, CMonteCarloLocalization2D,
 		mrpt::slam::detail::TPoseBin2D>(
 		actions, sf, PF_options, options.KLD_params, *this);
 

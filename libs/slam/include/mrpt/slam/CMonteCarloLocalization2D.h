@@ -96,43 +96,8 @@ public:
 	 *
 	 * \sa options
 	 */
-	void prediction_and_update_pfStandardProposal(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		;
-
-	/** Update the m_particles, predicting the posterior of robot pose and map
-	 * after a movement command.
-	 *  This method has additional configuration parameters in "options".
-	 *  Performs the update stage of the RBPF, using the sensed CSensoryFrame:
-	 *
-	 *   \param Action This is a pointer to CActionCollection, containing the
-	 * pose change the robot has been commanded.
-	 *   \param observation This must be a pointer to a CSensoryFrame object,
-	 * with robot sensed observations.
-	 *
-	 * \sa options
-	 */
-	void prediction_and_update_pfAuxiliaryPFStandard(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		;
-
-	/** Update the m_particles, predicting the posterior of robot pose and map
-	 * after a movement command.
-	 *  This method has additional configuration parameters in "options".
-	 *  Performs the update stage of the RBPF, using the sensed CSensoryFrame:
-	 *
-	 *   \param Action This is a pointer to CActionCollection, containing the
-	 * pose change the robot has been commanded.
-	 *   \param observation This must be a pointer to a CSensoryFrame object,
-	 * with robot sensed observations.
-	 *
-	 * \sa options
-	 */
-	void prediction_and_update_pfAuxiliaryPFOptimal(
+	 template <class T>
+	void prediction_and_update(
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
 		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
