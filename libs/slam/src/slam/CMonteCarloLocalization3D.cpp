@@ -65,8 +65,8 @@ void KLF_loadBinFromParticle(
 			round(currentParticleValue->roll() / opts.KLD_binSize_PHI);
 	}
 }
-}
-}
+}  // namespace slam
+}  // namespace mrpt
 
 #include <mrpt/slam/PF_implementations.h>
 
@@ -114,10 +114,12 @@ void CMonteCarloLocalization3D::prediction_and_update(
 	{  // A map MUST be supplied!
 		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
 		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
+			ASSERT_(
+				options.metricMaps.size() == m_poseParticles.m_particles.size())
 	}
 
-	T::template PF_SLAM_implementation<mrpt::poses::CPose3D, CMonteCarloLocalization3D,
+	T::template PF_SLAM_implementation<
+		mrpt::poses::CPose3D, CMonteCarloLocalization3D,
 		mrpt::slam::detail::TPoseBin3D>(
 		actions, sf, PF_options, options.KLD_params, *this);
 

@@ -36,7 +36,7 @@ namespace maps
 {
 /** Auxiliary class used in mrpt::maps::CMultiMetricMapPDF
  * \ingroup mrpt_slam_grp
-  */
+ */
 class SLAM_IMPEXP CRBPFParticleData : public mrpt::utils::CSerializable
 {
 	DEFINE_SERIALIZABLE(CRBPFParticleData)
@@ -53,12 +53,11 @@ class SLAM_IMPEXP CRBPFParticleData : public mrpt::utils::CSerializable
 DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(
 	CRBPFParticleData, mrpt::utils::CSerializable, SLAM_IMPEXP)
 
-class CMultiMetricMapPDFParticles:
-	public mrpt::bayes::CParticleFilterData<CRBPFParticleData>,
-	public mrpt::bayes::CParticleFilterDataImpl<
-		mrpt::bayes::CParticleFilterData<CRBPFParticleData>,
-		mrpt::bayes::CParticleFilterData<CRBPFParticleData>::CParticleList
-		>
+class CMultiMetricMapPDFParticles
+	: public mrpt::bayes::CParticleFilterData<CRBPFParticleData>,
+	  public mrpt::bayes::CParticleFilterDataImpl<
+		  mrpt::bayes::CParticleFilterData<CRBPFParticleData>,
+		  mrpt::bayes::CParticleFilterData<CRBPFParticleData>::CParticleList>
 {
 };
 
@@ -72,15 +71,16 @@ class CMultiMetricMapPDFParticles:
  */
 class SLAM_IMPEXP CMultiMetricMapPDF
 	: public mrpt::utils::CSerializable,
-	  public mrpt::slam::PF_implementation<CRBPFParticleData, CMultiMetricMapPDFParticles>
+	  public mrpt::slam::PF_implementation<
+		  CRBPFParticleData, CMultiMetricMapPDFParticles>
 {
-public:
+   public:
 	using ParticleData = CMultiMetricMapPDFParticles;
 	using CParticleList = ParticleData::CParticleList;
-	using CParticleDataContent =  ParticleData::CParticleDataContent;
+	using CParticleDataContent = ParticleData::CParticleDataContent;
 	ParticleData m_poseParticles;
-private:
 
+   private:
 	friend class mrpt::slam::CMetricMapBuilderRBPF;
 
 	DEFINE_SERIALIZABLE(CMultiMetricMapPDF)
@@ -92,15 +92,16 @@ private:
 		const mrpt::obs::CActionCollection* actions,
 		const mrpt::obs::CSensoryFrame* observation,
 		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		{
-			MRPT_START
+	{
+		MRPT_START
 
-			PF_ALGORITHM::template PF_SLAM_implementation<CRBPFParticleData, CMultiMetricMapPDF,
-				mrpt::slam::detail::TPoseBin2D>(
-				actions, observation, PF_options, options.KLD_params, *this);
+		PF_ALGORITHM::template PF_SLAM_implementation<
+			CRBPFParticleData, CMultiMetricMapPDF,
+			mrpt::slam::detail::TPoseBin2D>(
+			actions, observation, PF_options, options.KLD_params, *this);
 
-			MRPT_END
-		}
+		MRPT_END
+	}
 
    private:
 	/** Internal buffer for the averaged map. */
@@ -148,13 +149,13 @@ private:
 		 * useICPGlobalAlign_withGrid=true, this is the minimum quality ratio
 		 * [0,1] of the alignment such as it will be accepted. Otherwise, raw
 		 * odometry is used for those bad cases (default=0.7).
-		  */
+		 */
 		float ICPGlobalAlign_MinQuality;
 
 		/** [update stage] If the likelihood is computed through the occupancy
 		 * grid map, then this structure is passed to the map when updating the
 		 * particles weights in the update stage.
-		  */
+		 */
 		COccupancyGridMap2D::TLikelihoodOptions update_gridMapLikelihoodOptions;
 
 		mrpt::slam::TKLDParams KLD_params;
@@ -166,7 +167,7 @@ private:
 	} options;
 
 	/** Constructor
-	  */
+	 */
 	CMultiMetricMapPDF(
 		const bayes::CParticleFilter::TParticleFilterOptions& opts =
 			bayes::CParticleFilter::TParticleFilterOptions(),
@@ -203,9 +204,9 @@ private:
 	/** Returns the weighted averaged map based on the current best estimation.
 	 * If you need a persistent copy of this object, please use
 	 * "CSerializable::duplicate" and use the copy.
-	  * \sa Almost 100% sure you would prefer the best current map, given by
+	 * \sa Almost 100% sure you would prefer the best current map, given by
 	 * getCurrentMostLikelyMetricMap()
-	  */
+	 */
 	const CMultiMetricMap* getAveragedMetricMapEstimation();
 
 	/** Returns a pointer to the current most likely map (associated to the most
@@ -216,37 +217,37 @@ private:
 	size_t getNumberOfObservationsInSimplemap() const { return SFs.size(); }
 	/** Insert an observation to the map, at each particle's pose and to each
 	 * particle's metric map.
-	  * \param sf The SF to be inserted
-	  * \return true if any may was updated, false otherwise
-	  */
+	 * \param sf The SF to be inserted
+	 * \return true if any may was updated, false otherwise
+	 */
 	bool insertObservation(mrpt::obs::CSensoryFrame& sf);
 
 	/** Return the path (in absolute coordinate poses) for the i'th particle.
-	  * \exception On index out of bounds
-	  */
+	 * \exception On index out of bounds
+	 */
 	void getPath(size_t i, std::deque<math::TPose3D>& out_path) const;
 
 	/** Returns the current entropy of paths, computed as the average entropy of
 	 * poses along the path, where entropy of each pose estimation is computed
 	 * as the entropy of the gaussian approximation covariance.
-	  */
+	 */
 	double getCurrentEntropyOfPaths();
 
 	/** Returns the joint entropy estimation over paths and maps, acording to
 	 * "Information Gain-based Exploration Using" by C. Stachniss, G. Grissetti
 	 * and W.Burgard.
-	  */
+	 */
 	double getCurrentJointEntropy();
 
 	/** Update the poses estimation of the member "SFs" according to the current
 	 * path belief.
-	  */
+	 */
 	void updateSensoryFrameSequence();
 
 	/** A logging utility: saves the current path estimation for each particle
 	 * in a text file (a row per particle, each 3-column-entry is a set
 	 * [x,y,phi], respectively).
-	  */
+	 */
 	void saveCurrentPathEstimationToTextFile(const std::string& fil);
 
    private:
@@ -288,10 +289,26 @@ private:
 	/** @} */
 
 };  // End of class def.
+
+/*---------------------------------------------------------------
+			prediction_and_update<StandardProposal>
+ ---------------------------------------------------------------*/
+template <>
+void CMultiMetricMapPDF::prediction_and_update<mrpt::slam::StandardProposal>(
+	const mrpt::obs::CActionCollection* actions,
+	const mrpt::obs::CSensoryFrame* sf,
+	const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+
+template <>
+void CMultiMetricMapPDF::prediction_and_update<mrpt::slam::OptimalProposal>(
+	const mrpt::obs::CActionCollection* actions,
+	const mrpt::obs::CSensoryFrame* sf,
+	const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+
 DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(
 	CMultiMetricMapPDF, mrpt::utils::CSerializable, SLAM_IMPEXP)
 
-}  // End of namespace
-}  // End of namespace
+}  // namespace maps
+}  // namespace mrpt
 
 #endif

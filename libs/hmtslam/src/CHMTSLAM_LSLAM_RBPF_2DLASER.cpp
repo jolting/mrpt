@@ -226,7 +226,8 @@ void CLSLAM_RBPF_2DLASER::processOneLMH(
 /** The PF algorithm implementation for "optimal sampling for non-parametric
  * observation models"
   */
-void CLSLAM_RBPF_2DLASER::prediction_and_update_pfAuxiliaryPFOptimal(
+template <>
+void CLSLAM_RBPF_2DLASER::prediction_and_update<AuxiliaryPFOptimal>(
 	CLocalMetricHypothesis* LMH, const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
 	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
@@ -781,7 +782,8 @@ int CLSLAM_RBPF_2DLASER::findTPathBinIntoSet(
 /** The PF algorithm implementation for "optimal sampling" approximated with
  * scan matching (Stachniss method)
   */
-void CLSLAM_RBPF_2DLASER::prediction_and_update_pfOptimalProposal(
+template <>
+void CLSLAM_RBPF_2DLASER::prediction_and_update<OptimalProposal>(
 	CLocalMetricHypothesis* LMH, const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
 	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)

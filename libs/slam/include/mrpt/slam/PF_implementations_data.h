@@ -34,16 +34,15 @@ void KLF_loadBinFromParticle(
 
 /** A set of common data shared by PF implementations for both SLAM and
  * localization
-  *   \ingroup mrpt_slam_grp
-  */
-template <class PARTICLE_TYPE, class PDF_TYPE, class CParticleList = typename PDF_TYPE::CParticleList>
+ *   \ingroup mrpt_slam_grp
+ */
+template <
+	class PARTICLE_TYPE, class PDF_TYPE,
+	class CParticleList = typename PDF_TYPE::CParticleList>
 class PF_implementation : public mrpt::utils::COutputLogger
 {
    public:
-	PF_implementation()
-		: mrpt::utils::COutputLogger("PF_implementation")
-	{
-	}
+	PF_implementation() : mrpt::utils::COutputLogger("PF_implementation") {}
 
 	/** \name Data members and methods used by generic PF implementations
 		@{ */
@@ -68,11 +67,11 @@ class PF_implementation : public mrpt::utils::COutputLogger
 	std::vector<bool> m_pfAuxiliaryPFOptimal_maxLikMovementDrawHasBeenUsed;
 
 	/**  Compute w[i]*p(z_t | mu_t^i), with mu_t^i being
-	  *    the mean of the new robot pose
-	  *
-	  * \param action MUST be a "const CPose3D*"
-	  * \param observation MUST be a "const CSensoryFrame*"
-	  */
+	 *    the mean of the new robot pose
+	 *
+	 * \param action MUST be a "const CPose3D*"
+	 * \param observation MUST be a "const CSensoryFrame*"
+	 */
 	template <class BINTYPE>  // Template arg. actually not used, just to allow
 	// giving the definition in another file later on
 	static double PF_SLAM_particlesEvaluator_AuxPFStandard(
@@ -98,13 +97,13 @@ class PF_implementation : public mrpt::utils::COutputLogger
 
 	/** This is the default algorithm to efficiently replace one old set of
 	 * samples by another new set.
-	  *  The method uses pointers to make fast copies the first time each
+	 *  The method uses pointers to make fast copies the first time each
 	 * particle is duplicated, then
-	  *   makes real copies for the next ones.
-	  *
-	  *  Note that more efficient specializations might exist for specific
+	 *   makes real copies for the next ones.
+	 *
+	 *  Note that more efficient specializations might exist for specific
 	 * particle data structs.
-	  */
+	 */
 	virtual void PF_SLAM_implementation_replaceByNewParticleSet(
 		CParticleList& old_particles,
 		const std::vector<mrpt::math::TPose3D>& newParticles,
@@ -206,6 +205,6 @@ class PF_implementation : public mrpt::utils::COutputLogger
 	/** @} */
 };  // end PF_implementation
 
-}
-}
+}  // namespace slam
+}  // namespace mrpt
 #endif

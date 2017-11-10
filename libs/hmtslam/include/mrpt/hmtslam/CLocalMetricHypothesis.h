@@ -39,8 +39,8 @@ class HMTSLAM_IMPEXP CLSLAM_RBPF_2DLASER;
 /** Auxiliary class used in mrpt::slam::CLocalMetricHypothesis for HMT-SLAM;
  * this class keeps the data relative to each local metric particle ("a robot
  * metric path hypothesis" and its associated metric map).
-  * \ingroup mrpt_hmtslam_grp
-  */
+ * \ingroup mrpt_hmtslam_grp
+ */
 class HMTSLAM_IMPEXP CLSLAMParticleData : public mrpt::utils::CSerializable
 {
 	DEFINE_SERIALIZABLE(CLSLAMParticleData)
@@ -77,11 +77,11 @@ class HMTSLAM_IMPEXP CLocalMetricHypothesis
 
    public:
 	/** Constructor (Default param only used from STL classes)
-	  */
+	 */
 	CLocalMetricHypothesis(CHMTSLAM* parent = nullptr);
 
 	/** Destructor
-	  */
+	 */
 	~CLocalMetricHypothesis();
 
 	MRPT_TODO(
@@ -153,48 +153,48 @@ class HMTSLAM_IMPEXP CLocalMetricHypothesis
 
 	/** Returns a 3D representation of the the current robot pose, all the poses
 	 * in the auxiliary graph, and each of the areas they belong to.
-	  *  The metric maps are *not* included here for convenience, call
+	 *  The metric maps are *not* included here for convenience, call
 	 * m_metricMaps.getAs3DScene().
-	  *  The previous contents of "objs" will be discarded
-	  */
+	 *  The previous contents of "objs" will be discarded
+	 */
 	void getAs3DScene(mrpt::opengl::CSetOfObjects::Ptr& objs) const;
 
 	/** Returns the mean of each robot pose in this LMH, as computed from the
 	 * set of particles.
-	  * \sa getPathParticles, getRelativePose
-	  */
+	 * \sa getPathParticles, getRelativePose
+	 */
 	void getMeans(TMapPoseID2Pose3D& outList) const;
 
 	/** Returns the mean and covariance of each robot pose in this LMH, as
 	 * computed from the set of particles.
-	  * \sa getMeans, getPoseParticles
-	  */
+	 * \sa getMeans, getPoseParticles
+	 */
 	void getPathParticles(
 		std::map<TPoseID, mrpt::poses::CPose3DPDFParticles>& outList) const;
 
 	/** Returns the mean and covariance of each robot pose in this LMH, as
 	 * computed from the set of particles.
-	  * \sa getMeans, getPathParticles
-	  */
+	 * \sa getMeans, getPathParticles
+	 */
 	void getPoseParticles(
 		const TPoseID& poseID, mrpt::poses::CPose3DPDFParticles& outPDF) const;
 
 	/** Returns the pose PDF of some pose relative to some other pose ID (both
 	 * must be part of the the LMH).
-	  * \sa getMeans, getPoseParticles
-	  */
+	 * \sa getMeans, getPoseParticles
+	 */
 	void getRelativePose(
 		const TPoseID& reference, const TPoseID& pose,
 		mrpt::poses::CPose3DPDFParticles& outPDF) const;
 
 	/** Describes the LMH in text.
-	  */
+	 */
 	void dumpAsText(utils::CStringList& st) const;
 
 	/** Change all coordinates to set a given robot pose as the new coordinate
 	 * origin, and rebuild metric maps and change coords in the partitioning
 	 * subsystem as well.
-	  */
+	 */
 	void changeCoordinateOrigin(const TPoseID& newOrigin);
 
 	/** Rebuild the metric maps of all particles from the observations and their
@@ -207,7 +207,7 @@ class HMTSLAM_IMPEXP CLocalMetricHypothesis
 
 	/** Sets the number of particles to the initial number according to the PF
 	 * options, and initialize them with no robot poses & empty metric maps.
-	  */
+	 */
 	void clearRobotPoses();
 
 	/** Returns the i'th particle hypothesis for the current robot pose.  */
@@ -217,29 +217,29 @@ class HMTSLAM_IMPEXP CLocalMetricHypothesis
 	mrpt::poses::CPose3D* getCurrentPose(const size_t& particleIdx);
 
 	/** Removes a given area from the LMH:
-	  *	- The corresponding node in the HMT map is updated with the robot poses
-	  *& SFs in the LMH.
-	  *	- Robot poses belonging to that area are removed from:
-	  *		- the particles.
-	  *		- the graph partitioner.
-	  *		- the list of SFs.
-	  *		- the list m_nodeIDmemberships.
-	  *	- m_neighbors is updated.
-	  * - The weights of all particles are changed to remove the effects of the
-	  *removed metric observations.
-	  *	- After calling this the metric maps should be updated.
-	  * - This method internally calls updateAreaFromLMH
-	  */
+	 *	- The corresponding node in the HMT map is updated with the robot poses
+	 *& SFs in the LMH.
+	 *	- Robot poses belonging to that area are removed from:
+	 *		- the particles.
+	 *		- the graph partitioner.
+	 *		- the list of SFs.
+	 *		- the list m_nodeIDmemberships.
+	 *	- m_neighbors is updated.
+	 * - The weights of all particles are changed to remove the effects of the
+	 *removed metric observations.
+	 *	- After calling this the metric maps should be updated.
+	 * - This method internally calls updateAreaFromLMH
+	 */
 	void removeAreaFromLMH(const CHMHMapNode::TNodeID areaID);
 
 	/** The corresponding node in the HMT map is updated with the robot poses &
 	 * SFs in the LMH: the poses are referenced to the area's reference poseID,
 	 * such as that reference is at the origin.
-	  *  If eraseSFsFromLMH=true, the sensoryframes are moved rather than copied
+	 *  If eraseSFsFromLMH=true, the sensoryframes are moved rather than copied
 	 * to the area, and removed from the LMH.
-	  * \note The critical section m_map_cs is locked internally, unlock it
+	 * \note The critical section m_map_cs is locked internally, unlock it
 	 * before calling this.
-	  */
+	 */
 	void updateAreaFromLMH(
 		const CHMHMapNode::TNodeID areaID, bool eraseSFsFromLMH = false);
 
@@ -250,28 +250,22 @@ class HMTSLAM_IMPEXP CLocalMetricHypothesis
 	 */
 
 	/** The PF algorithm implementation.
-	  */
-	void prediction_and_update_pfAuxiliaryPFOptimal(
+	 */
+	template <class PF_ALGORITHM>
+	void prediction_and_update(
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		override;
+		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
 
-	/** The PF algorithm implementation.  */
-	void prediction_and_update_pfOptimalProposal(
-		const mrpt::obs::CActionCollection* action,
-		const mrpt::obs::CSensoryFrame* observation,
-		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		override;
 	/** @}
 	 */
 
 	/** Auxiliary variable used in the "pfAuxiliaryPFOptimal" algorithm.
-	  */
+	 */
 	mutable mrpt::math::CVectorDouble m_pfAuxiliaryPFOptimal_estimatedProb;
 
 	/** Auxiliary variable used in the "pfAuxiliaryPFOptimal" algorithm.
-	  */
+	 */
 	mutable std::vector<double> m_maxLikelihood;
 
 	/** Auxiliary variable used in the "pfAuxiliaryPFOptimal" algorithm. */
@@ -287,7 +281,7 @@ class HMTSLAM_IMPEXP CLocalMetricHypothesis
 DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(
 	CLocalMetricHypothesis, mrpt::utils::CSerializable, HMTSLAM_IMPEXP)
 
-}  // End of namespace
-}  // End of namespace
+}  // namespace hmtslam
+}  // namespace mrpt
 
 #endif

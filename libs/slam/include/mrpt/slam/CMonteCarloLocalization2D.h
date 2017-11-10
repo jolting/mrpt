@@ -16,6 +16,8 @@
 
 #include <mrpt/slam/link_pragmas.h>
 
+#include <mrpt/slam/PF_aux_structs.h>
+
 namespace mrpt
 {
 namespace maps
@@ -38,11 +40,13 @@ namespace slam
  * \ingroup mrpt_slam_grp
  */
 class SLAM_IMPEXP CMonteCarloLocalization2D :
-//		public mrpt::bayes::CParticleFilterCapable,
-	  public PF_implementation<mrpt::poses::CPose2D, mrpt::poses::CPosePDFParticles>
+	//		public mrpt::bayes::CParticleFilterCapable,
+	public PF_implementation<
+		mrpt::poses::CPose2D, mrpt::poses::CPosePDFParticles>
 {
-public:
-	using CParticleDataContent = mrpt::poses::CPosePDFParticles::CParticleDataContent;
+   public:
+	using CParticleDataContent =
+		mrpt::poses::CPosePDFParticles::CParticleDataContent;
 	using CParticleList = mrpt::poses::CPosePDFParticles::CParticleList;
 
 	mrpt::poses::CPosePDFParticles m_poseParticles;
@@ -51,8 +55,8 @@ public:
 	TMonteCarloLocalizationParams options;
 
 	/** Constructor
-	  * \param M The number of m_particles.
-	  */
+	 * \param M The number of m_particles.
+	 */
 	CMonteCarloLocalization2D(size_t M = 1);
 
 	/** Destructor */
@@ -60,23 +64,23 @@ public:
 
 	/** Reset the PDF to an uniformly distributed one, but only in the
 	 * free-space
-	  *   of a given 2D occupancy-grid-map. Orientation is randomly generated in
+	 *   of a given 2D occupancy-grid-map. Orientation is randomly generated in
 	 * the whole 2*PI range.
-	  * \param theMap The occupancy grid map
-	  * \param freeCellsThreshold The minimum free-probability to consider a
+	 * \param theMap The occupancy grid map
+	 * \param freeCellsThreshold The minimum free-probability to consider a
 	 * cell as empty (default is 0.7)
-	  * \param particlesCount If set to -1 the number of m_particles remains
+	 * \param particlesCount If set to -1 the number of m_particles remains
 	 * unchanged.
-	  * \param x_min The limits of the area to look for free cells.
-	  * \param x_max The limits of the area to look for free cells.
-	  * \param y_min The limits of the area to look for free cells.
-	  * \param y_max The limits of the area to look for free cells.
-	  * \param phi_min The limits of the area to look for free cells.
-	  * \param phi_max The limits of the area to look for free cells.
-	  *  \sa resetDeterm32inistic
-	  * \exception std::exception On any error (no free cell found in map,
+	 * \param x_min The limits of the area to look for free cells.
+	 * \param x_max The limits of the area to look for free cells.
+	 * \param y_min The limits of the area to look for free cells.
+	 * \param y_max The limits of the area to look for free cells.
+	 * \param phi_min The limits of the area to look for free cells.
+	 * \param phi_max The limits of the area to look for free cells.
+	 *  \sa resetDeterm32inistic
+	 * \exception std::exception On any error (no free cell found in map,
 	 * map=nullptr, etc...)
-	  */
+	 */
 	void resetUniformFreeSpace(
 		mrpt::maps::COccupancyGridMap2D* theMap,
 		const double freeCellsThreshold = 0.7, const int particlesCount = -1,
@@ -96,13 +100,30 @@ public:
 	 *
 	 * \sa options
 	 */
-	 template <class T>
+	template <class T>
 	void prediction_and_update(
-		const mrpt::obs::CActionCollection* action,
+		const mrpt::obs::CActionCollection* actions,
 		const mrpt::obs::CSensoryFrame* observation,
 		const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-		;
+	{
+		MRPT_START
 
+		if (observation)
+		{  // A map MUST be supplied!
+			ASSERT_(options.metricMap || options.metricMaps.size() > 0)
+			if (!options.metricMap)
+				ASSERT_(
+					options.metricMaps.size() ==
+					m_poseParticles.m_particles.size())
+		}
+
+		T::template PF_SLAM_implementation<
+			mrpt::poses::CPose2D, CMonteCarloLocalization2D,
+			mrpt::slam::detail::TPoseBin2D>(
+			actions, observation, PF_options, options.KLD_params, *this);
+
+		MRPT_END
+	}
 	// protected:
 	/** \name Virtual methods that the PF_implementations assume exist.
 		@{ */
@@ -133,7 +154,7 @@ public:
 
 };  // End of class def.
 
-}  // End of namespace
-}  // End of namespace
+}  // namespace slam
+}  // namespace mrpt
 
 #endif

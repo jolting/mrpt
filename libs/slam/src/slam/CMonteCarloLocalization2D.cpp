@@ -61,8 +61,8 @@ void KLF_loadBinFromParticle(
 		outBin.phi = round(currentParticleValue->phi() / opts.KLD_binSize_PHI);
 	}
 }
-}
-}
+}  // namespace slam
+}  // namespace mrpt
 
 #include <mrpt/slam/PF_implementations.h>
 
@@ -91,32 +91,6 @@ TPose3D CMonteCarloLocalization2D::getLastPose(
 	return TPose3D(TPose2D(*m_poseParticles.m_particles[i].d));
 }
 
-/*---------------------------------------------------------------
-
-			prediction_and_update_pfStandardProposal
-
- ---------------------------------------------------------------*/
-template <typename T>
-void CMonteCarloLocalization2D::prediction_and_update(
-	const mrpt::obs::CActionCollection* actions,
-	const mrpt::obs::CSensoryFrame* sf,
-	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-{
-	MRPT_START
-
-	if (sf)
-	{  // A map MUST be supplied!
-		ASSERT_(options.metricMap || options.metricMaps.size() > 0)
-		if (!options.metricMap)
-			ASSERT_(options.metricMaps.size() == m_poseParticles.m_particles.size())
-	}
-
-	T:: template PF_SLAM_implementation<mrpt::poses::CPose2D, CMonteCarloLocalization2D,
-		mrpt::slam::detail::TPoseBin2D>(
-		actions, sf, PF_options, options.KLD_params, *this);
-
-	MRPT_END
-}
 
 /*---------------------------------------------------------------
 			PF_SLAM_computeObservationLikelihoodForParticle
@@ -251,7 +225,8 @@ void CMonteCarloLocalization2D::resetUniformFreeSpace(
 			freeCells_x[idx] + randomGenerator.drawUniform(-gridRes, gridRes));
 		m_poseParticles.m_particles[i].d->y(
 			freeCells_y[idx] + randomGenerator.drawUniform(-gridRes, gridRes));
-		m_poseParticles.m_particles[i].d->phi(randomGenerator.drawUniform(phi_min, phi_max));
+		m_poseParticles.m_particles[i].d->phi(
+			randomGenerator.drawUniform(phi_min, phi_max));
 		m_poseParticles.m_particles[i].log_w = 0;
 	}
 

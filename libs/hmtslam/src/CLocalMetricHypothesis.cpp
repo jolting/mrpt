@@ -385,29 +385,6 @@ void CLocalMetricHypothesis::getAs3DScene(
 	}  // end of lock on map_cs
 }
 
-/** The PF algorithm implementation.  */
-void CLocalMetricHypothesis::prediction_and_update_pfAuxiliaryPFOptimal(
-	const mrpt::obs::CActionCollection* action,
-	const mrpt::obs::CSensoryFrame* observation,
-	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-{
-	ASSERT_(m_parent.get());
-	ASSERT_(m_parent->m_LSLAM_method);
-	m_parent->m_LSLAM_method->prediction_and_update_pfAuxiliaryPFOptimal(
-		this, action, observation, PF_options);
-}
-
-void CLocalMetricHypothesis::prediction_and_update_pfOptimalProposal(
-	const mrpt::obs::CActionCollection* action,
-	const mrpt::obs::CSensoryFrame* observation,
-	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
-{
-	ASSERT_(m_parent.get());
-	ASSERT_(m_parent->m_LSLAM_method);
-	m_parent->m_LSLAM_method->prediction_and_update_pfOptimalProposal(
-		this, action, observation, PF_options);
-}
-
 /*---------------------------------------------------------------
 					getMeans
    Returns the mean of each robot pose in this LMH, as
