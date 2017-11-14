@@ -20,6 +20,8 @@
 
 #include <mrpt/slam/PF_aux_structs.h>
 
+#include <mrpt/bayes/CParticleFilter_impl.h>
+
 using namespace mrpt;
 using namespace mrpt::bayes;
 using namespace mrpt::poses;
@@ -231,4 +233,39 @@ void CMonteCarloLocalization2D::resetUniformFreeSpace(
 	}
 
 	MRPT_END
+}
+
+namespace mrpt
+{
+namespace bayes
+{
+template <>
+void CParticleFilter::executeOn<CMonteCarloLocalization2D>(
+	CMonteCarloLocalization2D& obj, const mrpt::obs::CActionCollection* action,
+	const mrpt::obs::CSensoryFrame* observation, TParticleFilterStats* stats)
+{
+	switch (m_options.PF_algorithm)
+	{
+		case CParticleFilter::pfStandardProposal:
+			executeOn<CMonteCarloLocalization2D, mrpt::slam::StandardProposal>(
+				obj, action, observation, stats);
+			break;
+		case CParticleFilter::pfAuxiliaryPFStandard:
+			executeOn<CMonteCarloLocalization2D, mrpt::slam::AuxiliaryPFStandard>(
+				obj, action, observation, stats);
+			break;
+		case CParticleFilter::pfAuxiliaryPFOptimal:
+			executeOn<CMonteCarloLocalization2D, mrpt::slam::AuxiliaryPFOptimal>(
+				obj, action, observation, stats);
+			break;
+		default:
+		{
+			THROW_EXCEPTION("Invalid particle filter algorithm selection!");
+		}
+		break;
+	}
+
+}
+
+}
 }

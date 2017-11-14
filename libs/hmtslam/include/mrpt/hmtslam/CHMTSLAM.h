@@ -578,6 +578,12 @@ class HMTSLAM_IMPEXP CLSLAM_RBPF_2DLASER : public CLSLAMAlgorithmBase
 		const mrpt::obs::CActionCollection::Ptr& act,
 		const mrpt::obs::CSensoryFrame::Ptr& sf);
 
+	template <class PF_ALGORITHM>
+	void prediction_and_update(
+		CLocalMetricHypothesis* LMH, const mrpt::obs::CActionCollection* action,
+		const mrpt::obs::CSensoryFrame* observation,
+		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+
    protected:
 	/**  For use within PF callback methods */
 	bool m_insertNewRobotPose;

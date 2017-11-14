@@ -243,7 +243,6 @@ class HMTSLAM_IMPEXP CLocalMetricHypothesis
 	void updateAreaFromLMH(
 		const CHMHMapNode::TNodeID areaID, bool eraseSFsFromLMH = false);
 
-   protected:
 	/** @name Virtual methods for Particle Filter implementation (just a wrapper
 	   interface, actually implemented in CHMTSLAM::m_LSLAM_method)
 		@{
@@ -256,6 +255,7 @@ class HMTSLAM_IMPEXP CLocalMetricHypothesis
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
 		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
+   protected:
 
 	/** @}
 	 */

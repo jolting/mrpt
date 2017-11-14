@@ -27,6 +27,8 @@ using namespace mrpt::maps;
 
 #include <mrpt/slam/PF_implementations_data.h>
 
+#include <mrpt/bayes/CParticleFilter_impl.h>
+
 namespace mrpt
 {
 namespace slam
@@ -186,4 +188,39 @@ void CMonteCarloLocalization3D::PF_SLAM_implementation_replaceByNewParticleSet(
 		old_particles[i].log_w = newParticlesWeight[i];
 		old_particles[i].d.reset(new CPose3D(newParticles[i]));
 	}
+}
+
+namespace mrpt
+{
+namespace bayes
+{
+template <>
+void CParticleFilter::executeOn<CMonteCarloLocalization3D>(
+	CMonteCarloLocalization3D& obj, const mrpt::obs::CActionCollection* action,
+	const mrpt::obs::CSensoryFrame* observation, TParticleFilterStats* stats)
+{
+	switch (m_options.PF_algorithm)
+	{
+		case CParticleFilter::pfStandardProposal:
+			executeOn<CMonteCarloLocalization3D, mrpt::slam::StandardProposal>(
+				obj, action, observation, stats);
+			break;
+		case CParticleFilter::pfAuxiliaryPFStandard:
+			executeOn<CMonteCarloLocalization3D, mrpt::slam::AuxiliaryPFStandard>(
+				obj, action, observation, stats);
+			break;
+		case CParticleFilter::pfAuxiliaryPFOptimal:
+			executeOn<CMonteCarloLocalization3D, mrpt::slam::AuxiliaryPFOptimal>(
+				obj, action, observation, stats);
+			break;
+		default:
+		{
+			THROW_EXCEPTION("Invalid particle filter algorithm selection!");
+		}
+		break;
+	}
+
+}
+
+}
 }

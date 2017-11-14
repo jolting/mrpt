@@ -27,6 +27,8 @@
 
 #include <mrpt/slam/PF_aux_structs.h>
 
+#include <mrpt/bayes/CParticleFilter_impl.h>
+
 using namespace mrpt;
 using namespace mrpt::bayes;
 using namespace mrpt::math;
@@ -1012,4 +1014,39 @@ double CMultiMetricMapPDF::PF_SLAM_computeObservationLikelihoodForParticle(
 		 it != observation.end(); ++it)
 		ret += map->computeObservationLikelihood((CObservation*)it->get(), x);
 	return ret;
+}
+
+namespace mrpt
+{
+namespace bayes
+{
+template <>
+void CParticleFilter::executeOn<CMultiMetricMapPDF>(
+	CMultiMetricMapPDF& obj, const mrpt::obs::CActionCollection* action,
+	const mrpt::obs::CSensoryFrame* observation, TParticleFilterStats* stats)
+{
+	switch (m_options.PF_algorithm)
+	{
+		case CParticleFilter::pfStandardProposal:
+			executeOn<CMultiMetricMapPDF, mrpt::slam::StandardProposal>(
+				obj, action, observation, stats);
+			break;
+		case CParticleFilter::pfAuxiliaryPFStandard:
+			executeOn<CMultiMetricMapPDF, mrpt::slam::AuxiliaryPFStandard>(
+				obj, action, observation, stats);
+			break;
+		case CParticleFilter::pfAuxiliaryPFOptimal:
+			executeOn<CMultiMetricMapPDF, mrpt::slam::AuxiliaryPFOptimal>(
+				obj, action, observation, stats);
+			break;
+		default:
+		{
+			THROW_EXCEPTION("Invalid particle filter algorithm selection!");
+		}
+		break;
+	}
+
+}
+
+}
 }

@@ -20,6 +20,7 @@
 #include <mrpt/utils/CTicTac.h>
 #include <mrpt/utils/CFileStream.h>
 #include <mrpt/bayes/CParticleFilter.h>
+#include <mrpt/bayes/CParticleFilter_impl.h>
 #include <mrpt/system/os.h>
 #include <mrpt/utils/CTicTac.h>
 
@@ -34,6 +35,57 @@ using namespace mrpt::bayes;
 using namespace mrpt::poses;
 using namespace std;
 
+namespace mrpt
+{
+namespace hmtslam
+{
+class LSLAMAuxiliaryPFOptimal
+{
+public:
+	static constexpr bool DoesResampling = false;
+	MRPT_TODO("MOVE predicition_and_update code here");
+};
+
+class LSLAMOptimalProposal
+{
+   public:
+	static constexpr bool DoesResampling = true;
+	MRPT_TODO("MOVE prediction_and_update here");
+};
+
+}
+
+
+namespace bayes
+{
+template <>
+void CParticleFilter::executeOn<CLocalMetricHypothesis>(
+	CLocalMetricHypothesis& obj, const mrpt::obs::CActionCollection* action,
+	const mrpt::obs::CSensoryFrame* observation, TParticleFilterStats* stats)
+{
+	switch (m_options.PF_algorithm)
+	{
+		case CParticleFilter::pfOptimalProposal:
+			executeOn<
+				CLocalMetricHypothesis, mrpt::hmtslam::LSLAMOptimalProposal>(
+				obj, action, observation, stats);
+			break;
+		case CParticleFilter::pfAuxiliaryPFOptimal:
+			executeOn<
+				CLocalMetricHypothesis, mrpt::hmtslam::LSLAMAuxiliaryPFOptimal>(
+				obj, action, observation, stats);
+			break;
+		default:
+		{
+			THROW_EXCEPTION("Invalid particle filter algorithm selection!");
+		}
+		break;
+	}
+}
+}  // namespace bayes
+
+namespace hmtslam
+{
 // Constructor
 CLSLAM_RBPF_2DLASER::CLSLAM_RBPF_2DLASER(CHMTSLAM* parent)
 	: CLSLAMAlgorithmBase(parent)
@@ -122,9 +174,8 @@ void CLSLAM_RBPF_2DLASER::processOneLMH(
 				if (it->first != currentPoseID)
 				{
 					float linDist = it->second.distanceTo(*currentRobotPose);
-					float angDist = fabs(
-						math::wrapToPi(
-							it->second.yaw() - currentRobotPose->yaw()));
+					float angDist = fabs(math::wrapToPi(
+						it->second.yaw() - currentRobotPose->yaw()));
 
 					minDistLin = min(minDistLin, linDist);
 
@@ -225,9 +276,9 @@ void CLSLAM_RBPF_2DLASER::processOneLMH(
 
 /** The PF algorithm implementation for "optimal sampling for non-parametric
  * observation models"
-  */
+ */
 template <>
-void CLSLAM_RBPF_2DLASER::prediction_and_update<AuxiliaryPFOptimal>(
+void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 	CLocalMetricHypothesis* LMH, const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
 	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
@@ -432,8 +483,8 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<AuxiliaryPFOptimal>(
 					// robotMovement->drawSingleSample( movementDraw );
 					// robotMovement->fastDrawSingleSample( movementDraw );
 					movementDraw =
-						LMH->m_movementDraws[LMH->m_movementDrawsIdx++ %
-											 size_movementDraws];
+						LMH->m_movementDraws
+							[LMH->m_movementDrawsIdx++ % size_movementDraws];
 				}
 
 				newPose.composeFrom(
@@ -781,9 +832,9 @@ int CLSLAM_RBPF_2DLASER::findTPathBinIntoSet(
 
 /** The PF algorithm implementation for "optimal sampling" approximated with
  * scan matching (Stachniss method)
-  */
+ */
 template <>
-void CLSLAM_RBPF_2DLASER::prediction_and_update<OptimalProposal>(
+void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMOptimalProposal>(
 	CLocalMetricHypothesis* LMH, const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
 	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
@@ -974,3 +1025,5 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<OptimalProposal>(
 
 	MRPT_END
 }
+}  // namespace hmtslam
+}  // namespace mrpt

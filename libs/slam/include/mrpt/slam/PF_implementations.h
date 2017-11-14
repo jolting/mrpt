@@ -46,6 +46,8 @@ namespace slam
 class StandardProposal
 {
    public:
+	static constexpr bool DoesResampling = true;
+
 	template <class PARTICLE_TYPE, class MYSELF, class BINTYPE>
 	static void PF_SLAM_implementation(
 		const mrpt::obs::CActionCollection* actions,
@@ -428,6 +430,8 @@ template <bool USE_OPTIMAL_SAMPLING>
 class AuxiliaryPFStandardAndOptimal
 {
    public:
+	static constexpr bool DoesResampling = false;
+
 	template <
 		class PARTICLE_TYPE, class MYSELF, class BINTYPE,
 		class EVALUATOR = std::conditional_t<
@@ -1146,11 +1150,6 @@ using AuxiliaryPFStandard = AuxiliaryPFStandardAndOptimal<false>;
  *     and Automation (ICRA'08), 2008, pp. 461466.
  */
 using AuxiliaryPFOptimal = AuxiliaryPFStandardAndOptimal<true>;
-
-// Used in RBPF
-class OptimalProposal
-{
-};
 
 }  // namespace slam
 }  // namespace mrpt

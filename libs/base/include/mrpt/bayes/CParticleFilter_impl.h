@@ -19,37 +19,6 @@ namespace bayes
 {
 using namespace mrpt::utils;
 
-template <class PARTICLEFILTERCAPABLE>
-void CParticleFilter::executeOn(
-	PARTICLEFILTERCAPABLE& obj, const mrpt::obs::CActionCollection* action,
-	const mrpt::obs::CSensoryFrame* observation, TParticleFilterStats* stats)
-{
-	switch (m_options.PF_algorithm)
-	{
-		case CParticleFilter::pfStandardProposal:
-			executeOn<PARTICLEFILTERCAPABLE, mrpt::slam::StandardProposal>(
-				obj, action, observation, stats);
-			break;
-		case CParticleFilter::pfAuxiliaryPFStandard:
-			executeOn<PARTICLEFILTERCAPABLE, mrpt::slam::AuxiliaryPFStandard>(
-				obj, action, observation, stats);
-			break;
-		case CParticleFilter::pfOptimalProposal:
-			executeOn<PARTICLEFILTERCAPABLE, mrpt::slam::OptimalProposal>(
-				obj, action, observation, stats);
-			break;
-		case CParticleFilter::pfAuxiliaryPFOptimal:
-			executeOn<PARTICLEFILTERCAPABLE, mrpt::slam::AuxiliaryPFOptimal>(
-				obj, action, observation, stats);
-			break;
-		default:
-		{
-			THROW_EXCEPTION("Invalid particle filter algorithm selection!");
-		}
-		break;
-	}
-}
-
 template <class PARTICLEFILTERCAPABLE, class PF_ALGORITHM>
 void CParticleFilter::executeOn(
 	PARTICLEFILTERCAPABLE& obj, const mrpt::obs::CActionCollection* action,
@@ -93,8 +62,7 @@ void CParticleFilter::executeOn(
 	// 4) Particles resampling stage
 	// ---------------------------------------------------
 	if (!m_options.adaptiveSampleSize &&
-		(m_options.PF_algorithm == CParticleFilter::pfStandardProposal ||
-		 m_options.PF_algorithm == CParticleFilter::pfOptimalProposal))
+		(PF_ALGORITHM::DoesResampling))
 	{
 		if (obj.m_poseParticles.ESS() < m_options.BETA)
 		{

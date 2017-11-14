@@ -32,7 +32,7 @@ namespace slam
  */
 class SLAM_IMPEXP CMonteCarloLocalization3D
 	: public PF_implementation<
-		  mrpt::poses::CPose3D, mrpt::poses::CPose3DPDFParticles>
+		 mrpt::poses::CPose3D, mrpt::poses::CPose3DPDFParticles>
 {
    public:
 	using CParticleDataContent =
