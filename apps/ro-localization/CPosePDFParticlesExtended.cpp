@@ -34,6 +34,10 @@ using namespace std;
 
 double likelihood_acumulation = 0;
 
+namespace mrpt
+{
+namespace poses
+{
 IMPLEMENTS_SERIALIZABLE(CPosePDFParticlesExtended, CPosePDF, mrpt::poses)
 
 /*---------------------------------------------------------------
@@ -41,10 +45,10 @@ IMPLEMENTS_SERIALIZABLE(CPosePDFParticlesExtended, CPosePDF, mrpt::poses)
   ---------------------------------------------------------------*/
 CPosePDFParticlesExtended::CPosePDFParticlesExtended(size_t M)
 {
-	m_particles.resize(M);
+	m_poseParticles.m_particles.resize(M);
 
-	for (CParticleList::iterator it = m_particles.begin();
-		 it != m_particles.end(); ++it)
+	for (CParticleList::iterator it = m_poseParticles.m_particles.begin();
+		 it != m_poseParticles.m_particles.end(); ++it)
 		it->d.reset(new TExtendedCPose2D());
 
 	static TExtendedCPose2D nullPose;
@@ -69,22 +73,22 @@ void CPosePDFParticlesExtended::copyFrom(const CPosePDF& o)
 		CPosePDFParticlesExtended* pdf = (CPosePDFParticlesExtended*)&o;
 
 		// Both are particles:
-		m_particles = pdf->m_particles;
+		m_poseParticles.m_particles = pdf->m_poseParticles.m_particles;
 	}
 	else if (o.GetRuntimeClass() == CLASS_ID(CPosePDFGaussian))
 	{
 		CPosePDFGaussian* pdf = (CPosePDFGaussian*)&o;
-		int M = (int)m_particles.size();
+		int M = (int)m_poseParticles.m_particles.size();
 		std::vector<vector<double>> parts;
 		std::vector<vector<double>>::iterator partsIt;
 
 		randomGenerator.drawGaussianMultivariateMany(parts, M, pdf->cov);
 
-		m_particles.clear();
-		m_particles.resize(M);
+		m_poseParticles.m_particles.clear();
+		m_poseParticles.m_particles.resize(M);
 
-		for (itDest = m_particles.begin(), partsIt = parts.begin();
-			 itDest != m_particles.end(); itDest++, partsIt++)
+		for (itDest = m_poseParticles.m_particles.begin(), partsIt = parts.begin();
+			 itDest != m_poseParticles.m_particles.end(); itDest++, partsIt++)
 		{
 			itDest->log_w = 0;
 			itDest->d.reset(new TExtendedCPose2D());
@@ -106,18 +110,18 @@ CPosePDFParticlesExtended::~CPosePDFParticlesExtended() { clear(); }
 /*---------------------------------------------------------------
 			clear
   ---------------------------------------------------------------*/
-void CPosePDFParticlesExtended::clear() { m_particles.clear(); }
+void CPosePDFParticlesExtended::clear() { m_poseParticles.m_particles.clear(); }
 /*---------------------------------------------------------------
 						getEstimatedPose
   Returns an estimate of the pose, i.e. a "mean value", computed
-		as a weighted average over all m_particles.
+		as a weighted average over all m_poseParticles.m_particles.
  ---------------------------------------------------------------*/
 void CPosePDFParticlesExtended::getMean(CPose2D& est) const
 {
 	est = CPose2D(0, 0, 0);
 
 	CPose2D p;
-	size_t i, n = m_particles.size();
+	size_t i, n = m_poseParticles.m_particles.size();
 	double phi, w, W = 0;
 	double W_phi_R = 0, W_phi_L = 0;
 	double phi_R = 0, phi_L = 0;
@@ -128,8 +132,8 @@ void CPosePDFParticlesExtended::getMean(CPose2D& est) const
 	// -----------------------------------
 	for (i = 0; i < n; i++)
 	{
-		p = m_particles[i].d->pose;
-		w = exp(m_particles[i].log_w);
+		p = m_poseParticles.m_particles[i].d->pose;
+		w = exp(m_poseParticles.m_particles[i].log_w);
 		W += w;
 
 		est.x_incr(p.x() * w);
@@ -175,7 +179,7 @@ TExtendedCPose2D CPosePDFParticlesExtended::getEstimatedPoseState() const
 {
 	TExtendedCPose2D est;
 	CPose2D p;
-	size_t i, n = m_particles.size();
+	size_t i, n = m_poseParticles.m_particles.size();
 	double phi;
 	double w, W = 0;
 	double W_phi_R = 0, W_phi_L = 0;
@@ -183,22 +187,22 @@ TExtendedCPose2D CPosePDFParticlesExtended::getEstimatedPoseState() const
 
 	if (!n) return est;
 
-	est.state.resize(m_particles[0].d->state.size());
+	est.state.resize(m_poseParticles.m_particles[0].d->state.size());
 
-	for (i = 0; i < n; i++) W += exp(m_particles[i].log_w);
+	for (i = 0; i < n; i++) W += exp(m_poseParticles.m_particles[i].log_w);
 	if (W == 0) W = 1;
 
 	// First: XY
 	// -----------------------------------
 	for (i = 0; i < n; i++)
 	{
-		p = m_particles[i].d->pose;
-		w = exp(m_particles[i].log_w) / W;
+		p = m_poseParticles.m_particles[i].d->pose;
+		w = exp(m_poseParticles.m_particles[i].log_w) / W;
 
 		est.pose.x_incr((p.x() * w));
 		est.pose.y_incr((p.y() * w));
 
-		CVectorDouble auxVec(m_particles[i].d->state);
+		CVectorDouble auxVec(m_poseParticles.m_particles[i].d->state);
 		auxVec *= w;
 		est.state += auxVec;
 
@@ -246,7 +250,7 @@ void CPosePDFParticlesExtended::getCovarianceAndMean(
 	getMean(mean);
 	cov.zeros();
 
-	size_t i, n = m_particles.size();
+	size_t i, n = m_poseParticles.m_particles.size();
 	double var_x = 0, var_y = 0, var_p = 0, var_xy = 0, var_xp = 0, var_yp = 0;
 	double mean_phi = mean.phi();
 
@@ -254,18 +258,18 @@ void CPosePDFParticlesExtended::getCovarianceAndMean(
 
 	double lin_w_sum = 0;
 
-	for (i = 0; i < n; i++) lin_w_sum += exp(m_particles[i].log_w);
+	for (i = 0; i < n; i++) lin_w_sum += exp(m_poseParticles.m_particles[i].log_w);
 	if (lin_w_sum == 0) lin_w_sum = 1;
 
 	for (i = 0; i < n; i++)
 	{
-		double w = exp(m_particles[i].log_w) / lin_w_sum;
+		double w = exp(m_poseParticles.m_particles[i].log_w) / lin_w_sum;
 
 		// Manage 1 PI range:
-		double err_x = m_particles[i].d->pose.x() - mean.x();
-		double err_y = m_particles[i].d->pose.y() - mean.y();
+		double err_x = m_poseParticles.m_particles[i].d->pose.x() - mean.x();
+		double err_y = m_poseParticles.m_particles[i].d->pose.y() - mean.y();
 		double err_phi =
-			wrapToPi(fabs(m_particles[i].d->pose.phi() - mean_phi));
+			wrapToPi(fabs(m_poseParticles.m_particles[i].d->pose.phi() - mean_phi));
 
 		var_x += square(err_x) * w;
 		var_y += square(err_y) * w;
@@ -302,9 +306,9 @@ void CPosePDFParticlesExtended::writeToStream(
 		uint32_t n;
 
 		// The data
-		n = uint32_t(m_particles.size());
+		n = uint32_t(m_poseParticles.m_particles.size());
 		out << n;
-		for (it = m_particles.begin(); it != m_particles.end(); it++)
+		for (it = m_poseParticles.m_particles.begin(); it != m_poseParticles.m_particles.end(); it++)
 			out << it->log_w << it->d->pose << it->d->state;
 	}
 }
@@ -323,12 +327,12 @@ void CPosePDFParticlesExtended::readFromStream(
 			uint32_t n;
 
 			// Delete previous content:
-			m_particles.clear();
+			m_poseParticles.m_particles.clear();
 
 			// The data
 			in >> n;
-			m_particles.resize(n);
-			for (it = m_particles.begin(); it != m_particles.end(); it++)
+			m_poseParticles.m_particles.resize(n);
+			for (it = m_poseParticles.m_particles.begin(); it != m_poseParticles.m_particles.end(); it++)
 				in >> it->log_w >> it->d->pose >> it->d->state;
 		}
 		break;
@@ -350,20 +354,33 @@ void CPosePDFParticlesExtendedPF::offsetTransitionModel(double& val)
 	}
 }
 
+
+class MyStandardProposal
+{
+	static constexpr bool DoesResampling = true;
+};
+
+class MyAuxiliaryPfOptimal
+{
+	static constexpr bool DoesResampling = false;
+};
+
+
+
 /*---------------------------------------------------------------
 
 			prediction_and_update<StandardProposal>
 
  ---------------------------------------------------------------*/
 template <>
-void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::StandardProposal>(
+void CPosePDFParticlesExtendedPF::prediction_and_update<MyStandardProposal>(
 	const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
 	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
 {
 	MRPT_START
 
-	size_t i, M = m_poseParticles.m_particles.size();
+	size_t i, M = m_poseParticles.m_poseParticles.m_particles.size();
 	CActionRobotMovement2D::Ptr robotMovement;
 
 	// ----------------------------------------------------------------------
@@ -397,11 +414,11 @@ void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::StandardProp
 			poseSamplesGen.drawSample(increment_i);
 
 			// Add pose increment.
-			m_poseParticles.m_particles[i].d->pose = m_poseParticles.m_particles[i].d->pose + increment_i;
+			m_poseParticles.m_poseParticles.m_particles[i].d->pose = m_poseParticles.m_poseParticles.m_particles[i].d->pose + increment_i;
 
 			// Prediction of the BIAS "state vector":
-			for (int k = 0; k < m_poseParticles.m_particles[i].d->state.size(); k++)
-				offsetTransitionModel(m_poseParticles.m_particles[i].d->state[k]);
+			for (int k = 0; k < m_poseParticles.m_poseParticles.m_particles[i].d->state.size(); k++)
+				offsetTransitionModel(m_poseParticles.m_poseParticles.m_particles[i].d->state[k]);
 		}
 	}  // end of fixed sample size
 	else
@@ -421,7 +438,7 @@ void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::StandardProp
 
 		// Update particle's likelihood using the particle's pose:
 		CParticleList::iterator it;
-		for (it = m_poseParticles.m_particles.begin(), i = 0; it != m_poseParticles.m_particles.end();
+		for (it = m_poseParticles.m_particles.begin(), i = 0; it != m_poseParticles.m_poseParticles.m_particles.end();
 			 it++, i++)
 			it->log_w += auxiliarComputeObservationLikelihood(
 							 PF_options, &m_poseParticles, i, sf, it->d.get()) *
@@ -437,14 +454,14 @@ void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::StandardProp
 
  ---------------------------------------------------------------*/
 template <>
-void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::AuxiliaryPFOptimal>(
+void CPosePDFParticlesExtendedPF::prediction_and_update<MyAuxiliaryPfOptimal>(
 	const mrpt::obs::CActionCollection* actions,
 	const mrpt::obs::CSensoryFrame* sf,
 	const bayes::CParticleFilter::TParticleFilterOptions& PF_options)
 {
 	MRPT_START
 
-	size_t i, k, N, M = m_poseParticles.m_particles.size();
+	size_t i, k, N, M = m_poseParticles.m_poseParticles.m_particles.size();
 	CActionRobotMovement2D::Ptr robotMovement;
 
 	// ----------------------------------------------------------------------
@@ -468,7 +485,7 @@ void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::AuxiliaryPFO
 	}
 
 	// ----------------------------------------------------------------------
-	//		0) Common part:  Prepare m_particles "draw" and compute
+	//		0) Common part:  Prepare m_poseParticles.m_particles "draw" and compute
 	// ----------------------------------------------------------------------
 	// Initialize random sample generator:
 	mrpt::poses::CPoseRandomSampler m_movementDrawer;
@@ -542,10 +559,10 @@ void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::AuxiliaryPFO
 		for (i = 0; i < M; i++)
 		{
 			// Generate a new particle:
-			//   (a) Draw a "t-1" m_particles' index:
+			//   (a) Draw a "t-1" m_poseParticles.m_particles' index:
 			// ----------------------------------------------------------------
 			k = m_poseParticles.fastDrawSample(PF_options);
-			oldPose = *m_poseParticles.m_particles[k].d;
+			oldPose = *m_poseParticles.m_poseParticles.m_particles[k].d;
 
 			//   (b) Rejection-sampling: Draw a new robot pose from x[k],
 			//       and accept it with probability p(zk|x) / maxLikelihood:
@@ -642,16 +659,16 @@ void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::AuxiliaryPFO
 	// Substitute old by new particle set:
 	// -------------------------------------------------
 	N = newParticles.size();
-	m_poseParticles.clear();  // Free old m_particles memory:
-	m_poseParticles.m_particles.resize(N);
+	m_poseParticles.clear();  // Free old m_poseParticles.m_particles memory:
+	m_poseParticles.m_poseParticles.m_particles.resize(N);
 
 	CParticleList::iterator itDest;
 	deque<TExtendedCPose2D*>::const_iterator itSrc;
 	vector<double>::iterator itW;
 
-	for (itDest = m_poseParticles.m_particles.begin(), itSrc = newParticles.begin(),
+	for (itDest = m_poseParticles.m_poseParticles.m_particles.begin(), itSrc = newParticles.begin(),
 		itW = newParticlesWeight.begin();
-		 itDest != m_poseParticles.m_particles.end(); itDest++, itSrc++, itW++)
+		 itDest != m_poseParticles.m_poseParticles.m_particles.end(); itDest++, itSrc++, itW++)
 	{
 		itDest->d.reset(*itSrc);
 		itDest->log_w = *itW;
@@ -674,12 +691,12 @@ void CPosePDFParticlesExtended::resetDeterministic(
 	if (particlesCount > 0)
 	{
 		clear();
-		m_particles.resize(particlesCount);
-		for (it = m_particles.begin(); it != m_particles.end(); it++)
+		m_poseParticles.m_particles.resize(particlesCount);
+		for (it = m_poseParticles.m_particles.begin(); it != m_poseParticles.m_particles.end(); it++)
 			it->d.reset(new TExtendedCPose2D());
 	}
 
-	for (it = m_particles.begin(); it != m_particles.end(); it++)
+	for (it = m_poseParticles.m_particles.begin(); it != m_poseParticles.m_particles.end(); it++)
 	{
 		*it->d = location;
 		it->log_w = 0;
@@ -700,26 +717,26 @@ void CPosePDFParticlesExtended::resetUniform(
 	if (particlesCount > 0)
 	{
 		clear();
-		m_particles.resize(particlesCount);
+		m_poseParticles.m_particles.resize(particlesCount);
 		for (int i = 0; i < particlesCount; i++)
-			m_particles[i].d.reset(new TExtendedCPose2D());
+			m_poseParticles.m_particles[i].d.reset(new TExtendedCPose2D());
 	}
 
-	size_t i, M = m_particles.size();
+	size_t i, M = m_poseParticles.m_particles.size();
 	for (i = 0; i < M; i++)
 	{
-		m_particles[i].d->pose.x(randomGenerator.drawUniform(x_min, x_max));
-		m_particles[i].d->pose.y(randomGenerator.drawUniform(y_min, y_max));
-		m_particles[i].d->pose.phi(
+		m_poseParticles.m_particles[i].d->pose.x(randomGenerator.drawUniform(x_min, x_max));
+		m_poseParticles.m_particles[i].d->pose.y(randomGenerator.drawUniform(y_min, y_max));
+		m_poseParticles.m_particles[i].d->pose.phi(
 			randomGenerator.drawUniform(phi_min, phi_max));
-		m_particles[i].d->state.resize(state_min.size());
-		m_particles[i].d->state.resize(state_max.size());
+		m_poseParticles.m_particles[i].d->state.resize(state_min.size());
+		m_poseParticles.m_particles[i].d->state.resize(state_max.size());
 
 		for (int k = 0; k < state_min.size(); k++)
-			m_particles[i].d->state[k] =
+			m_poseParticles.m_particles[i].d->state[k] =
 				randomGenerator.drawUniform(state_min[k], state_max[k]);
 
-		m_particles[i].log_w = 0;
+		m_poseParticles.m_particles[i].log_w = 0;
 	}
 
 	MRPT_END
@@ -735,11 +752,11 @@ void CPosePDFParticlesExtended::saveToTextFile(const std::string& file) const
 	FILE* f = os::fopen(file.c_str(), "wt");
 	if (!f) return;
 
-	for (unsigned int i = 0; i < m_particles.size(); i++)
+	for (unsigned int i = 0; i < m_poseParticles.m_particles.size(); i++)
 		os::fprintf(
-			f, "%f %f %f %e\n", m_particles[i].d->pose.x(),
-			m_particles[i].d->pose.y(), m_particles[i].d->pose.phi(),
-			m_particles[i].log_w);
+			f, "%f %f %f %e\n", m_poseParticles.m_particles[i].d->pose.x(),
+			m_poseParticles.m_particles[i].d->pose.y(), m_poseParticles.m_particles[i].d->pose.phi(),
+			m_poseParticles.m_particles[i].log_w);
 
 	os::fclose(f);
 }
@@ -749,7 +766,7 @@ void CPosePDFParticlesExtended::saveToTextFile(const std::string& file) const
  ---------------------------------------------------------------*/
 CPose2D CPosePDFParticlesExtended::getParticlePose(int i) const
 {
-	return m_particles[i].d->pose;
+	return m_poseParticles.m_particles[i].d->pose;
 }
 
 /*---------------------------------------------------------------
@@ -761,7 +778,7 @@ void CPosePDFParticlesExtended::changeCoordinatesReference(
 	CPose2D newReferenceBase = CPose2D(newReferenceBase_);
 	CParticleList::iterator it;
 
-	for (it = m_particles.begin(); it != m_particles.end(); it++)
+	for (it = m_poseParticles.m_particles.begin(); it != m_poseParticles.m_particles.end(); it++)
 		it->d->pose = newReferenceBase + it->d->pose;
 }
 
@@ -774,7 +791,7 @@ void CPosePDFParticlesExtended::drawSingleSample(CPose2D& outPart) const
 	double cum = 0;
 	CParticleList::const_iterator it;
 
-	for (it = m_particles.begin(); it != m_particles.end(); it++)
+	for (it = m_poseParticles.m_particles.begin(); it != m_poseParticles.m_particles.end(); it++)
 	{
 		cum += exp(it->log_w);
 		if (uni <= cum)
@@ -785,7 +802,7 @@ void CPosePDFParticlesExtended::drawSingleSample(CPose2D& outPart) const
 	}
 
 	// Might not come here normally:
-	outPart = (m_particles.end() - 1)->d->pose;
+	outPart = (m_poseParticles.m_particles.end() - 1)->d->pose;
 }
 
 /*---------------------------------------------------------------
@@ -804,7 +821,7 @@ void CPosePDFParticlesExtended::drawManySamples(
 	for (size_t i = 0; i < N; i++)
 	{
 		const TExtendedCPose2D* ptr =
-			m_particles[fastDrawSample(PF_options)].d.get();
+			m_poseParticles.m_particles[fastDrawSample(PF_options)].d.get();
 
 		// Copy pose:
 		outSamples[i].resize(3);
@@ -821,7 +838,7 @@ void CPosePDFParticlesExtended::operator+=(const CPose2D& Ap)
 {
 	CParticleList::iterator it;
 
-	for (it = m_particles.begin(); it != m_particles.end(); it++)
+	for (it = m_poseParticles.m_particles.begin(); it != m_poseParticles.m_particles.end(); it++)
 		it->d->pose = it->d->pose + Ap;
 }
 
@@ -836,8 +853,8 @@ void CPosePDFParticlesExtended::inverse(CPosePDF& o) const
 	out->copyFrom(*this);
 	static CPose2D nullPose(0, 0, 0);
 
-	for (unsigned int i = 0; i < out->m_particles.size(); i++)
-		out->m_particles[i].d->pose = nullPose - out->m_particles[i].d->pose;
+	for (unsigned int i = 0; i < out->m_poseParticles.m_particles.size(); i++)
+		out->m_poseParticles.m_particles[i].d->pose = nullPose - out->m_poseParticles.m_particles[i].d->pose;
 }
 
 /*---------------------------------------------------------------
@@ -845,10 +862,10 @@ void CPosePDFParticlesExtended::inverse(CPosePDF& o) const
  ---------------------------------------------------------------*/
 CPose2D CPosePDFParticlesExtended::getMostLikelyParticle() const
 {
-	CParticleList::const_iterator it, itMax = m_particles.begin();
+	CParticleList::const_iterator it, itMax = m_poseParticles.m_particles.begin();
 	double max_w = -1e300;
 
-	for (it = m_particles.begin(); it != m_particles.end(); it++)
+	for (it = m_poseParticles.m_particles.begin(); it != m_poseParticles.m_particles.end(); it++)
 	{
 		if (it->log_w > max_w)
 		{
@@ -881,8 +898,8 @@ double CPosePDFParticlesExtended::evaluatePDF_parzen(
 {
 	double difPhi, ret = 0;
 
-	for (CParticleList::const_iterator it = m_particles.begin();
-		 it != m_particles.end(); ++it)
+	for (CParticleList::const_iterator it = m_poseParticles.m_particles.begin();
+		 it != m_poseParticles.m_particles.end(); ++it)
 	{
 		difPhi = wrapToPi(phi - it->d->pose.phi());
 
@@ -1008,11 +1025,11 @@ double CPosePDFParticlesExtendedPF::particlesEvaluator_AuxPFOptimal(
 	// Take the previous particle weight:
 	// --------------------------------------------
 
-	double ret = m_poseParticles.m_particles[index].log_w;
+	double ret = m_poseParticles.m_poseParticles.m_particles[index].log_w;
 
 	// , take the mean of the posterior density:
 	// --------------------------------------------
-	TExtendedCPose2D x_predict = *m_poseParticles.m_particles[index].d;
+	TExtendedCPose2D x_predict = *m_poseParticles.m_poseParticles.m_particles[index].d;
 	x_predict.pose = x_predict.pose + *static_cast<const CPose2D*>(action);
 
 	// and compute the obs. likelihood:
@@ -1024,4 +1041,34 @@ double CPosePDFParticlesExtendedPF::particlesEvaluator_AuxPFOptimal(
 						  &x_predict));
 
 	MRPT_END
+}
+
+}
+namespace bayes
+{
+template <>
+void CParticleFilter::executeOn<mrpt::poses::CPosePDFParticlesExtendedPF>(
+	mrpt::poses::CPosePDFParticlesExtendedPF& obj, const mrpt::obs::CActionCollection* action,
+	const mrpt::obs::CSensoryFrame* observation, TParticleFilterStats* stats)
+{
+	switch (m_options.PF_algorithm)
+	{
+		case CParticleFilter::pfOptimalProposal:
+			executeOn<
+				mrpt::poses::CPosePDFParticlesExtendedPF, MyOptimalProposal>(
+				obj, action, observation, stats);
+			break;
+		case CParticleFilter::pfAuxiliaryPFOptimal:
+			executeOn<
+				mrpt::poses::CPosePDFParticlesExtendedPF, MyAuxiliaryPFOptimal>(
+				obj, action, observation, stats);
+			break;
+		default:
+		{
+			THROW_EXCEPTION("Invalid particle filter algorithm selection!");
+		}
+		break;
+	}
+}
+}  // namespace bayes
 }

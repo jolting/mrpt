@@ -59,23 +59,28 @@ class HMTSLAM_IMPEXP CLSLAMParticleData : public mrpt::utils::CSerializable
 DEFINE_SERIALIZABLE_POST_CUSTOM_BASE_LINKAGE(
 	CLSLAMParticleData, mrpt::utils::CSerializable, HMTSLAM_IMPEXP)
 
+class CLSLAMParticleDataParticles
+	: public mrpt::bayes::CParticleFilterData<CLSLAMParticleData>,
+	  public mrpt::bayes::CParticleFilterDataImpl<
+		  mrpt::bayes::CParticleFilterData<CLSLAMParticleData>,
+		  mrpt::bayes::CParticleFilterData<CLSLAMParticleData>::CParticleList>
+{
+};
+
 /** This class is used in HMT-SLAM to represent each of the Local Metric
  * Hypotheses (LMHs).
  *   It has a set of particles representing the robot path in nearby poses.
  * \sa CHMTSLAM, CLSLAM_RBPF_2DLASER
  */
-class HMTSLAM_IMPEXP CLocalMetricHypothesis
-	: public mrpt::bayes::CParticleFilterData<CLSLAMParticleData>,
-	  public mrpt::bayes::CParticleFilterDataImpl<
-		  CLocalMetricHypothesis,
-		  mrpt::bayes::CParticleFilterData<CLSLAMParticleData>::CParticleList>,
-	  public mrpt::utils::CSerializable
+class HMTSLAM_IMPEXP CLocalMetricHypothesis : public mrpt::utils::CSerializable
 {
 	friend class HMTSLAM_IMPEXP CLSLAM_RBPF_2DLASER;
 
 	DEFINE_SERIALIZABLE(CLocalMetricHypothesis)
 
    public:
+	using CParticleList =  mrpt::bayes::CParticleFilterData<CLSLAMParticleData>::CParticleList;
+	CLSLAMParticleDataParticles m_poseParticles;
 	/** Constructor (Default param only used from STL classes)
 	 */
 	CLocalMetricHypothesis(CHMTSLAM* parent = nullptr);
@@ -255,8 +260,8 @@ class HMTSLAM_IMPEXP CLocalMetricHypothesis
 		const mrpt::obs::CActionCollection* action,
 		const mrpt::obs::CSensoryFrame* observation,
 		const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
-   protected:
 
+   protected:
 	/** @}
 	 */
 

@@ -127,10 +127,10 @@ void CLSLAM_RBPF_2DLASER::processOneLMH(
 		// Create a new robot pose:
 		CPose3D initPose(0, 0, 0);
 
-		ASSERT_(LMH->m_particles.size() > 0);
+		ASSERT_(LMH->m_poseParticles.m_particles.size() > 0);
 		for (CLocalMetricHypothesis::CParticleList::iterator it =
-				 LMH->m_particles.begin();
-			 it != LMH->m_particles.end(); ++it)
+				 LMH->m_poseParticles.m_particles.begin();
+			 it != LMH->m_poseParticles.m_particles.end(); ++it)
 			it->d->robotPoses[currentPoseID] = initPose;
 
 		ASSERT_(m_parent->m_map.nodeCount() == 1);
@@ -227,8 +227,8 @@ void CLSLAM_RBPF_2DLASER::processOneLMH(
 		//     and insert the observations into the metric maps:
 		// ----------------------------------------------------------------------------
 		for (CLocalMetricHypothesis::CParticleList::iterator partIt =
-				 LMH->m_particles.begin();
-			 partIt != LMH->m_particles.end(); partIt++)
+				 LMH->m_poseParticles.m_particles.begin();
+			 partIt != LMH->m_poseParticles.m_particles.end(); partIt++)
 		{
 			const CPose3D* curRobotPose = &partIt->d->robotPoses[currentPoseID];
 			partIt->d->robotPoses[newCurrentPoseID] = *curRobotPose;
@@ -288,7 +288,7 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 	// Get the current robot pose estimation:
 	TPoseID currentPoseID = LMH->m_currentRobotPose;
 
-	size_t i, k, N, M = LMH->m_particles.size();
+	size_t i, k, N, M = LMH->m_poseParticles.m_particles.size();
 
 	// ----------------------------------------------------------------------
 	//	  We can execute optimal PF only when we have both, an action, and
@@ -327,9 +327,9 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 
 	if (sf != nullptr)
 	{
-		ASSERT_(LMH->m_particles.size() > 0);
+		ASSERT_(LMH->m_poseParticles.m_particles.size() > 0);
 		SFhasValidObservations =
-			(*LMH->m_particles.begin())
+			(*LMH->m_poseParticles.m_particles.begin())
 				.d->metricMaps.canComputeObservationsLikelihood(*sf);
 	}
 
@@ -362,7 +362,7 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 		false;  // To reset odometry at next iteration!
 
 	// ----------------------------------------------------------------------
-	//		0) Common part:  Prepare m_particles "draw" and compute
+	//		0) Common part:  Prepare m_poseParticles.m_particles "draw" and compute
 	// ----------------------------------------------------------------------
 	// Precompute a list of "random" samples from the movement model:
 	LMH->m_movementDraws.clear();
@@ -389,7 +389,7 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 	// Prepare data for executing "fastDrawSample"
 	CTicTac tictac;
 	tictac.Tic();
-	LMH->prepareFastDrawSample(
+	LMH->m_poseParticles.prepareFastDrawSample(
 		PF_options, particlesEvaluator_AuxPFOptimal, robotMovement, sf);
 	printf("[prepareFastDrawSample] Done in %.06f ms\n", tictac.Tac() * 1e3f);
 
@@ -435,15 +435,15 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 	newParticlesWeight.resize(M);
 	newParticlesDerivedFromIdx.resize(M);
 
-	bool doResample = LMH->ESS() < 0.5;
+	bool doResample = LMH->m_poseParticles.ESS() < 0.5;
 
 	for (i = 0; i < M; i++)
 	{
 		// Generate a new particle:
-		//   (a) Draw a "t-1" m_particles' index:
+		//   (a) Draw a "t-1" m_poseParticles.m_particles' index:
 		// ----------------------------------------------------------------
 		if (doResample)
-			k = LMH->fastDrawSample(
+			k = LMH->m_poseParticles.fastDrawSample(
 				PF_options);  // Based on weights of last step only!
 		else
 			k = i;
@@ -455,7 +455,7 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 		// ----------------------------------------------------------------
 		if (LMH->m_SFs.empty())
 		{
-			// The first robot pose in the SLAM execution: All m_particles start
+			// The first robot pose in the SLAM execution: All m_poseParticles.m_particles start
 			// at the same point (this is the lowest bound of subsequent
 			// uncertainty):
 			movementDraw = CPose2D(0, 0, 0);
@@ -493,7 +493,7 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 
 				// Compute acceptance probability:
 				newPoseLikelihood = auxiliarComputeObservationLikelihood(
-					PF_options, LMH, k, sf, &newPose);
+					PF_options, &LMH->m_poseParticles, k, sf, &newPose);
 				ratioLikLik = exp(newPoseLikelihood - LMH->m_maxLikelihood[k]);
 				acceptanceProb = min(1.0, ratioLikLik);
 
@@ -532,7 +532,7 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 		if (doResample)
 			newParticlesWeight[i] = 0;
 		else
-			newParticlesWeight[i] = LMH->m_particles[k].log_w + weightFact;
+			newParticlesWeight[i] = LMH->m_poseParticles.m_particles[k].log_w + weightFact;
 
 		// and its heritance:
 		newParticlesDerivedFromIdx[i] = (unsigned int)k;
@@ -541,7 +541,7 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 
 	// ---------------------------------------------------------------------------------
 	// Substitute old by new particle set:
-	//   Old are in "m_particles"
+	//   Old are in "m_poseParticles.m_particles"
 	//   New are in "newParticles",
 	//   "newParticlesWeight","newParticlesDerivedFromIdx"
 	// ---------------------------------------------------------------------------------
@@ -552,7 +552,7 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 	// For efficiency, just copy the "CRBPFParticleData" from the old particle
 	// into the
 	//  new one, but this can be done only once:
-	std::vector<bool> oldParticleAlreadyCopied(LMH->m_particles.size(), false);
+	std::vector<bool> oldParticleAlreadyCopied(LMH->m_poseParticles.m_particles.size(), false);
 	CLSLAMParticleData* newPartData;
 
 	for (newPartIt = newParticlesArray.begin(), i = 0;
@@ -566,14 +566,14 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 		{
 			// The first copy of this old particle:
 			newPartData =
-				LMH->m_particles[newParticlesDerivedFromIdx[i]].d.release();
+				LMH->m_poseParticles.m_particles[newParticlesDerivedFromIdx[i]].d.release();
 			oldParticleAlreadyCopied[newParticlesDerivedFromIdx[i]] = true;
 		}
 		else
 		{
 			// Make a copy:
 			newPartData = new CLSLAMParticleData(
-				*LMH->m_particles[newParticlesDerivedFromIdx[i]].d);
+				*LMH->m_poseParticles.m_particles[newParticlesDerivedFromIdx[i]].d);
 		}
 
 		newPartIt->d.reset(newPartData);
@@ -586,16 +586,16 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 		newPartIt->d->robotPoses[LMH->m_currentRobotPose] =
 			CPose3D(newParticles[i]);
 
-	// Free those old m_particles not being copied into the new ones:
-	for (i = 0; i < LMH->m_particles.size(); i++)
+	// Free those old m_poseParticles.m_particles not being copied into the new ones:
+	for (i = 0; i < LMH->m_poseParticles.m_particles.size(); i++)
 	{
-		LMH->m_particles[i].d.reset();
+		LMH->m_poseParticles.m_particles[i].d.reset();
 	}
 
-	// Copy into "m_particles":
-	LMH->m_particles.resize(newParticlesArray.size());
+	// Copy into "m_poseParticles.m_particles":
+	LMH->m_poseParticles.m_particles.resize(newParticlesArray.size());
 	for (newPartIt = newParticlesArray.begin(),
-		trgPartIt = LMH->m_particles.begin();
+		trgPartIt = LMH->m_poseParticles.m_particles.begin();
 		 newPartIt != newParticlesArray.end(); newPartIt++, trgPartIt++)
 	{
 		trgPartIt->log_w = newPartIt->log_w;
@@ -609,7 +609,7 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMAuxiliaryPFOptimal>(
 	newParticlesDerivedFromIdx.clear();
 
 	double out_max_log_w;
-	LMH->normalizeWeights(&out_max_log_w);  // Normalize weights:
+	LMH->m_poseParticles.normalizeWeights(&out_max_log_w);  // Normalize weights:
 	LMH->m_log_w += out_max_log_w;
 
 #if 0
@@ -703,11 +703,11 @@ double CLSLAM_RBPF_2DLASER::particlesEvaluator_AuxPFOptimal(
 	// and compute the resulting probability of this particle:
 	// ------------------------------------------------------------
 	//	if (myObj->m_adaptiveSampleSize)
-	//			return myObj->m_particles[index].w *
+	//			return myObj->m_poseParticles.m_particles[index].w *
 	// myObj->m_pfAuxiliaryPFOptimal_estimatedProb[index];
-	//	else	return myObj->m_particles[index].w;
+	//	else	return myObj->m_poseParticles.m_particles[index].w;
 
-	double ret = myObj->m_particles[index].log_w +
+	double ret = myObj->m_poseParticles.m_particles[index].log_w +
 				 myObj->m_pfAuxiliaryPFOptimal_estimatedProb[index];
 
 	MRPT_CHECK_NORMAL_NUMBER(ret);
@@ -729,7 +729,7 @@ double CLSLAM_RBPF_2DLASER::auxiliarComputeObservationLikelihood(
 	const CLocalMetricHypothesis* theObj =
 		static_cast<const CLocalMetricHypothesis*>(obj);
 	CMultiMetricMap* map = const_cast<CMultiMetricMap*>(
-		&theObj->m_particles[particleIndexForMap].d->metricMaps);
+		&theObj->m_poseParticles.m_particles[particleIndexForMap].d->metricMaps);
 
 	return map->computeObservationsLikelihood(*observation, *x);
 }
@@ -881,9 +881,9 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMOptimalProposal>(
 
 	if (sf != nullptr)
 	{
-		ASSERT_(LMH->m_particles.size() > 0);
+		ASSERT_(LMH->m_poseParticles.m_particles.size() > 0);
 		SFhasValidObservations =
-			(*LMH->m_particles.begin())
+			(*LMH->m_poseParticles.m_particles.begin())
 				.d->metricMaps.canComputeObservationsLikelihood(*sf);
 	}
 
@@ -923,9 +923,9 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMOptimalProposal>(
 	// Build the map of points to align:
 	CSimplePointsMap localMapPoints;
 
-	ASSERT_(LMH->m_particles[0].d->metricMaps.m_gridMaps.size() > 0);
+	ASSERT_(LMH->m_poseParticles.m_particles[0].d->metricMaps.m_gridMaps.size() > 0);
 	// float	minDistBetweenPointsInLocalMaps = 0.02f; //3.0f *
-	// m_particles[0].d->metricMaps.m_gridMaps[0]->getResolution();
+	// m_poseParticles.m_particles[0].d->metricMaps.m_gridMaps[0]->getResolution();
 
 	// Build local map:
 	localMapPoints.clear();
@@ -933,17 +933,17 @@ void CLSLAM_RBPF_2DLASER::prediction_and_update<LSLAMOptimalProposal>(
 	sf->insertObservationsInto(&localMapPoints);
 
 	// Process the particles
-	const size_t M = LMH->m_particles.size();
+	const size_t M = LMH->m_poseParticles.m_particles.size();
 	LMH->m_log_w_metric_history.resize(M);
 
 	for (size_t i = 0; i < M; i++)
 	{
-		CLocalMetricHypothesis::CParticleData& part = LMH->m_particles[i];
+		CLocalMetricHypothesis::CParticleData& part = LMH->m_poseParticles.m_particles[i];
 		CPose3D* part_pose = LMH->getCurrentPose(i);
 
 		if (LMH->m_SFs.empty())
 		{
-			// The first robot pose in the SLAM execution: All m_particles start
+			// The first robot pose in the SLAM execution: All m_poseParticles.m_particles start
 			// at the same point (this is the lowest bound of subsequent
 			// uncertainty):
 			// New pose = old pose.

@@ -313,21 +313,6 @@ struct lt_TPoseBin
 		return s1.x < s2.x;
 	}
 };
-
-/* Specializations */
-template <>
-void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::StandardProposal>(
-	const mrpt::obs::CActionCollection* actions,
-	const mrpt::obs::CSensoryFrame* sf,
-	const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
-
-template <>
-void CPosePDFParticlesExtendedPF::prediction_and_update<mrpt::slam::AuxiliaryPFOptimal>(
-	const mrpt::obs::CActionCollection* actions,
-	const mrpt::obs::CSensoryFrame* sf,
-	const bayes::CParticleFilter::TParticleFilterOptions& PF_options);
-
-
 }  // End of namespace
 }  // End of namespace
 
