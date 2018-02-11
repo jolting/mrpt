@@ -4,7 +4,7 @@ sudo: required
 dist: trusty
 
 before_script:
-  - export DOCKER_IMAGE=ubuntu:$DISTRO
+  - export DOCKER_IMAGE=mrpt/build-env-full
   - export CI_SOURCE_PATH=$(pwd)
   - export REPOSITORY_NAME=${PWD##*/}
   - docker images
@@ -25,18 +25,6 @@ matrix:
   - compiler: gcc
     os: linux
     env: TASK="test" DISTRO=xenial
-  - compiler: gcc
-    os: linux
-    env: TASK="build" DEPS="headless" DISTRO=xenial
-  - compiler: gcc
-    os: linux
-    env: TASK="test" DEPS="headless" DISTRO=xenial
-  - compiler: gcc
-    os: linux
-    env: TASK="build" DEPS="minimal" DISTRO=xenial
-  - compiler: gcc
-    os: linux
-    env: TASK="test" DEPS="minimal" DISTRO=xenial
   - compiler: clang
     os: linux
     env: TASK="build" DISTRO=xenial
