@@ -5,6 +5,7 @@ The MRPT project
 [![Coverage Badge](http://150.214.150.101:50000/projects/5940153f75d24b06002327b7/coverageBadge?branch=master)](http://150.214.150.101:50001/github/MRPT/mrpt)
 [![Releases](https://img.shields.io/github/release/MRPT/mrpt.svg)](https://github.com/MRPT/mrpt/releases)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/MRPT/mrpt)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjolting%2Fmrpt.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjolting%2Fmrpt?ref=badge_shield)
 
 ## 1. Introduction
 <img align="right" src="https://mrpt.github.io/imgs/mrpt-videos-mix2.gif">
@@ -87,3 +88,6 @@ make
 
 ## 4. License
 MRPT is released under the [new BSD license](http://www.mrpt.org/License/).
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjolting%2Fmrpt.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjolting%2Fmrpt?ref=badge_large)
