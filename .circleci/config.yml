@@ -3,30 +3,29 @@ jobs:
   build:
     docker:
       - image: mrpt/mrpt-build-env:full
-    working_directory: ~/mrpt
+    working_directory: ~/workspace/mrpt
     environment:
       - TASK: build
       - BUILD_TYPE: Debug
     steps:
       - checkout
       - attach_workspace:
-          at: ~/mrpt
+          at: ~/workspace
       - run: travis/travis_main.sh
       - persist_to_workspace:
-          root: .
+          root: ~/workspace
           paths:
-            - build
+            - mrpt
   test:
     docker:
       - image: mrpt/mrpt-build-env:full
-    working_directory: ~/mrpt
+    working_directory: ~/workspace/mrpt
     environment:
       - TASK: test
       - BUILD_TYPE: Debug
     steps:
-      - checkout
       - attach_workspace:
-          at: ~/mrpt
+          at: ~/workspace
       - run: travis/travis_main.sh
 
 
