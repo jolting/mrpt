@@ -72,6 +72,7 @@ function test ()
   prepare_build_dir
   cmake $MRPT_DIR \
     -DBUILD_APPLICATIONS=FALSE \
+    -DBUILD_TESTING=On \
     -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
     -DENABLE_COVERAGE=On \
     $EXTRA_CMAKE_ARGS
