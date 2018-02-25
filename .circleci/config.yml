@@ -1,0 +1,38 @@
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: mrpt/mrpt-build-env:full
+    working_directory: ~/mrpt
+    environment:
+      - TASK: build
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/mrpt
+      - run: travis/travis_main.sh
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  test:
+    docker:
+      - image: mrpt/mrpt-build-env:full
+    working_directory: ~/mrpt
+    environment:
+      - TASK: test
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/mrpt
+      - run: travis/travis_main.sh
+
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build

@@ -17,11 +17,13 @@ function prepare_install()
 
 function prepare_build_dir()
 {
-  # Make sure we dont have spurious files:
-  cd $MRPT_DIR
-  git clean -fd || true
+  if [ -z "$CIRCLECI" ]; then
+    # Make sure we dont have spurious files:
+    cd $MRPT_DIR
+    git clean -fd || true
 
-  rm -fr $BUILD_DIR || true
+    rm -fr $BUILD_DIR || true
+  fi
   mkdir -p $BUILD_DIR
   cd $BUILD_DIR
 }
