@@ -6,6 +6,7 @@ jobs:
     working_directory: ~/mrpt
     environment:
       - TASK: build
+      - BUILD_TYPE: Debug
     steps:
       - checkout
       - attach_workspace:
@@ -21,6 +22,7 @@ jobs:
     working_directory: ~/mrpt
     environment:
       - TASK: test
+      - BUILD_TYPE: Debug
     steps:
       - checkout
       - attach_workspace:
