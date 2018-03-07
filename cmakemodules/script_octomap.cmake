@@ -41,9 +41,17 @@ IF (NOT OCTOMAP_FOUND)
 			SET(OCTOMAP_EP_URL "https://github.com/MRPT/octomap/archive/devel.zip")
 		ENDIF()
 
+		set(OCTOMAP_LIBRARIES "")
+
+		LIST(APPEND OCTOMAP_LIBRARIES
+			${MRPT_BINARY_DIR}/lib/${LIB_PREFIX}octomath$<$<CONFIG:Debug>:${CMAKE_DEBUG_POSTFIX}>.${LIB_EXT}
+			${MRPT_BINARY_DIR}/lib/${LIB_PREFIX}octomap$<$<CONFIG:Debug>:${CMAKE_DEBUG_POSTFIX}>.${LIB_EXT}
+			)
+
 		ExternalProject_Add(EP_octomap
 		  URL               "${OCTOMAP_EP_URL}" #TO-DO: Switch back to original repo after next stable release.
 		  SOURCE_DIR        "${MRPT_BINARY_DIR}/otherlibs/octomap/"
+		  BUILD_BYPRODUCTS   "${OCTOMAP_LIBRARIES}"
 		  CMAKE_ARGS
 			-DBUILD_TESTING=OFF
 			-DBUILD_DYNAMICETD3D_SUBPROJECT=OFF
@@ -60,12 +68,7 @@ IF (NOT OCTOMAP_FOUND)
 		SET(CMAKE_MRPT_HAS_OCTOMAP 1)
 		SET(CMAKE_MRPT_HAS_OCTOMAP_SYSTEM 0)
 
-		set(OCTOMAP_LIBRARIES "")
 
-		LIST(APPEND OCTOMAP_LIBRARIES
-			${MRPT_BINARY_DIR}/lib/${LIB_PREFIX}octomath$<$<CONFIG:Debug>:${CMAKE_DEBUG_POSTFIX}>.${LIB_EXT}
-			${MRPT_BINARY_DIR}/lib/${LIB_PREFIX}octomap$<$<CONFIG:Debug>:${CMAKE_DEBUG_POSTFIX}>.${LIB_EXT}
-			)
 		SET(OCTOMAP_INCLUDE_DIRS
 			"${MRPT_BINARY_DIR}/otherlibs/octomap/octomap/include/"
 		)
