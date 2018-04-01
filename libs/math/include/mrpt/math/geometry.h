@@ -16,6 +16,8 @@
 #include <mrpt/math/math_frwds.h>  // forward declarations
 #include <mrpt/math/wrap2pi.h>
 
+#include <limits>
+
 namespace mrpt
 {
 namespace math
@@ -292,29 +294,26 @@ void createFromPoseAndVector(
  */
 /**
  * Checks whether this polygon or set of points acceptably fits a plane.
- * \sa TPolygon3D,getEpsilon
+ * \sa TPolygon3D
  */
 bool conformAPlane(const std::vector<TPoint3D>& points);
 /**
  * Checks whether this polygon or set of points acceptably fits a plane, and if
  * it's the case returns it in the second argument.
- * \sa TPolygon3D,getEpsilon
+ * \sa TPolygon3D
  */
 bool conformAPlane(const std::vector<TPoint3D>& points, TPlane& p);
 /**
  * Checks whether this set of points acceptably fits a 2D line.
- * \sa getEpsilon
  */
 bool areAligned(const std::vector<TPoint2D>& points);
 /**
  * Checks whether this set of points acceptably fits a 2D line, and if it's the
  * case returns it in the second argument.
- * \sa getEpsilon
  */
 bool areAligned(const std::vector<TPoint2D>& points, TLine2D& r);
 /**
  * Checks whether this set of points acceptably fits a 3D line.
- * \sa getEpsilon
  */
 bool areAligned(const std::vector<TPoint3D>& points);
 /**
@@ -736,19 +735,6 @@ void assemblePolygons(
 	const std::vector<TObject3D>& objs, std::vector<TPolygon3D>& polys,
 	std::vector<TSegment3D>& remainder1, std::vector<TObject3D>& remainder2);
 
-/**
- * Changes the value of the geometric epsilon (default = 1e-5)
- * \sa geometryEpsilon,getEpsilon
- */
-void setEpsilon(double nE);
-/**
- * Gets the value of the geometric epsilon  (default = 1e-5)
- * \sa setEpsilon
- */
-double getEpsilon();
-/**
- * Splits a 2D polygon into convex components.
- */
 bool splitInConvexComponents(
 	const TPolygon2D& poly, std::vector<TPolygon2D>& components);
 /**
@@ -917,7 +903,7 @@ inline mrpt::math::CMatrixDouble33 skew_symmetric3_neg(const VECTOR& v)
 template <class T, class U>
 inline bool vectorsAreParallel2D(const T& v1, const U& v2)
 {
-	return abs(v1[0] * v2[1] - v2[0] * v1[1]) < getEpsilon();
+	return abs(v1[0] * v2[1] - v2[0] * v1[1]) < std::numeric_limits<double>::epsilon();
 }
 
 /**
@@ -927,9 +913,9 @@ inline bool vectorsAreParallel2D(const T& v1, const U& v2)
 template <class T, class U>
 inline bool vectorsAreParallel3D(const T& v1, const U& v2)
 {
-	if (abs(v1[0] * v2[1] - v2[0] * v1[1]) >= getEpsilon()) return false;
-	if (abs(v1[1] * v2[2] - v2[1] * v1[2]) >= getEpsilon()) return false;
-	return abs(v1[2] * v2[0] - v2[2] * v1[0]) < getEpsilon();
+	if (abs(v1[0] * v2[1] - v2[0] * v1[1]) >= std::numeric_limits<double>::epsilon()) return false;
+	if (abs(v1[1] * v2[2] - v2[1] * v1[2]) >= std::numeric_limits<double>::epsilon()) return false;
+	return abs(v1[2] * v2[0] - v2[2] * v1[0]) < std::numeric_limits<double>::epsilon();
 }
 
 /** Computes the closest point from a given point to a segment.
