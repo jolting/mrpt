@@ -64,18 +64,32 @@ TEST(Geometry, Segment2DIntersect)
 		EXPECT_FALSE(do_inter);
 	}
 
-#if 0
 	{
 		// Two parallel segments that do NOT intersect: result is a "segment in the middle".
 		const TSegment2D s1(TPoint2D(-0.05,0.05), TPoint2D(-0.05,-0.05));
 		const TSegment2D s2(TPoint2D(0,0.135), TPoint2D(0,-0.0149999));
 
 		TObject2D inter;
-		bool do_inter = intersect(s1, s2, inter);
-
-		EXPECT_TRUE(do_inter && inter.getType()==GEOMETRIC_TYPE_SEGMENT);
+		EXPECT_FALSE(intersect(s1, s2, inter));
 	}
-#endif
+}
+
+TEST(Geometry, Intersection3D)
+{
+	{
+		TPolygon3D p3d({
+			{ 1,0,0},
+			{ 0,1,0},
+			{ 0,0,1}
+		});
+		TSegment3D s3d({
+			{ 1,0,0},
+			{ 0,1,0},
+		});
+		TObject3D inter;
+		EXPECT_TRUE(intersect(p3d, s3d, inter));
+		EXPECT_EQ(inter.getType(), GEOMETRIC_TYPE_SEGMENT);
+	}
 }
 
 void myTestPolygonContainsPoint(std::vector<TPoint2D>& vs, bool convex)
