@@ -83,6 +83,12 @@ The following modules have been converted to Rust:
   - Task scheduling and execution
   - Pending task tracking
 
+- **Containers** (`containers/`)
+  - Circular buffer with wraparound behavior
+  - Push/pop with overflow protection
+  - Peek operations for non-destructive reads
+  - Capacity and availability tracking
+
 - **FFI Bridge** (`ffi.rs`)
   - C-compatible interface for C++ interop
   - Clock function exports
@@ -95,22 +101,23 @@ The following modules have been converted to Rust:
   - CMake integration with MRPT_USE_RUST_CORE toggle
   - Cross-platform build support (Windows, Linux, macOS)
   - Test and benchmark infrastructure
-  - 53 unit tests passing (1 flaky clock test)
+  - 64 unit tests passing (1 flaky clock test)
   - Full integration with MRPT 3.0 branch
+  - 13 total modules (12 from Phase 1 + 2 from Phase 2)
 
 ## Phase 2: Extended Core Modules (PLANNED)
 
 ### Priority 1: Memory and Data Structures
 
+- [x] **Containers** (`containers/`) **PARTIALLY COMPLETED**
+  - [x] Circular buffer (`circular_buffer.rs`) - 11 tests passing
+  - [ ] Thread-safe queues
+  - [ ] Custom vector implementations
+
 - [ ] **Safe Pointers** (`safe_pointers.rs`)
   - Smart pointer wrappers
   - Lifetime management
   - Null pointer safety
-
-- [ ] **Containers** (`containers/`)
-  - Circular buffers
-  - Thread-safe queues
-  - Custom vector implementations
 
 ### Priority 2: Serialization and RTTI
 
@@ -368,12 +375,14 @@ When converting a new module:
 ### Short Term (Current)
 - ✅ Complete Phase 1: Core foundation (12 modules)
 - ✅ Complete WorkerThreadsPool from Phase 2
+- ✅ Complete CircularBuffer from Phase 2
 - ✅ Document all converted modules
 - ✅ Performance validation (equivalent to C++)
 - ✅ Integration with MRPT 3.0 branch
-- ✅ 53 Rust unit tests + 36 C++ integration tests
+- ✅ 64 Rust unit tests + 36 C++ integration tests
 - [ ] Add comprehensive usage examples
 - [ ] Create C++ wrapper for WorkerThreadsPool
+- [ ] Add more container types (queues, etc.)
 
 ### Medium Term (Next 3-6 months)
 - [ ] Begin Phase 2: Extended core modules
