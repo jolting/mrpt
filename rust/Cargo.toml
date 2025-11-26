@@ -1,0 +1,31 @@
+[workspace]
+resolver = "2"
+members = [
+    "mrpt-core",
+]
+
+[workspace.package]
+version = "3.0.0"
+authors = ["MRPT Contributors"]
+edition = "2021"
+rust-version = "1.70"
+license = "BSD-3-Clause"
+repository = "https://github.com/MRPT/mrpt"
+homepage = "https://www.mrpt.org/"
+
+[workspace.dependencies]
+# Common dependencies used across crates
+libc = "0.2"
+chrono = "0.4"
+thiserror = "1.0"
+backtrace = "0.3"
+parking_lot = "0.12"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+
+[profile.dev]
+opt-level = 0
+debug = true

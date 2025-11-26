@@ -87,6 +87,8 @@ option(MRPT_EXCEPTIONS_WITH_CALL_STACK "Report callstack upon exceptions" "ON")
 set(MRPT_EXCEPTIONS_CALL_STACK_MAX_DEPTH "50" CACHE STRING "Maximum number of stack levels to show upon exceptions.")
 mark_as_advanced(MRPT_EXCEPTIONS_CALL_STACK_MAX_DEPTH)
 
+option(MRPT_USE_RUST_CORE "Use Rust implementation of mrpt-core instead of C++" "OFF")
+
 # The root directory for all MRPT libraries/modules:
 set(MRPT_LIBS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/libs" CACHE INTERNAL "")  # This emulates global vars
 
@@ -629,6 +631,12 @@ add_custom_target(all_mrpt_libs ALL) # all_mrpt_libs: target to build all mrpt-*
 #      					PROCESS SUBDIRECTORIES:
 # ----------------------------------------------------------------------------
 add_subdirectory(3rdparty)   # The third-party libraries
+
+# Rust integration (if enabled)
+if(MRPT_USE_RUST_CORE)
+    add_subdirectory(rust)    # The Rust core library
+endif()
+
 add_subdirectory(libs)        # The MRPT C++ libraries
 
 # Build pymrpt after defining the libs above

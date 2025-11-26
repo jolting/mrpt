@@ -41,6 +41,7 @@
 #include <windows.h>
 #endif
 
+#include <chrono>
 #include <iostream>
 #include <thread>
 
@@ -48,6 +49,7 @@ using namespace mrpt;
 using namespace mrpt::comms;
 using namespace mrpt::io;
 using namespace std;
+using namespace std::chrono_literals;
 using namespace std::literals;
 
 // ctor
