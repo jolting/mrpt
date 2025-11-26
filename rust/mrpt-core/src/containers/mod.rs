@@ -16,5 +16,7 @@
 //! This module provides various container types used throughout MRPT.
 
 pub mod circular_buffer;
+pub mod thread_safe_queue;
 
 pub use circular_buffer::CircularBuffer;
+pub use thread_safe_queue::ThreadSafeQueue;
