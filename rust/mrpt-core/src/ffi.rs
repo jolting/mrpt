@@ -160,6 +160,113 @@ pub unsafe extern "C" fn mrpt_format_get_length(
     -1
 }
 
+// ========== CPU functions ==========
+
+/// Check if a CPU feature is supported
+#[no_mangle]
+pub extern "C" fn mrpt_cpu_supports(feature: u32) -> bool {
+    use crate::cpu::CpuFeature;
+    let cpu_feature = match feature {
+        0 => CpuFeature::MMX,
+        1 => CpuFeature::POPCNT,
+        2 => CpuFeature::SSE,
+        3 => CpuFeature::SSE2,
+        4 => CpuFeature::SSE3,
+        5 => CpuFeature::SSSE3,
+        6 => CpuFeature::SSE4_1,
+        7 => CpuFeature::SSE4_2,
+        8 => CpuFeature::AVX,
+        9 => CpuFeature::AVX2,
+        _ => return false,
+    };
+    crate::cpu::supports(cpu_feature)
+}
+
+/// Get CPU features as a string
+///
+/// # Safety
+/// The caller must ensure `buffer` points to valid memory of at least `buffer_len` bytes
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_cpu_features_as_string(
+    buffer: *mut c_char,
+    buffer_len: usize,
+) -> c_int {
+    if buffer.is_null() || buffer_len == 0 {
+        return -1;
+    }
+
+    let features = crate::cpu::features_as_string();
+    let features_bytes = features.as_bytes();
+
+    if features_bytes.len() >= buffer_len {
+        return -1; // Buffer too small
+    }
+
+    std::ptr::copy_nonoverlapping(features_bytes.as_ptr(), buffer as *mut u8, features_bytes.len());
+    *buffer.add(features_bytes.len()) = 0; // Null terminator
+
+    features_bytes.len() as c_int
+}
+
+// ========== Demangle functions ==========
+
+/// Demangle a C++ symbol name
+///
+/// # Safety
+/// The caller must ensure `symbol_name` is a valid null-terminated string
+/// and `buffer` points to valid memory of at least `buffer_len` bytes
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_demangle(
+    symbol_name: *const c_char,
+    buffer: *mut c_char,
+    buffer_len: usize,
+) -> c_int {
+    if symbol_name.is_null() || buffer.is_null() || buffer_len == 0 {
+        return -1;
+    }
+
+    let demangled = crate::demangle::demangle_cstr(symbol_name);
+    let demangled_bytes = demangled.as_bytes();
+
+    if demangled_bytes.len() >= buffer_len {
+        return -1; // Buffer too small
+    }
+
+    std::ptr::copy_nonoverlapping(demangled_bytes.as_ptr(), buffer as *mut u8, demangled_bytes.len());
+    *buffer.add(demangled_bytes.len()) = 0; // Null terminator
+
+    demangled_bytes.len() as c_int
+}
+
+// ========== Aligned allocation functions ==========
+
+/// Allocate aligned memory
+///
+/// # Safety
+/// The returned pointer must be freed with `mrpt_aligned_free`
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_aligned_malloc(size: usize, alignment: usize) -> *mut u8 {
+    crate::aligned_alloc::aligned_malloc(size, alignment)
+}
+
+/// Allocate aligned memory and zero it
+///
+/// # Safety
+/// The returned pointer must be freed with `mrpt_aligned_free`
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_aligned_calloc(bytes: usize, alignment: usize) -> *mut u8 {
+    crate::aligned_alloc::aligned_calloc(bytes, alignment)
+}
+
+/// Free aligned memory
+///
+/// # Safety
+/// The pointer must have been allocated with `mrpt_aligned_malloc` or `mrpt_aligned_calloc`
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_aligned_free(ptr: *mut u8, size: usize, alignment: usize) {
+    crate::aligned_alloc::aligned_free(ptr, size, alignment)
+}
+
 // ========== Exception functions ==========
 
 /// Create an exception message with location info

@@ -25,6 +25,9 @@ pub mod clock;
 pub mod exceptions;
 pub mod format;
 pub mod bits;
+pub mod cpu;
+pub mod aligned_alloc;
+pub mod demangle;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;

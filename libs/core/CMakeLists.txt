@@ -33,6 +33,9 @@ if(BUILD_mrpt-core)
 			reverse_bytes.cpp
 			format.cpp
 			exceptions.cpp
+			cpu.cpp
+			aligned_malloc.cpp
+			demangle.cpp
 		)
 		
 		# List of Rust wrapper files from rust/ subdirectory
@@ -41,6 +44,9 @@ if(BUILD_mrpt-core)
 			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/reverse_bytes.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/format.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/exceptions.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/cpu.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/aligned_malloc.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/demangle.cpp
 		)
 		
 		# Filter out C++ files that have Rust replacements
