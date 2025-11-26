@@ -22,6 +22,7 @@ parking_lot.workspace = true
 lazy_static = "1.4"
 once_cell = "1.19"
 md-5 = "0.10"
+cpp_demangle = "0.4"
 
 [dev-dependencies]
 criterion = "0.5"

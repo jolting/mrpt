@@ -1,39 +1,35 @@
-// Mobile Robot Programming Toolkit (MRPT)
-// https://www.mrpt.org/
+//                    _
+//                   | |    Mobile Robot Programming Toolkit (MRPT)
+// _ __ ___  _ __ _ __ | |_
+//| '_ ` _ \| '__| '_ \| __|          https://www.mrpt.org/
+//| | | | | | |  | |_) | |_
+//|_| |_| |_|_|  | .__/ \__|     https://github.com/MRPT/mrpt/
+//               | |
+//               |_|
 //
-// Copyright (c) 2005-2024, Individual contributors, see AUTHORS file
+// Copyright (c) 2005-2025, Individual contributors, see AUTHORS file
 // See: https://www.mrpt.org/Authors - All rights reserved.
-// Released under BSD License. See: https://www.mrpt.org/License
+// SPDX-License-Identifier: BSD-3-Clause
 
 //! Symbol demangling utilities
 //!
 //! This module provides functions for demangling C++ symbol names.
 
-use std::ffi::{CStr, CString};
+use std::ffi::CStr;
 
 /// Demangle a C++ symbol name
 ///
-/// On platforms that support it, this will convert mangled C++ symbols
-/// to their human-readable form. On other platforms, returns the original name.
+/// Attempts to demangle C++ symbol names using the cpp_demangle crate.
+/// If demangling fails, returns the original symbol name.
 pub fn demangle(symbol_name: &str) -> String {
     if symbol_name.is_empty() {
         return String::new();
     }
 
-    #[cfg(target_os = "windows")]
-    {
-        // On Windows, we'd need to use UnDecorateSymbolName from dbghelp.dll
-        // For now, return the original name
-        // TODO: Implement Windows demangling via FFI
-        symbol_name.to_string()
-    }
-
-    #[cfg(not(target_os = "windows"))]
-    {
-        // On Unix-like systems, try using cpp_demangle crate
-        // For simplicity in this implementation, we'll just return the original
-        // A full implementation would use cpp_demangle or call __cxa_demangle
-        symbol_name.to_string()
+    // Try to demangle using cpp_demangle crate
+    match cpp_demangle::Symbol::new(symbol_name) {
+        Ok(symbol) => symbol.to_string(),
+        Err(_) => symbol_name.to_string(),
     }
 }
 
@@ -63,8 +59,27 @@ mod tests {
 
     #[test]
     fn test_demangle_simple() {
-        // For now, just returns the input
+        // Test demangling a real C++ mangled symbol
         let result = demangle("_ZN4mrpt5clock3nowEv");
-        assert!(!result.is_empty());
+        // Should demangle to something like "mrpt::clock::now()"
+        println!("Demangled: {} -> {}", "_ZN4mrpt5clock3nowEv", result);
+        assert!(result.contains("mrpt") || result.contains("clock"));
+    }
+
+    #[test]
+    fn test_demangle_invalid() {
+        // Invalid symbols should return the original string
+        let result = demangle("not_a_mangled_symbol");
+        assert_eq!(result, "not_a_mangled_symbol");
+    }
+
+    #[test]
+    fn test_demangle_actual() {
+        // Test that demangling actually works
+        let mangled = "_ZNSt6vectorIiSaIiEE9push_backERKi";
+        let result = demangle(mangled);
+        println!("Demangled: {} -> {}", mangled, result);
+        // Should contain "vector" and "push_back"
+        assert!(result.contains("vector") || result.contains("push_back"));
     }
 }
