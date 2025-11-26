@@ -42,6 +42,7 @@ pub mod worker_threads;
 pub mod containers;
 pub mod env;
 pub mod round;
+pub mod lock_helper;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;
