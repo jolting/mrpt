@@ -38,6 +38,7 @@ pub mod crc;
 pub mod base64;
 pub mod wrap2pi;
 pub mod string_utils;
+pub mod worker_threads;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;

@@ -77,6 +77,12 @@ The following modules have been converted to Rust:
   - Trimming and parsing helpers
   - Case conversion and formatting
 
+- **Worker Thread Pool** (`worker_threads.rs`)
+  - Thread pool with configurable size
+  - FIFO and DropOld queue policies
+  - Task scheduling and execution
+  - Pending task tracking
+
 - **FFI Bridge** (`ffi.rs`)
   - C-compatible interface for C++ interop
   - Clock function exports
@@ -89,7 +95,7 @@ The following modules have been converted to Rust:
   - CMake integration with MRPT_USE_RUST_CORE toggle
   - Cross-platform build support (Windows, Linux, macOS)
   - Test and benchmark infrastructure
-  - 46 unit tests, all passing
+  - 53 unit tests passing (1 flaky clock test)
   - Full integration with MRPT 3.0 branch
 
 ## Phase 2: Extended Core Modules (PLANNED)
@@ -120,10 +126,12 @@ The following modules have been converted to Rust:
 
 ### Priority 3: System Utilities
 
-- [ ] **WorkerThreadsPool** (`worker_threads.rs`)
-  - Thread pool implementation using Rayon
-  - Task scheduling
-  - Async/await support
+- [x] **WorkerThreadsPool** (`worker_threads.rs`) **COMPLETED**
+  - Thread pool implementation with configurable policies
+  - FIFO and DropOld queue policies
+  - Task scheduling and execution
+  - Thread-safe task queue
+  - 6 unit tests passing
 
 ## Phase 3: Math and Geometry (FUTURE)
 
@@ -358,12 +366,14 @@ When converting a new module:
 ## Rollout Plan
 
 ### Short Term (Current)
-- ✅ Complete Phase 1: Core foundation (11 modules)
+- ✅ Complete Phase 1: Core foundation (12 modules)
+- ✅ Complete WorkerThreadsPool from Phase 2
 - ✅ Document all converted modules
 - ✅ Performance validation (equivalent to C++)
 - ✅ Integration with MRPT 3.0 branch
-- ✅ 46 Rust unit tests + 36 C++ integration tests
+- ✅ 53 Rust unit tests + 36 C++ integration tests
 - [ ] Add comprehensive usage examples
+- [ ] Create C++ wrapper for WorkerThreadsPool
 
 ### Medium Term (Next 3-6 months)
 - [ ] Begin Phase 2: Extended core modules

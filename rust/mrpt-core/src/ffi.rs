@@ -557,3 +557,85 @@ mod tests {
         assert_eq!(mrpt_reverse_bytes_u32(0x12345678), 0x78563412);
     }
 }
+
+// ============================================================================
+// Worker Thread Pool FFI
+// ============================================================================
+
+use crate::worker_threads::{QueuePolicy, WorkerThreadsPool};
+use std::collections::HashMap;
+use std::ffi::CStr;
+use std::sync::Mutex;
+
+lazy_static::lazy_static! {
+    static ref THREAD_POOLS: Mutex<HashMap<usize, WorkerThreadsPool>> = Mutex::new(HashMap::new());
+    static ref NEXT_POOL_ID: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(1);
+}
+
+/// Create a new worker thread pool
+///
+/// # Safety
+/// The name pointer must be a valid null-terminated C string or null
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_worker_pool_create(
+    num_threads: usize,
+    policy: u8,
+    name: *const c_char,
+) -> usize {
+    let policy = if policy == 0 {
+        QueuePolicy::Fifo
+    } else {
+        QueuePolicy::DropOld
+    };
+
+    let pool_name = if name.is_null() {
+        "WorkerThreadsPool".to_string()
+    } else {
+        CStr::from_ptr(name)
+            .to_str()
+            .unwrap_or("WorkerThreadsPool")
+            .to_string()
+    };
+
+    let pool = WorkerThreadsPool::new(num_threads, policy, pool_name);
+    let pool_id = NEXT_POOL_ID.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+
+    THREAD_POOLS.lock().unwrap().insert(pool_id, pool);
+    pool_id
+}
+
+/// Destroy a worker thread pool
+#[no_mangle]
+pub extern "C" fn mrpt_worker_pool_destroy(pool_id: usize) {
+    THREAD_POOLS.lock().unwrap().remove(&pool_id);
+}
+
+/// Get the number of pending tasks in a pool
+#[no_mangle]
+pub extern "C" fn mrpt_worker_pool_pending_tasks(pool_id: usize) -> usize {
+    THREAD_POOLS
+        .lock()
+        .unwrap()
+        .get(&pool_id)
+        .map(|pool| pool.pending_tasks())
+        .unwrap_or(0)
+}
+
+/// Get the number of worker threads in a pool
+#[no_mangle]
+pub extern "C" fn mrpt_worker_pool_size(pool_id: usize) -> usize {
+    THREAD_POOLS
+        .lock()
+        .unwrap()
+        .get(&pool_id)
+        .map(|pool| pool.size())
+        .unwrap_or(0)
+}
+
+/// Clear all pending tasks and stop all worker threads
+#[no_mangle]
+pub extern "C" fn mrpt_worker_pool_clear(pool_id: usize) {
+    if let Some(pool) = THREAD_POOLS.lock().unwrap().get_mut(&pool_id) {
+        pool.clear();
+    }
+}
