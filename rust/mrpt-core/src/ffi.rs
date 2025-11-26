@@ -208,6 +208,108 @@ pub unsafe extern "C" fn mrpt_cpu_features_as_string(
     features_bytes.len() as c_int
 }
 
+// ========== CRC functions ==========
+
+/// Compute CRC16 checksum
+///
+/// # Safety
+/// The caller must ensure `data` points to valid memory of at least `len` bytes
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_compute_crc16(
+    data: *const u8,
+    len: usize,
+    gen_pol: u16,
+) -> u16 {
+    if data.is_null() || len == 0 {
+        return 0;
+    }
+    let slice = std::slice::from_raw_parts(data, len);
+    crate::crc::compute_crc16(slice, gen_pol)
+}
+
+/// Compute CRC32 checksum
+///
+/// # Safety
+/// The caller must ensure `data` points to valid memory of at least `len` bytes
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_compute_crc32(
+    data: *const u8,
+    len: usize,
+    gen_pol: u32,
+) -> u32 {
+    if data.is_null() || len == 0 {
+        return 0;
+    }
+    let slice = std::slice::from_raw_parts(data, len);
+    crate::crc::compute_crc32(slice, gen_pol)
+}
+
+// ========== Base64 functions ==========
+
+/// Encode data to Base64
+///
+/// # Safety
+/// The caller must ensure `data` points to valid memory of at least `len` bytes
+/// and `buffer` points to valid memory of at least `buffer_len` bytes
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_encode_base64(
+    data: *const u8,
+    len: usize,
+    buffer: *mut c_char,
+    buffer_len: usize,
+) -> c_int {
+    if data.is_null() || buffer.is_null() || len == 0 || buffer_len == 0 {
+        return -1;
+    }
+
+    let slice = std::slice::from_raw_parts(data, len);
+    let encoded = crate::base64::encode_base64(slice);
+    let encoded_bytes = encoded.as_bytes();
+
+    if encoded_bytes.len() >= buffer_len {
+        return -1; // Buffer too small
+    }
+
+    std::ptr::copy_nonoverlapping(encoded_bytes.as_ptr(), buffer as *mut u8, encoded_bytes.len());
+    *buffer.add(encoded_bytes.len()) = 0; // Null terminator
+
+    encoded_bytes.len() as c_int
+}
+
+/// Decode Base64 string
+///
+/// # Safety
+/// The caller must ensure `input` is a valid null-terminated string
+/// and `buffer` points to valid memory of at least `buffer_len` bytes
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_decode_base64(
+    input: *const c_char,
+    buffer: *mut u8,
+    buffer_len: usize,
+) -> c_int {
+    if input.is_null() || buffer.is_null() || buffer_len == 0 {
+        return -1;
+    }
+
+    let input_str = match std::ffi::CStr::from_ptr(input).to_str() {
+        Ok(s) => s,
+        Err(_) => return -1,
+    };
+
+    let decoded = match crate::base64::decode_base64(input_str) {
+        Ok(d) => d,
+        Err(_) => return -1,
+    };
+
+    if decoded.len() > buffer_len {
+        return -1; // Buffer too small
+    }
+
+    std::ptr::copy_nonoverlapping(decoded.as_ptr(), buffer, decoded.len());
+
+    decoded.len() as c_int
+}
+
 // ========== Demangle functions ==========
 
 /// Demangle a C++ symbol name

@@ -28,6 +28,8 @@ pub mod bits;
 pub mod cpu;
 pub mod aligned_alloc;
 pub mod demangle;
+pub mod crc;
+pub mod base64;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;
