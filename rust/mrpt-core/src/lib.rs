@@ -41,6 +41,7 @@ pub mod string_utils;
 pub mod worker_threads;
 pub mod containers;
 pub mod env;
+pub mod round;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;
