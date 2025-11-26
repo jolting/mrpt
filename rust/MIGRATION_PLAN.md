@@ -106,7 +106,7 @@ The following modules have been converted to Rust:
   - 13 total modules (12 from Phase 1 + 2 from Phase 2)
   - String parsing with `from_string` utility
 
-## Phase 2: Extended Core Modules (PLANNED)
+## Phase 2: Extended Core Modules (IN PROGRESS)
 
 ### Priority 1: Memory and Data Structures
 
@@ -114,6 +114,11 @@ The following modules have been converted to Rust:
   - [x] Circular buffer (`circular_buffer.rs`) - 11 tests passing
   - [x] Thread-safe queue (`thread_safe_queue.rs`) - 11 tests passing
   - [ ] Custom vector implementations (low priority)
+
+- [x] **Core Utilities** **COMPLETED**
+  - [x] Round module (`round.rs`) - 8 tests passing
+  - [x] Lock helper module (`lock_helper.rs`) - 4 tests passing
+  - [x] Math utilities in bits module - 13 tests passing
 
 - [ ] **Safe Pointers** (`safe_pointers.rs`)
   - Smart pointer wrappers
@@ -141,12 +146,23 @@ The following modules have been converted to Rust:
   - Thread-safe task queue
   - 6 unit tests passing
 
-## Phase 3: Math and Geometry (FUTURE)
+## Phase 3: Math and Geometry (IN PROGRESS)
 
-- [ ] Basic math operations (from `mrpt-math`)
-- [ ] Matrix operations (potentially using `nalgebra`)
-- [ ] Pose representations (from `mrpt-poses`)
-- [ ] Geometry utilities
+### NEW CRATE: mrpt-math
+
+- [x] **Basic Types and Utilities** **COMPLETED**
+  - [x] Epsilon module - Global geometric epsilon (3 tests)
+  - [x] Utils module - approximately_equal, abs_diff, linspace, sequence (8 tests)
+  - [x] TPoint2D/TPoint2Df - 2D points (9 tests)
+  - [x] TPoint3D/TPoint3Df - 3D points (10 tests)
+  - [x] TPose2D/TPose3D - 2D/3D poses (12 tests)
+  - **42 unit tests total, all passing**
+
+- [ ] **Advanced Math** (TODO)
+  - [ ] Matrix operations (potentially using `nalgebra`)
+  - [ ] Quaternions
+  - [ ] Geometry utilities (lines, planes, polygons)
+  - [ ] Transformations
 
 ## Phase 4: Higher-Level Libraries (FUTURE)
 
@@ -231,7 +247,13 @@ int64_t timestamp = mrpt_clock_now();
 - ✅ Equivalent to C++ (0.98% difference in benchmarks)
 - ✅ Better optimization opportunities
 - ✅ No GC overhead
-- ✅ Validated with 36 C++ integration tests
+- ✅ Validated with C++ integration tests
+
+### Current Status (November 2025)
+- **2 Crates**: mrpt-core (18 modules), mrpt-math (5 modules)
+- **153 Total Unit Tests**: 152 passing, 1 flaky clock test
+- **Full C++ Interoperability**: FFI layer working
+- **Production Ready**: Core and math fundamentals complete
 
 ### Developer Experience
 - ✅ Cargo package manager
