@@ -40,6 +40,7 @@ pub mod wrap2pi;
 pub mod string_utils;
 pub mod worker_threads;
 pub mod containers;
+pub mod env;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;
