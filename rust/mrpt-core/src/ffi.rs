@@ -125,6 +125,92 @@ pub extern "C" fn mrpt_reverse_bytes_f64(value: f64) -> f64 {
     f64::from_bits(value.to_bits().swap_bytes())
 }
 
+// ========== Format functions ==========
+
+/// Format a string using vsnprintf-style formatting
+/// Returns the length of the formatted string (excluding null terminator)
+/// or -1 on error.
+///
+/// # Safety
+/// This function is unsafe because it dereferences raw pointers.
+/// The caller must ensure that:
+/// - `fmt` is a valid null-terminated string
+/// - `buffer` points to a valid buffer of at least `buffer_len` bytes
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_format_vsnprintf(
+    buffer: *mut c_char,
+    buffer_len: usize,
+    fmt: *const c_char,
+    args: *mut std::ffi::c_void,
+) -> c_int {
+    // This is a bridge function - in practice, we'll use platform-specific vsnprintf
+    // For now, return error to indicate this should use native implementation
+    -1
+}
+
+/// Get the length needed for a formatted string
+///
+/// # Safety
+/// This function is unsafe because it dereferences raw pointers.
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_format_get_length(
+    fmt: *const c_char,
+    args: *mut std::ffi::c_void,
+) -> c_int {
+    -1
+}
+
+// ========== Exception functions ==========
+
+/// Create an exception message with location info
+/// 
+/// # Safety
+/// This function is unsafe because it dereferences raw pointers.
+/// The caller must ensure all pointers are valid null-terminated strings.
+#[no_mangle]
+pub unsafe extern "C" fn mrpt_exception_line_msg(
+    msg: *const c_char,
+    filename: *const c_char,
+    line: u32,
+    function_name: *const c_char,
+    out_buffer: *mut c_char,
+    buffer_len: usize,
+) -> c_int {
+    if msg.is_null() || filename.is_null() || function_name.is_null() || out_buffer.is_null() {
+        return -1;
+    }
+
+    let msg_str = match std::ffi::CStr::from_ptr(msg).to_str() {
+        Ok(s) => s,
+        Err(_) => return -1,
+    };
+    let filename_str = match std::ffi::CStr::from_ptr(filename).to_str() {
+        Ok(s) => s,
+        Err(_) => return -1,
+    };
+    let function_str = match std::ffi::CStr::from_ptr(function_name).to_str() {
+        Ok(s) => s,
+        Err(_) => return -1,
+    };
+
+    let formatted = format!("{}:{}: [{}] {}\n", filename_str, line, function_str, msg_str);
+    let formatted_bytes = formatted.as_bytes();
+    
+    if formatted_bytes.len() >= buffer_len {
+        return -1; // Buffer too small
+    }
+
+    std::ptr::copy_nonoverlapping(
+        formatted_bytes.as_ptr(),
+        out_buffer as *mut u8,
+        formatted_bytes.len(),
+    );
+    // Add null terminator
+    *out_buffer.add(formatted_bytes.len()) = 0;
+
+    formatted_bytes.len() as c_int
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

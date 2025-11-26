@@ -31,12 +31,16 @@ if(BUILD_mrpt-core)
 		set(CPP_FILES_WITH_RUST_REPLACEMENTS
 			Clock.cpp
 			reverse_bytes.cpp
+			format.cpp
+			exceptions.cpp
 		)
 		
 		# List of Rust wrapper files from rust/ subdirectory
 		set(RUST_WRAPPER_FILES
 			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/Clock.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/reverse_bytes.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/format.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/rust/exceptions.cpp
 		)
 		
 		# Filter out C++ files that have Rust replacements
@@ -57,7 +61,11 @@ if(BUILD_mrpt-core)
 		
 		# Add Rust wrapper files
 		list(APPEND FINAL_SOURCES ${RUST_WRAPPER_FILES})
-		message(STATUS "  Adding Rust wrapper files: rust/Clock.cpp, rust/reverse_bytes.cpp")
+		message(STATUS "  Adding Rust wrapper files from rust/ directory:")
+		foreach(rust_file ${RUST_WRAPPER_FILES})
+			get_filename_component(rust_filename ${rust_file} NAME)
+			message(STATUS "    - rust/${rust_filename}")
+		endforeach()
 		
 		# Set the final source list
 		set_target_properties(core PROPERTIES SOURCES "${FINAL_SOURCES}")
