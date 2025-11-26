@@ -39,6 +39,7 @@ pub mod base64;
 pub mod wrap2pi;
 pub mod string_utils;
 pub mod worker_threads;
+pub mod containers;
 
 #[cfg(feature = "ffi")]
 pub mod ffi;
