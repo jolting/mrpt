@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "mrpt-core",
+    "mrpt-math",
 ]
 
 [workspace.package]

@@ -1,0 +1,19 @@
+[package]
+name = "mrpt-math"
+version = "3.0.0"
+edition = "2021"
+authors = ["MRPT Contributors"]
+license = "BSD-3-Clause"
+description = "MRPT math library - Rust implementation"
+repository = "https://github.com/MRPT/mrpt"
+
+[dependencies]
+mrpt-core = { path = "../mrpt-core", version = "3.0.0" }
+num-traits = "0.2"
+
+[dev-dependencies]
+approx = "0.5"
+
+[features]
+default = ["std"]
+std = []
