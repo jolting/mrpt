@@ -149,6 +149,184 @@ where
     }
 }
 
+/// Additional math utilities
+pub mod math {
+    use std::f64::consts::PI;
+
+    /// Square of a number
+    #[inline]
+    pub fn square<T>(x: T) -> T
+    where
+        T: Copy + std::ops::Mul<Output = T>,
+    {
+        x * x
+    }
+
+    /// Fast hypot (no overflow checking)
+    #[inline]
+    pub fn hypot_fast<T>(x: T, y: T) -> T
+    where
+        T: Copy + std::ops::Mul<Output = T> + std::ops::Add<Output = T>,
+        f64: From<T>,
+        T: From<f64>,
+    {
+        let sum = x * x + y * y;
+        let sqrt_val = f64::from(sum).sqrt();
+        T::from(sqrt_val)
+    }
+
+    /// Convert degrees to radians
+    #[inline]
+    pub fn deg2rad(degrees: f64) -> f64 {
+        degrees * PI / 180.0
+    }
+
+    /// Convert radians to degrees
+    #[inline]
+    pub fn rad2deg(radians: f64) -> f64 {
+        radians * 180.0 / PI
+    }
+
+    /// Return the sign of a number (-1 or 1)
+    #[inline]
+    pub fn sign<T>(x: T) -> i32
+    where
+        T: Copy + PartialOrd + From<i32>,
+    {
+        if x < T::from(0) {
+            -1
+        } else {
+            1
+        }
+    }
+
+    /// Return the sign of a number (-1, 0, or 1)
+    #[inline]
+    pub fn sign_with_zero<T>(x: T) -> i32
+    where
+        T: Copy + PartialEq + PartialOrd + From<i32>,
+    {
+        if x == T::from(0) {
+            0
+        } else if x < T::from(0) {
+            -1
+        } else {
+            1
+        }
+    }
+
+    /// Return the smallest positive number among two values
+    #[inline]
+    pub fn lowest_positive<T>(a: T, b: T) -> T
+    where
+        T: Copy + PartialOrd + From<i32>,
+    {
+        let zero = T::from(0);
+        if a > zero && a <= b {
+            a
+        } else if b > zero {
+            b
+        } else {
+            a
+        }
+    }
+
+    /// Return minimum of three values
+    #[inline]
+    pub fn min3<T>(a: T, b: T, c: T) -> T
+    where
+        T: Copy + PartialOrd,
+    {
+        if a < b {
+            if a < c {
+                a
+            } else {
+                c
+            }
+        } else if b < c {
+            b
+        } else {
+            c
+        }
+    }
+
+    /// Return maximum of three values
+    #[inline]
+    pub fn max3<T>(a: T, b: T, c: T) -> T
+    where
+        T: Copy + PartialOrd,
+    {
+        if a > b {
+            if a > c {
+                a
+            } else {
+                c
+            }
+        } else if b > c {
+            b
+        } else {
+            c
+        }
+    }
+
+    /// Round toward zero (truncate)
+    #[inline]
+    pub fn fix(x: f64) -> i32 {
+        x.trunc() as i32
+    }
+
+    /// Clamp a mutable value to min/max range
+    #[inline]
+    pub fn saturate<T>(var: &mut T, sat_min: T, sat_max: T)
+    where
+        T: Copy + PartialOrd,
+    {
+        if *var > sat_max {
+            *var = sat_max;
+        }
+        if *var < sat_min {
+            *var = sat_min;
+        }
+    }
+
+    /// Clamp a value to min/max range (returns value)
+    #[inline]
+    pub fn saturate_val<T>(value: T, sat_min: T, sat_max: T) -> T
+    where
+        T: Copy + PartialOrd,
+    {
+        if value > sat_max {
+            sat_max
+        } else if value < sat_min {
+            sat_min
+        } else {
+            value
+        }
+    }
+
+    /// Update a variable to keep it below or equal to a test value
+    #[inline]
+    pub fn keep_min<T>(var: &mut T, test_val: T)
+    where
+        T: Copy + PartialOrd,
+    {
+        if test_val < *var {
+            *var = test_val;
+        }
+    }
+
+    /// Update a variable to keep it above or equal to a test value
+    #[inline]
+    pub fn keep_max<T>(var: &mut T, test_val: T)
+    where
+        T: Copy + PartialOrd,
+    {
+        if test_val > *var {
+            *var = test_val;
+        }
+    }
+}
+
 /// Low-level memory operations
 pub mod mem_ops {
     use std::ptr;
@@ -256,5 +434,116 @@ mod tests {
         assert_eq!(abs_diff(10, 5), 5);
         assert_eq!(abs_diff(5, 10), 5);
         assert_eq!(abs_diff(10, 10), 0);
+    }
+
+    // Math utilities tests
+    use super::math::*;
+
+    #[test]
+    fn test_square() {
+        assert_eq!(square(5), 25);
+        assert_eq!(square(-3), 9);
+        assert!((square(2.5_f64) - 6.25).abs() < 1e-10);
+    }
+
+    #[test]
+    fn test_deg2rad() {
+        assert!((deg2rad(0.0) - 0.0).abs() < 1e-10);
+        assert!((deg2rad(180.0) - std::f64::consts::PI).abs() < 1e-10);
+        assert!((deg2rad(90.0) - std::f64::consts::PI / 2.0).abs() < 1e-10);
+    }
+
+    #[test]
+    fn test_rad2deg() {
+        assert!((rad2deg(0.0) - 0.0).abs() < 1e-10);
+        assert!((rad2deg(std::f64::consts::PI) - 180.0).abs() < 1e-10);
+        assert!((rad2deg(std::f64::consts::PI / 2.0) - 90.0).abs() < 1e-10);
+    }
+
+    #[test]
+    fn test_sign() {
+        assert_eq!(sign(5), 1);
+        assert_eq!(sign(-5), -1);
+        assert_eq!(sign(0), 1); // sign of 0 is 1 in MRPT
+    }
+
+    #[test]
+    fn test_sign_with_zero() {
+        assert_eq!(sign_with_zero(5), 1);
+        assert_eq!(sign_with_zero(-5), -1);
+        assert_eq!(sign_with_zero(0), 0);
+    }
+
+    #[test]
+    fn test_lowest_positive() {
+        assert_eq!(lowest_positive(5, 10), 5);
+        assert_eq!(lowest_positive(10, 5), 5);
+        assert_eq!(lowest_positive(-5, 10), 10);
+        assert_eq!(lowest_positive(5, -10), 5);
+    }
+
+    #[test]
+    fn test_min3() {
+        assert_eq!(min3(1, 2, 3), 1);
+        assert_eq!(min3(3, 1, 2), 1);
+        assert_eq!(min3(2, 3, 1), 1);
+    }
+
+    #[test]
+    fn test_max3() {
+        assert_eq!(max3(1, 2, 3), 3);
+        assert_eq!(max3(3, 1, 2), 3);
+        assert_eq!(max3(2, 3, 1), 3);
+    }
+
+    #[test]
+    fn test_fix() {
+        assert_eq!(fix(3.7), 3);
+        assert_eq!(fix(-3.7), -3);
+        assert_eq!(fix(0.0), 0);
+    }
+
+    #[test]
+    fn test_saturate() {
+        let mut val = 15;
+        saturate(&mut val, 0, 10);
+        assert_eq!(val, 10);
+
+        let mut val = -5;
+        saturate(&mut val, 0, 10);
+        assert_eq!(val, 0);
+
+        let mut val = 5;
+        saturate(&mut val, 0, 10);
+        assert_eq!(val, 5);
+    }
+
+    #[test]
+    fn test_saturate_val() {
+        assert_eq!(saturate_val(15, 0, 10), 10);
+        assert_eq!(saturate_val(-5, 0, 10), 0);
+        assert_eq!(saturate_val(5, 0, 10), 5);
+    }
+
+    #[test]
+    fn test_keep_min() {
+        let mut val = 10;
+        keep_min(&mut val, 5);
+        assert_eq!(val, 5);
+
+        let mut val = 10;
+        keep_min(&mut val, 15);
+        assert_eq!(val, 10);
+    }
+
+    #[test]
+    fn test_keep_max() {
+        let mut val = 10;
+        keep_max(&mut val, 15);
+        assert_eq!(val, 15);
+
+        let mut val = 10;
+        keep_max(&mut val, 5);
+        assert_eq!(val, 10);
     }
 }
