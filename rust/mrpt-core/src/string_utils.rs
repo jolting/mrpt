@@ -74,6 +74,40 @@ pub fn contains(s: &str, substring: &str) -> bool {
     s.contains(substring)
 }
 
+/// Parse a string into any type that implements FromStr
+///
+/// Returns the default value if parsing fails and throw_on_error is false.
+/// Throws an error if parsing fails and throw_on_error is true.
+///
+/// # Examples
+///
+/// ```
+/// use mrpt_core::string_utils::from_string;
+///
+/// let num: i32 = from_string("42", 0, false).unwrap();
+/// assert_eq!(num, 42);
+///
+/// let invalid: i32 = from_string("not_a_number", 99, false).unwrap();
+/// assert_eq!(invalid, 99); // Returns default value
+/// ```
+pub fn from_string<T>(s: &str, default_value: T, throw_on_error: bool) -> crate::exceptions::MrptResult<T>
+where
+    T: std::str::FromStr + Clone,
+{
+    match s.parse::<T>() {
+        Ok(value) => Ok(value),
+        Err(_) => {
+            if throw_on_error {
+                Err(crate::exceptions::MrptError::InvalidArgument(
+                    format!("[from_string()] Cannot parse string: {}", s)
+                ))
+            } else {
+                Ok(default_value)
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -119,5 +153,27 @@ mod tests {
         assert!(ends_with("hello", "llo"));
         assert!(contains("hello", "ell"));
         assert!(!starts_with("hello", "world"));
+    }
+
+    #[test]
+    fn test_from_string() {
+        // Test successful parsing
+        let num: i32 = from_string("42", 0, false).unwrap();
+        assert_eq!(num, 42);
+
+        let float_val: f64 = from_string("3.14", 0.0, false).unwrap();
+        assert!((float_val - 3.14).abs() < 1e-10);
+
+        // Test with default value (throw_on_error = false)
+        let invalid: i32 = from_string("not_a_number", 99, false).unwrap();
+        assert_eq!(invalid, 99);
+
+        // Test with error (throw_on_error = true)
+        let result: Result<i32, _> = from_string("not_a_number", 0, true);
+        assert!(result.is_err());
+
+        // Test boolean parsing
+        let bool_val: bool = from_string("true", false, false).unwrap();
+        assert_eq!(bool_val, true);
     }
 }
