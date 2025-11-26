@@ -101,18 +101,19 @@ The following modules have been converted to Rust:
   - CMake integration with MRPT_USE_RUST_CORE toggle
   - Cross-platform build support (Windows, Linux, macOS)
   - Test and benchmark infrastructure
-  - 64 unit tests passing (1 flaky clock test)
+  - 77 unit tests (76 passing, 1 flaky clock test)
   - Full integration with MRPT 3.0 branch
   - 13 total modules (12 from Phase 1 + 2 from Phase 2)
+  - String parsing with `from_string` utility
 
 ## Phase 2: Extended Core Modules (PLANNED)
 
 ### Priority 1: Memory and Data Structures
 
-- [x] **Containers** (`containers/`) **PARTIALLY COMPLETED**
+- [x] **Containers** (`containers/`) **COMPLETED**
   - [x] Circular buffer (`circular_buffer.rs`) - 11 tests passing
-  - [ ] Thread-safe queues
-  - [ ] Custom vector implementations
+  - [x] Thread-safe queue (`thread_safe_queue.rs`) - 11 tests passing
+  - [ ] Custom vector implementations (low priority)
 
 - [ ] **Safe Pointers** (`safe_pointers.rs`)
   - Smart pointer wrappers
@@ -375,14 +376,14 @@ When converting a new module:
 ### Short Term (Current)
 - ✅ Complete Phase 1: Core foundation (12 modules)
 - ✅ Complete WorkerThreadsPool from Phase 2
-- ✅ Complete CircularBuffer from Phase 2
+- ✅ Complete Containers from Phase 2 (CircularBuffer + ThreadSafeQueue)
+- ✅ Add string parsing utilities
 - ✅ Document all converted modules
 - ✅ Performance validation (equivalent to C++)
 - ✅ Integration with MRPT 3.0 branch
-- ✅ 64 Rust unit tests + 36 C++ integration tests
+- ✅ 77 Rust unit tests + 36 C++ integration tests
 - [ ] Add comprehensive usage examples
 - [ ] Create C++ wrapper for WorkerThreadsPool
-- [ ] Add more container types (queues, etc.)
 
 ### Medium Term (Next 3-6 months)
 - [ ] Begin Phase 2: Extended core modules
