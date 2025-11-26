@@ -1,0 +1,36 @@
+[package]
+name = "mrpt-core"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Core functionality for the Mobile Robot Programming Toolkit (MRPT) - Rust implementation"
+
+[lib]
+name = "mrpt_core"
+crate-type = ["lib", "staticlib", "cdylib"]
+
+[dependencies]
+libc.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+backtrace.workspace = true
+parking_lot.workspace = true
+lazy_static = "1.4"
+once_cell = "1.19"
+md-5 = "0.10"
+
+[dev-dependencies]
+criterion = "0.5"
+
+[features]
+default = ["std", "ffi"]
+std = []
+ffi = []
+
+[[bench]]
+name = "clock_benchmark"
+harness = false
