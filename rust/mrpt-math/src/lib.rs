@@ -38,6 +38,9 @@ pub mod pose;
 pub mod line;
 pub mod plane;
 
+#[cfg(feature = "ffi")]
+pub mod ffi;
+
 pub use epsilon::{get_epsilon, set_epsilon};
 pub use point2d::{TPoint2D, TPoint2Df};
 pub use point3d::{TPoint3D, TPoint3Df};

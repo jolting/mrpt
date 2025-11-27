@@ -17,3 +17,7 @@ approx = "0.5"
 [features]
 default = ["std"]
 std = []
+ffi = []
+
+[lib]
+crate-type = ["lib", "staticlib"]
