@@ -101,9 +101,11 @@ The following modules have been converted to Rust:
   - CMake integration with MRPT_USE_RUST_CORE toggle
   - Cross-platform build support (Windows, Linux, macOS)
   - Test and benchmark infrastructure
-  - 77 unit tests (76 passing, 1 flaky clock test)
+  - 167 unit tests total (166 passing, 1 flaky clock test)
+    - mrpt-core: 110 tests (109 passing)
+    - mrpt-math: 57 tests (all passing)
   - Full integration with MRPT 3.0 branch
-  - 13 total modules (12 from Phase 1 + 2 from Phase 2)
+  - 2 crates: mrpt-core (18 modules), mrpt-math (7 modules)
   - String parsing with `from_string` utility
 
 ## Phase 2: Extended Core Modules (IN PROGRESS)
@@ -156,12 +158,12 @@ The following modules have been converted to Rust:
   - [x] TPoint2D/TPoint2Df - 2D points (9 tests)
   - [x] TPoint3D/TPoint3Df - 3D points (10 tests)
   - [x] TPose2D/TPose3D - 2D/3D poses (12 tests)
-  - **42 unit tests total, all passing**
+  - [x] TLine2D/TLine3D - 2D/3D lines (15 tests)
+  - **57 unit tests total, all passing**
 
 - [ ] **Advanced Math** (TODO)
   - [ ] Matrix operations (potentially using `nalgebra`)
-  - [ ] Quaternions
-  - [ ] Geometry utilities (lines, planes, polygons)
+  - [ ] Geometry utilities (planes, polygons, segments)
   - [ ] Transformations
 
 ## Phase 4: Higher-Level Libraries (FUTURE)
