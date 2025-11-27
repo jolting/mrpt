@@ -216,6 +216,11 @@ mrpt_add_library(
     ${eigen_dep}
 )
 
+# Define math constants like M_PI on Windows
+if(WIN32)
+  target_compile_definitions(${PROJECT_NAME} PUBLIC NOMINMAX)
+endif()
+
 # extra dependencies required by unit tests in this module:
 #set_property(GLOBAL PROPERTY mrpt_math_UNIT_TEST_EXTRA_DEPS mrpt-io)
 

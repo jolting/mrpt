@@ -192,6 +192,11 @@ if (MSVC)
   target_compile_definitions(${PROJECT_NAME} PUBLIC -D_ENABLE_EXTENDED_ALIGNED_STORAGE)
 endif()
 
+# Prevent Windows.h from defining min/max macros that conflict with std::min/std::max
+if(WIN32)
+  target_compile_definitions(${PROJECT_NAME} PUBLIC NOMINMAX)
+endif()
+
 if(WIN32)
   target_link_libraries(${PROJECT_NAME} PRIVATE Dbghelp) # For mrpt::demangle(), mrpt::callStackBackTrace()
 else()

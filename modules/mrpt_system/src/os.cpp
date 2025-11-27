@@ -70,9 +70,9 @@
 #define _stat   stat
 #endif
 
-#ifndef _WIN32
 namespace
 {
+#ifndef _WIN32
 /** By ninjalj in
  * http://stackoverflow.com/questions/3962263/checking-if-a-key-was-pressed
  */
@@ -101,6 +101,7 @@ int myKbhit()
 
   return (ret > 0);
 }
+#endif
 
 struct LoadedModuleInfo
 {
@@ -154,7 +155,6 @@ struct ModulesRegistry
 };
 
 }  // namespace
-#endif
 
 namespace mrpt::system
 {

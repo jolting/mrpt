@@ -290,7 +290,7 @@ double mrpt::system::extractDayTimeFromTimestamp(const mrpt::system::TTimeStamp 
 
 #ifdef _WIN32
   SYSTEMTIME sysT;
-  FileTimeToSystemTime((FILETIME*)&t, &sysT);
+  FileTimeToSystemTime((FILETIME*)&tt, &sysT);
   return sysT.wHour * 3600.0 + sysT.wMinute * 60.0 + sysT.wSecond + sysT.wMilliseconds * 0.001;
 #else
   const uint64_t tmp = static_cast<uint64_t>(tt.time_since_epoch().count()) - EPOCH_OFFSET;
@@ -393,46 +393,42 @@ std::string implIntervalFormat(const double seconds)
   if (seconds >= 365 * 24 * 3600)
   {
     const int i = static_cast<int>(seconds / (365 * 24 * 3600));
-    return format("%i year%s", i, i > 1 ? "s" : "") + ", "s +
-           implIntervalFormat(std::fmod(seconds, (365 * 24 * 3600)));
+    return mrpt::format("%i year%s, %s", i, i > 1 ? "s" : "", implIntervalFormat(std::fmod(seconds, (365 * 24 * 3600))).c_str());
   }
   if (seconds >= 24 * 3600)
   {
     const int i = static_cast<int>(seconds / (24 * 3600));
-    return format("%i day%s", i, i > 1 ? "s" : "") + ", "s +
-           implIntervalFormat(std::fmod(seconds, (24 * 3600)));
+    return mrpt::format("%i day%s, %s", i, i > 1 ? "s" : "", implIntervalFormat(std::fmod(seconds, (24 * 3600))).c_str());
   }
 
   if (seconds >= 3600)
   {
     const int i = static_cast<int>(seconds / 3600);
-    return format("%i hour%s", i, i > 1 ? "s" : "") + ", "s +
-           implIntervalFormat(std::fmod(seconds, 3600));
+    return mrpt::format("%i hour%s, %s", i, i > 1 ? "s" : "", implIntervalFormat(std::fmod(seconds, 3600)).c_str());
   }
 
   if (seconds >= 60)
   {
     const int i = static_cast<int>(seconds / 60);
-    return format("%i minute%s", i, i > 1 ? "s" : "") + ", "s +
-           implIntervalFormat(std::fmod(seconds, 60));
+    return mrpt::format("%i minute%s, %s", i, i > 1 ? "s" : "", implIntervalFormat(std::fmod(seconds, 60)).c_str());
   }
 
   if (seconds >= 1)
   {
-    return format("%.2f sec", seconds);
+    return mrpt::format("%.2f sec", seconds);
   }
 
   if (seconds >= 1e-3)
   {
-    return format("%.2f ms", seconds * 1e3);
+    return mrpt::format("%.2f ms", seconds * 1e3);
   }
 
   if (seconds >= 1e-6)
   {
-    return format("%.2f us", seconds * 1e6);
+    return mrpt::format("%.2f us", seconds * 1e6);
   }
 
-  return format("%.2f ns", seconds * 1e9);
+  return mrpt::format("%.2f ns", seconds * 1e9);
 }
 }  // namespace
 

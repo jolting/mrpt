@@ -11,6 +11,8 @@
 
 #include <mrpt/math/interp_fit.h>
 
+#include <mrpt/core/bits_math.h>
+
 namespace mrpt::math
 {
 template <class T, class VECTOR>

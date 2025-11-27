@@ -18,6 +18,7 @@ find_package(mrpt_typemeta REQUIRED)
 find_package(mrpt_containers REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+find_package(Threads REQUIRED)
 find_package(Filesystem REQUIRED)  # Use C++17 filesystem lib
 
 include(./cmake/find_inotify.cmake REQUIRED)     # Check for the sys/inotify headers (Linux only, in win32 we use the equivalent API for file system monitoring):

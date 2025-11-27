@@ -36,7 +36,7 @@ struct TObject2D
   using variant_t = std::variant<std::monostate, TPoint2D, TSegment2D, TLine2D, TPolygon2D>;
 
   variant_t data;
-
+  TObject2D(variant_t d) : data(std::move(d)) {}
   TObject2D() = default;
   ~TObject2D() = default;
 

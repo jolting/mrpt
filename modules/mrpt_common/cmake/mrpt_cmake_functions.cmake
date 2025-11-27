@@ -465,7 +465,6 @@ function(handle_special_simd_flags lst_files FILE_PATTERN FLAGS_TO_ADD)
   endif()
 endfunction()
 
-
 # -----------------------------------------------------------------------------
 # mrpt_add_library(
 #	TARGET name
@@ -607,6 +606,9 @@ endfunction()
 # Defines a MRPT unit test
 # -----------------------------------------------------------------------------
 function(mrpt_add_test)
+  if(NOT GTest_FOUND)
+    message(WARNING "GTest not found, cannot build unit tests.")
+  else()
     set(oneValueArgs TARGET)
     set(multiValueArgs SOURCES LINK_LIBRARIES)
     cmake_parse_arguments(MRPT_ADD_TEST "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -648,7 +650,7 @@ function(mrpt_add_test)
 
     add_custom_target(run_${MRPT_ADD_TEST_TARGET} COMMAND ${MRPT_ADD_TEST_TARGET})
     add_dependencies(run_${MRPT_ADD_TEST_TARGET} ${MRPT_ADD_TEST_TARGET})
-
+  endif()
 endfunction()
 
 # -----------------------------------------------------------------------------

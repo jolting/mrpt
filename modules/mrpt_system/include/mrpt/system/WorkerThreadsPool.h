@@ -55,7 +55,7 @@ class WorkerThreadsPool
   /** Enqueue one new working item, to be executed by threads when any is
    * available. */
   template <class F, class... Args>
-  auto enqueue(F&& f, Args&&... args) -> std::future<typename std::result_of<F(Args...)>::type>;
+  auto enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type>;
 
   /** Returns the number of enqueued tasks, currently waiting for a free
    * working thread to process them.  */
@@ -72,9 +72,9 @@ class WorkerThreadsPool
 
 template <class F, class... Args>
 auto WorkerThreadsPool::enqueue(F&& f, Args&&... args)
-    -> std::future<typename std::result_of<F(Args...)>::type>
+    -> std::future<typename std::invoke_result<F, Args...>::type>
 {
-  using return_type = typename std::result_of<F(Args...)>::type;
+  using return_type = typename std::invoke_result<F, Args...>::type;
 
   auto task = std::make_shared<std::packaged_task<return_type()>>(
       std::bind(std::forward<F>(f), std::forward<Args>(args)...));

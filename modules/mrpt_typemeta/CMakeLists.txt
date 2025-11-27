@@ -15,7 +15,7 @@ project(mrpt_typemeta LANGUAGES C CXX)
 find_package(mrpt_common REQUIRED)
 
 # define lib:
-  set(LIB_SRCS
+set(LIB_SRCS
   src/typename_unittest.cpp
   src/enumtype_unittest.cpp
   src/static_string_unittest.cpp
